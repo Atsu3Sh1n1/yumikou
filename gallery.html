@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -92,7 +92,7 @@
         justify-content: center;
         align-items: center;
         overflow-y: auto; /* ギャラリー部分だけスクロール可能 */
-        height: 100%; /* ギャラリー部分が画面いっぱいに表示される */
+        height: calc(100vh - 60px); /* ビューポートの高さからアドレスバー分を引いた高さを設定 */
       }
 
       /* スマホの場合、画像の動き（スクロール）を無効化 */
