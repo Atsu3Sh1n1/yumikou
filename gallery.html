@@ -8,9 +8,9 @@
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       font-family: 'Segoe UI', sans-serif;
-      overflow: hidden;
       background: black;
       color: white;
+      overflow: auto; /* スクロール可能に */
     }
 
     canvas {
@@ -30,6 +30,7 @@
       text-align: center;
       max-width: 1200px;
       margin: auto;
+      overflow: auto; /* コンテンツがスクロールできるように */
     }
 
     .card {
@@ -70,6 +71,11 @@
       .gallery-container {
         grid-template-columns: 1fr;
       }
+
+      /* スマホの場合、画像の動き（スクロール）を無効化 */
+      .card a {
+        pointer-events: none; /* リンクが反応しないようにする */
+      }
     }
   </style>
 </head>
@@ -78,12 +84,12 @@
 <canvas id="warpCanvas"></canvas>
 
 <div class="gallery-container">
-  <div class="card"><a href="#"><img src="https://placehold.jp/300x200.png" alt="" /></a><h2>銀河の入り口</h2></div>
-  <div class="card"><a href="#"><img src="https://placehold.jp/300x200.png" alt="" /></a><h2>星屑の記憶</h2></div>
-  <div class="card"><a href="#"><img src="https://placehold.jp/300x200.png" alt="" /></a><h2>コスモステーション</h2></div>
-  <div class="card"><a href="#"><img src="https://placehold.jp/300x200.png" alt="" /></a><h2>ブラックホール・ログ</h2></div>
-  <div class="card"><a href="#"><img src="https://placehold.jp/300x200.png" alt="" /></a><h2>時空ジャーナル</h2></div>
-  <div class="card"><a href="#"><img src="https://placehold.jp/300x200.png" alt="" /></a><h2>光速航路マップ</h2></div>
+  <div class="card"><a href="#"><img src="https://placehold.jp/300x200.png" alt="" /><h2>銀河の入り口</h2></a></div>
+  <div class="card"><a href="#"><img src="https://placehold.jp/300x200.png" alt="" /><h2>星屑の記憶</h2></a></div>
+  <div class="card"><a href="#"><img src="https://placehold.jp/300x200.png" alt="" /><h2>コスモステーション</h2></a></div>
+  <div class="card"><a href="#"><img src="https://placehold.jp/300x200.png" alt="" /><h2>ブラックホール・ログ</h2></a></div>
+  <div class="card"><a href="#"><img src="https://placehold.jp/300x200.png" alt="" /><h2>時空ジャーナル</h2></a></div>
+  <div class="card"><a href="#"><img src="https://placehold.jp/300x200.png" alt="" /><h2>光速航路マップ</h2></a></div>
 </div>
 
 <script>
@@ -115,7 +121,7 @@
     ctx.fillRect(0, 0, width, height);
 
     for (let star of stars) {
-      star.z -= 4;
+      star.z -= 1; // 星の動きが遅くなるように変更
       if (star.z <= 0) {
         star.x = Math.random() * width - width / 2;
         star.y = Math.random() * height - height / 2;
