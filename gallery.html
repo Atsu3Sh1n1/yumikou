@@ -2,20 +2,18 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
+  <title>Gallery</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
-    /* 共通スタイル */
     body {
       font-family: 'Segoe UI', sans-serif;
       background: black;
       color: white;
-      height: 100vh; /* ビューポートに合わせて高さを設定 */
-      overflow: hidden; /* スクロールバーを無効化 */
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      overflow: auto; /* スクロール可能に */
+      min-height: 100vh; /* スクロールを少しだけ許可 */
+      padding-bottom: 10px; /* 下部に少しだけ余白を追加 */
     }
 
     canvas {
@@ -23,23 +21,19 @@
       top: 0;
       left: 0;
       z-index: -2;
-      width: 100%;
-      height: 100%;
     }
 
     .gallery-container {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr); /* PCで3列表示 */
-      gap: 40px 60px;
-      max-width: 1200px;
-      width: 100%;
-      padding: 60px 40px;
-      justify-content: center;
-      align-items: center;
       position: relative;
-      overflow-y: auto; /* ギャラリー部分だけスクロール可能 */
-      height: 100%; /* ギャラリー部分が画面いっぱいに表示される */
-      padding-bottom: 60px; /* スクロール時に少し余裕を持たせる */
+      z-index: 1;
+      padding: 60px 40px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 40px 60px;
+      text-align: center;
+      max-width: 1200px;
+      margin: auto;
+      overflow: auto; /* コンテンツがスクロールできるように */
     }
 
     .card {
@@ -64,35 +58,21 @@
       box-shadow: 0 0 20px rgba(255,255,255,0.4);
     }
 
-    /* PC用 */
-    @media (min-width: 769px) {
-      body {
-        overflow: hidden; /* PCではスクロールを無効化 */
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      }
+    .card h2 {
+      margin-top: 12px;
+      font-size: 1.1em;
+      color: #ddd;
+    }
 
+    @media (max-width: 900px) {
       .gallery-container {
-        grid-template-columns: repeat(3, 1fr); /* 3列で表示 */
-        justify-items: center; /* 横方向に中央寄せ */
-        align-items: center; /* 縦方向に中央寄せ */
-        height: 100%;
+        grid-template-columns: repeat(2, 1fr);
       }
     }
 
-    /* スマホ用 */
-    @media (max-width: 768px) {
-      body {
-        overflow: hidden; /* スマホでもbody全体のスクロール無効化 */
-      }
-
+    @media (max-width: 600px) {
       .gallery-container {
-        grid-template-columns: 1fr; /* 1列で表示 */
-        justify-content: center;
-        align-items: center;
-        overflow-y: auto; /* ギャラリー部分だけスクロール可能 */
-        height: 100%; /* ギャラリー部分が画面いっぱいに表示される */
+        grid-template-columns: 1fr;
       }
 
       /* スマホの場合、画像の動き（スクロール）を無効化 */
@@ -107,12 +87,12 @@
 <canvas id="warpCanvas"></canvas>
 
 <div class="gallery-container">
-  <div class="card"><a href="#"><img src="https://placehold.jp/300x200.png" alt="" /></a></div>
-  <div class="card"><a href="#"><img src="https://placehold.jp/300x200.png" alt="" /></a></div>
-  <div class="card"><a href="#"><img src="https://placehold.jp/300x200.png" alt="" /></a></div>
-  <div class="card"><a href="#"><img src="https://placehold.jp/300x200.png" alt="" /></a></div>
-  <div class="card"><a href="#"><img src="https://placehold.jp/300x200.png" alt="" /></a></div>
-  <div class="card"><a href="#"><img src="https://placehold.jp/300x200.png" alt="" /></a></div>
+  <div class="card"><a href="#"><img src="https://placehold.jp/300x200.png" alt="" /><h2>銀河の入り口</h2></a></div>
+  <div class="card"><a href="#"><img src="https://placehold.jp/300x200.png" alt="" /><h2>星屑の記憶</h2></a></div>
+  <div class="card"><a href="#"><img src="https://placehold.jp/300x200.png" alt="" /><h2>コスモステーション</h2></a></div>
+  <div class="card"><a href="#"><img src="https://placehold.jp/300x200.png" alt="" /><h2>ブラックホール・ログ</h2></a></div>
+  <div class="card"><a href="#"><img src="https://placehold.jp/300x200.png" alt="" /><h2>時空ジャーナル</h2></a></div>
+  <div class="card"><a href="#"><img src="https://placehold.jp/300x200.png" alt="" /><h2>光速航路マップ</h2></a></div>
 </div>
 
 <script>
