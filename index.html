@@ -18,98 +18,108 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
+      color: white;
       white-space: nowrap;
       font-weight: 300;
       pointer-events: none;
       user-select: none;
-      display: flex;
-      flex-direction: column; /* 縦並びに変更 */
-      align-items: center; /* 中央揃え */
-      color: white; /* 文字色を白に設定 */
+      text-align: center;
     }
-
-    #overlayText .part1, #overlayText .part2 {
+    #overlayText .part1 {
+      display: block;
+      margin-bottom: 10px; /* 改行のための余白 */
+    }
+    #overlayText .part2 {
+      display: inline-block;
+      position: absolute;
+      right: 0; /* 会社名を右に移動 */
+    }
+    #overlayText span {
       opacity: 0;
       transition: opacity 2s ease-in-out;
       display: inline-block;
     }
-
-    #overlayText .part1.visible {
+    #overlayText .visible {
       opacity: 1;
     }
-    #overlayText .part2.visible {
-      opacity: 1;
-    }
+    #skipButton {
+  position: absolute;
+  bottom: 20%; /* 画面の下から20%の位置に配置 */
+  left: 50%; /* 画面の横方向で中央に配置 */
+  transform: translateX(-50%); /* 左右中央揃え */
+  padding: 10px 16px;
+  background-color: rgba(0, 0, 0, 0.6);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 1em;
+  cursor: pointer;
+  display: none;
+  transition: opacity 0.5s ease;
+}
 
-    /* デスクトップ用 */
-    #overlayText .part1 {
-      font-size: 5em;
-    }
-    #overlayText .part2 {
-      font-size: 3.1em;
-      margin-left: 700px; /* 右に移動 */
-    }
 
-    /* スマホ向けの調整 */
+    /* スマホ用スタイル */
     @media (max-width: 768px) {
+      #overlayText {
+        font-size: 5vw;
+      }
       #overlayText .part1 {
-        font-size: 6vw;
+        font-size: 6vw; /* スマホ用の「理想を形に変えるお手伝い。」のサイズ */
       }
       #overlayText .part2 {
-        font-size: 4.5vw;
-        margin-left: 10px; /* スマホ向けに少し左寄せ */
+        font-size: 4.5vw; /* スマホ用の「有限会社弓工」のサイズ */
       }
     }
 
-    #skipButton {
-      position: absolute;
-      bottom: 20%;
-      right: 30%;
-      padding: 10px 16px;
-      background-color: rgba(0, 0, 0, 0.6);
-      color: white;
-      border: none;
-      border-radius: 5px;
-      font-size: 1em;
-      cursor: pointer;
-      display: none;
-      transition: opacity 0.5s ease;
+    /* PC用スタイル */
+    @media (min-width: 769px) {
+      #overlayText {
+        font-size: 3em;
+      }
+      #overlayText .part1 {
+        font-size: 2em; /* PC用の「理想を形に変えるお手伝い。」のサイズ */
+      }
+      #overlayText .part2 {
+        font-size: 1em; /* PC用の「有限会社弓工」のサイズ */
+      }
     }
   </style>
 </head>
 <body>
-  <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
-  <script>
+  <script type="module">
+    import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js';
+
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
     const renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
     document.body.appendChild(renderer.domElement);
 
-    const geometry = new THREE.BoxGeometry();
-    const material = new THREE.MeshNormalMaterial();
-    const cube = new THREE.Mesh(geometry, material);
-    scene.add(cube);
+    const geometry = new THREE.IcosahedronGeometry(1, 2); // 16-sided object (icosahedron)
+    const material = new THREE.MeshBasicMaterial({ color: 0x00ff00, wireframe: true });
+    const object = new THREE.Mesh(geometry, material);
+    scene.add(object);
 
-    let cameraPosition, cubeScale;
+    let cameraPosition, objectScale;
 
     function updateCameraAndScale() {
       if (window.innerWidth <= 768) {
         cameraPosition = new THREE.Vector3(1.5, 1.2, 2.5);
-        cubeScale = new THREE.Vector3(1.2, 1.2, 1.2);
+        objectScale = new THREE.Vector3(2.2, 2.2, 2.2);
       } else {
         cameraPosition = new THREE.Vector3(2, 1.5, 3);
-        cubeScale = new THREE.Vector3(2.5, 2.5, 2.5);
+        objectScale = new THREE.Vector3(3.5, 3.5, 3.5);
       }
       camera.position.set(cameraPosition.x, cameraPosition.y, cameraPosition.z);
-      cube.scale.set(cubeScale.x, cubeScale.y, cubeScale.z);
+      object.scale.set(objectScale.x, objectScale.y, objectScale.z);
       camera.aspect = window.innerWidth / window.innerHeight;
       camera.updateProjectionMatrix();
       renderer.setSize(window.innerWidth, window.innerHeight);
     }
 
     updateCameraAndScale();
-    camera.lookAt(cube.position);
+    camera.lookAt(object.position);
 
     let isUserInteracting = false;
     let previousTouch = new THREE.Vector2();
@@ -119,7 +129,7 @@
     let isTwoFinger = false;
     let previousAngle = 0;
     let initialPinchDistance = 0;
-    let initialScale = cube.scale.clone();
+    let initialScale = object.scale.clone();
 
     const rotationSpeedFactor = 0.005;
     const dampingFactor = 0.95;
@@ -149,7 +159,7 @@
       const axis = new THREE.Vector3(deltaY, deltaX, 0).normalize();
       const angle = Math.sqrt(deltaX * deltaX + deltaY * deltaY) * rotationSpeedFactor;
       quaternionDelta.setFromAxisAngle(axis, angle);
-      cube.quaternion.premultiply(quaternionDelta);
+      object.quaternion.premultiply(quaternionDelta);
       inertiaRotation.set(deltaX, deltaY);
       lastMovementAxis.copy(axis);
       previousTouch.set(x, y);
@@ -169,7 +179,7 @@
         isTwoFinger = true;
         previousAngle = getAngle(e.touches[0], e.touches[1]);
         initialPinchDistance = getDistance(e.touches[0], e.touches[1]);
-        initialScale.copy(cube.scale);
+        initialScale.copy(object.scale);
       } else if (e.touches.length === 1) {
         isTwoFinger = false;
         onPointerDown(e.touches[0].clientX, e.touches[0].clientY);
@@ -178,16 +188,16 @@
 
     window.addEventListener('touchmove', (e) => {
       e.preventDefault();
-      if (isTwoFinger && e.touches.length === 2) {
+      if (e.touches.length === 2 && isTwoFinger) {
         const angle = getAngle(e.touches[0], e.touches[1]);
         const deltaAngle = angle - previousAngle;
         previousAngle = angle;
         const rotationAxis = new THREE.Vector3(0, 0, 1);
         quaternionDelta.setFromAxisAngle(rotationAxis, -deltaAngle);
-        cube.quaternion.premultiply(quaternionDelta);
+        object.quaternion.premultiply(quaternionDelta);
         const currentDistance = getDistance(e.touches[0], e.touches[1]);
         const scaleFactor = currentDistance / initialPinchDistance;
-        cube.scale.set(
+        object.scale.set(
           initialScale.x * scaleFactor,
           initialScale.y * scaleFactor,
           initialScale.z * scaleFactor
@@ -204,7 +214,7 @@
     window.addEventListener('wheel', (event) => {
       event.preventDefault();
       const scaleFactor = 1 + (event.deltaY > 0 ? -0.05 : 0.05);
-      cube.scale.multiplyScalar(scaleFactor);
+      object.scale.multiplyScalar(scaleFactor);
     });
 
     function animate() {
@@ -214,12 +224,12 @@
         if (angle > 0.0001) {
           const axis = new THREE.Vector3(inertiaRotation.y, inertiaRotation.x, 0).normalize();
           quaternionDelta.setFromAxisAngle(axis, angle);
-          cube.quaternion.premultiply(quaternionDelta);
+          object.quaternion.premultiply(quaternionDelta);
           lastMovementAxis.copy(axis);
           inertiaRotation.multiplyScalar(dampingFactor);
         }
         const slowQuat = new THREE.Quaternion().setFromAxisAngle(lastMovementAxis, microRotationAngle);
-        cube.quaternion.premultiply(slowQuat);
+        object.quaternion.premultiply(slowQuat);
       }
       renderer.render(scene, camera);
     }
@@ -244,8 +254,7 @@
   </script>
 
   <div id="overlayText">
-    <span class="part1">想像を形にするお手伝い。</span>
-    <span class="part2">有限会社弓工</span>
+    <span class="part1">想像を形に変えるお手伝い。</span><span class="part2">有限会社弓工</span>
   </div>
   <button id="skipButton" onclick="window.location.href='https://example.com'">スキップ</button>
 </body>
