@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>3D Cube Rotation</title>
+  <link rel="prefetch" href="https://maps.app.goo.gl/EmbTuk8dD5GcFThb7">
   <style>
     body {
       margin: 0;
@@ -27,12 +28,12 @@
     }
     #overlayText .part1 {
       display: block;
-      margin-bottom: 10px; /* 改行のための余白 */
+      margin-bottom: 10px;
     }
     #overlayText .part2 {
       display: inline-block;
       position: absolute;
-      right: 0; /* 会社名を右に移動 */
+      right: 0;
     }
     #overlayText span {
       opacity: 0;
@@ -43,45 +44,42 @@
       opacity: 1;
     }
     #skipButton {
-  position: absolute;
-  bottom: 20%; /* 画面の下から20%の位置に配置 */
-  left: 50%; /* 画面の横方向で中央に配置 */
-  transform: translateX(-50%); /* 左右中央揃え */
-  padding: 10px 16px;
-  background-color: rgba(0, 0, 0, 0.6);
-  color: white;
-  border: none;
-  border-radius: 5px;
-  font-size: 1em;
-  cursor: pointer;
-  display: none;
-  transition: opacity 0.5s ease;
-}
+      position: absolute;
+      bottom: 20%;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 10px 16px;
+      background-color: rgba(0, 0, 0, 0.6);
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 1em;
+      cursor: pointer;
+      display: none;
+      transition: opacity 0.5s ease;
+    }
 
-
-    /* スマホ用スタイル */
     @media (max-width: 768px) {
       #overlayText {
         font-size: 5vw;
       }
       #overlayText .part1 {
-        font-size: 6vw; /* スマホ用の「理想を形に変えるお手伝い。」のサイズ */
+        font-size: 6vw;
       }
       #overlayText .part2 {
-        font-size: 4.5vw; /* スマホ用の「有限会社弓工」のサイズ */
+        font-size: 4.5vw;
       }
     }
 
-    /* PC用スタイル */
     @media (min-width: 769px) {
       #overlayText {
         font-size: 3em;
       }
       #overlayText .part1 {
-        font-size: 2em; /* PC用の「理想を形に変えるお手伝い。」のサイズ */
+        font-size: 2em;
       }
       #overlayText .part2 {
-        font-size: 1em; /* PC用の「有限会社弓工」のサイズ */
+        font-size: 1em;
       }
     }
   </style>
@@ -96,7 +94,7 @@
     renderer.setSize(window.innerWidth, window.innerHeight);
     document.body.appendChild(renderer.domElement);
 
-    const geometry = new THREE.IcosahedronGeometry(1, 2); // 16-sided object (icosahedron)
+    const geometry = new THREE.IcosahedronGeometry(1, 2);
     const material = new THREE.MeshBasicMaterial({ color: 0x00ff00, wireframe: true });
     const object = new THREE.Mesh(geometry, material);
     scene.add(object);
