@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>3D Cube Rotation</title>
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    }
+    canvas {
+      display: block;
+    }
+    #overlayText {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      white-space: nowrap;
+      font-weight: 300;
+      pointer-events: none;
+      user-select: none;
+      display: flex;
+      flex-direction: column; /* 縦並びに変更 */
+      align-items: center; /* 中央揃え */
+      color: white; /* 文字色を白に設定 */
+    }
+
+    #overlayText .part1, #overlayText .part2 {
+      opacity: 0;
+      transition: opacity 2s ease-in-out;
+      display: inline-block;
+    }
+
+    #overlayText .part1.visible {
+      opacity: 1;
+    }
+    #overlayText .part2.visible {
+      opacity: 1;
+    }
+
+    /* デスクトップ用 */
+    #overlayText .part1 {
+      font-size: 5em;
+    }
+    #overlayText .part2 {
+      font-size: 3.1em;
+      margin-left: 700px; /* 右に移動 */
+    }
+
+    /* スマホ向けの調整 */
+    @media (max-width: 768px) {
+      #overlayText .part1 {
+        font-size: 6vw;
+      }
+      #overlayText .part2 {
+        font-size: 4.5vw;
+        margin-left: 10px; /* スマホ向けに少し左寄せ */
+      }
+    }
+
+    #skipButton {
+      position: absolute;
+      bottom: 20%;
+      right: 30%;
+      padding: 10px 16px;
+      background-color: rgba(0, 0, 0, 0.6);
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 1em;
+      cursor: pointer;
+      display: none;
+      transition: opacity 0.5s ease;
+    }
+  </style>
+</head>
+<body>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+  <script>
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.body.appendChild(renderer.domElement);
+
+    const geometry = new THREE.BoxGeometry();
+    const material = new THREE.MeshNormalMaterial();
+    const cube = new THREE.Mesh(geometry, material);
+    scene.add(cube);
+
+    let cameraPosition, cubeScale;
+
+    function updateCameraAndScale() {
+      if (window.innerWidth <= 768) {
+        cameraPosition = new THREE.Vector3(1.5, 1.2, 2.5);
+        cubeScale = new THREE.Vector3(1.2, 1.2, 1.2);
+      } else {
+        cameraPosition = new THREE.Vector3(2, 1.5, 3);
+        cubeScale = new THREE.Vector3(2.5, 2.5, 2.5);
+      }
+      camera.position.set(cameraPosition.x, cameraPosition.y, cameraPosition.z);
+      cube.scale.set(cubeScale.x, cubeScale.y, cubeScale.z);
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    }
+
+    updateCameraAndScale();
+    camera.lookAt(cube.position);
+
+    let isUserInteracting = false;
+    let previousTouch = new THREE.Vector2();
+    let inertiaRotation = new THREE.Vector2(0, 0);
+    let quaternionDelta = new THREE.Quaternion();
+    let lastMovementAxis = new THREE.Vector3(0, 1, 0);
+    let isTwoFinger = false;
+    let previousAngle = 0;
+    let initialPinchDistance = 0;
+    let initialScale = cube.scale.clone();
+
+    const rotationSpeedFactor = 0.005;
+    const dampingFactor = 0.95;
+    const microRotationAngle = 0.001;
+
+    function getAngle(touch1, touch2) {
+      const dx = touch2.clientX - touch1.clientX;
+      const dy = touch2.clientY - touch1.clientY;
+      return Math.atan2(dy, dx);
+    }
+
+    function getDistance(touch1, touch2) {
+      const dx = touch2.clientX - touch1.clientX;
+      const dy = touch2.clientY - touch1.clientY;
+      return Math.sqrt(dx * dx + dy * dy);
+    }
+
+    function onPointerDown(x, y) {
+      isUserInteracting = true;
+      previousTouch.set(x, y);
+    }
+
+    function onPointerMove(x, y) {
+      if (!isUserInteracting || isTwoFinger) return;
+      const deltaX = x - previousTouch.x;
+      const deltaY = y - previousTouch.y;
+      const axis = new THREE.Vector3(deltaY, deltaX, 0).normalize();
+      const angle = Math.sqrt(deltaX * deltaX + deltaY * deltaY) * rotationSpeedFactor;
+      quaternionDelta.setFromAxisAngle(axis, angle);
+      cube.quaternion.premultiply(quaternionDelta);
+      inertiaRotation.set(deltaX, deltaY);
+      lastMovementAxis.copy(axis);
+      previousTouch.set(x, y);
+    }
+
+    function onPointerUp() {
+      isUserInteracting = false;
+      isTwoFinger = false;
+    }
+
+    window.addEventListener('mousedown', (e) => onPointerDown(e.clientX, e.clientY));
+    window.addEventListener('mousemove', (e) => onPointerMove(e.clientX, e.clientY));
+    window.addEventListener('mouseup', onPointerUp);
+
+    window.addEventListener('touchstart', (e) => {
+      if (e.touches.length === 2) {
+        isTwoFinger = true;
+        previousAngle = getAngle(e.touches[0], e.touches[1]);
+        initialPinchDistance = getDistance(e.touches[0], e.touches[1]);
+        initialScale.copy(cube.scale);
+      } else if (e.touches.length === 1) {
+        isTwoFinger = false;
+        onPointerDown(e.touches[0].clientX, e.touches[0].clientY);
+      }
+    });
+
+    window.addEventListener('touchmove', (e) => {
+      e.preventDefault();
+      if (isTwoFinger && e.touches.length === 2) {
+        const angle = getAngle(e.touches[0], e.touches[1]);
+        const deltaAngle = angle - previousAngle;
+        previousAngle = angle;
+        const rotationAxis = new THREE.Vector3(0, 0, 1);
+        quaternionDelta.setFromAxisAngle(rotationAxis, -deltaAngle);
+        cube.quaternion.premultiply(quaternionDelta);
+        const currentDistance = getDistance(e.touches[0], e.touches[1]);
+        const scaleFactor = currentDistance / initialPinchDistance;
+        cube.scale.set(
+          initialScale.x * scaleFactor,
+          initialScale.y * scaleFactor,
+          initialScale.z * scaleFactor
+        );
+        lastMovementAxis.copy(rotationAxis);
+        inertiaRotation.set(0, 0);
+      } else if (e.touches.length === 1) {
+        onPointerMove(e.touches[0].clientX, e.touches[0].clientY);
+      }
+    }, { passive: false });
+
+    window.addEventListener('touchend', onPointerUp);
+
+    window.addEventListener('wheel', (event) => {
+      event.preventDefault();
+      const scaleFactor = 1 + (event.deltaY > 0 ? -0.05 : 0.05);
+      cube.scale.multiplyScalar(scaleFactor);
+    });
+
+    function animate() {
+      requestAnimationFrame(animate);
+      if (!isUserInteracting && !isTwoFinger) {
+        const angle = inertiaRotation.length() * rotationSpeedFactor;
+        if (angle > 0.0001) {
+          const axis = new THREE.Vector3(inertiaRotation.y, inertiaRotation.x, 0).normalize();
+          quaternionDelta.setFromAxisAngle(axis, angle);
+          cube.quaternion.premultiply(quaternionDelta);
+          lastMovementAxis.copy(axis);
+          inertiaRotation.multiplyScalar(dampingFactor);
+        }
+        const slowQuat = new THREE.Quaternion().setFromAxisAngle(lastMovementAxis, microRotationAngle);
+        cube.quaternion.premultiply(slowQuat);
+      }
+      renderer.render(scene, camera);
+    }
+
+    animate();
+
+    window.addEventListener('resize', updateCameraAndScale);
+
+    setTimeout(() => {
+      document.querySelector('#overlayText .part1').classList.add('visible');
+    }, 600);
+
+    setTimeout(() => {
+      document.querySelector('#overlayText .part2').classList.add('visible');
+    }, 2600);
+
+    setTimeout(() => {
+      const skipButton = document.getElementById('skipButton');
+      skipButton.style.display = 'block';
+      skipButton.style.opacity = 1;
+    }, 6000);
+  </script>
+
+  <div id="overlayText">
+    <span class="part1">想像を形にするお手伝い。</span>
+    <span class="part2">有限会社弓工</span>
+  </div>
+  <button id="skipButton" onclick="window.location.href='https://example.com'">スキップ</button>
+</body>
+</html>
