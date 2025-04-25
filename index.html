@@ -29,6 +29,7 @@
     #overlayText .part1 {
       display: block;
       margin-bottom: 10px;
+      margin-left: 0.5em; /* 文字を右に移動 */
     }
     #overlayText .part2 {
       display: inline-block;
@@ -65,6 +66,7 @@
       }
       #overlayText .part1 {
         font-size: 6vw;
+        margin-left: 1em; /* スマホ版でも右に移動 */
       }
       #overlayText .part2 {
         font-size: 4.5vw;
@@ -254,6 +256,8 @@
   <div id="overlayText">
     <span class="part1">想像を形に変えるお手伝い。</span><span class="part2">有限会社弓工</span>
   </div>
-  <button id="skipButton" onclick="window.location.href='https://maps.app.goo.gl/EmbTuk8dD5GcFThb7'">スキップ</button>
+  <button id="skipButton" onclick="window.location.href='gallery.html'" style="background-color: rgba(0, 0, 0, 0.7); color: white; padding: 10px 20px; border: none; border-radius: 5px; font-size: 1.2em; cursor: pointer; transition: all 0.3s ease;">
+    スキップ
+  </button>
 </body>
 </html>

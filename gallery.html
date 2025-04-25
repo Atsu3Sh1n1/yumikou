@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>Gallery</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      overflow: hidden;
+      background: black;
+      color: white;
+    }
+
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: -2;
+    }
+
+    .gallery-container {
+      position: relative;
+      z-index: 1;
+      padding: 60px 40px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 40px 60px;
+      text-align: center;
+      max-width: 1200px;
+      margin: auto;
+    }
+
+    .card {
+      background: none;
+      border: none;
+      box-shadow: none;
+      transition: transform 0.4s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-10px) scale(1.03);
+    }
+
+    .card img {
+      width: 100%;
+      border-radius: 12px;
+      transition: box-shadow 0.3s ease;
+      box-shadow: 0 0 12px rgba(255,255,255,0.1);
+    }
+
+    .card:hover img {
+      box-shadow: 0 0 20px rgba(255,255,255,0.4);
+    }
+
+    .card h2 {
+      margin-top: 12px;
+      font-size: 1.1em;
+      color: #ddd;
+    }
+
+    @media (max-width: 900px) {
+      .gallery-container {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 600px) {
+      .gallery-container {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<canvas id="warpCanvas"></canvas>
+
+<div class="gallery-container">
+  <div class="card"><a href="#"><img src="https://placehold.jp/300x200.png" alt="" /></a><h2>銀河の入り口</h2></div>
+  <div class="card"><a href="#"><img src="https://placehold.jp/300x200.png" alt="" /></a><h2>星屑の記憶</h2></div>
+  <div class="card"><a href="#"><img src="https://placehold.jp/300x200.png" alt="" /></a><h2>コスモステーション</h2></div>
+  <div class="card"><a href="#"><img src="https://placehold.jp/300x200.png" alt="" /></a><h2>ブラックホール・ログ</h2></div>
+  <div class="card"><a href="#"><img src="https://placehold.jp/300x200.png" alt="" /></a><h2>時空ジャーナル</h2></div>
+  <div class="card"><a href="#"><img src="https://placehold.jp/300x200.png" alt="" /></a><h2>光速航路マップ</h2></div>
+</div>
+
+<script>
+  const canvas = document.getElementById('warpCanvas');
+  const ctx = canvas.getContext('2d');
+
+  let stars = [];
+  const numStars = 500;
+  let width, height;
+  let focalLength;
+
+  function init() {
+    width = window.innerWidth;
+    height = window.innerHeight;
+    focalLength = width / 2;
+
+    canvas.width = width;
+    canvas.height = height;
+
+    stars = Array.from({ length: numStars }, () => ({
+      x: Math.random() * width - width / 2,
+      y: Math.random() * height - height / 2,
+      z: Math.random() * width
+    }));
+  }
+
+  function draw() {
+    ctx.fillStyle = 'black';
+    ctx.fillRect(0, 0, width, height);
+
+    for (let star of stars) {
+      star.z -= 4;
+      if (star.z <= 0) {
+        star.x = Math.random() * width - width / 2;
+        star.y = Math.random() * height - height / 2;
+        star.z = width;
+      }
+
+      const k = focalLength / star.z;
+      const sx = star.x * k + width / 2;
+      const sy = star.y * k + height / 2;
+      const size = (1 - star.z / width) * 3;
+
+      ctx.beginPath();
+      ctx.arc(sx, sy, size, 0, Math.PI * 2);
+      ctx.fillStyle = 'white';
+      ctx.fill();
+    }
+
+    requestAnimationFrame(draw);
+  }
+
+  window.addEventListener('resize', init);
+  init();
+  draw();
+</script>
+
+</body>
+</html>
