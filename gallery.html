@@ -2,22 +2,22 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
-  <meta name="theme-color" content="#000000">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Centered Gallery</title>
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-    body {
-      font-family: 'Segoe UI', sans-serif;
+    html, body {
+      width: 100%;
+      height: 100%;
       background: black;
       color: white;
-      height: 100vh;
-      overflow: hidden;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      font-family: 'Segoe UI', sans-serif;
+      overflow: hidden; /* PCでは固定表示 */
     }
 
     canvas {
@@ -29,99 +29,74 @@
       height: 100%;
     }
 
+    .wrapper {
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 2vh 2vw;
+      margin-top: 1vh; 
+    }
+
     .gallery-container {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 40px 60px;
-      max-width: 1200px;
+      grid-template-rows: repeat(2, 1fr);
+      gap: 2vh 2vw;
       width: 100%;
-      padding: 60px 40px 0;
-      justify-content: center;
-      align-items: center;
-      position: relative;
-      overflow-y: auto;
       height: 100%;
-      padding-bottom: 60px;
-      z-index: 1;
     }
 
     .card {
-      background: none;
-      border: none;
-      box-shadow: none;
-      transition: transform 0.4s ease;
+      width: 100%;
+      height: 95%;
+      border-radius: 12px;
+      overflow: hidden;
+      transition: transform 0.3s ease;
     }
 
     .card:hover {
-      transform: translateY(-10px) scale(1.03);
+      transform: scale(1.03);
     }
 
     .card img {
       width: 100%;
-      border-radius: 12px;
-      transition: box-shadow 0.3s ease;
-      box-shadow: 0 0 12px rgba(255,255,255,0.1);
-      aspect-ratio: 3 / 2;
+      height: 100%;
+      object-fit: cover;
       display: block;
-    }
-
-    .card:hover img {
-      box-shadow: 0 0 20px rgba(255,255,255,0.4);
-    }
-
-    .card.map:hover {
-      transform: none;
-    }
-
-    .card.map .map-frame {
-      width: 100%;
-      aspect-ratio: 3 / 2;
       border-radius: 12px;
-      overflow: hidden;
-      box-shadow: 0 0 12px rgba(255,255,255,0.1);
+      box-shadow: 0 0 12px rgba(255, 255, 255, 0.1);
     }
 
     .card.map iframe {
       width: 100%;
       height: 100%;
       border: 0;
-      display: block;
-      pointer-events: auto;
-    }
-
-    @media (min-width: 769px) {
-      body {
-        overflow: hidden;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      }
-
-      .gallery-container {
-        grid-template-columns: repeat(3, 1fr);
-        justify-items: center;
-        align-items: center;
-        height: 100%;
-      }
+      border-radius: 12px;
+      box-shadow: 0 0 12px rgba(255, 255, 255, 0.1);
     }
 
     @media (max-width: 768px) {
-      body {
-        overflow: hidden;
+      html, body {
+        overflow-y: auto; /* スマホで縦スクロール許可 */
+      }
+
+      .wrapper {
+        padding: 20px;
+        height: auto;
+        align-items: start;
       }
 
       .gallery-container {
         grid-template-columns: 1fr;
-        justify-content: center;
-        align-items: center;
-        overflow-y: auto;
-        height: 100vh;
-        padding-top: 30px;
-        padding-bottom: 120px;
+        grid-template-rows: auto;
+        height: auto;
+        gap: 20px;
       }
 
-      .card a {
-        pointer-events: none;
+      .card {
+        height: 40vh;
       }
     }
   </style>
@@ -130,18 +105,19 @@
 
 <canvas id="warpCanvas"></canvas>
 
-<div class="gallery-container">
-  <div class="card"><a href="#"><img src="https://placehold.jp/300x200.png" alt="" /></a></div>
-  <div class="card"><a href="#"><img src="https://placehold.jp/300x200.png" alt="" /></a></div>
-  <div class="card"><a href="#"><img src="https://placehold.jp/300x200.png" alt="" /></a></div>
-  <div class="card"><a href="#"><img src="https://placehold.jp/300x200.png" alt="" /></a></div>
-  <div class="card"><a href="#"><img src="https://placehold.jp/300x200.png" alt="" /></a></div>
-
-  <!-- Google Map (遅延読み込みオフに変更済み) -->
-  <div class="card map">
-    <div class="map-frame">
-      <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2754.588261461662!2d134.7318093604317!3d34.81157800592433!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3554df9c08d57293%3A0x83ba1245278a92a1!2z77yI5pyJ77yJ5byT5bel!5e0!3m2!1sja!2sjp!4v1745633751317!5m2!1sja!2sjp"
-        allowfullscreen="" referrerpolicy="no-referrer-when-downgrade"></iframe>
+<div class="wrapper">
+  <div class="gallery-container">
+    <div class="card"><img src="https://placehold.jp/900x600.png" alt="img1" /></div>
+    <div class="card"><img src="https://placehold.jp/900x600.png" alt="img2" /></div>
+    <div class="card"><img src="https://placehold.jp/900x600.png" alt="img3" /></div>
+    <div class="card"><img src="https://placehold.jp/900x600.png" alt="img4" /></div>
+    <div class="card"><img src="https://placehold.jp/900x600.png" alt="img5" /></div>
+    <div class="card map">
+      <iframe
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2754.588261461662!2d134.7318093604317!3d34.81157800592433!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3554df9c08d57293%3A0x83ba1245278a92a1!2z77yI5pyJ77yJ5byT5bel!5e0!3m2!1sja!2sjp!4v1745633751317!5m2!1sja!2sjp"
+        allowfullscreen=""
+        referrerpolicy="no-referrer-when-downgrade">
+      </iframe>
     </div>
   </div>
 </div>
@@ -189,20 +165,10 @@
       const sy = star.y * k + height / 2;
       const size = (1 - star.z / width) * 3;
 
-      if (star.tailAlpha > 0) {
-        ctx.beginPath();
-        ctx.arc(sx, sy, size * 2, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(255, 255, 255, ${star.tailAlpha})`;
-        ctx.fill();
-        star.tailAlpha *= 0.99;
-      }
-
       ctx.beginPath();
       ctx.arc(sx, sy, size, 0, Math.PI * 2);
       ctx.fillStyle = `rgba(255, 255, 255, ${star.alpha})`;
       ctx.fill();
-
-      star.tailAlpha = Math.max(star.tailAlpha, 0.05);
     }
 
     requestAnimationFrame(draw);
