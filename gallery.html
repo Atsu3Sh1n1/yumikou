@@ -45,6 +45,7 @@
       overflow-y: auto; /* ギャラリー部分だけスクロール可能 */
       height: 100%; /* ギャラリー部分が画面いっぱいに表示される */
       padding-bottom: 60px; /* スクロール時に少し余裕を持たせる */
+      z-index: 1; /* canvasの上に来るようにする */
     }
 
     .card {
@@ -97,7 +98,9 @@
         justify-content: center;
         align-items: center;
         overflow-y: auto; /* ギャラリー部分だけスクロール可能 */
-        height: calc(100vh - 60px); /* ビューポートの高さからアドレスバー分を引いた高さを設定 */
+        height: 100vh; /* ビューポートに合わせて高さを設定 */
+        padding-top: 30px; /* 上の余白をさらに広げて全体を下に配置 */
+        padding-bottom: 120px;   /* 
       }
 
       /* スマホの場合、画像の動き（スクロール）を無効化 */
@@ -140,7 +143,9 @@
     stars = Array.from({ length: numStars }, () => ({
       x: Math.random() * width - width / 2,
       y: Math.random() * height - height / 2,
-      z: Math.random() * width
+      z: Math.random() * width,
+      alpha: Math.random() * 0.5 + 0.3,  // 星の透明度を追加して柔らかさを出す
+      tailAlpha: 0,  // 残像の透明度
     }));
   }
 
@@ -161,10 +166,23 @@
       const sy = star.y * k + height / 2;
       const size = (1 - star.z / width) * 3;
 
+      // 残光効果の追加
+      if (star.tailAlpha > 0) {
+        ctx.beginPath();
+        ctx.arc(sx, sy, size * 2, 0, Math.PI * 2); // 残光の大きさを大きめに設定
+        ctx.fillStyle = `rgba(255, 255, 255, ${star.tailAlpha})`;
+        ctx.fill();
+        star.tailAlpha *= 0.99; // 残像を徐々に消していく
+      }
+
+      // 星の描画
       ctx.beginPath();
       ctx.arc(sx, sy, size, 0, Math.PI * 2);
-      ctx.fillStyle = 'white';
+      ctx.fillStyle = `rgba(255, 255, 255, ${star.alpha})`; // 柔らかさを出すため透明度を追加
       ctx.fill();
+
+      // 残像効果のため、星の尾の透明度を設定
+      star.tailAlpha = Math.max(star.tailAlpha, 0.05);  // 最低でも残像は少し残る
     }
 
     requestAnimationFrame(draw);
