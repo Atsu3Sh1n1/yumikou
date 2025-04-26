@@ -2,28 +2,40 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>有限会社弓工 | 理想を形に変える3Dビジュアル制作</title>
+
+  <!-- スマホのアドレスバー等を黒くする設定 -->
+  <meta name="theme-color" content="#000000">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+  <!-- SEO向けメタ情報 -->
   <meta name="description" content="有限会社弓工は、理想を形にする3Dデザイン・ビジュアル制作を行っています。Web演出から製品プロモーションまで、お客様のイメージを現実に。">
+  <meta name="keywords" content="弓工, 3Dデザイン, Web演出, 3Dビジュアル, プロモーション, ポートフォリオ">
+  <meta name="author" content="有限会社弓工">
+
+  <!-- OGP設定 -->
+  <meta property="og:title" content="有限会社弓工 | 理想を形に変える3Dビジュアル制作">
+  <meta property="og:description" content="3D表現とアイデアで、あなたの理想を形にします。有限会社弓工のポートフォリオサイト。">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://atsu3sh1n1.github.io/yumikou/">
+  <meta property="og:image" content="https://atsu3sh1n1.github.io/yumikou/ogp-image.jpg">
+
+  <!-- Twitterカード -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="有限会社弓工">
+  <meta name="twitter:description" content="理想を形に変える3Dビジュアル制作。有限会社弓工の公式サイト。">
+  <meta name="twitter:image" content="https://atsu3sh1n1.github.io/yumikou/ogp-image.jpg">
 
   <style>
-    :root {
-      --vh: 100vh;
-    }
-
-    html, body {
+    body {
       margin: 0;
-      padding: 0;
-      height: 100%;
       overflow: hidden;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
     }
-
     canvas {
       display: block;
-      width: 100vw;
-      height: calc(var(--vh, 1vh) * 100);
     }
-
     #overlayText {
       position: absolute;
       top: 50%;
@@ -36,29 +48,24 @@
       user-select: none;
       text-align: center;
     }
-
     #overlayText .part1 {
       display: block;
       margin-bottom: 10px;
       margin-left: 0.5em;
     }
-
     #overlayText .part2 {
       display: inline-block;
       position: absolute;
       right: 0;
     }
-
     #overlayText span {
       opacity: 0;
       transition: opacity 2s ease-in-out;
       display: inline-block;
     }
-
     #overlayText .visible {
       opacity: 1;
     }
-
     #skipButton {
       position: absolute;
       bottom: 20%;
@@ -101,190 +108,177 @@
   </style>
 </head>
 <body>
+  <script type="module">
+    import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js';
 
-<script type="module">
-  import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js';
-
-  // Set --vh based on real height
-  function setVh() {
-    const vh = window.innerHeight * 0.01;
-    document.documentElement.style.setProperty('--vh', `${vh}px`);
-  }
-  window.addEventListener('resize', setVh);
-  setVh();
-
-  const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-  const renderer = new THREE.WebGLRenderer({ antialias: true });
-  renderer.setSize(window.innerWidth, window.innerHeight);
-  document.body.appendChild(renderer.domElement);
-
-  const geometry = new THREE.IcosahedronGeometry(1, 2);
-  const material = new THREE.MeshBasicMaterial({ color: 0x00ff00, wireframe: true });
-  const object = new THREE.Mesh(geometry, material);
-  scene.add(object);
-
-  let cameraPosition, objectScale;
-
-  function updateCameraAndScale() {
-    if (window.innerWidth <= 768) {
-      cameraPosition = new THREE.Vector3(1.5, 1.2, 2.5);
-      objectScale = new THREE.Vector3(2.2, 2.2, 2.2);
-    } else {
-      cameraPosition = new THREE.Vector3(2, 1.5, 3);
-      objectScale = new THREE.Vector3(3.5, 3.5, 3.5);
-    }
-    camera.position.set(cameraPosition.x, cameraPosition.y, cameraPosition.z);
-    object.scale.set(objectScale.x, objectScale.y, objectScale.z);
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
-  }
+    document.body.appendChild(renderer.domElement);
 
-  updateCameraAndScale();
-  camera.lookAt(object.position);
+    const geometry = new THREE.IcosahedronGeometry(1, 2);
+    const material = new THREE.MeshBasicMaterial({ color: 0x00ff00, wireframe: true });
+    const object = new THREE.Mesh(geometry, material);
+    scene.add(object);
 
-  let isUserInteracting = false;
-  let previousTouch = new THREE.Vector2();
-  let inertiaRotation = new THREE.Vector2(0, 0);
-  let quaternionDelta = new THREE.Quaternion();
-  let lastMovementAxis = new THREE.Vector3(0, 1, 0);
-  let isTwoFinger = false;
-  let previousAngle = 0;
-  let initialPinchDistance = 0;
-  let initialScale = object.scale.clone();
+    let cameraPosition, objectScale;
 
-  const rotationSpeedFactor = 0.005;
-  const dampingFactor = 0.95;
-  const microRotationAngle = 0.001;
-
-  function getAngle(touch1, touch2) {
-    const dx = touch2.clientX - touch1.clientX;
-    const dy = touch2.clientY - touch1.clientY;
-    return Math.atan2(dy, dx);
-  }
-
-  function getDistance(touch1, touch2) {
-    const dx = touch2.clientX - touch1.clientX;
-    const dy = touch2.clientY - touch1.clientY;
-    return Math.sqrt(dx * dx + dy * dy);
-  }
-
-  function onPointerDown(x, y) {
-    isUserInteracting = true;
-    previousTouch.set(x, y);
-  }
-
-  function onPointerMove(x, y) {
-    if (!isUserInteracting || isTwoFinger) return;
-    const deltaX = x - previousTouch.x;
-    const deltaY = y - previousTouch.y;
-    const axis = new THREE.Vector3(deltaY, deltaX, 0).normalize();
-    const angle = Math.sqrt(deltaX * deltaX + deltaY * deltaY) * rotationSpeedFactor;
-    quaternionDelta.setFromAxisAngle(axis, angle);
-    object.quaternion.premultiply(quaternionDelta);
-    inertiaRotation.set(deltaX, deltaY);
-    lastMovementAxis.copy(axis);
-    previousTouch.set(x, y);
-  }
-
-  function onPointerUp() {
-    isUserInteracting = false;
-    isTwoFinger = false;
-  }
-
-  window.addEventListener('mousedown', (e) => onPointerDown(e.clientX, e.clientY));
-  window.addEventListener('mousemove', (e) => onPointerMove(e.clientX, e.clientY));
-  window.addEventListener('mouseup', onPointerUp);
-
-  window.addEventListener('touchstart', (e) => {
-    if (e.touches.length === 2) {
-      isTwoFinger = true;
-      previousAngle = getAngle(e.touches[0], e.touches[1]);
-      initialPinchDistance = getDistance(e.touches[0], e.touches[1]);
-      initialScale.copy(object.scale);
-    } else if (e.touches.length === 1) {
-      isTwoFinger = false;
-      onPointerDown(e.touches[0].clientX, e.touches[0].clientY);
-    }
-  });
-
-  window.addEventListener('touchmove', (e) => {
-    e.preventDefault();
-    if (e.touches.length === 2 && isTwoFinger) {
-      const angle = getAngle(e.touches[0], e.touches[1]);
-      const deltaAngle = angle - previousAngle;
-      previousAngle = angle;
-      const rotationAxis = new THREE.Vector3(0, 0, 1);
-      quaternionDelta.setFromAxisAngle(rotationAxis, -deltaAngle);
-      object.quaternion.premultiply(quaternionDelta);
-      const currentDistance = getDistance(e.touches[0], e.touches[1]);
-      const scaleFactor = currentDistance / initialPinchDistance;
-      object.scale.set(
-        initialScale.x * scaleFactor,
-        initialScale.y * scaleFactor,
-        initialScale.z * scaleFactor
-      );
-      lastMovementAxis.copy(rotationAxis);
-      inertiaRotation.set(0, 0);
-    } else if (e.touches.length === 1) {
-      onPointerMove(e.touches[0].clientX, e.touches[0].clientY);
-    }
-  }, { passive: false });
-
-  window.addEventListener('touchend', onPointerUp);
-
-  window.addEventListener('wheel', (event) => {
-    event.preventDefault();
-    const scaleFactor = 1 + (event.deltaY > 0 ? -0.05 : 0.05);
-    object.scale.multiplyScalar(scaleFactor);
-  });
-
-  function animate() {
-    requestAnimationFrame(animate);
-    if (!isUserInteracting && !isTwoFinger) {
-      const angle = inertiaRotation.length() * rotationSpeedFactor;
-      if (angle > 0.0001) {
-        const axis = new THREE.Vector3(inertiaRotation.y, inertiaRotation.x, 0).normalize();
-        quaternionDelta.setFromAxisAngle(axis, angle);
-        object.quaternion.premultiply(quaternionDelta);
-        lastMovementAxis.copy(axis);
-        inertiaRotation.multiplyScalar(dampingFactor);
+    function updateCameraAndScale() {
+      if (window.innerWidth <= 768) {
+        cameraPosition = new THREE.Vector3(1.5, 1.2, 2.5);
+        objectScale = new THREE.Vector3(2.2, 2.2, 2.2);
+      } else {
+        cameraPosition = new THREE.Vector3(2, 1.5, 3);
+        objectScale = new THREE.Vector3(3.5, 3.5, 3.5);
       }
-      const slowQuat = new THREE.Quaternion().setFromAxisAngle(lastMovementAxis, microRotationAngle);
-      object.quaternion.premultiply(slowQuat);
+      camera.position.set(cameraPosition.x, cameraPosition.y, cameraPosition.z);
+      object.scale.set(objectScale.x, objectScale.y, objectScale.z);
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
     }
-    renderer.render(scene, camera);
-  }
 
-  animate();
-
-  window.addEventListener('resize', () => {
     updateCameraAndScale();
-    setVh();
-  });
+    camera.lookAt(object.position);
 
-  setTimeout(() => {
-    document.querySelector('#overlayText .part1').classList.add('visible');
-  }, 600);
+    let isUserInteracting = false;
+    let previousTouch = new THREE.Vector2();
+    let inertiaRotation = new THREE.Vector2(0, 0);
+    let quaternionDelta = new THREE.Quaternion();
+    let lastMovementAxis = new THREE.Vector3(0, 1, 0);
+    let isTwoFinger = false;
+    let previousAngle = 0;
+    let initialPinchDistance = 0;
+    let initialScale = object.scale.clone();
 
-  setTimeout(() => {
-    document.querySelector('#overlayText .part2').classList.add('visible');
-  }, 2600);
+    const rotationSpeedFactor = 0.005;
+    const dampingFactor = 0.95;
+    const microRotationAngle = 0.001;
 
-  setTimeout(() => {
-    const skipButton = document.getElementById('skipButton');
-    skipButton.style.display = 'block';
-    skipButton.style.opacity = 1;
-  }, 6000);
-</script>
+    function getAngle(touch1, touch2) {
+      const dx = touch2.clientX - touch1.clientX;
+      const dy = touch2.clientY - touch1.clientY;
+      return Math.atan2(dy, dx);
+    }
 
-<div id="overlayText">
-  <span class="part1">理想を形に変えるお手伝い。</span><span class="part2">有限会社弓工</span>
-</div>
-<button id="skipButton" onclick="window.location.href='gallery.html'">
-  スキップ
-</button>
+    function getDistance(touch1, touch2) {
+      const dx = touch2.clientX - touch1.clientX;
+      const dy = touch2.clientY - touch1.clientY;
+      return Math.sqrt(dx * dx + dy * dy);
+    }
 
+    function onPointerDown(x, y) {
+      isUserInteracting = true;
+      previousTouch.set(x, y);
+    }
+
+    function onPointerMove(x, y) {
+      if (!isUserInteracting || isTwoFinger) return;
+      const deltaX = x - previousTouch.x;
+      const deltaY = y - previousTouch.y;
+      const axis = new THREE.Vector3(deltaY, deltaX, 0).normalize();
+      const angle = Math.sqrt(deltaX * deltaX + deltaY * deltaY) * rotationSpeedFactor;
+      quaternionDelta.setFromAxisAngle(axis, angle);
+      object.quaternion.premultiply(quaternionDelta);
+      inertiaRotation.set(deltaX, deltaY);
+      lastMovementAxis.copy(axis);
+      previousTouch.set(x, y);
+    }
+
+    function onPointerUp() {
+      isUserInteracting = false;
+      isTwoFinger = false;
+    }
+
+    window.addEventListener('mousedown', (e) => onPointerDown(e.clientX, e.clientY));
+    window.addEventListener('mousemove', (e) => onPointerMove(e.clientX, e.clientY));
+    window.addEventListener('mouseup', onPointerUp);
+
+    window.addEventListener('touchstart', (e) => {
+      if (e.touches.length === 2) {
+        isTwoFinger = true;
+        previousAngle = getAngle(e.touches[0], e.touches[1]);
+        initialPinchDistance = getDistance(e.touches[0], e.touches[1]);
+        initialScale.copy(object.scale);
+      } else if (e.touches.length === 1) {
+        isTwoFinger = false;
+        onPointerDown(e.touches[0].clientX, e.touches[0].clientY);
+      }
+    });
+
+    window.addEventListener('touchmove', (e) => {
+      e.preventDefault();
+      if (e.touches.length === 2 && isTwoFinger) {
+        const angle = getAngle(e.touches[0], e.touches[1]);
+        const deltaAngle = angle - previousAngle;
+        previousAngle = angle;
+        const rotationAxis = new THREE.Vector3(0, 0, 1);
+        quaternionDelta.setFromAxisAngle(rotationAxis, -deltaAngle);
+        object.quaternion.premultiply(quaternionDelta);
+        const currentDistance = getDistance(e.touches[0], e.touches[1]);
+        const scaleFactor = currentDistance / initialPinchDistance;
+        object.scale.set(
+          initialScale.x * scaleFactor,
+          initialScale.y * scaleFactor,
+          initialScale.z * scaleFactor
+        );
+        lastMovementAxis.copy(rotationAxis);
+        inertiaRotation.set(0, 0);
+      } else if (e.touches.length === 1) {
+        onPointerMove(e.touches[0].clientX, e.touches[0].clientY);
+      }
+    }, { passive: false });
+
+    window.addEventListener('touchend', onPointerUp);
+
+    window.addEventListener('wheel', (event) => {
+      event.preventDefault();
+      const scaleFactor = 1 + (event.deltaY > 0 ? -0.05 : 0.05);
+      object.scale.multiplyScalar(scaleFactor);
+    });
+
+    function animate() {
+      requestAnimationFrame(animate);
+      if (!isUserInteracting && !isTwoFinger) {
+        const angle = inertiaRotation.length() * rotationSpeedFactor;
+        if (angle > 0.0001) {
+          const axis = new THREE.Vector3(inertiaRotation.y, inertiaRotation.x, 0).normalize();
+          quaternionDelta.setFromAxisAngle(axis, angle);
+          object.quaternion.premultiply(quaternionDelta);
+          lastMovementAxis.copy(axis);
+          inertiaRotation.multiplyScalar(dampingFactor);
+        }
+        const slowQuat = new THREE.Quaternion().setFromAxisAngle(lastMovementAxis, microRotationAngle);
+        object.quaternion.premultiply(slowQuat);
+      }
+      renderer.render(scene, camera);
+    }
+
+    animate();
+
+    window.addEventListener('resize', updateCameraAndScale);
+
+    setTimeout(() => {
+      document.querySelector('#overlayText .part1').classList.add('visible');
+    }, 600);
+
+    setTimeout(() => {
+      document.querySelector('#overlayText .part2').classList.add('visible');
+    }, 2600);
+
+    setTimeout(() => {
+      const skipButton = document.getElementById('skipButton');
+      skipButton.style.display = 'block';
+      skipButton.style.opacity = 1;
+    }, 6000);
+  </script>
+
+  <div id="overlayText">
+    <span class="part1">理想を形に変えるお手伝い。</span><span class="part2">有限会社弓工</span>
+  </div>
+  <button id="skipButton" onclick="window.location.href='gallery.html'" style="background-color: rgba(0, 0, 0, 0.7); color: white; padding: 10px 20px; border: none; border-radius: 5px; font-size: 1.2em; cursor: pointer; transition: all 0.3s ease;">
+    スキップ
+  </button>
 </body>
 </html>
