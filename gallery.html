@@ -21,6 +21,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
+      flex-direction: column; /* ギャラリーと地図を縦に並べる */
     }
 
     canvas {
@@ -70,6 +71,14 @@
       box-shadow: 0 0 20px rgba(255,255,255,0.4);
     }
 
+    /* 地図部分 */
+    #map {
+      width: 100%;
+      height: 400px;
+      margin-top: 20px;
+      border-radius: 10px;
+    }
+
     /* PC用 */
     @media (min-width: 769px) {
       body {
@@ -100,15 +109,50 @@
         overflow-y: auto; /* ギャラリー部分だけスクロール可能 */
         height: 100vh; /* ビューポートに合わせて高さを設定 */
         padding-top: 30px; /* 上の余白をさらに広げて全体を下に配置 */
-        padding-bottom: 120px;   /* 
-      }
-
-      /* スマホの場合、画像の動き（スクロール）を無効化 */
-      .card a {
-        pointer-events: none; /* リンクが反応しないようにする */
+        padding-bottom: 120px;
       }
     }
   </style>
+  <!-- Google Maps APIを読み込む -->
+  <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_API_KEY&callback=initMap" async defer></script>
+  <script>
+    let map;
+
+    function initMap() {
+      const tokyoTower = { lat: 35.6586, lng: 139.7454 };
+
+      map = new google.maps.Map(document.getElementById("map"), {
+        center: tokyoTower,
+        zoom: 15,
+        mapTypeId: "roadmap",
+        styles: [
+          { "elementType": "geometry", "stylers": [{ "color": "#212121" }] },
+          { "elementType": "labels.icon", "stylers": [{ "visibility": "off" }] },
+          { "elementType": "labels.text.fill", "stylers": [{ "color": "#757575" }] },
+          { "elementType": "labels.text.stroke", "stylers": [{ "color": "#212121" }] },
+          { "featureType": "administrative", "elementType": "geometry", "stylers": [{ "color": "#757575" }] },
+          { "featureType": "poi", "elementType": "geometry", "stylers": [{ "color": "#212121" }] },
+          { "featureType": "poi.park", "elementType": "geometry", "stylers": [{ "color": "#181818" }] },
+          { "featureType": "road", "elementType": "geometry", "stylers": [{ "color": "#484848" }] },
+          { "featureType": "road", "elementType": "geometry.stroke", "stylers": [{ "color": "#212121" }] },
+          { "featureType": "road.highway", "elementType": "geometry", "stylers": [{ "color": "#746855" }] },
+          { "featureType": "road.highway", "elementType": "geometry.stroke", "stylers": [{ "color": "#1f1f1f" }] },
+          { "featureType": "road.arterial", "elementType": "geometry", "stylers": [{ "color": "#373737" }] },
+          { "featureType": "road.local", "elementType": "geometry", "stylers": [{ "color": "#212121" }] },
+          { "featureType": "transit", "elementType": "geometry", "stylers": [{ "color": "#2f2f2f" }] },
+          { "featureType": "transit.station", "elementType": "geometry", "stylers": [{ "color": "#3f3f3f" }] },
+          { "featureType": "water", "elementType": "geometry", "stylers": [{ "color": "#000000" }] },
+          { "featureType": "water", "elementType": "geometry.stroke", "stylers": [{ "color": "#000000" }] }
+        ]
+      });
+
+      const marker = new google.maps.Marker({
+        position: tokyoTower,
+        map: map,
+        title: "Tokyo Tower"
+      });
+    }
+  </script>
 </head>
 <body>
 
@@ -121,6 +165,11 @@
   <div class="card"><a href="#"><img src="https://placehold.jp/300x200.png" alt="" /></a></div>
   <div class="card"><a href="#"><img src="https://placehold.jp/300x200.png" alt="" /></a></div>
   <div class="card"><a href="#"><img src="https://placehold.jp/300x200.png" alt="" /></a></div>
+
+  <!-- 東京タワーの地図表示部分（ギャラリー枠の一番下に配置）-->
+  <div class="card">
+    <div id="map"></div>
+  </div>
 </div>
 
 <script>
