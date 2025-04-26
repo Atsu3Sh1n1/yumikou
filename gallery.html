@@ -3,25 +3,21 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
-  
-  <!-- アドレスバーを黒くする設定 -->
   <meta name="theme-color" content="#000000">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
-    /* 共通スタイル */
     body {
       font-family: 'Segoe UI', sans-serif;
       background: black;
       color: white;
-      height: 100vh; /* ビューポートに合わせて高さを設定 */
-      overflow: hidden; /* スクロールバーを無効化 */
+      height: 100vh;
+      overflow: hidden;
       display: flex;
       justify-content: center;
       align-items: center;
-      flex-direction: column; /* ギャラリーと地図を縦に並べる */
     }
 
     canvas {
@@ -35,18 +31,18 @@
 
     .gallery-container {
       display: grid;
-      grid-template-columns: repeat(3, 1fr); /* PCで3列表示 */
+      grid-template-columns: repeat(3, 1fr);
       gap: 40px 60px;
       max-width: 1200px;
       width: 100%;
-      padding: 60px 40px;
+      padding: 60px 40px 0;
       justify-content: center;
       align-items: center;
       position: relative;
-      overflow-y: auto; /* ギャラリー部分だけスクロール可能 */
-      height: 100%; /* ギャラリー部分が画面いっぱいに表示される */
-      padding-bottom: 60px; /* スクロール時に少し余裕を持たせる */
-      z-index: 1; /* canvasの上に来るようにする */
+      overflow-y: auto;
+      height: 100%;
+      padding-bottom: 60px;
+      z-index: 1;
     }
 
     .card {
@@ -65,94 +61,71 @@
       border-radius: 12px;
       transition: box-shadow 0.3s ease;
       box-shadow: 0 0 12px rgba(255,255,255,0.1);
+      aspect-ratio: 3 / 2;
+      display: block;
     }
 
     .card:hover img {
       box-shadow: 0 0 20px rgba(255,255,255,0.4);
     }
 
-    /* 地図部分 */
-    #map {
-      width: 100%;
-      height: 400px;
-      margin-top: 20px;
-      border-radius: 10px;
+    /* マップ用 */
+    .card.map:hover {
+      transform: none;
     }
 
-    /* PC用 */
+    .card.map .map-frame {
+      width: 100%;
+      aspect-ratio: 3 / 2;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 0 12px rgba(255,255,255,0.1);
+    }
+
+    .card.map iframe {
+      width: 100%;
+      height: 100%;
+      border: 0;
+      display: block;
+      pointer-events: auto;
+    }
+
     @media (min-width: 769px) {
       body {
-        overflow: hidden; /* PCではスクロールを無効化 */
+        overflow: hidden;
         display: flex;
         justify-content: center;
         align-items: center;
       }
 
       .gallery-container {
-        grid-template-columns: repeat(3, 1fr); /* 3列で表示 */
-        justify-items: center; /* 横方向に中央寄せ */
-        align-items: center; /* 縦方向に中央寄せ */
+        grid-template-columns: repeat(3, 1fr);
+        justify-items: center;
+        align-items: center;
         height: 100%;
       }
     }
 
-    /* スマホ用 */
     @media (max-width: 768px) {
       body {
-        overflow: hidden; /* スマホでもbody全体のスクロール無効化 */
+        overflow: hidden;
       }
 
       .gallery-container {
-        grid-template-columns: 1fr; /* 1列で表示 */
+        grid-template-columns: 1fr;
         justify-content: center;
         align-items: center;
-        overflow-y: auto; /* ギャラリー部分だけスクロール可能 */
-        height: 100vh; /* ビューポートに合わせて高さを設定 */
-        padding-top: 30px; /* 上の余白をさらに広げて全体を下に配置 */
+        overflow-y: auto;
+        height: 100vh;
+        padding-top: 30px;
         padding-bottom: 120px;
+      }
+
+      .card a {
+        pointer-events: none;
       }
     }
   </style>
-  <!-- Google Maps APIを読み込む -->
-  <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_API_KEY&callback=initMap" async defer></script>
-  <script>
-    let map;
-
-    function initMap() {
-      const tokyoTower = { lat: 35.6586, lng: 139.7454 };
-
-      map = new google.maps.Map(document.getElementById("map"), {
-        center: tokyoTower,
-        zoom: 15,
-        mapTypeId: "roadmap",
-        styles: [
-          { "elementType": "geometry", "stylers": [{ "color": "#212121" }] },
-          { "elementType": "labels.icon", "stylers": [{ "visibility": "off" }] },
-          { "elementType": "labels.text.fill", "stylers": [{ "color": "#757575" }] },
-          { "elementType": "labels.text.stroke", "stylers": [{ "color": "#212121" }] },
-          { "featureType": "administrative", "elementType": "geometry", "stylers": [{ "color": "#757575" }] },
-          { "featureType": "poi", "elementType": "geometry", "stylers": [{ "color": "#212121" }] },
-          { "featureType": "poi.park", "elementType": "geometry", "stylers": [{ "color": "#181818" }] },
-          { "featureType": "road", "elementType": "geometry", "stylers": [{ "color": "#484848" }] },
-          { "featureType": "road", "elementType": "geometry.stroke", "stylers": [{ "color": "#212121" }] },
-          { "featureType": "road.highway", "elementType": "geometry", "stylers": [{ "color": "#746855" }] },
-          { "featureType": "road.highway", "elementType": "geometry.stroke", "stylers": [{ "color": "#1f1f1f" }] },
-          { "featureType": "road.arterial", "elementType": "geometry", "stylers": [{ "color": "#373737" }] },
-          { "featureType": "road.local", "elementType": "geometry", "stylers": [{ "color": "#212121" }] },
-          { "featureType": "transit", "elementType": "geometry", "stylers": [{ "color": "#2f2f2f" }] },
-          { "featureType": "transit.station", "elementType": "geometry", "stylers": [{ "color": "#3f3f3f" }] },
-          { "featureType": "water", "elementType": "geometry", "stylers": [{ "color": "#000000" }] },
-          { "featureType": "water", "elementType": "geometry.stroke", "stylers": [{ "color": "#000000" }] }
-        ]
-      });
-
-      const marker = new google.maps.Marker({
-        position: tokyoTower,
-        map: map,
-        title: "Tokyo Tower"
-      });
-    }
-  </script>
 </head>
 <body>
 
@@ -164,11 +137,13 @@
   <div class="card"><a href="#"><img src="https://placehold.jp/300x200.png" alt="" /></a></div>
   <div class="card"><a href="#"><img src="https://placehold.jp/300x200.png" alt="" /></a></div>
   <div class="card"><a href="#"><img src="https://placehold.jp/300x200.png" alt="" /></a></div>
-  <div class="card"><a href="#"><img src="https://placehold.jp/300x200.png" alt="" /></a></div>
 
-  <!-- 東京タワーの地図表示部分（ギャラリー枠の一番下に配置）-->
-  <div class="card">
-    <div id="map"></div>
+  <!-- 6つ目だけマップに差し替え -->
+  <div class="card map">
+    <div class="map-frame">
+      <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2754.588261461662!2d134.7318093604317!3d34.81157800592433!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3554df9c08d57293%3A0x83ba1245278a92a1!2z77yI5pyJ77yJ5byT5bel!5e0!3m2!1sja!2sjp!4v1745633751317!5m2!1sja!2sjp"
+        allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+    </div>
   </div>
 </div>
 
@@ -193,8 +168,8 @@
       x: Math.random() * width - width / 2,
       y: Math.random() * height - height / 2,
       z: Math.random() * width,
-      alpha: Math.random() * 0.5 + 0.3,  // 星の透明度を追加して柔らかさを出す
-      tailAlpha: 0,  // 残像の透明度
+      alpha: Math.random() * 0.5 + 0.3,
+      tailAlpha: 0,
     }));
   }
 
@@ -203,7 +178,7 @@
     ctx.fillRect(0, 0, width, height);
 
     for (let star of stars) {
-      star.z -= 1; // 星の動きが遅くなるように変更
+      star.z -= 1;
       if (star.z <= 0) {
         star.x = Math.random() * width - width / 2;
         star.y = Math.random() * height - height / 2;
@@ -215,23 +190,20 @@
       const sy = star.y * k + height / 2;
       const size = (1 - star.z / width) * 3;
 
-      // 残光効果の追加
       if (star.tailAlpha > 0) {
         ctx.beginPath();
-        ctx.arc(sx, sy, size * 2, 0, Math.PI * 2); // 残光の大きさを大きめに設定
+        ctx.arc(sx, sy, size * 2, 0, Math.PI * 2);
         ctx.fillStyle = `rgba(255, 255, 255, ${star.tailAlpha})`;
         ctx.fill();
-        star.tailAlpha *= 0.99; // 残像を徐々に消していく
+        star.tailAlpha *= 0.99;
       }
 
-      // 星の描画
       ctx.beginPath();
       ctx.arc(sx, sy, size, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(255, 255, 255, ${star.alpha})`; // 柔らかさを出すため透明度を追加
+      ctx.fillStyle = `rgba(255, 255, 255, ${star.alpha})`;
       ctx.fill();
 
-      // 残像効果のため、星の尾の透明度を設定
-      star.tailAlpha = Math.max(star.tailAlpha, 0.05);  // 最低でも残像は少し残る
+      star.tailAlpha = Math.max(star.tailAlpha, 0.05);
     }
 
     requestAnimationFrame(draw);
