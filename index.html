@@ -43,8 +43,6 @@
       pointer-events: none;
       user-select: none;
       text-align: center;
-      opacity: 1;
-      transition: opacity 2s ease;
     }
     #overlayText .part1 {
       display: block;
@@ -287,13 +285,8 @@
     // スキップボタンのクリック処理
     document.getElementById('skipButton').addEventListener('click', () => {
       const fadeOverlay = document.getElementById('fadeOverlay');
-      const overlayText = document.getElementById('overlayText');
-      
       fadeOverlay.style.pointerEvents = 'auto';
       fadeOverlay.style.opacity = 1;
-
-      // タイトルもフェードアウト
-      overlayText.style.opacity = 0;
 
       // フェードアウト後に遷移
       setTimeout(() => {
