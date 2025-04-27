@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
+  
+  <!-- iOS Safariのタスクバーの色を黒に変更 -->
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  <!-- Androidのタスクバーの色を黒に変更 -->
+  <meta name="theme-color" content="black">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      user-select: none;
+    }
+
+    body {
+      margin: 0;
+      overflow: hidden;
+      font-family: Arial, sans-serif;
+      color: white;
+    }
+
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    /* 中央揃えのタイトル */
+    h1 {
+      position: absolute;
+      top: 50%;  /* タイトルを画面の中央に配置 */
+      left: 50%;
+      transform: translate(-50%, -50%);  /* 中央揃え */
+      text-align: center;
+      font-size: 48px; /* タイトル文字の大きさ */
+      font-weight: bold;
+      text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.8);
+      opacity: 0;
+      animation: fadeIn 3s forwards;  /* タイトルのフェードイン */
+    }
+
+    /* 文章 */
+    .content {
+      position: absolute;
+      top: 60%; /* 文章をタイトルの下に配置 */
+      left: 50%;
+      transform: translateX(-50%); /* 横中央揃え */
+      font-size: 24px; /* 文字の大きさ */
+      line-height: 1.8;
+      font-weight: normal;
+      text-align: justify; /* 文章の整列 */
+      max-width: 90%; /* 文章が広がりすぎないように制限 */
+      overflow-y: auto;
+      height: 40%; /* 文章が画面の下部に長くなるように調整 */
+      opacity: 0;
+      animation: fadeIn 5s forwards; /* 文章のフェードイン */
+    }
+
+    @keyframes fadeIn {
+      0% {
+        opacity: 0;
+      }
+      100% {
+        opacity: 1;
+      }
+    }
+
+    /* スクロールができるように追加 */
+    body {
+      overflow-y: scroll; /* スクロールを有効にする */
+    }
+  </style>
+</head>
+
+<body>
+
+<canvas id="warpCanvas"></canvas>
+
+<!-- タイトル -->
+<h1>有限会社弓工　ご挨拶</h1>
+
+<!-- 文章部分 -->
+<div class="content">
+  <p>
+    有限会社弓工は、1996年（平成8年）、志高き技術者たちにより設立されました。<br>
+    当時、プラントエンジニアリングの現場は、決して平坦なものではありませんでした。<br>
+    わずかな仲間と限られた設備の中、ただひたすらに「ものづくりへの誇り」と「お客様に応えたい一心」だけを胸に、ひとつひとつの現場に向き合ってきました。<br><br>
+
+    新設・製作、工場移設、アフターメンテナンス。<br>
+    どの工程においても、安全と品質を何よりも大切にする姿勢を貫き、経験と信頼を積み重ねてまいりました。<br>
+    失敗も挫折も数えきれないほどありましたが、そのたびに仲間と力を合わせ、乗り越えてきた歩みこそが、弓工の土台となっています。<br><br>
+
+    時代は変わり、技術も価値観も大きく進化しています。<br>
+    私たちもまた、変化を恐れず挑み続ける集団でありたい。<br>
+    伝統的な職人技に磨きをかける一方で、最新技術にも柔軟に取り組み、次の時代を切り拓く力へと変えていきます。<br><br>
+
+    弓工の力の源は、仲間一人ひとりの存在です。<br>
+    支え合い、学び合い、高め合いながら、共に未来をつくる。<br>
+    これからも、技術と人を大切にし、社会に必要とされる会社であり続けます。<br><br>
+
+    志を共にする仲間と共に、有限会社弓工は、次の未来へ歩みを進めます。
+  </p>
+</div>
+
+<script>
+  const canvas = document.getElementById('warpCanvas');
+  const ctx = canvas.getContext('2d');
+
+  let stars = [];
+  const numStars = 500;
+  let width, height, focalLength;
+
+  function init() {
+    width = window.innerWidth;
+    height = window.innerHeight;
+    focalLength = width / 2;
+
+    canvas.width = width;
+    canvas.height = height;
+
+    stars = Array.from({ length: numStars }, () => ({
+      x: Math.random() * width - width / 2,
+      y: Math.random() * height - height / 2,
+      z: Math.random() * width
+    }));
+  }
+
+  function draw() {
+    ctx.fillStyle = 'black';
+    ctx.fillRect(0, 0, width, height);
+
+    stars.forEach(star => {
+      star.z -= 1;
+      if (star.z <= 0) {
+        star.x = Math.random() * width - width / 2;
+        star.y = Math.random() * height - height / 2;
+        star.z = width;
+      }
+
+      const k = focalLength / star.z;
+      const sx = star.x * k + width / 2;
+      const sy = star.y * k + height / 2;
+      const size = (1 - star.z / width) * 3;
+
+      ctx.beginPath();
+      ctx.arc(sx, sy, size, 0, Math.PI * 2);
+      ctx.fillStyle = 'white';
+      ctx.fill();
+    });
+
+    requestAnimationFrame(draw);
+  }
+
+  window.addEventListener('resize', init);
+  init();
+  draw();
+</script>
+
+</body>
+</html>
