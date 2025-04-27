@@ -277,12 +277,6 @@
     }, 2600);
 
     setTimeout(() => {
-      const overlayText = document.getElementById('overlayText');
-      overlayText.style.transition = 'opacity 2s ease-in-out';
-      overlayText.style.opacity = 0; // 2秒後にフェードアウト
-    }, 6000); // 2秒後にフェードアウト開始
-
-    setTimeout(() => {
       const skipButton = document.getElementById('skipButton');
       skipButton.style.display = 'block';
       skipButton.style.opacity = 1;

@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
+  
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="theme-color" content="black">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      user-select: none;
+    }
+
+    body {
+      margin: 0;
+      position: relative;
+      height: 100vh;
+      overflow: hidden;
+      background: black;
+      font-family: sans-serif;
+    }
+
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    /* フォントサイズ調整用のCSS変数 */
+    :root {
+      --font-size-h1: 24px;
+      --font-size-p: 21px;
+      --font-size-card: 18px;
+    }
+
+    /* テキストエリア */
+    .text-area {
+      position: fixed;
+      top: 50%;
+      left: 10%;
+      width: 30%;
+      transform: translateY(-50%);
+      text-align: center;
+      z-index: 100;
+      background-color: rgba(0, 0, 0, 0.7);
+      color: white;
+      padding: 20px;
+      border-radius: 10px;
+    }
+
+    .text-area h1 {
+      font-size: var(--font-size-h1);
+      margin: 0;
+    }
+
+    .text-area p {
+      margin-top: 10px;
+      font-size: var(--font-size-p);
+    }
+
+    .text-area a {
+      display: inline-block;
+      margin-top: 10px;
+      padding: 10px 20px;
+      background: #00bcd4;
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+    }
+
+    /* ギャラリー */
+    .gallery {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 50%;
+      height: 100vh; /* 高さは100vhに固定 */
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      padding: 20px 20px 40px; /* 下部に余裕を40px追加 */
+      box-sizing: border-box;
+      z-index: 10;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+
+    .gallery::-webkit-scrollbar {
+      display: none;
+    }
+
+    .card {
+      width: 100%;
+      height: 150px;
+      background-color: #ccc;
+      border-radius: 8px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 10px;
+      cursor: pointer;
+      font-size: var(--font-size-card);
+      font-weight: bold;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .card iframe {
+      width: 100%;
+      height: 100%;
+      border: 0;
+      border-radius: 8px;
+      pointer-events: none;
+    }
+
+    /* モバイル対応 */
+    @media (max-width: 768px) {
+      .text-area {
+        width: 52%;
+        left: 2%;
+        top: 50%;
+        transform: translateY(-50%);
+        padding: 5px;
+      }
+
+      .gallery {
+        width: 50%;
+        right: 0;
+        top: 0;
+        height: 100vh; /* 高さは100vhに固定 */
+        padding: 10px 20px 90px; /* スマホの場合に下部余裕を60pxに変更 */
+      }
+
+      .card {
+        height: 180px;
+      }
+
+      .text-area h1 {
+        font-size: var(--font-size-h1);
+      }
+
+      .text-area p {
+        font-size: var(--font-size-p);
+      }
+    }
+
+    /* オーバーレイ */
+    #overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgb(0, 0, 0);
+      z-index: 1000;
+      opacity: 1;
+      transition: opacity 2s ease;
+      pointer-events: none;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="overlay"></div>
+
+  <canvas id="warpCanvas"></canvas>
+
+  <div class="text-area">
+    <h1></h1>
+    <p id="textDisplay">ここに説明文が入ります。</p>
+    <a id="linkButton" href="#" target="_blank" style="display: none;">地図を開く</a>
+  </div>
+
+  <div class="gallery">
+    <div class="card" data-text="画像1に関連するテキスト">画像1</div>
+    <div class="card" data-text="画像2に関連するテキスト">画像2</div>
+    <div class="card" data-text="画像3に関連するテキスト">画像3</div>
+    <div class="card" data-text="画像4に関連するテキスト">画像4</div>
+    <div class="card" data-text="画像5に関連するテキスト">画像5</div>
+    <div class="card" id="mapCard" data-text="平素より格別のご高配を賜り、誠にありがとうございます。
+    お近くへお越しの際は、ぜひ弊社にもお立ち寄りいただけますと幸いです。
+    皆様のご来訪を心よりお待ちしております。">
+      <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d579.0726516617829!2d134.73116545920215!3d34.81274440596379!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3554df9c08d57293%3A0x83ba1245278a92a1!2z77yI5pyJ77yJ5byT5bel!5e0!3m2!1sja!2sjp!4v1745753774641!5m2!1sja!2sjp" 
+        allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+    </div>
+  </div>
+
+  <script>
+    window.addEventListener('load', () => {
+      const overlay = document.getElementById('overlay');
+      overlay.style.opacity = 0;
+      setTimeout(() => {
+        overlay.style.display = 'none';
+      }, 2000);
+    });
+
+    const canvas = document.getElementById('warpCanvas');
+    const ctx = canvas.getContext('2d');
+
+    let stars = [];
+    const numStars = 500;
+    let width, height, focalLength;
+
+    function init() {
+      width = window.innerWidth;
+      height = window.innerHeight;
+      focalLength = width / 2;
+      canvas.width = width;
+      canvas.height = height;
+
+      stars = Array.from({ length: numStars }, () => ({
+        x: Math.random() * width - width / 2,
+        y: Math.random() * height - height / 2,
+        z: Math.random() * width
+      }));
+    }
+
+    function draw() {
+      ctx.fillStyle = 'black';
+      ctx.fillRect(0, 0, width, height);
+
+      stars.forEach(star => {
+        star.z -= 1;
+        if (star.z <= 0) {
+          star.x = Math.random() * width - width / 2;
+          star.y = Math.random() * height - height / 2;
+          star.z = width;
+        }
+
+        const k = focalLength / star.z;
+        const sx = star.x * k + width / 2;
+        const sy = star.y * k + height / 2;
+        const size = (1 - star.z / width) * 3;
+
+        ctx.beginPath();
+        ctx.arc(sx, sy, size, 0, Math.PI * 2);
+        ctx.fillStyle = 'white';
+        ctx.fill();
+      });
+
+      requestAnimationFrame(draw);
+    }
+
+    window.addEventListener('resize', init);
+    init();
+    draw();
+
+    const cards = document.querySelectorAll('.card');
+    const textDisplay = document.getElementById('textDisplay');
+    const linkButton = document.getElementById('linkButton');
+
+    cards.forEach(card => {
+      card.addEventListener('click', () => {
+        const text = card.getAttribute('data-text');
+        textDisplay.textContent = text;
+
+        if (card.id === 'mapCard') {
+          linkButton.style.display = 'inline-block';
+          linkButton.href = "https://maps.app.goo.gl/4j9atNvngjuf6ysm9";
+        } else {
+          linkButton.style.display = 'none';
+        }
+      });
+    });
+  </script>
+</body>
+</html>
