@@ -2,182 +2,231 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Centered Gallery</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
+  
+  <!-- iOS Safariのタスクバーの色を黒に変更 -->
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  <!-- Androidのタスクバーの色を黒に変更 -->
+  <meta name="theme-color" content="black">
+
   <style>
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
+      user-select: none;
     }
 
-    html, body {
-      width: 100%;
-      height: 100%;
+    body {
+      margin: 0;
+      position: relative;
+      height: 100vh;
+      overflow: hidden;
       background: black;
-      color: white;
-      font-family: 'Segoe UI', sans-serif;
-      overflow: hidden; /* PCでは固定表示 */
     }
 
+    /* 背景のキャンバス */
     canvas {
       position: fixed;
       top: 0;
       left: 0;
-      z-index: -2;
       width: 100%;
       height: 100%;
+      z-index: -1;
+      pointer-events: none;
     }
 
-    .wrapper {
-      width: 100vw;
+    /* 左側のテキストエリア */
+    .text-area {
+      position: fixed;
+      top: 50%;
+      left: 20%;
+      transform: translateY(-50%);
+      text-align: center;
+      z-index: 10;
+      background-color: rgba(0, 0, 0, 0.7);
+      color: white;
+      padding: 20px;
+      border-radius: 10px;
+    }
+
+    .text-area h1 {
+      margin: 0;
+      font-size: 24px;
+    }
+
+    .text-area p {
+      margin-top: 10px;
+    }
+
+    /* 右側のギャラリー */
+    .gallery {
+      width: 50%;
+      margin-left: 50%;
       height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 2vh 2vw;
-      margin-top: 1vh; 
+      overflow-y: scroll;
+      -webkit-overflow-scrolling: touch;
+      padding: 20px;
+      box-sizing: border-box;
+      z-index: 10;
+      position: relative;
+
+      /* スクロールバーを非表示 */
+      scrollbar-width: none; /* Firefox */
+      -ms-overflow-style: none; /* IE/Edge */
     }
 
-    .gallery-container {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      grid-template-rows: repeat(2, 1fr);
-      gap: 2vh 2vw;
-      width: 100%;
-      height: 100%;
+    .gallery::-webkit-scrollbar {
+      display: none; /* Webkit */
     }
 
     .card {
       width: 100%;
-      height: 95%;
-      border-radius: 12px;
-      overflow: hidden;
-      transition: transform 0.3s ease;
-    }
-
-    .card:hover {
-      transform: scale(1.03);
-    }
-
-    .card img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-      border-radius: 12px;
-      box-shadow: 0 0 12px rgba(255, 255, 255, 0.1);
-    }
-
-    .card.map iframe {
-      width: 100%;
-      height: 100%;
-      border: 0;
-      border-radius: 12px;
-      box-shadow: 0 0 12px rgba(255, 255, 255, 0.1);
+      height: 150px;
+      background-color: #ccc;
+      border-radius: 8px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 10px;
+      cursor: pointer;
+      font-size: 18px;
+      font-weight: bold;
     }
 
     @media (max-width: 768px) {
-      html, body {
-        overflow-y: auto; /* スマホで縦スクロール許可 */
+      .text-area {
+        width: 50%;
+        left: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 20px;
       }
 
-      .wrapper {
-        padding: 20px;
-        height: auto;
-        align-items: start;
-      }
-
-      .gallery-container {
-        grid-template-columns: 1fr;
-        grid-template-rows: auto;
-        height: auto;
-        gap: 20px;
+      .gallery {
+        width: 50%;
+        margin-left: 50%;
+        height: 90vh;
       }
 
       .card {
-        height: 40vh;
+        height: 200px;
       }
+    }
+
+    /* 光のオーバーレイ */
+    #overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgb(0, 0, 0);
+      z-index: 1000;
+      opacity: 1;
+      transition: opacity 2s ease;
+      pointer-events: none;
     }
   </style>
 </head>
+
 <body>
+  <!-- 光のオーバーレイ -->
+  <div id="overlay"></div>
 
-<canvas id="warpCanvas"></canvas>
+  <!-- 背景のキャンバス -->
+  <canvas id="warpCanvas"></canvas>
 
-<div class="wrapper">
-  <div class="gallery-container">
-    <div class="card"><img src="https://placehold.jp/900x600.png" alt="img1" /></div>
-    <div class="card"><img src="https://placehold.jp/900x600.png" alt="img2" /></div>
-    <div class="card"><img src="https://placehold.jp/900x600.png" alt="img3" /></div>
-    <div class="card"><img src="https://placehold.jp/900x600.png" alt="img4" /></div>
-    <div class="card"><img src="https://placehold.jp/900x600.png" alt="img5" /></div>
-    <div class="card map">
-      <iframe
-        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2754.588261461662!2d134.7318093604317!3d34.81157800592433!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3554df9c08d57293%3A0x83ba1245278a92a1!2z77yI5pyJ77yJ5byT5bel!5e0!3m2!1sja!2sjp!4v1745633751317!5m2!1sja!2sjp"
-        allowfullscreen=""
-        referrerpolicy="no-referrer-when-downgrade">
-      </iframe>
-    </div>
+  <!-- 左側テキストエリア -->
+  <div class="text-area">
+    <h1>ギャラリー</h1>
+    <p id="textDisplay">ここに説明文が入ります。</p>
   </div>
-</div>
 
-<script>
-  const canvas = document.getElementById('warpCanvas');
-  const ctx = canvas.getContext('2d');
+  <!-- 右側ギャラリー -->
+  <div class="gallery">
+    <div class="card" data-text="画像1に関連するテキスト">画像1</div>
+    <div class="card" data-text="画像2に関連するテキスト">画像2</div>
+    <div class="card" data-text="画像3に関連するテキスト">画像3</div>
+    <div class="card" data-text="画像4に関連するテキスト">画像4</div>
+    <div class="card" data-text="画像5に関連するテキスト">画像5</div>
+    <div class="card" data-text="画像6に関連するテキスト">画像6</div>
+  </div>
 
-  let stars = [];
-  const numStars = 500;
-  let width, height;
-  let focalLength;
+  <script>
+    // 光のオーバーレイフェードアウト
+    window.addEventListener('load', () => {
+      const overlay = document.getElementById('overlay');
+      overlay.style.opacity = 0;
+      setTimeout(() => {
+        overlay.style.display = 'none';
+      }, 2000);
+    });
 
-  function init() {
-    width = window.innerWidth;
-    height = window.innerHeight;
-    focalLength = width / 2;
+    // 背景のワープアニメーション
+    const canvas = document.getElementById('warpCanvas');
+    const ctx = canvas.getContext('2d');
 
-    canvas.width = width;
-    canvas.height = height;
+    let stars = [];
+    const numStars = 500;
+    let width, height, focalLength;
 
-    stars = Array.from({ length: numStars }, () => ({
-      x: Math.random() * width - width / 2,
-      y: Math.random() * height - height / 2,
-      z: Math.random() * width,
-      alpha: Math.random() * 0.5 + 0.3,
-      tailAlpha: 0,
-    }));
-  }
+    function init() {
+      width = window.innerWidth;
+      height = window.innerHeight;
+      focalLength = width / 2;
 
-  function draw() {
-    ctx.fillStyle = 'black';
-    ctx.fillRect(0, 0, width, height);
+      canvas.width = width;
+      canvas.height = height;
 
-    for (let star of stars) {
-      star.z -= 1;
-      if (star.z <= 0) {
-        star.x = Math.random() * width - width / 2;
-        star.y = Math.random() * height - height / 2;
-        star.z = width;
-      }
-
-      const k = focalLength / star.z;
-      const sx = star.x * k + width / 2;
-      const sy = star.y * k + height / 2;
-      const size = (1 - star.z / width) * 3;
-
-      ctx.beginPath();
-      ctx.arc(sx, sy, size, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(255, 255, 255, ${star.alpha})`;
-      ctx.fill();
+      stars = Array.from({ length: numStars }, () => ({
+        x: Math.random() * width - width / 2,
+        y: Math.random() * height - height / 2,
+        z: Math.random() * width
+      }));
     }
 
-    requestAnimationFrame(draw);
-  }
+    function draw() {
+      ctx.fillStyle = 'black';
+      ctx.fillRect(0, 0, width, height);
 
-  window.addEventListener('resize', init);
-  init();
-  draw();
-</script>
+      stars.forEach(star => {
+        star.z -= 1;
+        if (star.z <= 0) {
+          star.x = Math.random() * width - width / 2;
+          star.y = Math.random() * height - height / 2;
+          star.z = width;
+        }
 
+        const k = focalLength / star.z;
+        const sx = star.x * k + width / 2;
+        const sy = star.y * k + height / 2;
+        const size = (1 - star.z / width) * 3;
+
+        ctx.beginPath();
+        ctx.arc(sx, sy, size, 0, Math.PI * 2);
+        ctx.fillStyle = 'white';
+        ctx.fill();
+      });
+
+      requestAnimationFrame(draw);
+    }
+
+    window.addEventListener('resize', init);
+    init();
+    draw();
+
+    // ギャラリーのカードをクリックでテキストを更新
+    const cards = document.querySelectorAll('.card');
+    const textDisplay = document.getElementById('textDisplay');
+
+    cards.forEach(card => {
+      card.addEventListener('click', () => {
+        const text = card.getAttribute('data-text');
+        textDisplay.textContent = text;
+      });
+    });
+  </script>
 </body>
 </html>

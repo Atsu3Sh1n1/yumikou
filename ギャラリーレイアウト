@@ -1,0 +1,144 @@
+<!DOCTYPE html> 
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0">
+    <title>ギャラリーのレイアウト</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+            touch-action: none; /* ダブルタップ無効化とピンチ無効化 */
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        /* 左側のテキストエリア */
+        .text-area {
+            position: fixed;
+            top: 50%;
+            left: 20%; /* 画面左側から10%の位置 */
+            transform: translateY(-50%);
+            text-align: center;
+            z-index: 10;
+        }
+
+        .text-area h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .text-area p {
+            margin-top: 10px;
+        }
+
+        /* 右側のギャラリー */
+        .gallery {
+            width: 50%;
+            margin-left: 50%;
+            height: 100%;
+            overflow-y: scroll;
+            padding: 20px;
+            box-sizing: border-box;
+            touch-action: auto; /* ギャラリー内のスクロールを有効にする */
+        }
+
+        .card {
+            width: 100%;
+            height: 150px;
+            background-color: #ccc;
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 10px;
+            cursor: pointer; /* クリック可能であることを示す */
+        }
+
+        /* スマホ対応 */
+        @media (max-width: 768px) {
+            body {
+                flex-direction: row;
+            }
+
+            .text-area {
+                width: 50%;
+                left: 0;
+                top: 50%;
+                transform: translateY(-50%);
+                font-size: 20px;
+            }
+
+            .gallery {
+                width: 50%;
+                margin-left: 50%;
+                height: 90%;
+            }
+
+            .card {
+                height: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 左側テキストエリア -->
+    <div class="text-area">
+        <h1>ギャラリー</h1>
+        <p id="textDisplay">ここに説明文が入ります。</p>
+    </div>
+
+    <!-- 右側ギャラリー -->
+    <div class="gallery">
+        <div class="card" data-text="画像1に関連するテキスト">画像1</div>
+        <div class="card" data-text="画像2に関連するテキスト">画像2</div>
+        <div class="card" data-text="画像3に関連するテキスト">画像3</div>
+        <div class="card" data-text="画像4に関連するテキスト">画像4</div>
+        <div class="card" data-text="画像5に関連するテキスト">画像5</div>
+        <div class="card" data-text="画像6に関連するテキスト">画像6</div>
+    </div>
+
+    <script>
+        // ズームやダブルタップを防止するための設定
+        let lastTouchTime = 0;
+
+        // タッチスタートイベントでダブルタップを検知し無効化
+        document.body.addEventListener('touchstart', function(event) {
+            const currentTime = new Date().getTime();
+            if (currentTime - lastTouchTime <= 300) {
+                event.preventDefault(); // ダブルタップを無効にする
+            }
+            lastTouchTime = currentTime;
+        });
+
+        // 画像をタップしたときにテキストを表示
+        const cards = document.querySelectorAll('.card');
+        const textDisplay = document.getElementById('textDisplay');
+
+        // クリックイベントをPC版向けに追加
+        if (window.innerWidth > 768) {
+            cards.forEach(card => {
+                card.addEventListener('click', function() {
+                    const text = this.getAttribute('data-text');
+                    textDisplay.textContent = text;
+                });
+            });
+        }
+        // タッチイベントをスマホ版向けに追加
+        else {
+            cards.forEach(card => {
+                card.addEventListener('touchstart', function(event) {
+                    const text = this.getAttribute('data-text');
+                    textDisplay.textContent = text;
+                });
+            });
+        }
+    </script>
+</body>
+</html>
