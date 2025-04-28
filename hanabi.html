@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>線香花火・本当のスケール版</title>
+  <title>線香花火・5倍10倍スケール版</title>
   <style>
     body, html {
       margin: 0;
@@ -95,16 +95,20 @@ function createFirework(x, y) {
   let baseSpeed = 1;
 
   const rand = Math.random();
-  if (rand < 0.05) {
-    baseCount *= Math.random() < 0.5 ? 2 : 3; // 超大爆発
+  if (rand < 0.03) { // 超特大爆発
+    baseCount *= 10;
+    baseSpeed = 2.5;
+  } else if (rand < 0.10) { // 特大爆発
+    baseCount *= 5;
     baseSpeed = 2;
-  } else if (rand < 0.20) {
-    baseCount *= 1.8; // 大爆発
+  } else if (rand < 0.25) { // 大爆発
+    baseCount *= 2;
     baseSpeed = 1.5;
-  } else if (rand < 0.50) {
-    baseCount *= 1.3; // 中爆発
+  } else if (rand < 0.50) { // 中爆発
+    baseCount *= 1.5;
     baseSpeed = 1.2;
-  }
+  } // 小爆発はそのまま
+
   baseCount = Math.floor(baseCount);
 
   for (let i = 0; i < baseCount; i++) {
