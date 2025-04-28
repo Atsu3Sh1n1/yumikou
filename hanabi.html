@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>線香花火＋風バージョン</title>
+  <title>線香花火・進化版</title>
   <style>
     body, html {
       margin: 0;
@@ -24,9 +24,6 @@ const canvas = document.getElementById('sparkCanvas');
 const ctx = canvas.getContext('2d');
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
-
-let wind = 0;
-let windTarget = 0;
 
 class Spark {
   constructor(x, y, isSecondary = false) {
@@ -54,9 +51,6 @@ class Spark {
       this.trail.shift();
     }
 
-    // 風の影響
-    this.vx += wind * 0.05;
-
     this.x += this.vx;
     this.y += this.vy;
 
@@ -68,10 +62,10 @@ class Spark {
     this.lightness = 30 + (this.life / this.maxLife) * 30;
     this.radius *= 0.96;
 
-    // 二次火花を一度だけ発生
+    // 二次火花を一度だけ発生させる
     if (!this.isSecondary && !this.hasSpawnedSecondary && this.life < this.maxLife * 0.5) {
       this.hasSpawnedSecondary = true;
-      if (Math.random() < 0.6) {
+      if (Math.random() < 0.6) { // 二次火花は6割の確率で出る
         createSecondarySparks(this.x, this.y);
       }
     }
@@ -99,9 +93,12 @@ let sparks = [];
 
 function createFirework(x, y) {
   let baseCount = 30 + Math.floor(Math.random() * 40);
-  if (Math.random() < 0.1) {
-    baseCount *= Math.random() < 0.5 ? 2 : 3;
+
+  // 低確率でドカン爆発
+  if (Math.random() < 0.1) { // 10%の確率で
+    baseCount *= Math.random() < 0.5 ? 2 : 3; // さらに2倍か3倍
   }
+
   for (let i = 0; i < baseCount; i++) {
     sparks.push(new Spark(x, y));
   }
@@ -114,21 +111,9 @@ function createSecondarySparks(x, y) {
   }
 }
 
-function updateWind() {
-  // 風のターゲット方向を少しずつ目指す
-  wind += (windTarget - wind) * 0.01;
-
-  // たまに風の向き・強さを変える
-  if (Math.random() < 0.005) {
-    windTarget = (Math.random() - 0.5) * 2; // -1〜1くらい
-  }
-}
-
 function animate() {
   ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
   ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-  updateWind();
 
   for (let i = sparks.length - 1; i >= 0; i--) {
     const spark = sparks[i];
@@ -139,6 +124,7 @@ function animate() {
     }
   }
 
+  // 爆発発生
   if (Math.random() < 0.02) {
     const x = Math.random() * canvas.width;
     const y = Math.random() * canvas.height * 0.8 + canvas.height * 0.1;
