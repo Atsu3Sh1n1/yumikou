@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>線香花火・超超特大バージョン</title>
+  <title>線香花火・改良版（超超特大＆ふわっと尾）</title>
   <style>
     body, html {
       margin: 0;
@@ -26,7 +26,7 @@ canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
 class Spark {
-  constructor(x, y, baseSpeed = 1, lifeMultiplier = 1, trailMultiplier = 1, isSecondary = false) {
+  constructor(x, y, baseSpeed = 1, lifeMultiplier = 1, trailMultiplier = 1, fadeSpeed = 0.04, isSecondary = false) {
     this.x = x;
     this.y = y;
     this.radius = isSecondary ? Math.random() * 1 + 0.3 : Math.random() * 2 + 1;
@@ -44,6 +44,7 @@ class Spark {
     this.trailMaxLength = Math.floor((Math.random() * (isSecondary ? 2 : 6) + 2) * trailMultiplier);
     this.isSecondary = isSecondary;
     this.hasSpawnedSecondary = false;
+    this.fadeSpeed = fadeSpeed; // 消える速度
   }
   update() {
     this.trail.push({x: this.x, y: this.y});
@@ -60,12 +61,12 @@ class Spark {
 
     this.life--;
     this.lightness = 30 + (this.life / this.maxLife) * 30;
-    this.radius *= 0.96;
+    this.radius *= (1 - this.fadeSpeed);
 
     if (!this.isSecondary && !this.hasSpawnedSecondary && this.life < this.maxLife * 0.5) {
       this.hasSpawnedSecondary = true;
-      if (Math.random() < 0.6) {
-        createSecondarySparks(this.x, this.y);
+      if (Math.random() < 0.8) { // セカンダリ出現確率UP
+        createSecondarySparks(this.x, this.y, this.fadeSpeed);
       }
     }
   }
@@ -95,6 +96,7 @@ function createFirework(x, y) {
   let baseSpeed = 1;
   let lifeMultiplier = 1;
   let trailMultiplier = 1;
+  let fadeSpeed = 0.04;
 
   const rand = Math.random();
   if (rand < 0.01) { // 超超特大
@@ -102,39 +104,44 @@ function createFirework(x, y) {
     baseSpeed = 3;
     lifeMultiplier = 3;
     trailMultiplier = 3;
+    fadeSpeed = 0.01;
   } else if (rand < 0.03) { // 超特大
     baseCount *= 10;
     baseSpeed = 2.5;
     lifeMultiplier = 2.5;
     trailMultiplier = 2.5;
+    fadeSpeed = 0.015;
   } else if (rand < 0.10) { // 特大
     baseCount *= 5;
     baseSpeed = 2;
     lifeMultiplier = 2;
     trailMultiplier = 2;
+    fadeSpeed = 0.02;
   } else if (rand < 0.25) { // 大
     baseCount *= 2;
     baseSpeed = 1.5;
     lifeMultiplier = 1.5;
     trailMultiplier = 1.5;
+    fadeSpeed = 0.03;
   } else if (rand < 0.50) { // 中
     baseCount *= 1.5;
     baseSpeed = 1.2;
     lifeMultiplier = 1.2;
     trailMultiplier = 1.2;
+    fadeSpeed = 0.035;
   } // 小はそのまま
 
   baseCount = Math.floor(baseCount);
 
   for (let i = 0; i < baseCount; i++) {
-    sparks.push(new Spark(x, y, baseSpeed, lifeMultiplier, trailMultiplier));
+    sparks.push(new Spark(x, y, baseSpeed, lifeMultiplier, trailMultiplier, fadeSpeed));
   }
 }
 
-function createSecondarySparks(x, y) {
-  const count = 5 + Math.floor(Math.random() * 5);
+function createSecondarySparks(x, y, parentFadeSpeed) {
+  const count = 3 + Math.floor(Math.random() * 5); // さらにばらけさせる
   for (let i = 0; i < count; i++) {
-    sparks.push(new Spark(x, y, 0.8, 0.8, 0.8, true));
+    sparks.push(new Spark(x, y, 0.8, 0.8, 0.8, parentFadeSpeed * 1.2, true));
   }
 }
 
