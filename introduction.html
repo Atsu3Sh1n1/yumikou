@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
@@ -18,8 +18,8 @@
       overflow: hidden;
       font-family: 'Arial', sans-serif;
       height: 100vh;
-      opacity: 0;  /* 初めは透明 */
-      transition: opacity 2s ease-in;  /* 2秒かけてフェードイン */
+      opacity: 0;
+      transition: opacity 2s ease-in;
     }
 
     canvas {
@@ -93,6 +93,31 @@
       transition: opacity 0.5s ease-in-out;
       z-index: 2;
     }
+
+    /* --- スマホ専用 大きくする！ --- */
+    @media (max-width: 768px) {
+      .scrolling-text {
+        width: 100%;
+        animation: crawl-mobile 120s linear forwards;
+      }
+
+      .title {
+        font-size: 40px; /* ←スマホでさらにデカく！ */
+      }
+
+      .content {
+        font-size: 30px; /* ←本文もデカく！ */
+      }
+
+      @keyframes crawl-mobile {
+        0% {
+          transform: rotateX(25deg) translateY(340vh); /* ←スマホはさらに下から！ */
+        }
+        100% {
+          transform: rotateX(25deg) translateY(-340vh);
+        }
+      }
+    }
   </style>
 </head>
 
@@ -106,9 +131,8 @@
         有限会社弓工　ご挨拶
       </div>
       <div class="content">
-        <p>有限会社弓工は、1996年（平成8年）、</p>
-        <p>志(こころざし)高き技術者たちと共に設立しました。</p>
-        <p>当時を振り返ると、プラントエンジニアリングの現場は決して平坦なものではありませんでした。</p>
+        <p>有限会社弓工は、1996年（平成8年）、志(こころざし)高き技術者たちと共に設立しました。</p>
+        <p>当時を振り返ると、プラントエンジニアリングの現場は、決して平坦なものではありませんでした。</p>
         <p>わずかな仲間と限られた設備の中、ただひたすらに「ものづくりへの誇り」と「お客様に応えたい一心」だけを胸に、ひとつひとつの現場に向き合ってまいりました。</p>
         <p>新設・製作、工場移設、アフターメンテナンス。</p>
         <p>どの工程においても、安全と品質を何よりも大切にする姿勢を貫き、経験と信頼を積み重ねてまいりました。</p>
@@ -124,7 +148,6 @@
     </div>
   </div>
 
-  <!-- スキップボタン -->
   <button class="skip-btn" onclick="window.location.href='gallery.html';">スキップ</button>
 
   <script>
@@ -180,20 +203,17 @@
     init();
     draw();
 
-    // ページ読み込み後にフェードインさせる
     window.onload = function() {
-      document.body.style.opacity = 1; // 2秒かけてフェードイン
+      document.body.style.opacity = 1;
     };
 
-    // 2秒後にスキップボタンを表示する
     setTimeout(function() {
       const skipBtn = document.querySelector('.skip-btn');
-      skipBtn.style.display = 'block';  // ボタンを表示
+      skipBtn.style.display = 'block';
       setTimeout(function() {
-        skipBtn.style.opacity = '1';  // ボタンがふわっと現れる
+        skipBtn.style.opacity = '1';
       }, 50);
     }, 2000);
-
   </script>
 
 </body>
