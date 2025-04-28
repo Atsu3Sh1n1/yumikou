@@ -35,6 +35,27 @@
       --font-size-card: 18px;
     }
 
+    /* ====== プルダウンメニュー追加 ====== */
+    .menu-select {
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      background-color: rgba(0, 0, 0, 0.5);
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 5px;
+      z-index: 1000;
+      font-size: 16px;
+    }
+
+    /* ====== メニュー選択時のフォーカス変更 ====== */
+    .menu-select:focus {
+      outline: none;
+      border: 2px solid rgba(0, 0, 0, 0.5); /* 黒い透明のライン */
+      background-color: rgba(0, 0, 0, 0.7); /* フォーカス時の背景色変更 */
+    }
+
     /* ====== テキストエリア ====== */
     .text-area {
       position: fixed;
@@ -166,6 +187,13 @@
 </head>
 
 <body>
+  <!-- プルダウンメニュー -->
+  <select class="menu-select" id="menuSelect">
+    <option value="">メニューを選択</option>
+    <option value="index.html">トップ</option>
+    <option value="C:\yumikou\introduction.html">挨拶</option>
+  </select>
+
   <div id="overlay"></div>
 
   <canvas id="sparkCanvas"></canvas>
@@ -185,14 +213,20 @@
     <div class="card" id="mapCard" data-text="平素より格別のご高配を賜り、誠にありがとうございます。">
       <iframe src="https://www.google.com/maps/embed?pb=..." allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
     </div>
-
-    <!-- ボタン位置用のダミー -->
     <div id="button-placeholder" style="height: 80px;"></div>
   </div>
 
   <button id="fireworkButton" class="firework-button">花火を見る</button>
 
   <script>
+    // プルダウンでページ遷移
+    document.getElementById('menuSelect').addEventListener('change', function() {
+      const url = this.value;
+      if (url) {
+        window.location.href = url;
+      }
+    });
+
     // ====== オーバーレイフェードアウト ======
     window.addEventListener('load', () => {
       const overlay = document.getElementById('overlay');
