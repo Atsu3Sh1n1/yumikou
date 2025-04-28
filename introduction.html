@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>弓工 ご挨拶</title>
   <style>
     * {
@@ -31,12 +31,6 @@
       z-index: -1;
     }
 
-    :root {
-      --start-padding: 40vh;  /* スタート位置 */
-      --scroll-start: 400vh;  /* スクロール開始の深さ */
-      --scroll-speed: 150s;   /* スクロール速度 */
-    }
-
     .star-wars-intro {
       position: relative;
       height: 100vh;
@@ -55,26 +49,26 @@
       color: yellow;
       font-weight: bold;
       text-align: center;
-      animation: crawl var(--scroll-speed) linear forwards;
+      animation: crawl 150s linear forwards;
     }
 
     @keyframes crawl {
       0% {
-        transform: rotateX(25deg) translateY(var(--scroll-start));
+        transform: rotateX(25deg) translateY(var(--scroll-start, 20vh));  /* 開始位置 */
       }
       100% {
-        transform: rotateX(25deg) translateY(-100vh);
+        transform: rotateX(25deg) translateY(-300vh);  /* 画面外までスクロール */
       }
     }
 
     .title {
-      font-size: 80px;
+      font-size: 8vw; /* ビューポート幅に基づく設定 */
       margin-bottom: 60px;
       text-align: center;
     }
 
     .content {
-      font-size: 50px;
+      font-size: 5vw; /* ビューポート幅に基づく設定 */
       line-height: 1.8;
       text-align: center;
     }
@@ -102,32 +96,26 @@
 
     /* --- スマホ専用設定 --- */
     @media (max-width: 768px) {
-      :root {
-        --start-padding: 90vh;  /* スマホ版でより下からスタート */
-        --scroll-start: 340vh;  /* スマホ版でスクロール開始をさらに下げる */
-        --scroll-speed: 200s;   /* スマホ版はスクロール速度をゆっくり */
-      }
-
       .scrolling-text {
         width: 100%;
-        animation: crawl-mobile var(--scroll-speed) linear forwards;
+        animation: crawl-mobile 200s linear forwards;
+      }
+
+      .title {
+        font-size: 10vw;  /* スマホ版でタイトルをデカく */
+      }
+
+      .content {
+        font-size: 11vw;  /* スマホ版で本文をデカく */
       }
 
       @keyframes crawl-mobile {
         0% {
-          transform: rotateX(25deg) translateY(var(--scroll-start));
+          transform: rotateX(25deg) translateY(var(--scroll-start-mobile, 50vh));  /* スマホは画面の50%から開始 */
         }
         100% {
-          transform: rotateX(25deg) translateY(-340vh);  /* スマホ版でスクロール開始の深さを調整 */
+          transform: rotateX(25deg) translateY(-300vh);
         }
-      }
-
-      .title {
-        font-size: 40px;  /* スマホ版でタイトルをデカく */
-      }
-
-      .content {
-        font-size: 30px;  /* スマホ版で本文をデカく */
       }
     }
   </style>
@@ -143,7 +131,7 @@
         有限会社弓工　ご挨拶
       </div>
       <div class="content">
-        <p>有限会社弓工は、1996年（平成8年）、志(こころざし)高き技術者たちと共に設立しました。</p>
+        <p>有限会社弓工は、1996年（平成8年）、志(こころざし)高き技術者たちと共に設立されました。</p>
         <p>当時を振り返ると、プラントエンジニアリングの現場は、決して平坦なものではありませんでした。</p>
         <p>わずかな仲間と限られた設備の中、ただひたすらに「ものづくりへの誇り」と「お客様に応えたい一心」だけを胸に、ひとつひとつの現場に向き合ってまいりました。</p>
         <p>新設・製作、工場移設、アフターメンテナンス。</p>
@@ -163,6 +151,22 @@
   <button class="skip-btn" onclick="window.location.href='gallery.html';">スキップ</button>
 
   <script>
+    // ビューポートの高さを取得
+    const viewportHeight = window.innerHeight;
+
+    // スマホかPCかを判定
+    const isMobile = window.innerWidth <= 768;
+
+    // スクロール開始位置を設定
+    const root = document.documentElement;
+
+    // スマホ用とPC用の開始位置を設定
+    if (isMobile) {
+      root.style.setProperty('--scroll-start-mobile', `${viewportHeight * 2.9}px`);  // スマホは画面の50%から開始
+    } else {
+      root.style.setProperty('--scroll-start', `${viewportHeight * 8}px`);  // PCは画面の20%から開始
+    }
+
     const canvas = document.getElementById('warpCanvas');
     const ctx = canvas.getContext('2d');
 
@@ -225,6 +229,11 @@
       setTimeout(function() {
         skipBtn.style.opacity = '1';
       }, 50);
+
+      // スクロール終了後に自動でリンクに飛ばす
+      setTimeout(function() {
+        window.location.href = 'gallery.html';
+      }, 120000);  // 150秒後（アニメーション終了のタイミング）にページ遷移
     }, 2000);
   </script>
 
