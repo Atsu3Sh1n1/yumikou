@@ -279,7 +279,7 @@
     setTimeout(() => {
       const overlayText = document.getElementById('overlayText');
       overlayText.style.transition = 'opacity 2s ease-in-out';
-      overlayText.style.opacity = 0; // 2秒後にフェードアウト
+      overlayText.style.opacity = 1; // 2秒後にフェードアウト
     }, 600000); // 2秒後にフェードアウト開始
 
     setTimeout(() => {
@@ -296,7 +296,7 @@
 
       // フェードアウト後に遷移
       setTimeout(() => {
-        window.location.href = 'gallery.html';
+        window.location.href = 'introduction.html';
       }, 1000); // フェードアウトが終了してから遷移
     });
   </script>
