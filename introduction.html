@@ -162,7 +162,7 @@
 
     // スマホ用とPC用の開始位置を設定
     if (isMobile) {
-      root.style.setProperty('--scroll-start-mobile', `${viewportHeight * 2.9}px`);  // スマホは画面の50%から開始
+      root.style.setProperty('--scroll-start-mobile', `${viewportHeight * 7.5}px`);  // スマホは画面の50%から開始
     } else {
       root.style.setProperty('--scroll-start', `${viewportHeight * 8}px`);  // PCは画面の20%から開始
     }
@@ -233,7 +233,7 @@
       // スクロール終了後に自動でリンクに飛ばす
       setTimeout(function() {
         window.location.href = 'gallery.html';
-      }, 120000);  // 150秒後（アニメーション終了のタイミング）にページ遷移
+      }, 150000);  // 150秒後（アニメーション終了のタイミング）にページ遷移
     }, 2000);
   </script>
 
