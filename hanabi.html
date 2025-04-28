@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>線香花火・進化版</title>
+  <title>線香花火・本当のスケール版</title>
   <style>
     body, html {
       margin: 0;
@@ -26,7 +26,7 @@ canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
 class Spark {
-  constructor(x, y, isSecondary = false) {
+  constructor(x, y, baseSpeed = 1, isSecondary = false) {
     this.x = x;
     this.y = y;
     this.radius = isSecondary ? Math.random() * 1 + 0.3 : Math.random() * 2 + 1;
@@ -34,10 +34,10 @@ class Spark {
     this.hue = hue;
     this.saturation = 100;
     this.lightness = 60;
-    const baseSpeed = isSecondary ? 1 + Math.random() * 1.5 : 5 + Math.random() * 5;
     const angle = Math.random() * Math.PI * 2;
-    this.vx = Math.cos(angle) * baseSpeed;
-    this.vy = Math.sin(angle) * baseSpeed;
+    const speed = (isSecondary ? 1 + Math.random() * 1.5 : 5 + Math.random() * 5) * baseSpeed;
+    this.vx = Math.cos(angle) * speed;
+    this.vy = Math.sin(angle) * speed;
     this.life = isSecondary ? 10 + Math.random() * 15 : 60 + Math.random() * 40;
     this.maxLife = this.life;
     this.trail = [];
@@ -62,10 +62,9 @@ class Spark {
     this.lightness = 30 + (this.life / this.maxLife) * 30;
     this.radius *= 0.96;
 
-    // 二次火花を一度だけ発生させる
     if (!this.isSecondary && !this.hasSpawnedSecondary && this.life < this.maxLife * 0.5) {
       this.hasSpawnedSecondary = true;
-      if (Math.random() < 0.6) { // 二次火花は6割の確率で出る
+      if (Math.random() < 0.6) {
         createSecondarySparks(this.x, this.y);
       }
     }
@@ -92,22 +91,31 @@ class Spark {
 let sparks = [];
 
 function createFirework(x, y) {
-  let baseCount = 30 + Math.floor(Math.random() * 40);
+  let baseCount = 20 + Math.floor(Math.random() * 30);
+  let baseSpeed = 1;
 
-  // 低確率でドカン爆発
-  if (Math.random() < 0.1) { // 10%の確率で
-    baseCount *= Math.random() < 0.5 ? 2 : 3; // さらに2倍か3倍
+  const rand = Math.random();
+  if (rand < 0.05) {
+    baseCount *= Math.random() < 0.5 ? 2 : 3; // 超大爆発
+    baseSpeed = 2;
+  } else if (rand < 0.20) {
+    baseCount *= 1.8; // 大爆発
+    baseSpeed = 1.5;
+  } else if (rand < 0.50) {
+    baseCount *= 1.3; // 中爆発
+    baseSpeed = 1.2;
   }
+  baseCount = Math.floor(baseCount);
 
   for (let i = 0; i < baseCount; i++) {
-    sparks.push(new Spark(x, y));
+    sparks.push(new Spark(x, y, baseSpeed));
   }
 }
 
 function createSecondarySparks(x, y) {
   const count = 5 + Math.floor(Math.random() * 5);
   for (let i = 0; i < count; i++) {
-    sparks.push(new Spark(x, y, true));
+    sparks.push(new Spark(x, y, 0.8, true));
   }
 }
 
@@ -124,7 +132,6 @@ function animate() {
     }
   }
 
-  // 爆発発生
   if (Math.random() < 0.02) {
     const x = Math.random() * canvas.width;
     const y = Math.random() * canvas.height * 0.8 + canvas.height * 0.1;
