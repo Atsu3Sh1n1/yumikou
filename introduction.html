@@ -1,4 +1,4 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
@@ -31,6 +31,12 @@
       z-index: -1;
     }
 
+    :root {
+      --start-padding: 40vh;  /* スタート位置 */
+      --scroll-start: 400vh;  /* スクロール開始の深さ */
+      --scroll-speed: 150s;   /* スクロール速度 */
+    }
+
     .star-wars-intro {
       position: relative;
       height: 100vh;
@@ -49,12 +55,12 @@
       color: yellow;
       font-weight: bold;
       text-align: center;
-      animation: crawl 150s linear forwards;
+      animation: crawl var(--scroll-speed) linear forwards;
     }
 
     @keyframes crawl {
       0% {
-        transform: rotateX(25deg) translateY(420vh);
+        transform: rotateX(25deg) translateY(var(--scroll-start));
       }
       100% {
         transform: rotateX(25deg) translateY(-100vh);
@@ -94,28 +100,34 @@
       z-index: 2;
     }
 
-    /* --- スマホ専用 大きくする！ --- */
+    /* --- スマホ専用設定 --- */
     @media (max-width: 768px) {
+      :root {
+        --start-padding: 90vh;  /* スマホ版でより下からスタート */
+        --scroll-start: 340vh;  /* スマホ版でスクロール開始をさらに下げる */
+        --scroll-speed: 200s;   /* スマホ版はスクロール速度をゆっくり */
+      }
+
       .scrolling-text {
         width: 100%;
-        animation: crawl-mobile 200s linear forwards;
-      }
-
-      .title {
-        font-size: 40px; /* ←スマホでさらにデカく！ */
-      }
-
-      .content {
-        font-size: 30px; /* ←本文もデカく！ */
+        animation: crawl-mobile var(--scroll-speed) linear forwards;
       }
 
       @keyframes crawl-mobile {
         0% {
-          transform: rotateX(25deg) translateY(340vh); /* ←スマホはさらに下から！ */
+          transform: rotateX(25deg) translateY(var(--scroll-start));
         }
         100% {
-          transform: rotateX(25deg) translateY(-340vh);
+          transform: rotateX(25deg) translateY(-340vh);  /* スマホ版でスクロール開始の深さを調整 */
         }
+      }
+
+      .title {
+        font-size: 40px;  /* スマホ版でタイトルをデカく */
+      }
+
+      .content {
+        font-size: 30px;  /* スマホ版で本文をデカく */
       }
     }
   </style>
