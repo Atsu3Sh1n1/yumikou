@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>線香花火・超超特大レインボー版</title>
+  <title>線香花火・超超特大だけ虹色バージョン</title>
   <style>
     body, html {
       margin: 0;
@@ -30,17 +30,21 @@ class Spark {
     this.x = x;
     this.y = y;
     this.radius = isSecondary ? Math.random() * 1 + 0.3 : Math.random() * 2 + 1;
-    this.hue = 40 + Math.random() * 20;
-    this.saturation = 100;
-    this.lightness = 60;
 
-    // ★ 3D的に広げる
     const theta = Math.random() * 2 * Math.PI;
     const phi = Math.acos(2 * Math.random() - 1);
     const speed = (isSecondary ? 1 + Math.random() * 1.5 : 5 + Math.random() * 5) * baseSpeed;
     this.vx = Math.sin(phi) * Math.cos(theta) * speed;
     this.vy = Math.sin(phi) * Math.sin(theta) * speed;
-    this.vz = Math.cos(phi) * speed; // depth方向（今回は使わないけど一応持つ）
+    this.vz = Math.cos(phi) * speed;
+
+    if (isRainbow) {
+      this.hue = (theta * 180 / Math.PI + 360) % 360; // 角度から色を決定
+    } else {
+      this.hue = 40 + Math.random() * 20; // 通常は黄色〜オレンジ系
+    }
+    this.saturation = 100;
+    this.lightness = 60;
 
     this.life = (isSecondary ? 10 + Math.random() * 15 : 60 + Math.random() * 40) * lifeMultiplier;
     this.maxLife = this.life;
@@ -49,7 +53,7 @@ class Spark {
     this.isSecondary = isSecondary;
     this.hasSpawnedSecondary = false;
     this.fadeSpeed = fadeSpeed;
-    this.isRainbow = isRainbow; // ★ レインボーフラグ
+    this.isRainbow = isRainbow;
   }
 
   update() {
@@ -63,19 +67,12 @@ class Spark {
     this.vx *= 0.92;
     this.vy *= 0.92;
     this.vz *= 0.92;
-    this.vy += 0.04; // 重力効果
+    this.vy += 0.04; // 重力
 
     this.life--;
     this.lightness = 30 + (this.life / this.maxLife) * 30;
     this.radius *= (1 - this.fadeSpeed);
 
-    // ★ レインボー回転
-    if (this.isRainbow) {
-      this.hue += 3;
-      if (this.hue >= 360) this.hue -= 360;
-    }
-
-    // セカンダリ生成
     if (!this.isSecondary && !this.hasSpawnedSecondary && this.life < this.maxLife * 0.5) {
       this.hasSpawnedSecondary = true;
       if (Math.random() < 0.8) {
@@ -120,7 +117,7 @@ function createFirework(x, y) {
     lifeMultiplier = 3;
     trailMultiplier = 3;
     fadeSpeed = 0.01;
-    isRainbow = true; // ★ 超超特大だけレインボー
+    isRainbow = true;
   } else if (rand < 0.03) { // 超特大
     baseCount *= 10;
     baseSpeed = 2.5;
