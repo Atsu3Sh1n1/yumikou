@@ -18,15 +18,28 @@
             /* フェードインアニメーション */
         }
 
-        /* フェードインのアニメーション */
+        /* タイトルがふわっと現れるアニメーション */
         @keyframes fadeIn {
             0% {
                 opacity: 0;
+                transform: translateY(20px);
             }
-
             100% {
                 opacity: 1;
+                transform: translateY(0);
             }
+        }
+
+        /* タイトルに遅延を追加して、ふわっと表示 */
+        .title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            letter-spacing: 1px;
+            font-weight: 300;
+            opacity: 0;
+            animation: fadeIn 1s ease-out forwards;
+            animation-delay: 1s; /* タイトルの表示を1秒遅らせる */
         }
 
         canvas {
@@ -48,26 +61,14 @@
         .container {
             width: 100%;
             max-width: 1300px;
-            /* PC向けは1300px */
             margin: 0 auto;
-        }
-
-        .title {
-            text-align: center;
-            font-size: 2.5rem;
-            /* PC用のフォントサイズ */
-            margin-bottom: 20px;
-            letter-spacing: 1px;
-            font-weight: 300;
         }
 
         /* タブレット向け */
         @media (max-width: 1024px) {
             .title {
                 font-size: 8vw;
-                /* タブレットでは画面幅の6%に設定 */
                 max-font-size: 40px;
-                /* 最大サイズを指定 */
             }
         }
 
@@ -75,16 +76,13 @@
         @media (max-width: 480px) {
             .title {
                 font-size: 8vw;
-                /* スマホでは画面幅の8%に設定 */
                 max-font-size: 36px;
-                /* 最大サイズを指定 */
             }
         }
 
         .gallery {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            /* PCは3列 */
             gap: 24px;
         }
 
@@ -134,19 +132,15 @@
             display: block;
         }
 
-        /* 小さな画面（スマホ向け） */
         @media (max-width: 480px) {
             .gallery {
                 grid-template-columns: repeat(2, 1fr);
-                /* スマホでも2列 */
             }
         }
 
-        /* タブレット向け 2列表示 */
         @media (max-width: 1024px) {
             .gallery {
                 grid-template-columns: repeat(2, 1fr);
-                /* タブレットは2列 */
             }
         }
     </style>
