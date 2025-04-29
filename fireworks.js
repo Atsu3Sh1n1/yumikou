@@ -86,7 +86,7 @@ window.addEventListener('DOMContentLoaded', () => {
   let sparks = [];
 
   function createFirework(x, y) {
-    let baseCount = (20 + Math.floor(Math.random() * 30)) * FIREWORK_SCALE;
+    let baseCount = (10 + Math.floor(Math.random() * 20)) * FIREWORK_SCALE; // スパーク数を減らした
     let baseSpeed = 1.5 * FIREWORK_SCALE;
     let lifeMultiplier = 1.5 * FIREWORK_SCALE;
     let trailMultiplier = 1.5;
@@ -131,7 +131,14 @@ window.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  function animate() {
+  let lastTime = 0;
+  function animate(timestamp) {
+    if (timestamp - lastTime < 1000 / 60) { // 60FPS制限
+      requestAnimationFrame(animate);
+      return;
+    }
+    lastTime = timestamp;
+
     ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
@@ -158,8 +165,13 @@ window.addEventListener('DOMContentLoaded', () => {
     animate();
   }, 3000); // 3000ミリ秒 (3秒)
 
+  // リサイズイベントの最適化
+  let resizeTimeout;
   window.addEventListener('resize', () => {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    if (resizeTimeout) clearTimeout(resizeTimeout);
+    resizeTimeout = setTimeout(() => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }, 200); // 200ms遅延でリサイズ
   });
 });
