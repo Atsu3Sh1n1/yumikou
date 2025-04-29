@@ -4,7 +4,7 @@ window.addEventListener('DOMContentLoaded', () => {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
   
-    const FIREWORK_SCALE = 1.6; // 花火全体の倍率 (2倍)
+    const FIREWORK_SCALE = 1; // 花火全体の倍率 (2倍)
   
     class Spark {
       constructor(x, y, baseSpeed = 1, lifeMultiplier = 1, trailMultiplier = 1, fadeSpeed = 0.04, isSecondary = false, isRainbow = false, isWhiteSpark = false) {

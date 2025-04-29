@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>Star Background Only</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: black;
+      overflow: hidden;
+    }
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: -1;
+    }
+  </style>
+</head>
+<body>
+
+<canvas id="warpCanvas"></canvas>
+
+<script>
+  const canvas = document.getElementById('warpCanvas');
+  const ctx = canvas.getContext('2d');
+
+  let stars = [];
+  const numStars = 500;
+  let width, height;
+  let focalLength;
+
+  function init() {
+    width = window.innerWidth;
+    height = window.innerHeight;
+    focalLength = width / 2;
+
+    canvas.width = width;
+    canvas.height = height;
+
+    stars = Array.from({ length: numStars }, () => ({
+      x: Math.random() * width - width / 2,
+      y: Math.random() * height - height / 2,
+      z: Math.random() * width
+    }));
+  }
+
+  function draw() {
+    ctx.fillStyle = 'black';
+    ctx.fillRect(0, 0, width, height);
+
+    for (let star of stars) {
+      star.z -= 1;
+      if (star.z <= 0) {
+        star.x = Math.random() * width - width / 2;
+        star.y = Math.random() * height - height / 2;
+        star.z = width;
+      }
+
+      const k = focalLength / star.z;
+      const sx = star.x * k + width / 2;
+      const sy = star.y * k + height / 2;
+      const size = (1 - star.z / width) * 3;
+
+      ctx.beginPath();
+      ctx.arc(sx, sy, size, 0, Math.PI * 2);
+      ctx.fillStyle = 'white';
+      ctx.fill();
+    }
+
+    requestAnimationFrame(draw);
+  }
+
+  window.addEventListener('resize', init);
+  init();
+  draw();
+</script>
+
+</body>
+</html>
