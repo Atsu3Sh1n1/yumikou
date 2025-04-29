@@ -1,19 +1,18 @@
-const FIREWORK_SCALE = 2; // スケール倍率
-
 const canvas = document.getElementById('sparkCanvas');
 const ctx = canvas.getContext('2d');
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
+const FIREWORK_SCALE = 2; // 花火のサイズ倍率（倍に）
+
 class Spark {
   constructor(x, y, baseSpeed = 1, lifeMultiplier = 1, trailMultiplier = 1, fadeSpeed = 0.04, isSecondary = false, isRainbow = false, isWhiteSpark = false) {
     this.x = x;
     this.y = y;
-    this.radius = (isSecondary ? Math.random() * 1 + 0.3 : Math.random() * 2 + 1) * FIREWORK_SCALE;
-
+    this.radius = isSecondary ? Math.random() * 1 + 0.3 : Math.random() * 2 + 1;
     const theta = Math.random() * 2 * Math.PI;
     const phi = Math.acos(2 * Math.random() - 1);
-    const speed = (isSecondary ? 1 + Math.random() * 1.5 : 5 + Math.random() * 5) * baseSpeed * FIREWORK_SCALE;
+    const speed = (isSecondary ? 1 + Math.random() * 1.5 : 5 + Math.random() * 5) * baseSpeed;
     this.vx = Math.sin(phi) * Math.cos(theta) * speed;
     this.vy = Math.sin(phi) * Math.sin(theta) * speed;
     this.vz = Math.cos(phi) * speed;
@@ -37,6 +36,7 @@ class Spark {
     this.trail = [];
     this.trailMaxLength = Math.floor((Math.random() * (isSecondary ? 2 : 6) + 2) * trailMultiplier);
     this.isSecondary = isSecondary;
+    this.hasSpawnedSecondary = false;
     this.fadeSpeed = fadeSpeed;
     this.isRainbow = isRainbow;
     this.isWhiteSpark = isWhiteSpark;
@@ -45,16 +45,14 @@ class Spark {
 
   update() {
     this.trail.push({x: this.x, y: this.y});
-    if (this.trail.length > this.trailMaxLength) {
-      this.trail.shift();
-    }
+    if (this.trail.length > this.trailMaxLength) this.trail.shift();
 
     this.x += this.vx;
     this.y += this.vy;
     this.vx *= 0.92;
     this.vy *= 0.92;
     this.vz *= 0.92;
-    this.vy += 0.04 * FIREWORK_SCALE;
+    this.vy += 0.04; // 重力
 
     this.life--;
     this.lightness = 30 + (this.life / this.maxLife) * 30;
@@ -63,7 +61,6 @@ class Spark {
     if (this.life <= 0 && this.spawnWhiteSpark) {
       createWhiteSparks(this.x, this.y);
     }
-
     return this.life <= 0;
   }
 
@@ -97,20 +94,23 @@ function createFirework(x, y) {
   let isRainbow = false;
 
   const rand = Math.random();
-  if (rand < 0.05) {
+  if (rand < 0.05) { // 超特大
     baseCount *= 10;
     baseSpeed = 3;
     lifeMultiplier = 3;
     trailMultiplier = 3;
     fadeSpeed = 0.01;
-    isRainbow = true;
-  } else if (rand < 0.15) {
+
+    if (Math.random() < 0.5) { // 50%でレインボー
+      isRainbow = true;
+    }
+  } else if (rand < 0.15) { // 特大
     baseCount *= 5;
     baseSpeed = 2.5;
     lifeMultiplier = 2.5;
     trailMultiplier = 2.5;
     fadeSpeed = 0.015;
-  } else if (rand < 0.40) {
+  } else if (rand < 0.40) { // 大
     baseCount *= 2;
     baseSpeed = 2;
     lifeMultiplier = 2;
@@ -122,13 +122,6 @@ function createFirework(x, y) {
 
   for (let i = 0; i < baseCount; i++) {
     sparks.push(new Spark(x, y, baseSpeed, lifeMultiplier, trailMultiplier, fadeSpeed, false, isRainbow));
-  }
-}
-
-function createSecondarySparks(x, y, parentFadeSpeed, isRainbow = false) {
-  const count = 5 + Math.floor(Math.random() * 5);
-  for (let i = 0; i < count; i++) {
-    sparks.push(new Spark(x, y, 0.8, 0.8, 0.8, parentFadeSpeed * 1.2, true, isRainbow));
   }
 }
 
@@ -145,10 +138,10 @@ function animate() {
 
   for (let i = sparks.length - 1; i >= 0; i--) {
     const spark = sparks[i];
-    const shouldRemove = spark.update();
-    spark.draw();
-    if (shouldRemove || spark.y > canvas.height) {
+    if (spark.update() || spark.y > canvas.height) {
       sparks.splice(i, 1);
+    } else {
+      spark.draw();
     }
   }
 
