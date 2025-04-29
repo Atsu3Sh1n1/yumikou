@@ -1,205 +1,264 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
-  <meta charset="UTF-8">
-  <title>BUILD Co. | セカンドページ</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-      background: black;
-      height: 100%;
-      font-family: 'Helvetica Neue', sans-serif;
-      color: white;
-    }
+    <meta charset="UTF-8">
+    <title>BUILD Co. | セカンドページ</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            background: black;
+            height: 100%;
+            font-family: 'Helvetica Neue', sans-serif;
+            color: white;
+            animation: fadeIn 1s ease-out;
+            /* フェードインアニメーション */
+        }
 
-    canvas {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      z-index: 0;
-      pointer-events: none;
-    }
+        /* フェードインのアニメーション */
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+            }
 
-    .wrapper {
-      position: relative;
-      z-index: 2;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      box-sizing: border-box;
-      padding: 40px 20px;
-    }
+            100% {
+                opacity: 1;
+            }
+        }
 
-    .container {
-      width: 100%;
-      max-width: 1300px;
-      padding: 40px;
-      display: flex;
-      flex-direction: column;
-      height: auto; /* 高さの調整を削除 */
-    }
+        canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 0;
+            pointer-events: none;
+        }
 
-    .title {
-      text-align: center;
-      font-size: 2.5rem;
-      margin-bottom: 20px;
-      letter-spacing: 1px;
-      font-weight: 300;
-    }
+        .wrapper {
+            position: relative;
+            z-index: 2;
+            padding: 40px 20px;
+        }
 
-    .gallery {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      grid-template-rows: repeat(2, 1fr);
-      gap: 24px;
-      flex-grow: 1;
-    }
+        .container {
+            width: 100%;
+            max-width: 1300px;
+            /* PC向けは1300px */
+            margin: 0 auto;
+        }
 
-    .card {
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 12px;
-      overflow: hidden;
-      transition: transform 0.3s ease;
-      display: flex;
-      flex-direction: column;
-    }
+        .title {
+            text-align: center;
+            font-size: 2.5rem;
+            /* PC用のフォントサイズ */
+            margin-bottom: 20px;
+            letter-spacing: 1px;
+            font-weight: 300;
+        }
 
-    .card:hover {
-      transform: scale(1.03);
-    }
+        /* タブレット向け */
+        @media (max-width: 1024px) {
+            .title {
+                font-size: 8vw;
+                /* タブレットでは画面幅の6%に設定 */
+                max-font-size: 40px;
+                /* 最大サイズを指定 */
+            }
+        }
 
-    .card img {
-      width: 100%;
-      height: 160px;
-      object-fit: cover;
-      display: block;
-    }
+        /* スマホ向けにフォントサイズ調整 */
+        @media (max-width: 480px) {
+            .title {
+                font-size: 8vw;
+                /* スマホでは画面幅の8%に設定 */
+                max-font-size: 36px;
+                /* 最大サイズを指定 */
+            }
+        }
 
-    .card .info {
-      padding: 16px;
-      flex-grow: 1;
-    }
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            /* PCは3列 */
+            gap: 24px;
+        }
 
-    .card .info h3 {
-      margin: 0 0 8px 0;
-      font-size: 1.2rem;
-    }
+        .card {
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
 
-    .card .info p {
-      margin: 0;
-      font-size: 0.95rem;
-      color: #ccc;
-    }
+        .card:hover {
+            transform: scale(1.03);
+        }
 
-    .map-embed iframe {
-      width: 100%;
-      height: 160px;
-      border: none;
-      display: block;
-    }
+        .card img {
+            width: 100%;
+            height: 160px;
+            object-fit: cover;
+            display: block;
+        }
 
-    /* メディアクエリでレスポンシブデザイン */
-    @media (max-width: 1200px) {
-      .gallery {
-        grid-template-columns: repeat(2, 1fr);
-      }
-    }
+        .card .info {
+            padding: 16px;
+            flex-grow: 1;
+        }
 
-    @media (max-width: 768px) {
-      .gallery {
-        grid-template-columns: 1fr;
-      }
-      .container {
-        padding: 20px;
-      }
-      .title {
-        font-size: 2rem;
-      }
-    }
+        .card .info h3 {
+            margin: 0 0 8px 0;
+            font-size: 1.2rem;
+        }
 
-    @media (max-width: 480px) {
-      .title {
-        font-size: 1.5rem;
-      }
-      .card img {
-        height: 140px;
-      }
-    }
-  </style>
+        .card .info p {
+            margin: 0;
+            font-size: 0.95rem;
+            color: #ccc;
+        }
+
+        .map-embed iframe {
+            width: 100%;
+            height: 160px;
+            border: none;
+            display: block;
+        }
+
+        /* 小さな画面（スマホ向け） */
+        @media (max-width: 480px) {
+            .gallery {
+                grid-template-columns: repeat(2, 1fr);
+                /* スマホでも2列 */
+            }
+        }
+
+        /* タブレット向け 2列表示 */
+        @media (max-width: 1024px) {
+            .gallery {
+                grid-template-columns: repeat(2, 1fr);
+                /* タブレットは2列 */
+            }
+        }
+    </style>
 </head>
+
 <body>
-  <canvas id="sparkCanvas"></canvas>
+    <canvas id="sparkCanvas"></canvas>
 
-  <div class="wrapper">
-    <div class="container">
-      <div class="title">有限会社弓工 事業紹介</div>
-      <div class="gallery">
-        <!-- 建設関連 -->
-        <div class="card">
-          <img src="construction.jpg" alt="建設業">
-          <div class="info">
-            <h3>建設部門</h3>
-            <p>公共・民間問わず、確かな技術で未来を築く。</p>
-          </div>
-        </div>
+    <div class="wrapper">
+        <div class="container">
+            <div class="title">有限会社弓工 事業紹介</div>
+            <div class="gallery">
+                <!-- 既存カテゴリー -->
 
-        <div class="card">
-          <img src="renovation.jpg" alt="リノベーション">
-          <div class="info">
-            <h3>リノベーション</h3>
-            <p>古き良き建物に新たな価値を。</p>
-          </div>
-        </div>
+                <!-- 建設関連 -->
+                <div class="card">
+                    <img src="construction.jpg" alt="建設業">
+                    <div class="info">
+                        <h3>建設部門</h3>
+                        <p>公共・民間問わず、確かな技術で未来を築く。</p>
+                    </div>
+                </div>
 
-        <!-- 飲食関連 -->
-        <div class="card">
-          <img src="restaurant.jpg" alt="飲食業">
-          <div class="info">
-            <h3>レストラン事業</h3>
-            <p>洗練された空間で特別なひとときを。</p>
-          </div>
-        </div>
+                <div class="card">
+                    <img src="renovation.jpg" alt="リノベーション">
+                    <div class="info">
+                        <h3>リノベーション</h3>
+                        <p>古き良き建物に新たな価値を。</p>
+                    </div>
+                </div>
 
-        <div class="card">
-          <img src="cafe.jpg" alt="カフェ事業">
-          <div class="info">
-            <h3>カフェ事業</h3>
-            <p>地域に愛される落ち着いた雰囲気のカフェ。</p>
-          </div>
-        </div>
+                <!-- 飲食関連 -->
+                <div class="card">
+                    <img src="restaurant.jpg" alt="飲食業">
+                    <div class="info">
+                        <h3>レストラン事業</h3>
+                        <p>洗練された空間で特別なひとときを。</p>
+                    </div>
+                </div>
 
-        <!-- 車関連 -->
-        <div class="card">
-          <img src="cars.jpg" alt="車関連">
-          <div class="info">
-            <h3>車販売・整備</h3>
-            <p>整備・販売・買取を一貫して対応。</p>
-          </div>
-        </div>
+                <div class="card">
+                    <img src="cafe.jpg" alt="カフェ事業">
+                    <div class="info">
+                        <h3>カフェ事業</h3>
+                        <p>地域に愛される落ち着いた雰囲気のカフェ。</p>
+                    </div>
+                </div>
 
-        <!-- 地図 -->
-        <div class="card map-embed">
-          <iframe 
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3241.9835739787266!2d139.7432443152588!3d35.65858018019912!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x60188b857a6b44e5%3A0x48a3e360a4f2ddbb!2z5p2x5Lqs6YO95aSn5a2m5qCh!5e0!3m2!1sja!2sjp!4v1616482284687!5m2!1sja!2sjp" 
-            allowfullscreen="" 
-            loading="lazy">
-          </iframe>
-          <div class="info">
-            <h3>アクセスマップ</h3>
-            <p>本社・店舗の所在地はこちらをご覧ください。</p>
-          </div>
+                <!-- 車関連 -->
+                <div class="card">
+                    <img src="cars.jpg" alt="車関連">
+                    <div class="info">
+                        <h3>車販売・整備</h3>
+                        <p>整備・販売・買取を一貫して対応。</p>
+                    </div>
+                </div>
+
+                <!-- 新しいカテゴリー -->
+
+                <!-- IT関連 -->
+                <div class="card">
+                    <img src="it_services.jpg" alt="ITサービス">
+                    <div class="info">
+                        <h3>ITサービス</h3>
+                        <p>最新のテクノロジーでシステム開発を支援。</p>
+                    </div>
+                </div>
+
+                <!-- 農業関連 -->
+                <div class="card">
+                    <img src="agriculture.jpg" alt="農業事業">
+                    <div class="info">
+                        <h3>農業事業</h3>
+                        <p>持続可能な農業を支援し、地域社会に貢献。</p>
+                    </div>
+                </div>
+
+                <!-- 教育関連 -->
+                <div class="card">
+                    <img src="education.jpg" alt="教育関連">
+                    <div class="info">
+                        <h3>教育事業</h3>
+                        <p>次世代を育成する教育プログラムを提供。</p>
+                    </div>
+                </div>
+
+                <!-- 環境関連 -->
+                <div class="card">
+                    <img src="environment.jpg" alt="環境保護">
+                    <div class="info">
+                        <h3>環境保護</h3>
+                        <p>持続可能な社会を目指した環境保護活動。</p>
+                    </div>
+                </div>
+
+                <!-- 地図 -->
+                <div class="card map-embed">
+                    <iframe
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3241.9835739787266!2d139.7432443152588!3d35.65858018019912!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x60188b857a6b44e5%3A0x48a3e360a4f2ddbb!2z5p2x5Lqs6YO95aSn5a2m5qCh!5e0!3m2!1sja!2sjp!4v1616482284687!5m2!1sja!2sjp"
+                        allowfullscreen="" loading="lazy">
+                    </iframe>
+                    <div class="info">
+                        <h3>アクセスマップ</h3>
+                        <p>本社・店舗の所在地はこちらをご覧ください。</p>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
 
-  <!-- fireworks.js 読み込み -->
-  <script src="fireworks.js"></script>
+    <!-- fireworks.js 読み込み -->
+    <script src="fireworks.js"></script>
 </body>
+
 </html>
