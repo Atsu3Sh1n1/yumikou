@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>線香花火・パラパラの後に白キラキラ版</title>
+  <title>線香花火・パラパラの後に白キラキラ版（拡大版）</title>
   <style>
     body, html {
       margin: 0;
@@ -20,6 +20,8 @@
 <canvas id="sparkCanvas"></canvas>
 
 <script>
+const FIREWORK_SCALE = 2; // ←★ここを変えればスケール調整可能！（例：1.5なら1.5倍）
+
 const canvas = document.getElementById('sparkCanvas');
 const ctx = canvas.getContext('2d');
 canvas.width = window.innerWidth;
@@ -29,11 +31,11 @@ class Spark {
   constructor(x, y, baseSpeed = 1, lifeMultiplier = 1, trailMultiplier = 1, fadeSpeed = 0.04, isSecondary = false, isRainbow = false, isWhiteSpark = false) {
     this.x = x;
     this.y = y;
-    this.radius = isSecondary ? Math.random() * 1 + 0.3 : Math.random() * 2 + 1;
+    this.radius = (isSecondary ? Math.random() * 1 + 0.3 : Math.random() * 2 + 1) * FIREWORK_SCALE;
 
     const theta = Math.random() * 2 * Math.PI;
     const phi = Math.acos(2 * Math.random() - 1);
-    const speed = (isSecondary ? 1 + Math.random() * 1.5 : 5 + Math.random() * 5) * baseSpeed;
+    const speed = (isSecondary ? 1 + Math.random() * 1.5 : 5 + Math.random() * 5) * baseSpeed * FIREWORK_SCALE;
     this.vx = Math.sin(phi) * Math.cos(theta) * speed;
     this.vy = Math.sin(phi) * Math.sin(theta) * speed;
     this.vz = Math.cos(phi) * speed;
@@ -61,7 +63,7 @@ class Spark {
     this.fadeSpeed = fadeSpeed;
     this.isRainbow = isRainbow;
     this.isWhiteSpark = isWhiteSpark;
-    this.spawnWhiteSpark = !isSecondary && !isWhiteSpark && Math.random() < 0.7; // 70%くらいで白キラキラ出す
+    this.spawnWhiteSpark = !isSecondary && !isWhiteSpark && Math.random() < 0.7;
   }
 
   update() {
@@ -75,22 +77,17 @@ class Spark {
     this.vx *= 0.92;
     this.vy *= 0.92;
     this.vz *= 0.92;
-    this.vy += 0.04; // 重力
+    this.vy += 0.04 * FIREWORK_SCALE; // 重力もスケール対応
 
     this.life--;
     this.lightness = 30 + (this.life / this.maxLife) * 30;
     this.radius *= (1 - this.fadeSpeed);
 
-    // 死に際に白キラキラ生成
     if (this.life <= 0 && this.spawnWhiteSpark) {
       createWhiteSparks(this.x, this.y);
     }
 
-    // もし普通の寿命終了ならここで消す
-    if (this.life <= 0) {
-      return true;
-    }
-    return false;
+    return this.life <= 0;
   }
 
   draw() {
@@ -115,45 +112,33 @@ class Spark {
 let sparks = [];
 
 function createFirework(x, y) {
-  let baseCount = 20 + Math.floor(Math.random() * 30);
-  let baseSpeed = 1;
-  let lifeMultiplier = 1;
-  let trailMultiplier = 1;
-  let fadeSpeed = 0.04;
+  let baseCount = (20 + Math.floor(Math.random() * 30)) * FIREWORK_SCALE;
+  let baseSpeed = 1.5;
+  let lifeMultiplier = 1.5;
+  let trailMultiplier = 1.5;
+  let fadeSpeed = 0.03;
   let isRainbow = false;
 
   const rand = Math.random();
-  if (rand < 0.01) { // 超超特大
-    baseCount *= 20;
+  if (rand < 0.05) { // 超超特大 (もともと1% → 5%)
+    baseCount *= 10;
     baseSpeed = 3;
     lifeMultiplier = 3;
     trailMultiplier = 3;
     fadeSpeed = 0.01;
     isRainbow = true;
-  } else if (rand < 0.03) { // 超特大
-    baseCount *= 10;
+  } else if (rand < 0.15) { // 超特大
+    baseCount *= 5;
     baseSpeed = 2.5;
     lifeMultiplier = 2.5;
     trailMultiplier = 2.5;
     fadeSpeed = 0.015;
-  } else if (rand < 0.10) { // 特大
-    baseCount *= 5;
+  } else if (rand < 0.40) { // 大
+    baseCount *= 2;
     baseSpeed = 2;
     lifeMultiplier = 2;
     trailMultiplier = 2;
     fadeSpeed = 0.02;
-  } else if (rand < 0.25) { // 大
-    baseCount *= 2;
-    baseSpeed = 1.5;
-    lifeMultiplier = 1.5;
-    trailMultiplier = 1.5;
-    fadeSpeed = 0.03;
-  } else if (rand < 0.50) { // 中
-    baseCount *= 1.5;
-    baseSpeed = 1.2;
-    lifeMultiplier = 1.2;
-    trailMultiplier = 1.2;
-    fadeSpeed = 0.035;
   }
 
   baseCount = Math.floor(baseCount);
@@ -164,17 +149,16 @@ function createFirework(x, y) {
 }
 
 function createSecondarySparks(x, y, parentFadeSpeed, isRainbow = false) {
-  const count = 3 + Math.floor(Math.random() * 5);
+  const count = 5 + Math.floor(Math.random() * 5);
   for (let i = 0; i < count; i++) {
     sparks.push(new Spark(x, y, 0.8, 0.8, 0.8, parentFadeSpeed * 1.2, true, isRainbow));
   }
 }
 
 function createWhiteSparks(x, y) {
-  const count = 5 + Math.floor(Math.random() * 10); // 5～15個くらい
+  const count = 5 + Math.floor(Math.random() * 10);
   for (let i = 0; i < count; i++) {
-    const spark = new Spark(x, y, 0.5, 0.5, 0.5, 0.1, true, false, true);
-    sparks.push(spark);
+    sparks.push(new Spark(x, y, 0.5, 0.5, 0.5, 0.1, true, false, true));
   }
 }
 
