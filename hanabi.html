@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>線香花火・超超特大だけ虹色バージョン</title>
+  <title>線香花火・パラパラの後に白キラキラ版</title>
   <style>
     body, html {
       margin: 0;
@@ -26,7 +26,7 @@ canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
 class Spark {
-  constructor(x, y, baseSpeed = 1, lifeMultiplier = 1, trailMultiplier = 1, fadeSpeed = 0.04, isSecondary = false, isRainbow = false) {
+  constructor(x, y, baseSpeed = 1, lifeMultiplier = 1, trailMultiplier = 1, fadeSpeed = 0.04, isSecondary = false, isRainbow = false, isWhiteSpark = false) {
     this.x = x;
     this.y = y;
     this.radius = isSecondary ? Math.random() * 1 + 0.3 : Math.random() * 2 + 1;
@@ -38,13 +38,19 @@ class Spark {
     this.vy = Math.sin(phi) * Math.sin(theta) * speed;
     this.vz = Math.cos(phi) * speed;
 
-    if (isRainbow) {
-      this.hue = (theta * 180 / Math.PI + 360) % 360; // 角度から色を決定
+    if (isWhiteSpark) {
+      this.hue = 0;
+      this.saturation = 0;
+      this.lightness = 100;
+    } else if (isRainbow) {
+      this.hue = (theta * 180 / Math.PI + 360) % 360;
+      this.saturation = 100;
+      this.lightness = 60;
     } else {
-      this.hue = 40 + Math.random() * 20; // 通常は黄色〜オレンジ系
+      this.hue = 40 + Math.random() * 20;
+      this.saturation = 100;
+      this.lightness = 60;
     }
-    this.saturation = 100;
-    this.lightness = 60;
 
     this.life = (isSecondary ? 10 + Math.random() * 15 : 60 + Math.random() * 40) * lifeMultiplier;
     this.maxLife = this.life;
@@ -54,6 +60,8 @@ class Spark {
     this.hasSpawnedSecondary = false;
     this.fadeSpeed = fadeSpeed;
     this.isRainbow = isRainbow;
+    this.isWhiteSpark = isWhiteSpark;
+    this.spawnWhiteSpark = !isSecondary && !isWhiteSpark && Math.random() < 0.7; // 70%くらいで白キラキラ出す
   }
 
   update() {
@@ -73,12 +81,16 @@ class Spark {
     this.lightness = 30 + (this.life / this.maxLife) * 30;
     this.radius *= (1 - this.fadeSpeed);
 
-    if (!this.isSecondary && !this.hasSpawnedSecondary && this.life < this.maxLife * 0.5) {
-      this.hasSpawnedSecondary = true;
-      if (Math.random() < 0.8) {
-        createSecondarySparks(this.x, this.y, this.fadeSpeed, this.isRainbow);
-      }
+    // 死に際に白キラキラ生成
+    if (this.life <= 0 && this.spawnWhiteSpark) {
+      createWhiteSparks(this.x, this.y);
     }
+
+    // もし普通の寿命終了ならここで消す
+    if (this.life <= 0) {
+      return true;
+    }
+    return false;
   }
 
   draw() {
@@ -158,15 +170,23 @@ function createSecondarySparks(x, y, parentFadeSpeed, isRainbow = false) {
   }
 }
 
+function createWhiteSparks(x, y) {
+  const count = 5 + Math.floor(Math.random() * 10); // 5～15個くらい
+  for (let i = 0; i < count; i++) {
+    const spark = new Spark(x, y, 0.5, 0.5, 0.5, 0.1, true, false, true);
+    sparks.push(spark);
+  }
+}
+
 function animate() {
   ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
   for (let i = sparks.length - 1; i >= 0; i--) {
     const spark = sparks[i];
-    spark.update();
+    const shouldRemove = spark.update();
     spark.draw();
-    if (spark.life <= 0 || spark.y > canvas.height) {
+    if (shouldRemove || spark.y > canvas.height) {
       sparks.splice(i, 1);
     }
   }
