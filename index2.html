@@ -10,15 +10,14 @@
         body {
             margin: 0;
             padding: 0;
-            background: black;
             height: 100%;
             font-family: 'Helvetica Neue', sans-serif;
             color: white;
+            overflow-x: hidden;
+            background: black;
             animation: fadeIn 1s ease-out;
-            /* フェードインアニメーション */
         }
 
-        /* タイトルがふわっと現れるアニメーション */
         @keyframes fadeIn {
             0% {
                 opacity: 0;
@@ -30,7 +29,6 @@
             }
         }
 
-        /* タイトルに遅延を追加して、ふわっと表示 */
         .title {
             text-align: center;
             font-size: 2.5rem;
@@ -39,15 +37,15 @@
             font-weight: 300;
             opacity: 0;
             animation: fadeIn 1s ease-out forwards;
-            animation-delay: 1s; /* タイトルの表示を1秒遅らせる */
+            animation-delay: 1s;
         }
 
         canvas {
-            position: fixed;
+            position: absolute;
             top: 0;
             left: 0;
-            width: 100vw;
-            height: 100vh;
+            width: 100%;
+            height: 100%;
             z-index: 0;
             pointer-events: none;
         }
@@ -64,7 +62,6 @@
             margin: 0 auto;
         }
 
-        /* タブレット向け */
         @media (max-width: 1024px) {
             .title {
                 font-size: 8vw;
@@ -72,7 +69,6 @@
             }
         }
 
-        /* スマホ向けにフォントサイズ調整 */
         @media (max-width: 480px) {
             .title {
                 font-size: 8vw;
@@ -153,9 +149,6 @@
         <div class="container">
             <div class="title">有限会社弓工 事業紹介</div>
             <div class="gallery">
-                <!-- 既存カテゴリー -->
-
-                <!-- 建設関連 -->
                 <div class="card">
                     <img src="construction.jpg" alt="建設業">
                     <div class="info">
@@ -172,7 +165,6 @@
                     </div>
                 </div>
 
-                <!-- 飲食関連 -->
                 <div class="card">
                     <img src="restaurant.jpg" alt="飲食業">
                     <div class="info">
@@ -189,7 +181,6 @@
                     </div>
                 </div>
 
-                <!-- 車関連 -->
                 <div class="card">
                     <img src="cars.jpg" alt="車関連">
                     <div class="info">
@@ -198,9 +189,6 @@
                     </div>
                 </div>
 
-                <!-- 新しいカテゴリー -->
-
-                <!-- IT関連 -->
                 <div class="card">
                     <img src="it_services.jpg" alt="ITサービス">
                     <div class="info">
@@ -209,7 +197,6 @@
                     </div>
                 </div>
 
-                <!-- 農業関連 -->
                 <div class="card">
                     <img src="agriculture.jpg" alt="農業事業">
                     <div class="info">
@@ -218,7 +205,6 @@
                     </div>
                 </div>
 
-                <!-- 教育関連 -->
                 <div class="card">
                     <img src="education.jpg" alt="教育関連">
                     <div class="info">
@@ -227,7 +213,6 @@
                     </div>
                 </div>
 
-                <!-- 環境関連 -->
                 <div class="card">
                     <img src="environment.jpg" alt="環境保護">
                     <div class="info">
@@ -236,7 +221,6 @@
                     </div>
                 </div>
 
-                <!-- 地図 -->
                 <div class="card map-embed">
                     <iframe
                         src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3241.9835739787266!2d139.7432443152588!3d35.65858018019912!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x60188b857a6b44e5%3A0x48a3e360a4f2ddbb!2z5p2x5Lqs6YO95aSn5a2m5qCh!5e0!3m2!1sja!2sjp!4v1616482284687!5m2!1sja!2sjp"
