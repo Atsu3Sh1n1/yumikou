@@ -101,7 +101,7 @@ function createFirework(x, y) {
     trailMultiplier = 3;
     fadeSpeed = 0.01;
 
-    if (Math.random() < 0.5) { // 50%でレインボー
+    if (Math.random() < 0.01) { // 50%でレインボー
       isRainbow = true;
     }
   } else if (rand < 0.15) { // 特大
