@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>線香花火・改良版（超超特大＆ふわっと尾）</title>
+  <title>線香花火・超超特大レインボー版</title>
   <style>
     body, html {
       margin: 0;
@@ -26,22 +26,21 @@ canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
 class Spark {
-  constructor(x, y, baseSpeed = 1, lifeMultiplier = 1, trailMultiplier = 1, fadeSpeed = 0.04, isSecondary = false) {
+  constructor(x, y, baseSpeed = 1, lifeMultiplier = 1, trailMultiplier = 1, fadeSpeed = 0.04, isSecondary = false, isRainbow = false) {
     this.x = x;
     this.y = y;
     this.radius = isSecondary ? Math.random() * 1 + 0.3 : Math.random() * 2 + 1;
-    const hue = 40 + Math.random() * 20;
-    this.hue = hue;
+    this.hue = 40 + Math.random() * 20;
     this.saturation = 100;
     this.lightness = 60;
-    
-    // 3Dの広がりを決める
-    const theta = Math.random() * 2 * Math.PI; // 0〜2π（経度・周方向）
-    const phi = Math.acos(2 * Math.random() - 1); // 0〜π（緯度・上下方向）
+
+    // ★ 3D的に広げる
+    const theta = Math.random() * 2 * Math.PI;
+    const phi = Math.acos(2 * Math.random() - 1);
     const speed = (isSecondary ? 1 + Math.random() * 1.5 : 5 + Math.random() * 5) * baseSpeed;
     this.vx = Math.sin(phi) * Math.cos(theta) * speed;
     this.vy = Math.sin(phi) * Math.sin(theta) * speed;
-    this.vz = Math.cos(phi) * speed; // 仮想的な「奥行き方向」
+    this.vz = Math.cos(phi) * speed; // depth方向（今回は使わないけど一応持つ）
 
     this.life = (isSecondary ? 10 + Math.random() * 15 : 60 + Math.random() * 40) * lifeMultiplier;
     this.maxLife = this.life;
@@ -49,9 +48,10 @@ class Spark {
     this.trailMaxLength = Math.floor((Math.random() * (isSecondary ? 2 : 6) + 2) * trailMultiplier);
     this.isSecondary = isSecondary;
     this.hasSpawnedSecondary = false;
-    this.fadeSpeed = fadeSpeed; // 消える速度
+    this.fadeSpeed = fadeSpeed;
+    this.isRainbow = isRainbow; // ★ レインボーフラグ
   }
-  
+
   update() {
     this.trail.push({x: this.x, y: this.y});
     if (this.trail.length > this.trailMaxLength) {
@@ -60,26 +60,30 @@ class Spark {
 
     this.x += this.vx;
     this.y += this.vy;
-    // this.z += this.vz; // z方向を更新しない（仮想的な奥行きだけ）
-
     this.vx *= 0.92;
     this.vy *= 0.92;
-    this.vz *= 0.92; // 奥行き方向の減速（仮想的）
-
-    this.vy += 0.04; // 重力
+    this.vz *= 0.92;
+    this.vy += 0.04; // 重力効果
 
     this.life--;
     this.lightness = 30 + (this.life / this.maxLife) * 30;
     this.radius *= (1 - this.fadeSpeed);
 
+    // ★ レインボー回転
+    if (this.isRainbow) {
+      this.hue += 3;
+      if (this.hue >= 360) this.hue -= 360;
+    }
+
+    // セカンダリ生成
     if (!this.isSecondary && !this.hasSpawnedSecondary && this.life < this.maxLife * 0.5) {
       this.hasSpawnedSecondary = true;
-      if (Math.random() < 0.8) { // セカンダリ出現確率UP
-        createSecondarySparks(this.x, this.y, this.fadeSpeed);
+      if (Math.random() < 0.8) {
+        createSecondarySparks(this.x, this.y, this.fadeSpeed, this.isRainbow);
       }
     }
   }
-  
+
   draw() {
     ctx.beginPath();
     for (let i = 0; i < this.trail.length - 1; i++) {
@@ -107,6 +111,7 @@ function createFirework(x, y) {
   let lifeMultiplier = 1;
   let trailMultiplier = 1;
   let fadeSpeed = 0.04;
+  let isRainbow = false;
 
   const rand = Math.random();
   if (rand < 0.01) { // 超超特大
@@ -115,6 +120,7 @@ function createFirework(x, y) {
     lifeMultiplier = 3;
     trailMultiplier = 3;
     fadeSpeed = 0.01;
+    isRainbow = true; // ★ 超超特大だけレインボー
   } else if (rand < 0.03) { // 超特大
     baseCount *= 10;
     baseSpeed = 2.5;
@@ -139,19 +145,19 @@ function createFirework(x, y) {
     lifeMultiplier = 1.2;
     trailMultiplier = 1.2;
     fadeSpeed = 0.035;
-  } // 小はそのまま
+  }
 
   baseCount = Math.floor(baseCount);
 
   for (let i = 0; i < baseCount; i++) {
-    sparks.push(new Spark(x, y, baseSpeed, lifeMultiplier, trailMultiplier, fadeSpeed));
+    sparks.push(new Spark(x, y, baseSpeed, lifeMultiplier, trailMultiplier, fadeSpeed, false, isRainbow));
   }
 }
 
-function createSecondarySparks(x, y, parentFadeSpeed) {
-  const count = 3 + Math.floor(Math.random() * 5); // さらにばらけさせる
+function createSecondarySparks(x, y, parentFadeSpeed, isRainbow = false) {
+  const count = 3 + Math.floor(Math.random() * 5);
   for (let i = 0; i < count; i++) {
-    sparks.push(new Spark(x, y, 0.8, 0.8, 0.8, parentFadeSpeed * 1.2, true));
+    sparks.push(new Spark(x, y, 0.8, 0.8, 0.8, parentFadeSpeed * 1.2, true, isRainbow));
   }
 }
 
