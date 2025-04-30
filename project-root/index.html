@@ -1,4 +1,4 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="ja">
 <head>
   <meta charset="UTF-8" />
@@ -72,6 +72,14 @@
         ライセンス展開の可能性も広がります。知財戦略も視野に入れた開発支援が可能です。
       </p>
     </section>
+  
+
+    <!-- 特許可能性診断デモンストレーションセクション -->
+    <section data-aos="fade-up" data-aos-delay="900">
+      <h2>10. あなたのアイデア、特許になるか診断してみましょう</h2>
+      <p>簡単な質問に答えるだけで、技術的アイデアが「特許性があるかどうか」診断できます。</p>
+      <iframe src="https://your-demo-url.com" width="100%" height="500" style="border:1px solid #ccc; border-radius: 8px;"></iframe>
+    </section>
   </main>
 
   <footer>
@@ -80,8 +88,33 @@
   </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
-  <script>
-    AOS.init();
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>
+■ 料金付き診断デモの例（組み込み可能な内容）
+ステップ形式（例）
+アイデアのジャンルを選ぶ
+
+特許に関する簡単な質問に答える
+
+診断結果 + 推奨プラン & 料金目安を表示
+
+■ 表示例（動的または静的）
+結果画面：
+診断結果：特許化の可能性あり！
+おすすめプラン：開発＋特許出願サポート
+
+初期設計・要件定義：￥200,000〜
+
+プロトタイプ開発：￥300,000〜
+
+特許出願サポート（弁理士連携）：￥150,000〜
+
+[詳細相談ボタン] [メールで問い合わせ]
+
+■ 実装形式
+HTML/JSで構成 → 即埋め込み・公開可能
+
+フォーム送信機能も追加可（例：Google Form / EmailJS）
+
+必要に応じて価格のロジックを動的に分岐できます（例：ジャンルや難易度で金額変動）
