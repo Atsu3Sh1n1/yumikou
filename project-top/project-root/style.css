@@ -3,12 +3,12 @@ body {
   margin: 0;
   padding: 0;
   line-height: 1.6;
-  background-color: #f9f9f9;
-  color: #333;
+  background-color: #000000;
+  color: #ffffff;
 }
 
 header {
-  background-color: #4CAF50;
+  background-color: #000000;
   color: white;
   padding: 2rem;
   text-align: center;
@@ -20,7 +20,7 @@ main {
 
 section {
   margin-bottom: 2rem;
-  background-color: white;
+  background-color: rgb(57, 57, 57);
   padding: 1.5rem;
   border-radius: 8px;
   box-shadow: 0 2px 5px rgba(0,0,0,0.1);
