@@ -11,6 +11,10 @@ body {
     line-height: 1.6;
 }
 
+.page-title {
+    font-size: clamp(24px, 6vw, 60px);
+  }
+  
 .container {
     width: 90%;
     max-width: 1200px;
