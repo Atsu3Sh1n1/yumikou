@@ -1,0 +1,71 @@
+/* ベースのダークテーマ */
+body {
+    margin: 0;
+    font-family: 'Helvetica Neue', sans-serif;
+    background-color: #121212;
+    color: #fff;
+  }
+  
+  header {
+    text-align: center;
+    padding: 2rem 1rem;
+    border-bottom: 1px solid #333;
+  }
+  
+  h1 {
+    font-size: 2rem;
+  }
+  
+  .partner-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2rem;
+    padding: 2rem;
+  }
+  
+  .partner-card {
+    background-color: #1e1e1e;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .partner-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.5);
+  }
+  
+  .partner-content {
+    padding: 1rem;
+  }
+  
+  .partner-name {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+  }
+  
+  .partner-desc {
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+  
+  .partner-video {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background-color: #000;
+  }
+  .map-link {
+    display: inline-block;
+    margin-top: 0.8rem;
+    color: #90caf9;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.2s;
+  }
+  
+  .map-link:hover {
+    color: #64b5f6;
+  }
+  
