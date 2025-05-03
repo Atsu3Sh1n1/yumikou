@@ -155,5 +155,10 @@ html, body {
     z-index: 1;
     pointer-events: none;
   }
+  .footer {
+    text-align: center;
+  }
   
-  
+  .footer a {
+    color: #09ff00; /* 好きな色に変更（これは青） */
+  }
