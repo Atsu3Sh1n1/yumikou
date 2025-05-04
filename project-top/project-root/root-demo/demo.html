@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>予約サイト構築プラン</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 font-sans leading-normal tracking-normal">
+
+    <div class="container mx-auto px-4 py-8">
+
+        <!-- タイトル -->
+        <h1 class="text-3xl font-bold text-center text-blue-600 mb-6">
+            予約サイト構築プラン（GitHubベース）の詳細
+        </h1>
+
+        <!-- 1. 構築方針 -->
+        <section class="mb-10">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-4">1. 構築方針</h2>
+            <p class="text-lg text-gray-700 mb-4">
+                本プロジェクトでは、現行サイト（<a href="https://all-good-marine-385.com" class="text-blue-500">https://all-good-marine-385.com</a>）の内容を基に、新しい予約サイトを構築します。
+            </p>
+            <ul class="list-disc pl-8 text-lg text-gray-700">
+                <li>GitHub管理 & Vercelホスティングで、コードのバージョン管理と自動デプロイを実現。</li>
+                <li>Next.js + Tailwind CSSでモダンなUIを構築し、効率よく美しいデザインを実装。</li>
+                <li>予約通知メールは仮で <span class="text-blue-500">staff@example.com</span> を設定（後で変更可能）。</li>
+            </ul>
+        </section>
+
+        <!-- 2. 主なページ構成 -->
+        <section class="mb-10">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-4">2. 主なページ構成</h2>
+            <table class="min-w-full table-auto border-collapse border border-gray-300">
+                <thead>
+                    <tr>
+                        <th class="py-2 px-4 border border-gray-300 text-left text-lg text-gray-700 bg-gray-100">ページ名</th>
+                        <th class="py-2 px-4 border border-gray-300 text-left text-lg text-gray-700 bg-gray-100">内容</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="py-2 px-4 border border-gray-300">トップページ</td>
+                        <td class="py-2 px-4 border border-gray-300">サービスの紹介、アクセス情報、予約ページへの導線が含まれます。</td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 px-4 border border-gray-300">体験メニュー</td>
+                        <td class="py-2 px-4 border border-gray-300">提供するアクティビティ（シュノーケル、SUPなど）の一覧が表示されます。</td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 px-4 border border-gray-300">料金一覧</td>
+                        <td class="py-2 px-4 border border-gray-300">各アクティビティの料金、所要時間、オプション等が詳細に表示されます。</td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 px-4 border border-gray-300">予約フォーム</td>
+                        <td class="py-2 px-4 border border-gray-300">日時、人数、希望メニューを選択する予約フォームです。合計金額の自動計算機能も実装予定です。</td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 px-4 border border-gray-300">お問い合わせ</td>
+                        <td class="py-2 px-4 border border-gray-300">LINEへの誘導や、メールフォームを用いてお問い合わせができるページです。</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- 3. 機能一覧 -->
+        <section class="mb-10">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-4">3. 機能一覧</h2>
+            <table class="min-w-full table-auto border-collapse border border-gray-300">
+                <thead>
+                    <tr>
+                        <th class="py-2 px-4 border border-gray-300 text-left text-lg text-gray-700 bg-gray-100">機能</th>
+                        <th class="py-2 px-4 border border-gray-300 text-left text-lg text-gray-700 bg-gray-100">実装内容</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="py-2 px-4 border border-gray-300">メニュー選択・人数入力</td>
+                        <td class="py-2 px-4 border border-gray-300">サイト内のプラン（シュノーケル、SUPなど）に基づき、ユーザーが体験メニューと人数を選択できるインターフェースを提供します。</td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 px-4 border border-gray-300">自動料金計算</td>
+                        <td class="py-2 px-4 border border-gray-300">ユーザーが選択した項目（人数、オプションなど）に応じて、合計金額を動的に計算して表示します。</td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 px-4 border border-gray-300">予約情報の保存</td>
+                        <td class="py-2 px-4 border border-gray-300">ユーザーが入力した予約情報をFirebaseのFirestoreに保存し、後で確認や管理ができるようにします。</td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 px-4 border border-gray-300">メール通知（仮設定）</td>
+                        <td class="py-2 px-4 border border-gray-300">予約が完了した際、指定のメールアドレス（仮設定：`staff@example.com`）に自動で通知が送信されます。後で変更可能です。</td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 px-4 border border-gray-300">顧客用確認メッセージ</td>
+                        <td class="py-2 px-4 border border-gray-300">予約が完了すると、「予約ありがとうございました」的な確認メッセージを表示し、ユーザーに予約の完了を通知します。</td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 px-4 border border-gray-300">GitHub管理</td>
+                        <td class="py-2 px-4 border border-gray-300">コードはGitHubリポジトリにすべて保存され、バージョン管理やコードレビューが可能となります。これにより、メンテナンスや拡張が容易になります。</td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 px-4 border border-gray-300">Vercel自動デプロイ</td>
+                        <td class="py-2 px-4 border border-gray-300">GitHubの`master`または`main`ブランチが更新されると、自動でVercelにデプロイされ、変更内容が本番環境に即時反映されます。</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- 予約フォーム -->
+        <section class="mb-10">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-4">予約フォーム</h2>
+            <form action="#" method="POST" class="space-y-4">
+                <div>
+                    <label for="name" class="block text-lg text-gray-700">お名前</label>
+                    <input type="text" id="name" name="name" required class="w-full px-4 py-2 border border-gray-300 rounded-md" placeholder="お名前を入力してください">
+                </div>
+
+                <div>
+                    <label for="email" class="block text-lg text-gray-700">メールアドレス</label>
+                    <input type="email" id="email" name="email" required class="w-full px-4 py-2 border border-gray-300 rounded-md" placeholder="メールアドレスを入力してください">
+                </div>
+
+                <div>
+                    <label for="date" class="block text-lg text-gray-700">ご予約日</label>
+                    <input type="date" id="date" name="date" required class="w-full px-4 py-2 border border-gray-300 rounded-md">
+                </div>
+
+                <div>
+                    <label for="menu" class="block text-lg text-gray-700">メニュー</label>
+                    <select id="menu" name="menu" required class="w-full px-4 py-2 border border-gray-300 rounded-md">
+                        <option value="snorkeling">シュノーケリング</option>
+                        <option value="sup">SUP</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="人数" class="block text-lg text-gray-700">人数</label>
+                    <input type="number" id="人数" name="人数" required class="w-full px-4 py-2 border border-gray-300 rounded-md" placeholder="人数を入力してください">
+                </div>
+
+                <button type="submit" class="w-full bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">
+                    予約を送信
+                </button>
+            </form>
+        </section>
+
+    </div>
+
+</body>
+
+</html>
