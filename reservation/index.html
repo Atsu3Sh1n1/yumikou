@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>予約フォーム</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center px-4">
+  <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-xl">
+    <h2 class="text-2xl font-bold mb-6 text-center">ご予約フォーム</h2>
+    <form id="reservationForm" class="space-y-4">
+
+      <div>
+        <label class="block font-medium text-gray-700">予約日</label>
+        <input type="date" id="date" class="mt-1 w-full border p-2 rounded" required>
+      </div>
+
+      <div>
+        <label class="block font-medium text-gray-700">時間</label>
+        <input type="time" id="time" class="mt-1 w-full border p-2 rounded" required>
+      </div>
+
+      <div>
+        <label class="block font-medium text-gray-700">人数</label>
+        <select id="people" class="mt-1 w-full border p-2 rounded">
+          <option value="1">1人</option>
+          <option value="2">2人</option>
+          <option value="3">3人</option>
+          <option value="4">4人</option>
+          <option value="5">5人</option>
+          <option value="6">6人</option>
+          <option value="7">7人</option>
+          <option value="8">8人</option>
+          <option value="9">9人</option>
+          <option value="10">10人</option>
+        </select>
+      </div>
+
+      <div>
+        <label class="block font-medium text-gray-700">オプション</label>
+        <div class="space-y-2 mt-2">
+          <label class="block"><input type="checkbox" class="option" value="500" data-label="ドリンク"> ドリンク（+¥500）</label>
+          <label class="block"><input type="checkbox" class="option" value="1000" data-label="特別席"> 特別席（+¥1000）</label>
+        </div>
+      </div>
+
+      <div class="text-right font-bold">
+        合計金額: <span id="total">¥0</span>
+      </div>
+
+      <button type="button" id="confirmBtn" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 rounded">
+        予約内容を確認
+      </button>
+    </form>
+  </div>
+
+  <!-- 確認モーダル -->
+  <div id="modal" class="fixed inset-0 bg-black bg-opacity-50 hidden justify-center items-center">
+    <div class="bg-white p-6 rounded shadow-lg w-full max-w-md">
+      <h3 class="text-xl font-bold mb-4">予約内容確認</h3>
+      <div id="confirmDetails" class="mb-4 text-sm text-gray-700"></div>
+      <div class="flex justify-end space-x-2">
+        <button id="cancelBtn" class="bg-gray-300 px-4 py-2 rounded">キャンセル</button>
+        <button id="submitBtn" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded">予約確定</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 完了表示 -->
+  <div id="successMessage" class="fixed inset-0 bg-white flex flex-col items-center justify-center text-center hidden">
+    <h2 class="text-2xl font-bold text-green-600 mb-4">予約完了しました！</h2>
+    <p class="text-lg">予約番号: <span id="reservationNumber" class="font-mono text-xl"></span></p>
+  </div>
+
+  <script src="index.js"></script>
+</body>
+</html>
