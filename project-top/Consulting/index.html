@@ -6,6 +6,31 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>コンサルティングサポート</title>
     <link rel="stylesheet" href="styles.css">
+    <style>
+        /* アニメーション用のCSS */
+        .category {
+            opacity: 0;
+            transform: translateX(100px); /* 右からスライド */
+            transition: all 0.8s ease;
+        }
+
+        .category.visible {
+            opacity: 1;
+            transform: translateX(0); /* スライドしながら表示 */
+        }
+
+        /* h3 と p にアニメーション */
+        .category h3, .category p {
+            opacity: 0;
+            transform: translateX(50px);
+            transition: all 0.8s ease;
+        }
+
+        .category.visible h3, .category.visible p {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    </style>
 </head>
 <body>
 
@@ -22,7 +47,7 @@
         </div>
     </header>
 
-    <section id="about" class="section">
+    <section id="about" class="section about-bg">
         <div class="container">
             <h2>私たちについて</h2>
             <p>高度な専門知識と経験を持つ弓工専属のコンサルティングチームが、貴社の成長をサポートします。業界ごとのニーズに対応する最適な戦略を提案し、実行します。</p>
@@ -64,9 +89,28 @@
             
                 <button type="submit">送信</button>
             </form>
-            
         </div>
     </section>
+
+    <footer class="article-footer">視点の変化が生む“想定外の価値”
+        「神戸牛を食べに沖縄へ行きますか？」
+        普通は「ノー」と答えるでしょう。
+        けれど、沖縄で神戸牛を出すレストランを見つけたら──
+        そこに“想定外の驚き”が生まれ、評価が一段上がります。
+        
+        このような「期待していなかったのに出会えた価値」は、体験や評価を大きく変える力を持っています。
+        
+        私たちのコンサルティングでは、この“視点の変化”を武器にしています。
+        業界の常識、事業の前提、顧客の思い込み──それらを丁寧にほどき、
+        「本当はそこにあるのに、見過ごされていた価値」を引き出します。
+        
+        想定外のリソースを強みに変える
+        諦めていた領域に活路を見出す
+        問題の定義そのものを再構築する
+        
+        それはまるで、沖縄限定のハンバーガーが神戸や姫路で食べられるような体験。
+        意外性と納得感が交差する瞬間に、人は心を動かされます。
+        期待を超える提案で、クライアントの「予想」を「評価」に変えていきます。</footer>
 
     <footer>
         <div class="container">
@@ -74,26 +118,20 @@
         </div>
     </footer>
 
-    <script src="script.js"></script>
+    <script>
+        // スクロールで右からフェードインする機能
+        const categoryElems = document.querySelectorAll('.category');
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        });
+
+        categoryElems.forEach(elem => observer.observe(elem));
+    </script>
+
 </body>
 </html>
-
-視点の変化が生む“想定外の価値”
-「神戸牛を食べに沖縄へ行きますか？」
-普通は「ノー」と答えるでしょう。
-けれど、沖縄で神戸牛を出すレストランを見つけたら──
-そこに“想定外の驚き”が生まれ、評価が一段上がります。
-
-このような「期待していなかったのに出会えた価値」は、体験や評価を大きく変える力を持っています。
-
-私たちのコンサルティングでは、この“視点の変化”を武器にしています。
-業界の常識、事業の前提、顧客の思い込み──それらを丁寧にほどき、
-「本当はそこにあるのに、見過ごされていた価値」を引き出します。
-
-想定外のリソースを強みに変える
-諦めていた領域に活路を見出す
-問題の定義そのものを再構築する
-
-それはまるで、沖縄限定のハンバーガーが神戸や姫路で食べられるような体験。
-意外性と納得感が交差する瞬間に、人は心を動かされます。
-期待を超える提案で、クライアントの「予想」を「評価」に変えていきます。

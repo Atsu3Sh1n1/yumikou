@@ -138,3 +138,31 @@ footer {
         flex: 1;
     }
 }
+.about-bg {
+    background: url('idea.jpg') no-repeat center center;
+    background-size: cover;
+    color: #fff; /* テキストの可読性を上げるため */
+    padding: 60px 20px; /* 適度な余白 */
+}
+
+.about-bg h2,
+.about-bg p {
+    text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.8);
+    font-size: 20px;
+}
+
+.about-bg h2,
+.about-bg p {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeUp 1s ease forwards;
+    animation-delay: 0.3s;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
+}
+
+@keyframes fadeUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
