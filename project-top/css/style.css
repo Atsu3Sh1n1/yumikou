@@ -43,8 +43,9 @@ html, body {
     white-space: nowrap;
     opacity: 0;
     animation: fadeIn 1s ease-out forwards;
-    animation-delay: 1s;
+    animation-delay: 0.5s;
   }
+  
   
   canvas {
     position: absolute;
