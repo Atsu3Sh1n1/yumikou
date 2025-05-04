@@ -5,11 +5,13 @@
     font-family: 'Arial', sans-serif;
 }
 
-body {
+html, body {
+    overflow-x: hidden;
     background-color: #000;
     color: #f1f1f1;
     line-height: 1.6;
 }
+
 
 .page-title {
     font-size: clamp(24px, 6vw, 60px);
@@ -165,7 +167,7 @@ footer {
     opacity: 0;
     transform: translateY(20px);
     animation: fadeUp 1s ease forwards;
-    animation-delay: 1.2s;
+    animation-delay: 1s;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
 }
 
