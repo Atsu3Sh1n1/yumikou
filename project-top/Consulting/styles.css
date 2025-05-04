@@ -148,15 +148,24 @@ footer {
 .about-bg h2,
 .about-bg p {
     text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.8);
-    font-size: 20px;
+    font-size: 2vw; /* PCなどのデフォルト */
 }
 
+@media screen and (max-width: 767px) {
+    .about-bg h2,
+    .about-bg p {
+        text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.8);
+        font-size: 5.5vw; /* スマホ時のフォントサイズ */
+    }
+}
+
+  
 .about-bg h2,
 .about-bg p {
     opacity: 0;
     transform: translateY(20px);
     animation: fadeUp 1s ease forwards;
-    animation-delay: 0.3s;
+    animation-delay: 1.2s;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
 }
 
