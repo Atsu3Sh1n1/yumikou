@@ -1,0 +1,3 @@
+[submodule "project-top/marine-reservation-site/marine-reservation-site"]
+	path = project-top/marine-reservation-site/marine-reservation-site
+	url = https://github.com/Atsu3Sh1n1/yumikou.git
