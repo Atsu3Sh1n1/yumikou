@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>採用情報 - 有限会社弓工</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;500&display=swap" rel="stylesheet">
+    <style>
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Roboto', sans-serif;
+            height: 100%;
+            background: #000;
+            overflow-x: hidden;
+        }
+
+        canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 0;
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 40px;
+            color: #fff;
+            max-width: 800px;
+            width: 100%;
+            box-shadow: 0 0 30px rgba(255, 255, 255, 0.1);
+            animation: fadeIn 1s ease-out;
+        }
+
+        h1 {
+            font-weight: 500;
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            margin-top: 2rem;
+            color: #1abc9c;
+            border-bottom: 1px solid #1abc9c;
+            padding-bottom: 5px;
+        }
+
+        ul {
+            font-size: 1.2rem;
+            list-style: none;
+            padding-left: 0;
+        }
+
+        li {
+            margin: 10px 0;
+        }
+
+        a {
+            color: #fff;
+            text-decoration: none;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        a::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            background-color: #1abc9c;
+            left: 0;
+            bottom: -2px;
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.3s ease;
+        }
+
+        a:hover {
+            color: #1abc9c;
+        }
+
+        a:hover::after {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+
+        footer {
+            margin-top: 40px;
+            text-align: center;
+            font-size: 0.9rem;
+            color: #ccc;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        
+
+        /* テキストアニメーション */
+        .animated-text span {
+            opacity: 0;
+            display: inline-block;
+            transform: translateX(20px);
+            animation: slideIn 1s forwards;
+        }
+
+        .animated-text span:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+
+        .animated-text span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .animated-text span:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+
+        .animated-text span:nth-child(4) {
+            animation-delay: 0.4s;
+        }
+
+        .animated-text span:nth-child(5) {
+            animation-delay: 0.5s;
+        }
+
+        .animated-text span:nth-child(6) {
+            animation-delay: 0.6s;
+        }
+
+        .animated-text span:nth-child(7) {
+            animation-delay: 0.7s;
+        }
+
+        .animated-text span:nth-child(8) {
+            animation-delay: 0.8s;
+        }
+
+        .animated-text span:nth-child(9) {
+            animation-delay: 0.9s;
+        }
+
+        .animated-text span:nth-child(10) {
+            animation-delay: 1s;
+        }
+
+        .animated-text span:nth-child(11) {
+            animation-delay: 1.1s;
+        }
+
+        .animated-text span:nth-child(12) {
+            animation-delay: 1.2s;
+        }
+
+        .animated-text span:nth-child(13) {
+            animation-delay: 1.3s;
+        }
+
+        @keyframes slideIn {
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* スマホ向けにフォントサイズや幅を調整 */
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            .card {
+                padding: 20px;
+            }
+
+            .animated-text {
+                font-size: 1.3rem;
+                white-space: normal;
+                word-wrap: break-word;
+            }
+        }
+
+        @media (max-width: 600px) {
+    .animated-text {
+        font-size: 1.3rem; /* または適切なサイズに */
+        white-space: nowrap;
+    }
+}
+
+    </style>
+</head>
+
+<body>
+
+    <canvas id="sparkCanvas"></canvas>
+
+    <div class="container">
+        <div class="card">
+            <h1></h1>
+            <p class="animated-text">
+                <span>一</span>
+                <span>緒</span>
+                <span>に</span>
+                <span>、</span>
+                <span>未</span>
+                <span>来</span>
+                <span>を</span>
+                <span>創</span>
+                <span>り</span>
+                <span>ま</span>
+                <span>せ</span>
+                <span>ん</span>
+                <span>か</span>
+            </p>
+
+            <h2>募集部署</h2>
+            <ul class="centered-list">
+                <li><a href="https://7n251g49.jbplt.jp/recruit/5226739">・ハンバーガーショップ</a></li>
+                <li><a href="https://7n251g49.jbplt.jp/recruit/555959">・現場スタッフ</a></li>
+                <li><a href="https://yumikou.jp/recruit/">・建設、建築部門</a></li>
+                <li><a href="#">・営業部</a></li>
+                <li><a href="#">・マーケティング部</a></li>
+                <li><a href="#">・開発部</a></li>
+                <li><a href="#">・人事部</a></li>
+                <li><a href="#">・総務部</a></li>
+            </ul>
+            ※ 時給についてのご案内。
+時給は変動性が高く、ページの更新が追いついていない場合がありますので、最新の情報についてはお問い合わせにてご確認ください。
+
+            <h2>厚生労働省リーフレット</h2>
+            <p style="font-size: 0.9rem; line-height: 1.6;">
+                当社は、厚生労働省が発行するリーフレットや関連法令を遵守し、働きやすい職場環境づくりに努めています。
+            </p>
+            <ul>
+                <li><a href="https://www.mhlw.go.jp/new-info/kobetu/roudou/gyousei/dl/150312-1.pdf">・リーフレット1：労働基準法</a></li>
+                <li><a href="https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/koyou_roudou/roudoukijun/gyousei/anzen/index.html">・リーフレット2：安全衛生管理</a></li>
+                <li><a href="https://www.mhlw.go.jp/new-info/kobetu/roudou/gyousei/dl/140811-4.pdf">・リーフレット3：就業規則</a></li>
+                <li><a href="https://www.mhlw.go.jp/new-info/kobetu/roudou/gyousei/dl/chyoujikan.pdf">・リーフレット4：労働時間</a></li>
+                <li><a href="https://www.nenkin.go.jp/service/pamphlet/kouseinenkin.files/jigyounushi_guidebook.pdf">・リーフレット5：社会保険制度</a></li>
+            </ul>
+
+            <h2>補助金情報一覧</h2>
+            <p style="font-size: 0.9rem; line-height: 1.6;">
+                当社では、国の補助金制度を積極的に活用し、従業員の賃金引き上げや労働環境の整備に努めています。
+            </p>
+            <ul>
+                <li>
+                    <a href="https://www.mhlw.go.jp/seisakunitsuite/bunya/koyou_roudou/koyou/kyufukin/okinawa_jakunen.html"
+                        target="_blank" rel="noopener noreferrer">
+                        ・沖縄若年者雇用促進奨励金（厚生労働省）
+                    </a>
+                </li>
+            </ul>
+
+            
+        </div>
+        <footer>
+            &copy; 2025 有限会社弓工 All rights reserved.
+        </footer>
+    </div>
+
+    <script src="fireworks.js"></script>
+</body>
+
+</html>
