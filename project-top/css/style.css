@@ -45,9 +45,12 @@ html, body {
     animation: fadeIn 1s ease-out forwards;
     animation-delay: 0.5s;
   }
-
+  .title .yumioka {
+    font-size: 0.5em;
+    font-weight: 300;
+  }
   .title .group {
-    font-size: 0.9em;
+    font-size: 0.5em;
     font-weight: 300;
   }
   
