@@ -36,7 +36,7 @@ html, body {
   
   .title {
     text-align: center;
-    font-size: 3.5rem;
+    font-size: 3.2rem;
     margin-bottom: 20px;
     letter-spacing: 1px;
     font-weight: 300;
@@ -44,6 +44,11 @@ html, body {
     opacity: 0;
     animation: fadeIn 1s ease-out forwards;
     animation-delay: 0.5s;
+  }
+
+  .title .group {
+    font-size: 0.9em;
+    font-weight: 300;
   }
   
   
