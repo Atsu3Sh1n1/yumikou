@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>宮古島アクティビティ予約</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #e0f7fa;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 30px;
+    }
+    .card {
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      padding: 30px;
+      max-width: 700px;
+      width: 100%;
+    }
+    h2 {
+      text-align: center;
+      color: #00796b;
+    }
+    .form-group {
+      margin-bottom: 15px;
+    }
+    label {
+      font-weight: bold;
+      display: block;
+      margin-bottom: 5px;
+    }
+    input[type="text"],
+    input[type="email"],
+    input[type="tel"],
+    input[type="number"],
+    input[type="date"],
+    input[type="time"],
+    select {
+      width: 100%;
+      padding: 8px;
+      font-size: 1em;
+      box-sizing: border-box;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+    .total-price {
+      font-size: 18px;
+      font-weight: bold;
+      color: #d32f2f;
+      margin-top: 15px;
+    }
+    button {
+      background: #00796b;
+      color: white;
+      border: none;
+      padding: 12px;
+      border-radius: 6px;
+      width: 100%;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #004d40;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2>宮古島アクティビティ予約フォーム</h2>
+    <form id="form">
+      <div class="form-group">
+        <label>お名前</label>
+        <input type="text" required />
+      </div>
+      <div class="form-group">
+        <label>電話番号</label>
+        <input type="tel" required />
+      </div>
+      <div class="form-group">
+        <label>メールアドレス</label>
+        <input type="email" required />
+      </div>
+      <div class="form-group">
+        <label>ご希望日</label>
+        <input type="date" required />
+      </div>
+
+      <!-- マリンジェット -->
+      <div class="form-group">
+        <label>マリンジェット貸出（1時間）</label>
+        <select id="jetPrice">
+          <option value="0">選択しない</option>
+          <option value="15000">15,000円</option>
+          <option value="20000">20,000円</option>
+          <option value="28000">28,000円</option>
+        </select>
+      </div>
+
+      <!-- 遊び放題 -->
+      <div class="form-group">
+        <label>遊び放題プラン</label>
+        <select id="freePlay">
+          <option value="0">選択しない</option>
+          <option value="12000">1〜5名／3時間：12,000円</option>
+          <option value="20000">1〜5名／1日：20,000円</option>
+          <option value="8000">6名以上／3時間：8,000円</option>
+          <option value="12000b">6名以上／1日：12,000円</option>
+        </select>
+      </div>
+
+      <!-- 人数関連 -->
+      <div class="form-group">
+        <label>海亀ツアー（1名 6,000円）</label>
+        <input type="number" id="turtle" min="0" value="0"/>
+      </div>
+      <div class="form-group">
+        <label>ヤビジシュノーケリング（1名 12,000円）</label>
+        <input type="number" id="yabiji" min="0" value="0"/>
+      </div>
+      <div class="form-group">
+        <label>ビーチシュノーケリング（1名 6,000円）</label>
+        <input type="number" id="beach" min="0" value="0"/>
+      </div>
+      <div class="form-group">
+        <label>SUP ユニの浜（1名 6,000円）</label>
+        <input type="number" id="sup" min="0" value="0"/>
+      </div>
+      <div class="form-group">
+        <label>チャータークルーズ（6名まで 2時間 50,000円）</label>
+        <select id="charter">
+          <option value="0">選択しない</option>
+          <option value="50000">予約する</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>パラセーリング（人数）</label>
+        <input type="number" id="parasail" min="0" value="0"/>
+      </div>
+      <div class="form-group">
+        <label>乗船のみ（1名 3,000円）</label>
+        <input type="number" id="rider" min="0" value="0"/>
+      </div>
+
+      <!-- レンタル -->
+      <div class="form-group">
+        <label>レンタル（フィン・ゴーグルなど）セット数（1,000円/セット）</label>
+        <input type="number" id="rental" min="0" value="0"/>
+      </div>
+      <div class="form-group">
+        <label>ライフジャケット着数（1,000円/着）</label>
+        <input type="number" id="jacket" min="0" value="0"/>
+      </div>
+
+      <div class="form-group">
+        <label>ご希望時間</label>
+        <input type="time" required />
+      </div>
+
+      <div class="total-price">合計金額：<span id="total">0</span> 円</div>
+
+      <button type="submit">予約内容を確認</button>
+    </form>
+  </div>
+
+  <script>
+    const ids = [
+      'jetPrice', 'freePlay', 'turtle', 'yabiji', 'beach', 'sup', 'charter',
+      'parasail', 'rider', 'rental', 'jacket'
+    ];
+
+    function calculateTotal() {
+      const getVal = id => parseInt(document.getElementById(id).value) || 0;
+      let total = 0;
+
+      total += getVal('jetPrice');
+      
+      const free = document.getElementById('freePlay').value;
+      if (free === '12000b') total += 12000;
+      else total += getVal('freePlay');
+
+      total += getVal('turtle') * 6000;
+      total += getVal('yabiji') * 12000;
+      total += getVal('beach') * 6000;
+      total += getVal('sup') * 6000;
+      total += getVal('charter');
+
+      const parasailNum = getVal('parasail');
+      if (parasailNum === 1) total += 9000;
+      else if (parasailNum >= 2) total += parasailNum * 8000;
+
+      total += getVal('rider') * 3000;
+      total += getVal('rental') * 1000;
+      total += getVal('jacket') * 1000;
+
+      document.getElementById('total').textContent = total.toLocaleString();
+    }
+
+    ids.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.addEventListener('input', calculateTotal);
+    });
+
+    document.getElementById('form').addEventListener('submit', e => {
+      e.preventDefault();
+      alert("ご予約内容を確認しました。\nこの内容で送信されます。（デモ）");
+    });
+
+    // 初期計算
+    calculateTotal();
+  </script>
+</body>
+</html>
