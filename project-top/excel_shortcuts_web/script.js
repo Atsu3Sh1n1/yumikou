@@ -33,6 +33,88 @@ const categorizedShortcuts = {
     { key: "Alt + Space", action: "コントロールメニューを表示" }
   ],
 
+  "ワークシート": [
+    { key: "Shift + F11", action: "新しいワークシートを挿入" },
+    { key: "Ctrl + PgDn", action: "次のワークシートに移動" },
+    { key: "Ctrl + PgUp", action: "前のワークシートに移動" },
+    { key: "Alt + O , H R", action: "現在のワークシートの名前を変更" },
+    { key: "Alt + E , L", action: "現在のワークシートを削除" },
+    { key: "Alt + E , M", action: "現在のワークシートを移動" },
+    { key: "F6 または Shift + F6", action: "ワークシート、リボン、作業ウィンドウ、ズームコントロール間を移動（分割ビュー時）" },
+    { key: "Ctrl + Shift + PgUp / PgDn", action: "隣接するワークシートを選択" },
+    { key: "Ctrl + Click", action: "離れたワークシートを選択" },
+    { key: "ScrLk", action: "スクロールロックの切り替え" },
+    { key: "Ctrl + Shift + F1", action: "全画面表示の切り替え" },
+    { key: "Ctrl + P", action: "印刷" },
+    { key: "Ctrl + F2", action: "印刷プレビューウィンドウを開く" },
+    { key: "Alt + P , R S", action: "印刷範囲を設定" },
+    { key: "Alt + P , R C", action: "印刷範囲をクリア" },
+    { key: "Ctrl + Mouse Wheel Up", action: "ズームイン" },
+    { key: "Ctrl + Mouse Wheel Down", action: "ズームアウト" },
+    { key: "Alt + R , P S", action: "シートを保護" }
+  ],
+
+  "ワークブック": [
+    { key: "Ctrl + N", action: "新しいブックを作成" },
+    { key: "Ctrl + O", action: "ブックを開く" },
+    { key: "Ctrl + S", action: "ブックを保存" },
+    { key: "F12", action: "名前を付けて保存" },
+    { key: "Ctrl + Tab", action: "次のブックに移動" },
+    { key: "Ctrl + Shift + Tab", action: "前のブックに移動" },
+    { key: "Ctrl + F9", action: "現在のブックウィンドウを最小化" },
+    { key: "Ctrl + F10", action: "現在のブックウィンドウを最大化" },
+    { key: "Alt + R , P W", action: "ブックを保護" },
+    { key: "Ctrl + F4", action: "現在のブックを閉じる" },
+    { key: "Alt + F4", action: "Excelを終了" }
+  ],
+
+  "リボン": [
+    { key: "Ctrl + F1", action: "リボンを展開／折りたたみ" },
+    { key: "Alt", action: "アクセスキーを有効化" },
+    { key: "→ ← ↑ ↓", action: "リボンのタブやグループ間を移動" },
+    { key: "Space または Enter", action: "選択したコントロールを有効化または開く" },
+    { key: "Enter", action: "コントロールの変更を確定" },
+    { key: "F1", action: "選択中のコントロールに関するヘルプを表示" }
+  ],
+
+"セルを選択したあとに、ドラッグ・アンド・ドロップで移動できる操作": [
+  { key: "Drag", action: "ドラッグして切り取り" },
+  { key: "Ctrl + Drag", action: "ドラッグしてコピー" },
+  { key: "Shift + Drag", action: "ドラッグして挿入" },
+  { key: "Ctrl + Shift + Drag", action: "ドラッグしてコピーを挿入" },
+  { key: "Alt + Drag", action: "ドラッグして別のワークシートへ移動" },
+  { key: "Ctrl + Drag", action: "ドラッグしてワークシートを複製" }
+  ],
+  
+  "ナビゲーション": [
+    { key: "→", action: "1つ右のセルに移動" },
+    { key: "←", action: "1つ左のセルに移動" },
+    { key: "↑", action: "1つ上のセルに移動" },
+    { key: "↓", action: "1つ下のセルに移動" },
+    { key: "Alt + PgDn", action: "1画面分右に移動" },
+    { key: "Alt + PgUp", action: "1画面分左に移動" },
+    { key: "PgUp", action: "1画面分上に移動" },
+    { key: "PgDn", action: "1画面分下に移動" },
+    { key: "Ctrl + →", action: "データ領域の右端に移動" },
+    { key: "Ctrl + ←", action: "データ領域の左端に移動" },
+    { key: "Ctrl + ↑", action: "データ領域の上端に移動" },
+    { key: "Ctrl + ↓", action: "データ領域の下端に移動" },
+    { key: "Home", action: "行の先頭に移動" },
+    { key: "Ctrl + End", action: "ワークシート内の最後のデータセルに移動" },
+    { key: "Ctrl + Home", action: "ワークシート内の最初のセルに移動" },
+    { key: "End", action: "Endモードをオンにする" }
+  ],
+  
+  "アクティブセル": [
+    { key: "Shift + Backspace", action: "アクティブセルを選択（複数セルが選択されている場合）" },
+    { key: "Ctrl + Backspace", action: "ワークシートでアクティブセルを表示" },
+    { key: "Ctrl + .", action: "選択範囲の角にアクティブセルを時計回りに移動" },
+    { key: "Enter", action: "選択範囲内でアクティブセルを下に移動 - 次の列にラップ" },
+    { key: "Shift + Enter", action: "選択範囲内でアクティブセルを上に移動 - 前の列にラップ" },
+    { key: "Tab", action: "選択範囲内でアクティブセルを右に移動 - 次の行にラップ" },
+    { key: "Shift + Tab", action: "選択範囲内でアクティブセルを左に移動 - 前の行にラップ" }
+  ],
+
   "編集": [
     { key: "Ctrl + C", action: "コピー" },
     { key: "Ctrl + X", action: "切り取り" },
