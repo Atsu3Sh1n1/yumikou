@@ -21,8 +21,18 @@ const categorizedShortcuts = {
     { key: "Ctrl + Space", action: "テーブルの列を選択" },
     { key: "Ctrl + A", action: "テーブル全体を選択（アクティブセルがテーブル内にあるとき）" },
     { key: "Alt + C", action: "スライサーフィルタをクリア" },
-    { key: "F7", action: "スペルチェックを実行" }
+    { key: "F7", action: "スペルチェックを実行" },
+    { key: "Shift + F7", action: "類語辞典を開く" },
+    { key: "Alt + F8", action: "マクロダイアログボックスを開く" },
+    { key: "Alt + F11", action: "VBAエディターを開く" },
+    { key: "Ctrl + D", action: "オブジェクトを複製" },
+    { key: "Alt", action: "ドラッグ中にグリッドにスナップ" },
+    { key: "Ctrl + 6", action: "オブジェクトの表示/非表示を切り替える" },
+    { key: "Alt + '", action: "セルスタイルの変更ダイアログを開く" },
+    { key: "Shift + F10", action: "右クリックメニューを表示" },
+    { key: "Alt + Space", action: "コントロールメニューを表示" }
   ],
+
   "編集": [
     { key: "Ctrl + C", action: "コピー" },
     { key: "Ctrl + X", action: "切り取り" },

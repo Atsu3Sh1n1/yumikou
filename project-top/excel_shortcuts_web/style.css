@@ -16,7 +16,7 @@ html, body {
 
 /* コピークレジット */
 .created-by {
-  font-size: 16px;
+  font-size: 14px;
   color: #555;
   text-align: center;
   margin-top: 5px;
@@ -132,11 +132,11 @@ section {
 
   h2,
   h3 {
-    font-size: 1.2rem;
+    font-size: 1.5rem;
   }
 
   li {
-    font-size: 0.95rem;
+    font-size: 1.1rem;
   }
 
   input[type="text"],
