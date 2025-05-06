@@ -26,6 +26,11 @@ html, body {
   margin-top: 5px;
 }
 
+p {
+  line-height: 1.2;
+}
+
+
 .created-by a {
   text-decoration: none;
   color: #007BFF;
