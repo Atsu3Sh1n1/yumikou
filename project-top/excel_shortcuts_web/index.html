@@ -3,8 +3,37 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  
+  <!-- SEOメタタグ -->
+  <meta name="description" content="Excelのショートカットキーを検索・一覧表示するサイトです。すべてのショートカットを簡単に探すことができます。" />
+  <meta name="keywords" content="Excel, ショートカット, 検索, 一覧, 時間短縮, 作業効率" />
+  <meta name="author" content="YUMIKOU Inc." />
+  
+  <!-- Open Graph (OGP) メタタグ -->
+  <meta property="og:title" content="Excelショートカット検索と一覧" />
+  <meta property="og:description" content="Excelのショートカットを検索・一覧表示できる便利なツールです。" />
+  <meta property="og:image" content="https://example.com/ogp-image.jpg" /> <!-- 画像URLを設定 -->
+  <meta property="og:url" content="https://your-website.com" />
+  <meta property="og:type" content="website" />
+  
+  <!-- Twitterカード用メタタグ -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Excelショートカット検索と一覧" />
+  <meta name="twitter:description" content="Excelのショートカットを検索・一覧表示できる便利なツールです。" />
+  <meta name="twitter:image" content="https://example.com/ogp-image.jpg" /> <!-- Twitter用画像URL -->
+  
+  <!-- ファビコンとブックマークアイコン -->
+  <link rel="icon" href="https://example.com/favicon.ico" type="image/x-icon" />
+  <link rel="icon" href="https://example.com/favicon-32x32.png" sizes="32x32" />
+  <link rel="icon" href="https://example.com/favicon-16x16.png" sizes="16x16" />
+  <link rel="apple-touch-icon" href="https://example.com/apple-touch-icon.png" />
+  
   <title>Excelショートカット検索と一覧</title>
+  
+  <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  
+  <!-- 外部CSS -->
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -14,7 +43,6 @@
       <input type="text" id="searchBox" class="search-box" placeholder="ショートカットを検索" />
     </div>
     
-    
     <!-- Created by YUMIKOU Inc.を検索フォームの下に追加 -->
     <p class="created-by">
       <a href="https://atsu3sh1n1.github.io/yumikou/" target="_blank">Created by YUMIKOU Inc.</a>
@@ -23,9 +51,11 @@
     <ul id="results"></ul>
 
     <h2 id="shortcutHeader">全ショートカット一覧</h2>
-<div id="shortcutList"></div>
-<ul id="results"></ul>
+    <div id="shortcutList"></div>
+    <ul id="results"></ul>
   </div>
+
+  <!-- JavaScript -->
   <script src="script.js"></script>
 </body>
 </html>

@@ -115,6 +115,49 @@ const categorizedShortcuts = {
     { key: "Shift + Tab", action: "選択範囲内でアクティブセルを左に移動 - 前の行にラップ" }
   ],
 
+  "セクション(選択)": [
+    { key: "Shift + Space", action: "行全体を選択" },
+    { key: "Ctrl + Space", action: "列全体を選択" },
+    { key: "Ctrl + A", action: "現在の範囲を選択（データがある場合）- 再度押すと集計行を選択、さらに押すとワークシート全体を選択" },
+    { key: "Shift + Click", action: "選択範囲を拡張" },
+    { key: "Ctrl + Click", action: "選択範囲に離れたセルを追加" },
+    { key: "Ctrl + Alt + →", action: "離れた選択範囲間で右に移動" },
+    { key: "Ctrl + Alt + ←", action: "離れた選択範囲間で左に移動" },
+    { key: "Shift + F8", action: "'選択を追加'モードを切り替える" },
+    { key: "Esc", action: "'選択を追加'モードを終了" }
+  ],
+
+  "エクステンド セレクション（選択範囲を拡張）": [
+    { key: "Shift + →", action: "選択範囲を右に拡張" },
+    { key: "Shift + ←", action: "選択範囲を左に拡張" },
+    { key: "Shift + ↑", action: "選択範囲を上に拡張" },
+    { key: "Shift + ↓", action: "選択範囲を下に拡張" },
+    { key: "Ctrl + Shift + →", action: "データが含まれている右端のセル、または次のデータがあるセル、または最後の列まで選択範囲を拡張" },
+    { key: "Ctrl + Shift + ←", action: "データが含まれている左端のセル、または次のデータがあるセル、または最初の列まで選択範囲を拡張" },
+    { key: "Ctrl + Shift + ↑", action: "データが含まれている上端のセル、または次のデータがあるセル、または最初の行まで選択範囲を拡張" },
+    { key: "Ctrl + Shift + ↓", action: "データが含まれている下端のセル、または次のデータがあるセル、または最後の行まで選択範囲を拡張" },
+    { key: "Shift + PgUp", action: "1画面分上に選択範囲を拡張" },
+    { key: "Shift + PgDn", action: "1画面分下に選択範囲を拡張" },
+    { key: "Alt + Shift + PgDn", action: "1画面分右に選択範囲を拡張" },
+    { key: "Alt + Shift + PgUp", action: "1画面分左に選択範囲を拡張" },
+    { key: "Shift + Home", action: "行の先頭まで選択範囲を拡張" },
+    { key: "Ctrl + Shift + Home", action: "ワークシート内の最初のセルまで選択範囲を拡張" },
+    { key: "Ctrl + Shift + End", action: "ワークシート内の最後のセルまで選択範囲を拡張" },
+    { key: "F8", action: "'選択範囲拡張'モードを切り替える" },
+    { key: "Esc", action: "'選択範囲拡張'モードを終了" }
+  ],
+
+  "編集": [
+    { key: "Ctrl + C", action: "コピー" },
+    { key: "Ctrl + X", action: "切り取り" },
+    { key: "Ctrl + V", action: "貼り付け" },
+    { key: "Delete", action: "内容を削除" },
+    { key: "Ctrl + Z", action: "元に戻す" },
+    { key: "Ctrl + Y", action: "やり直す" },
+    { key: "Ctrl + F", action: "検索" },
+    { key: "Ctrl + H", action: "置換" }
+  ],
+
   "編集": [
     { key: "Ctrl + C", action: "コピー" },
     { key: "Ctrl + X", action: "切り取り" },
