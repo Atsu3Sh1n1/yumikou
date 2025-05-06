@@ -1,0 +1,147 @@
+/* ベースのフォントと背景 */
+html, body {
+  font-family: 'Poppins', sans-serif;
+  background-color: #1e1e1e;
+  color: #e5e5e5;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden; /* 横スクロール防止 */
+  user-select: none;
+  box-sizing: border-box;
+}
+
+*, *::before, *::after {
+  box-sizing: inherit;
+}
+
+/* コピークレジット */
+.created-by {
+  font-size: 16px;
+  color: #555;
+  text-align: center;
+  margin-top: 5px;
+}
+
+.created-by a {
+  text-decoration: none;
+  color: #007BFF;
+}
+
+.created-by a:hover {
+  text-decoration: underline;
+  color: #0056b3;
+}
+
+/* メインコンテナ */
+.container {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 30px;
+  background-color: #2d2d2d;
+  border-radius: 12px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+  color: #e5e5e5;
+}
+
+/* タイトル */
+h1 {
+  font-size: 2.5rem;
+  color: #f39c12;
+  margin-bottom: 20px;
+  text-align: center;
+  word-break: break-word;
+}
+
+/* 検索ボックス */
+input[type="text"],
+.search-box {
+  width: 100%;
+  padding: 14px;
+  background-color: #444;
+  border: none;
+  color: #fff;
+  font-size: 1rem;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  transition: background-color 0.3s ease;
+  box-sizing: border-box;
+}
+
+input[type="text"]:focus {
+  background-color: #555;
+  outline: none;
+}
+
+#searchBox {
+  user-select: text;
+}
+
+/* リスト表示 */
+ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+li {
+  padding: 12px;
+  background-color: #333;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  transition: background-color 0.3s ease;
+  font-size: 1rem;
+  word-break: break-word;
+}
+
+li:hover {
+  background-color: #444;
+}
+
+strong {
+  font-weight: bold;
+  color: #f39c12;
+}
+
+/* セクション見出し */
+h2 {
+  font-size: 1.8rem;
+  color: #f39c12;
+  margin-top: 40px;
+}
+
+h3 {
+  font-size: 1.5rem;
+  color: #ddd;
+  margin-top: 30px;
+}
+
+section {
+  margin-bottom: 20px;
+}
+
+/* スマホ用レスポンシブ対応 */
+@media (max-width: 600px) {
+  .container {
+    padding: 1rem;
+  }
+
+  h1 {
+    font-size: 1.8rem;
+  }
+
+  h2,
+  h3 {
+    font-size: 1.2rem;
+  }
+
+  li {
+    font-size: 0.95rem;
+  }
+
+  input[type="text"],
+  .search-box {
+    padding: 10px;
+    font-size: 1rem;
+  }
+}
