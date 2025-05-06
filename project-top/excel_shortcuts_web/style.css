@@ -5,10 +5,14 @@ html, body {
   color: #e5e5e5;
   margin: 0;
   padding: 0;
-  overflow-x: hidden; /* 横スクロール防止 */
+  overflow-x: hidden;
   user-select: none;
+  -webkit-user-select: none; /* Safari / iOS 対応 */
+  -moz-user-select: none;    /* Firefox 対応 */
+  -ms-user-select: none;     /* 古いIE対応（念のため） */
   box-sizing: border-box;
 }
+
 
 *, *::before, *::after {
   box-sizing: inherit;
