@@ -183,7 +183,7 @@ const categorizedShortcuts = {
     { key: "Shift + Enter", action: "データを入力して上に移動" },
     { key: "Tab", action: "データを入力して右に移動" },
     { key: "Shift + Tab", action: "データを入力して左に移動" },
-    { key: "Ctrl + Enter", action: "データを入力して同じセルにとどまる" },
+    { key: "Ctrl + Enter", action: "データを入力して同じセルにとどまる（複数セルに同時入力）" },
     { key: "Enter", action: "複数のセルに同じデータを入力（コピー後、セルを選択してから）" },
     { key: "Ctrl + ;", action: "現在の日付を入力" },
     { key: "Ctrl + Shift + :", action: "現在の時間を入力" },
@@ -293,6 +293,20 @@ const categorizedShortcuts = {
     { key: "Enter", action: "適用してダイアログを閉じる" },
     { key: "Space", action: "チェックボックスのオン/オフを切り替える" },
     { key: "Esc", action: "キャンセルしてダイアログを閉じる" }
+  ],
+
+"右クリックメニュー": [
+    { key: "Shift + F10, T", action: "切り取り" },
+    { key: "Shift + F10, C", action: "コピー" },
+    { key: "Shift + F10, V", action: "貼り付け" },
+    { key: "Shift + F10, V V", action: "値として貼り付け" },
+    { key: "Shift + F10, V R", action: "書式を貼り付け" },
+    { key: "Shift + F10, I", action: "挿入" },
+    { key: "Shift + F10, D", action: "削除" },
+    { key: "Shift + F10, F", action: "セルの書式設定" },
+    { key: "Shift + F10, M (または N）", action: "名前の定義" },
+    { key: "Shift + F10, M（Excelのバージョン依存）", action: "コメントの挿入／編集" },
+    { key: "Shift + F10, K", action: "ハイパーリンクの挿入" }
   ],
 
 };
