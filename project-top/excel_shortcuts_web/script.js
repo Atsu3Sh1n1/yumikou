@@ -171,7 +171,7 @@ const categorizedShortcuts = {
     { key: "Ctrl + Shift + →", action: "右に1単語選択" },
     { key: "Ctrl + Shift + ←", action: "左に1単語選択" },
     { key: "Shift + Home", action: "セルの先頭まで選択" },
-    { key: "Shift + End", action: "セルの末尾まで選択" }
+    { key: "Shift + End", action: "セルの末尾まで選択" },
     { key: "Ctrl + Delete", action: "行の末尾まで削除" },
     { key: "Backspace", action: "カーソルの左側の文字を削除" },
     { key: "Delete", action: "カーソルの右側の文字を削除" },
@@ -294,7 +294,7 @@ const categorizedShortcuts = {
     { key: "Space", action: "チェックボックスのオン/オフを切り替える" },
     { key: "Esc", action: "キャンセルしてダイアログを閉じる" }
   ],
-  
+
 };
 
 const allShortcuts = Object.values(categorizedShortcuts).flat();
