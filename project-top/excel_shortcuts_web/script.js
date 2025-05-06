@@ -77,7 +77,7 @@ const categorizedShortcuts = {
     { key: "F1", action: "選択中のコントロールに関するヘルプを表示" }
   ],
 
-"セルを選択したあとに、ドラッグ・アンド・ドロップで移動できる操作": [
+"セルを選択したあとに、ドラッグアンドドロップで移動できる操作": [
   { key: "Drag", action: "ドラッグして切り取り" },
   { key: "Ctrl + Drag", action: "ドラッグしてコピー" },
   { key: "Shift + Drag", action: "ドラッグして挿入" },
@@ -115,7 +115,7 @@ const categorizedShortcuts = {
     { key: "Shift + Tab", action: "選択範囲内でアクティブセルを左に移動 - 前の行にラップ" }
   ],
 
-  "セクション(選択)": [
+  "選択": [
     { key: "Shift + Space", action: "行全体を選択" },
     { key: "Ctrl + Space", action: "列全体を選択" },
     { key: "Ctrl + A", action: "現在の範囲を選択（データがある場合）- 再度押すと集計行を選択、さらに押すとワークシート全体を選択" },
@@ -127,7 +127,7 @@ const categorizedShortcuts = {
     { key: "Esc", action: "'選択を追加'モードを終了" }
   ],
 
-  "エクステンド セレクション（選択範囲を拡張）": [
+  "選択範囲を拡張": [
     { key: "Shift + →", action: "選択範囲を右に拡張" },
     { key: "Shift + ←", action: "選択範囲を左に拡張" },
     { key: "Shift + ↑", action: "選択範囲を上に拡張" },
@@ -147,71 +147,154 @@ const categorizedShortcuts = {
     { key: "Esc", action: "'選択範囲拡張'モードを終了" }
   ],
 
-  "編集": [
-    { key: "Ctrl + C", action: "コピー" },
-    { key: "Ctrl + X", action: "切り取り" },
-    { key: "Ctrl + V", action: "貼り付け" },
-    { key: "Delete", action: "内容を削除" },
-    { key: "Ctrl + Z", action: "元に戻す" },
-    { key: "Ctrl + Y", action: "やり直す" },
-    { key: "Ctrl + F", action: "検索" },
-    { key: "Ctrl + H", action: "置換" }
+  "特定の条件に基づいた選択": [
+    { key: "Ctrl + G または F5", action: "'移動先'ダイアログボックスを表示" },
+    { key: "Ctrl + Shift + O", action: "コメントが含まれるセルを選択" },
+    { key: "Ctrl + Shift + *", action: "アクティブセルを囲む現在の領域を選択" },
+    { key: "Ctrl + A", action: "現在の範囲を選択" },
+    { key: "Ctrl + [", action: "直接の先行セルを選択" },
+    { key: "Ctrl + Shift + {", action: "すべての先行セルを選択" },
+    { key: "Ctrl + ]", action: "直接の従属セルを選択" },
+    { key: "Ctrl + Shift + }", action: "すべての従属セルを選択" },
+    { key: "Alt + ;", action: "表示されているセルのみを選択" }
   ],
 
-  "編集": [
-    { key: "Ctrl + C", action: "コピー" },
-    { key: "Ctrl + X", action: "切り取り" },
-    { key: "Ctrl + V", action: "貼り付け" },
-    { key: "Delete", action: "内容を削除" },
-    { key: "Ctrl + Z", action: "元に戻す" },
-    { key: "Ctrl + Y", action: "やり直す" },
-    { key: "Ctrl + F", action: "検索" },
-    { key: "Ctrl + H", action: "置換" }
+  "セル エディット モード": [
+    { key: "F2", action: "アクティブセルを編集" },
+    { key: "Shift + F2", action: "コメントを挿入または編集" },
+    { key: "Shift + F10 , M", action: "コメントを削除" },
+    { key: "Esc", action: "編集をキャンセル" },
+    { key: "Shift + →", action: "右に1文字選択" },
+    { key: "Shift + ←", action: "左に1文字選択" },
+    { key: "Ctrl + →", action: "右に1単語移動" },
+    { key: "Ctrl + ←", action: "左に1単語移動" },
+    { key: "Ctrl + Shift + →", action: "右に1単語選択" },
+    { key: "Ctrl + Shift + ←", action: "左に1単語選択" },
+    { key: "Shift + Home", action: "セルの先頭まで選択" },
+    { key: "Shift + End", action: "セルの末尾まで選択" }
+    { key: "Ctrl + Delete", action: "行の末尾まで削除" },
+    { key: "Backspace", action: "カーソルの左側の文字を削除" },
+    { key: "Delete", action: "カーソルの右側の文字を削除" },
+    { key: "Alt + Enter", action: "同じセル内で新しい行を開始" }
   ],
-  "書式設定": [
-    { key: "Ctrl + B", action: "太字" },
-    { key: "Ctrl + I", action: "斜体" },
-    { key: "Ctrl + U", action: "下線" },
-    { key: "Alt + E, S, V", action: "形式を選択して貼り付け" },
-    { key: "Ctrl + 1", action: "セルの書式設定" }
+
+  "データ入力": [
+    { key: "Enter", action: "データを入力して下に移動" },
+    { key: "Shift + Enter", action: "データを入力して上に移動" },
+    { key: "Tab", action: "データを入力して右に移動" },
+    { key: "Shift + Tab", action: "データを入力して左に移動" },
+    { key: "Ctrl + Enter", action: "データを入力して同じセルにとどまる" },
+    { key: "Enter", action: "複数のセルに同じデータを入力（コピー後、セルを選択してから）" },
+    { key: "Ctrl + ;", action: "現在の日付を入力" },
+    { key: "Ctrl + Shift + :", action: "現在の時間を入力" },
+    { key: "Ctrl + D", action: "上のセルから下にデータをコピー" },
+    { key: "Ctrl + R", action: "左のセルから右にデータをコピー" },
+    { key: "Ctrl + '", action: "上のセルから数式をコピー（数式をそのままコピー）" },
+    { key: "Ctrl + Shift + \"", action: "上のセルから値をコピー" },
+    { key: "Ctrl + K", action: "ハイパーリンクを挿入" },
+    { key: "Alt + ↓", action: "AutoCompleteリストを表示" },
+    { key: "Ctrl + E", action: "フラッシュフィル" }
   ],
-  "行・列操作": [
-    { key: "Ctrl + Shift + +", action: "セルを挿入" },
-    { key: "Ctrl + -", action: "セルを削除" },
+
+  "書式設定・形式変更": [
+    { key: "Ctrl + 1", action: "セルの書式設定" },
+    { key: "Ctrl + Shift + F", action: "書式設定ダイアログを表示（フォントタブ選択）" },
+    { key: "Ctrl + B", action: "太字を適用または解除" },
+    { key: "Ctrl + I", action: "斜体を適用または解除" },
+    { key: "Ctrl + U", action: "下線を適用または解除" },
+    { key: "Ctrl + 5", action: "取り消し線を適用または解除" },
+    { key: "Alt + H , A C", action: "中央揃え" },
+    { key: "Alt + H , A L", action: "左揃え" },
+    { key: "Alt + H , A R", action: "右揃え" },
+    { key: "Alt + H , 6", action: "インデントを増やす" },
+    { key: "Alt + H , 5", action: "インデントを減らす" },
+    { key: "Alt + H , W", action: "テキストの折り返し" },
+    { key: "Alt + H , A T", action: "上揃え" },
+    { key: "Alt + H , A M", action: "中央揃え（垂直方向）" },
+    { key: "Alt + H , A B", action: "下揃え" },
+    { key: "Alt + H , F G", action: "フォントサイズを1段階大きくする" },
+    { key: "Alt + H , F K", action: "フォントサイズを1段階小さくする" }
+  ],
+
+  "数値の形式設定": [
+    { key: "Ctrl + Shift + ~", action: "一般形式を適用" },
+    { key: "Ctrl + Shift + !", action: "数値形式を適用" },
+    { key: "Ctrl + Shift + @", action: "時刻形式を適用" },
+    { key: "Ctrl + Shift + #", action: "日付形式を適用" },
+    { key: "Ctrl + Shift + $", action: "通貨形式を適用" },
+    { key: "Ctrl + Shift + %", action: "パーセンテージ形式を適用" },
+    { key: "Ctrl + Shift + ^", action: "科学的記数法形式を適用" }
+  ],
+
+  "ボーダーの設定・枠線・境界線": [
+    { key: "Alt + H , B", action: "リボンから枠線・境界線スタイルのリストを開く" },
+    { key: "Ctrl + Shift + &", action: "選択したセルに枠線・境界線を追加" },
+    { key: "Alt + H , B R", action: "右の枠線・境界線を追加または削除" },
+    { key: "Alt + H , B L", action: "左の枠線・境界線を追加または削除" },
+    { key: "Alt + H , B P", action: "上の枠線・境界線を追加または削除" },
+    { key: "Alt + H , B O", action: "下の枠線・境界線を追加または削除" },
+    { key: "Alt + H , B A", action: "選択したすべてのセルにすべての枠線・境界線を追加" },
+    { key: "Ctrl + Shift + -", action: "枠線・境界線を削除" }
+  ],
+
+  "数式・関数": [
+    { key: "=", action: "数式の入力を開始" },
+    { key: "F4", action: "絶対参照と相対参照を切り替える（セル編集モード）" },
+    { key: "Shift + F3", action: "関数の挿入ダイアログを開く" },
+    { key: "Alt + =", action: "オートサム" },
+    { key: "Ctrl + `", action: "数式の表示をオン/オフ" },
+    { key: "Ctrl + Shift + A", action: "関数引数を挿入" },
+    { key: "Ctrl + Shift + Enter", action: "配列数式を入力" },
+    { key: "F9", action: "ワークシートを計算" },
+    { key: "Shift + F9", action: "アクティブなワークシートを計算" },
+    { key: "Ctrl + Alt + F9", action: "すべてのワークシートを強制的に計算" },
+    { key: "F9", action: "数式の一部を評価（セル編集モード）" },
+    { key: "Ctrl + Shift + U", action: "数式バーを展開または折りたたむ" },
+    { key: "Ctrl + A", action: "関数引数ダイアログボックスを表示" },
+    { key: "Ctrl + F3", action: "名前の管理者を開く" },
+    { key: "Ctrl + Shift + F3", action: "行/列の値から名前を作成" },
+    { key: "F3", action: "数式に名前を貼り付け" },
+    { key: "Tab", action: "自動補完で関数を確定" }
+  ],
+
+  "行と列": [
+    { key: "Ctrl + +", action: "挿入ダイアログボックスを表示" },
+    { key: "Ctrl + +", action: "選択した行数分を挿入" },
+    { key: "Ctrl + +", action: "選択した列数分を挿入" },
+    { key: "Ctrl + -", action: "削除ダイアログボックスを表示" },
+    { key: "Ctrl + -", action: "選択した行数分を削除" },
+    { key: "Ctrl + -", action: "選択した列数分を削除" },
+    { key: "Delete", action: "選択したセルの内容を削除" },
+    { key: "Ctrl + 0", action: "列を非表示" },
     { key: "Ctrl + 9", action: "行を非表示" },
     { key: "Ctrl + Shift + 9", action: "行を再表示" },
-    { key: "Ctrl + 0", action: "列を非表示" },
-    { key: "Ctrl + Shift + 0", action: "列を再表示" }
+    { key: "Alt + Shift + →", action: "行または列をグループ化（行/列選択時）" },
+    { key: "Alt + Shift + ←", action: "行または列をグループ解除（行/列選択時）" },
+    { key: "Alt + Shift + →", action: "グループダイアログボックスを開く（行/列選択なし）" },
+    { key: "Alt + Shift + ←", action: "グループ解除ダイアログボックスを開く" },
+    { key: "Ctrl + 8", action: "アウトライン記号の表示/非表示" }
   ],
-  "移動・選択": [
-    { key: "Ctrl + →", action: "右端のセルへ移動" },
-    { key: "Ctrl + ←", action: "左端のセルへ移動" },
-    { key: "Ctrl + ↑", action: "上端のセルへ移動" },
-    { key: "Ctrl + ↓", action: "下端のセルへ移動" },
-    { key: "Shift + 矢印キー", action: "セルを範囲選択" },
-    { key: "Ctrl + Space", action: "列全体を選択" },
-    { key: "Shift + Space", action: "行全体を選択" }
+
+  "ピボットテーブル": [
+    { key: "Alt + N , V", action: "ピボットテーブルを作成" },
+    { key: "Ctrl + A", action: "ピボットテーブル全体を選択" },
+    { key: "Alt + Shift + →", action: "ピボットテーブルの項目をグループ化" },
+    { key: "Alt + Shift + ←", action: "ピボットテーブルの項目のグループ解除" },
+    { key: "Ctrl + -", action: "ピボットテーブルの項目を非表示（フィルター）" },
+    { key: "Alt + H , S C", action: "ピボットテーブルの項目を再表示（フィルター解除）" },
+    { key: "Alt + N , S Z C", action: "ピボットグラフを挿入" }
   ],
-  "数式": [
-    { key: "=", action: "数式入力開始" },
-    { key: "Alt + =", action: "オートサム" },
-    { key: "Ctrl + `", action: "数式を表示" }
+
+  "ダイアログボックス": [
+    { key: "Tab", action: "次のコントロールに移動" },
+    { key: "Shift + Tab", action: "前のコントロールに移動" },
+    { key: "Ctrl + Tab", action: "次のタブに移動" },
+    { key: "Ctrl + Shift + Tab", action: "前のタブに移動" },
+    { key: "Enter", action: "適用してダイアログを閉じる" },
+    { key: "Space", action: "チェックボックスのオン/オフを切り替える" },
+    { key: "Esc", action: "キャンセルしてダイアログを閉じる" }
   ],
-  "データ": [
-    { key: "Ctrl + T", action: "テーブル作成" },
-    { key: "Ctrl + Shift + L", action: "フィルターの切り替え" }
-  ],
-  "日付・時刻": [
-    { key: "Ctrl + ;", action: "今日の日付を入力" },
-    { key: "Ctrl + Shift + :", action: "現在の時刻を入力" }
-  ],
-  "その他": [
-    { key: "F2", action: "セルの編集" },
-    { key: "Alt + Enter", action: "セル内で改行" },
-    { key: "Ctrl + Tab", action: "ブック間を移動" },
-    { key: "Ctrl + Page Up", action: "左のシートに移動" },
-    { key: "Ctrl + Page Down", action: "右のシートに移動" }
-  ]
+  
 };
 
 const allShortcuts = Object.values(categorizedShortcuts).flat();
