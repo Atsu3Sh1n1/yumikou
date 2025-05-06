@@ -42,6 +42,7 @@ html, body {
   border-radius: 12px;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
   color: #e5e5e5;
+  margin-bottom: 0px; /* ここで下部にスペースを追加 */
 }
 
 /* タイトル */
@@ -144,4 +145,16 @@ section {
     padding: 10px;
     font-size: 1rem;
   }
+}
+
+footer a {
+  display: block;
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  padding: 0.9rem;
+}
+
+footer a:hover {
+  background-color: #444; /* ホバー時の背景色 */
 }
