@@ -174,10 +174,16 @@ button {
   padding: 5px 9px;
   border: none;
   border-radius: 8px;
-  background: linear-gradient(135deg, #707070, #6d6d6d); /* 濃→薄のグラデーション */
+  background: linear-gradient(135deg, #707070, #6d6d6d);
   color: #ffffff;
   font-size: 1rem;
   font-weight: bold;
   font-family: 'Segoe UI', sans-serif;
   cursor: pointer;
+  transition: background 0.3s;
+}
+
+/* 選択されたときのスタイル */
+.selected {
+  background: linear-gradient(135deg, #018a28, #098f45); /* 青系グラデ */
 }

@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <!-- SEOメタタグ -->
   <meta name="description" content="Excelのショートカットキーを検索・一覧表示するサイトです。すべてのショートカットを簡単に探すことができます。" />
@@ -56,36 +56,33 @@
     </p>
 
     <div>
-      <button onclick="filterShortcuts('table')">会計・経理業務</button>
-      <button onclick="filterShortcuts('edit')">在庫管理・表作成</button>
-      <button onclick="filterShortcuts('image')">営業資料・レポート作成</button>
-      <button onclick="filterShortcuts('save')">データ分析・集計業務</button>
-      <button onclick="filterShortcuts('search')">時短入力・編集作業</button>
-      <button onclick="filterShortcuts('search')">資料提出・印刷準備</button>
-      <button onclick="filterShortcuts('search')">チームでの共同作業向け</button>
-      <button onclick="filterShortcuts('all')">すべて表示</button>
+      <button onclick="selectButton(this); filterShortcuts('basic_operations')">基本操作</button>
+      <button onclick="selectButton(this); filterShortcuts('cell_editing')">セル移動・選択</button>
+      <button onclick="selectButton(this); filterShortcuts('formatting')">数値入力・書式設定</button>
+      <button onclick="selectButton(this); filterShortcuts('formulas_functions')"> 数式・関数</button>
+      <button onclick="selectButton(this); filterShortcuts('row_column_sheet')">シート操作</button>
+      <button onclick="selectButton(this); filterShortcuts('search_replace')">検索・置換</button>
+      <button onclick="selectButton(this); filterShortcuts('data_sort_filter')">データの並べ替え・フィルター</button>
+      <button onclick="selectButton(this); filterShortcuts('charts_tables')">表・グラフ関連</button>
+      <button onclick="selectButton(this); filterShortcuts('view_zoom')">表示・ズーム操作</button>
+      <button onclick="selectButton(this); filterShortcuts('others ')">その他</button>
+      <button onclick="selectButton(this); filterShortcuts('all')">すべて表示</button>
     </div>
 
 
-    <!-- ショートカット表示エリア -->
-    <div id="shortcuts"></div>
+    <!-- 結果表示エリア -->
+    <ul id="shortcutList"></ul>
 
-    <!-- 結果の表示エリア -->
-    <ul id="results"></ul>
 
-    <br>
-    <div id="shortcutList"></div>
-  </div>
+    <!-- JavaScript -->
+    <script src="script.js"></script>
 
-  <!-- JavaScript -->
-  <script src="script.js"></script>
-
-  <footer>
-    <a href="https://atsu3sh1n1.github.io/yumikou/"
-      style="display: block; color: white; text-decoration: none; padding: 0.9rem;">
-      <p>2025 有限会社弓工 All rights reserved.</p>
-    </a>
-  </footer>
+    <footer>
+      <a href="https://atsu3sh1n1.github.io/yumikou/"
+        style="display: block; color: white; text-decoration: none; padding: 0.9rem;">
+        <p>2025 有限会社弓工 All rights reserved.</p>
+      </a>
+    </footer>
 </body>
 
 </html>
