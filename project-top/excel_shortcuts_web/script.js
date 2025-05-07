@@ -306,6 +306,14 @@ const categorizedShortcuts = {
     { key: "Shift + F10, F", action: "セルの書式設定" },
     { key: "Shift + F10, M (または N）", action: "名前の定義" },
     { key: "Shift + F10, M（Excelのバージョン依存）", action: "コメントの挿入／編集" },
+    { key: "Shift + F10, L", action: "セルのクリア（書式、内容など）" },
+    { key: "Shift + F10, U", action: "元に戻す" },
+    { key: "Shift + F10, Y", action: "やり直し（Redo）" },
+    { key: "Shift + F10, Q", action: "クイック分析（表データ時）" },
+    { key: "Shift + F10, S", action: "スパークライン関連（表内）" },
+    { key: "Shift + F10, Z", action: "Smart Lookup（スマート検索）" },
+    { key: "Shift + F10, R", action: "並べ替え" },
+    { key: "Shift + F10, H", action: "ヘルプまたはフィードバック" },
     { key: "Shift + F10, K", action: "ハイパーリンクの挿入" }
   ],
 
