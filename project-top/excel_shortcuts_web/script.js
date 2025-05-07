@@ -241,7 +241,7 @@ const categorizedShortcuts = {
     { key: "=", action: "数式の入力を開始" },
     { key: "F4", action: "絶対参照と相対参照を切り替える（セル編集モード）" },
     { key: "Shift + F3", action: "関数の挿入ダイアログを開く" },
-    { key: "Alt + =", action: "オートサム" },
+    { key: "Alt + =", action: "オートサム SUM関数自動挿入（選択範囲の合計）" },
     { key: "Ctrl + `", action: "数式の表示をオン/オフ" },
     { key: "Ctrl + Shift + A", action: "関数引数を挿入" },
     { key: "Ctrl + Shift + Enter", action: "配列数式を入力" },
@@ -315,6 +315,22 @@ const categorizedShortcuts = {
     { key: "Shift + F10, R", action: "並べ替え" },
     { key: "Shift + F10, H", action: "ヘルプまたはフィードバック" },
     { key: "Shift + F10, K", action: "ハイパーリンクの挿入" }
+  ],
+
+  "マニアック": [
+    { key: "F2, Ctrl + Shift + →", action: "セル内の文字列の末尾まで一気に選択" },
+    { key: "Ctrl + Shift + Alt + F9", action: "全ブックの数式を強制的に再計算" },
+    { key: "Alt + F11", action: "Ctrl + G でイミディエイトウィンドウ開いて、? Range(A1).Value でセルの中身を問答無用で吐き出せる。" },
+    { key: "Ctrl + [ / Ctrl + ]", action: "参照元 / 参照先ジャンプ" },
+    { key: "Ctrl + 6", action: "図形・グラフ・画像を一発で非表示にする" },
+    { key: "Ctrl + `（バッククオート）+ Page Down / Up", action: "数式表示モードでシート間ジャンプ" },
+    { key: "Ctrl + Alt + F5", action: "ピボットテーブルとデータ接続を即更新" },
+    { key: "F3 → 名前貼り付け", action: "使ってる定義名（Named Range）を一覧表示 → セルに一発貼り付け。" },
+    { key: "Alt + D → P（古のピボット起動）", action: "最新UIを無視して、昔のウィザード形式でピボットテーブルを作る裏技。" },
+    { key: "Scroll Lock + 矢印キー", action: "セルを動かさずに画面だけスクロール" },
+    { key: "Ctrl + F3 → 定義名一括管理", action: "すべての名前・参照先を一覧で見られる。" },
+    { key: "Ctrl + Shift + スペース", action: "現在の「データ領域全体」を一発選択" },
+
   ],
 
 };
