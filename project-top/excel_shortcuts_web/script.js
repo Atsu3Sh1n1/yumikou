@@ -37,7 +37,7 @@ const categorizedShortcuts = {
     { "key": "Ctrl + Y", "action": "繰り返し" },
     { "key": "Ctrl + Z", "action": "元に戻す" }
   ],
-
+  
   "Ctrl + [Shift] + [キー]": [
     { "key": "Ctrl + Shift + \"", "action": "上のセルの値をコピー" },
     { "key": "Ctrl + Shift + &", "action": "外枠罫線を適用" },
