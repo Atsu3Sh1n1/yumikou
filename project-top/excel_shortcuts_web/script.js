@@ -1,12 +1,12 @@
 const categorizedShortcuts = {
   "基本操作": [
     { key: "F1", action: "ヘルプを開く" },
-    { key: "Ctrl + Z", action: "最後の操作を元に戻す" },
-    { key: "Ctrl + Y", action: "最後の操作をやり直す" },
     { key: "Ctrl + C", action: "選択範囲をコピー" },
-    { key: "F4", action: "最後の操作を繰り返す" },
     { key: "Ctrl + X", action: "選択範囲を切り取る" },
-    { key: "Ctrl + V", action: "クリップボードの内容を貼り付け" },
+    { key: "Ctrl + V", action: "クリップ内容を貼り付け" },
+    { key: "Ctrl + Y", action: "最後の操作をやり直す" },
+    { key: "Ctrl + Z", action: "最後の操作を元に戻す" },
+    { key: "F4", action: "最後の操作を繰り返す" },
     { key: "Ctrl + Alt + V", action: "「形式を選択して貼り付け」ダイアログを表示" },
     { key: "Ctrl + F", action: "検索と置換（検索タブを選択）を表示" },
     { key: "Ctrl + H", action: "検索と置換（置換タブを選択）を表示" },
@@ -320,7 +320,7 @@ const categorizedShortcuts = {
   "マニアック": [
     { key: "F2, Ctrl + Shift + →", action: "セル内の文字列の末尾まで一気に選択" },
     { key: "Ctrl + Shift + Alt + F9", action: "全ブックの数式を強制的に再計算" },
-    { key: "Alt + F11", action: "Ctrl + G でイミディエイトウィンドウ開いて、? Range(A1).Value でセルの中身を問答無用で吐き出せる。" },
+    { key: "Alt + F11", action: "Ctrl + G でイミディエイトウィンドウ開いて、Range(A1).Value でセルの中身を問答無用で吐き出せる。" },
     { key: "Ctrl + [ / Ctrl + ]", action: "参照元 / 参照先ジャンプ" },
     { key: "Ctrl + 6", action: "図形・グラフ・画像を一発で非表示にする" },
     { key: "Ctrl + `（バッククオート）+ Page Down / Up", action: "数式表示モードでシート間ジャンプ" },
