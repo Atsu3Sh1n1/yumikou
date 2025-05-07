@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>弓工 ご挨拶</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      user-select: none;
+    }
+
+    body {
+      margin: 0;
+      background: black;
+      overflow: hidden;
+      font-family: 'Arial', sans-serif;
+      height: 100vh;
+      opacity: 0;
+      transition: opacity 2s ease-in;
+    }
+
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+    }
+
+    .star-wars-intro {
+      position: relative;
+      height: 100vh;
+      perspective: 400px;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+      z-index: 1;
+    }
+
+    .scrolling-text {
+      width: 80%;
+      transform: rotateX(25deg);
+      transform-origin: bottom center;
+      color: yellow;
+      font-weight: bold;
+      text-align: center;
+      animation: crawl 150s linear forwards;
+    }
+
+    @keyframes crawl {
+      0% {
+        transform: rotateX(25deg) translateY(var(--scroll-start, 20vh));  /* 開始位置 */
+      }
+      100% {
+        transform: rotateX(25deg) translateY(-300vh);  /* 画面外までスクロール */
+      }
+    }
+
+    .title {
+      font-size: 8vw; /* ビューポート幅に基づく設定 */
+      margin-bottom: 60px;
+      text-align: center;
+    }
+
+    .content {
+      font-size: 5vw; /* ビューポート幅に基づく設定 */
+      line-height: 1.8;
+      text-align: center;
+    }
+
+    .content p {
+      margin: 0 0 20px 0;
+    }
+
+    .skip-btn {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: rgba(0, 0, 0, 0.5); /* 黒の透明 */
+      color: white; /* 文字を白く */
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      display: none;
+      border-radius: 5px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+      opacity: 0;
+      transition: opacity 0.5s ease-in-out;
+      z-index: 2;
+    }
+
+    /* --- スマホ専用設定 --- */
+    @media (max-width: 768px) {
+      .scrolling-text {
+        width: 100%;
+        animation: crawl-mobile 200s linear forwards;
+      }
+
+      .title {
+        font-size: 10vw;  /* スマホ版でタイトルをデカく */
+      }
+
+      .content {
+        font-size: 11vw;  /* スマホ版で本文をデカく */
+      }
+
+      @keyframes crawl-mobile {
+        0% {
+          transform: rotateX(25deg) translateY(var(--scroll-start-mobile, 50vh));  /* スマホは画面の50%から開始 */
+        }
+        100% {
+          transform: rotateX(25deg) translateY(-300vh);
+        }
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <canvas id="warpCanvas"></canvas>
+
+  <div class="star-wars-intro">
+    <div class="scrolling-text">
+      <div class="title">
+        有限会社弓工　ご挨拶
+      </div>
+      <div class="content">
+        <p>有限会社弓工は、1996年（平成8年）、志(こころざし)高き技術者たちと共に設立されました。</p>
+        <p>当時を振り返ると、プラントエンジニアリングの現場は、決して平坦なものではありませんでした。</p>
+        <p>わずかな仲間と限られた設備の中、ただひたすらに「ものづくりへの誇り」と「お客様に応えたい一心」だけを胸に、ひとつひとつの現場に向き合ってまいりました。</p>
+        <p>新設・製作、工場移設、アフターメンテナンス。</p>
+        <p>どの工程においても、安全と品質を何よりも大切にする姿勢を貫き、経験と信頼を積み重ねてまいりました。</p>
+        <p>失敗も挫折も数えきれないほどありましたが、そのたびに仲間と力を合わせ、乗り越えてきた歩みこそが、弓工の土台となっております。</p>
+        <p>時代は変わり、技術も価値観も大きく進化しています。</p>
+        <p>私たちもまた、変化を恐れず挑み続ける集団でありたい。</p>
+        <p>伝統的な職人技に磨きをかける一方で、最新技術にも柔軟に取り組み、次の時代を切り拓く力へと変えていきます。</p>
+        <p>弓工の力の源は、仲間一人ひとりの存在です。</p>
+        <p>支え合い、学び合い、高め合いながら、共に未来をつくる。</p>
+        <p>これからも、技術と人を大切にし、社会に必要とされる会社であり続けます。</p>
+        <p>志を共にする仲間と共に、有限会社弓工は、次の未来へ歩みを進めます。</p>
+      </div>
+    </div>
+  </div>
+
+  <button class="skip-btn" onclick="window.location.href='index.html';">スキップ</button>
+
+  <script>
+    // ビューポートの高さを取得
+    const viewportHeight = window.innerHeight;
+
+    // スマホかPCかを判定
+    const isMobile = window.innerWidth <= 768;
+
+    // スクロール開始位置を設定
+    const root = document.documentElement;
+
+    // スマホ用とPC用の開始位置を設定
+    if (isMobile) {
+      root.style.setProperty('--scroll-start-mobile', `${viewportHeight * 7.5}px`);  // スマホは画面の50%から開始
+    } else {
+      root.style.setProperty('--scroll-start', `${viewportHeight * 8}px`);  // PCは画面の20%から開始
+    }
+
+    const canvas = document.getElementById('warpCanvas');
+    const ctx = canvas.getContext('2d');
+
+    let stars = [];
+    const numStars = 500;
+    let width, height, focalLength;
+
+    function init() {
+      width = window.innerWidth;
+      height = window.innerHeight;
+      focalLength = width / 2;
+
+      canvas.width = width;
+      canvas.height = height;
+
+      stars = Array.from({ length: numStars }, () => ({
+        x: Math.random() * width - width / 2,
+        y: Math.random() * height - height / 2,
+        z: Math.random() * width
+      }));
+    }
+
+    function draw() {
+      ctx.fillStyle = 'black';
+      ctx.fillRect(0, 0, width, height);
+
+      stars.forEach(star => {
+        star.z -= 1;
+        if (star.z <= 0) {
+          star.x = Math.random() * width - width / 2;
+          star.y = Math.random() * height - height / 2;
+          star.z = width;
+        }
+
+        const k = focalLength / star.z;
+        const sx = star.x * k + width / 2;
+        const sy = star.y * k + height / 2;
+        const size = (1 - star.z / width) * 3;
+
+        ctx.beginPath();
+        ctx.arc(sx, sy, size, 0, Math.PI * 2);
+        ctx.fillStyle = 'white';
+        ctx.fill();
+      });
+
+      requestAnimationFrame(draw);
+    }
+
+    window.addEventListener('resize', init);
+    init();
+    draw();
+
+    window.onload = function() {
+      document.body.style.opacity = 1;
+    };
+
+    setTimeout(function() {
+      const skipBtn = document.querySelector('.skip-btn');
+      skipBtn.style.display = 'block';
+      setTimeout(function() {
+        skipBtn.style.opacity = '1';
+      }, 50);
+
+      // スクロール終了後に自動でリンクに飛ばす
+      setTimeout(function() {
+        window.location.href = 'index.html';
+      }, 150000);  // 150秒後（アニメーション終了のタイミング）にページ遷移
+    }, 2000);
+  </script>
+
+</body>
+</html>
