@@ -3,36 +3,36 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  
+
   <!-- SEOメタタグ -->
   <meta name="description" content="Excelのショートカットキーを検索・一覧表示するサイトです。すべてのショートカットを簡単に探すことができます。" />
   <meta name="keywords" content="Excel, ショートカット, 検索, 一覧, 時間短縮, 作業効率" />
   <meta name="author" content="YUMIKOU Inc." />
-  
+
   <!-- Open Graph (OGP) メタタグ -->
   <meta property="og:title" content="Excelショートカット検索と一覧" />
   <meta property="og:description" content="Excelのショートカットを検索・一覧表示できる便利なツールです。" />
   <meta property="og:image" content="images/Excel.png" /> <!-- 画像URLを設定 -->
   <meta property="og:url" content="https://atsu3sh1n1.github.io/yumikou/" />
   <meta property="og:type" content="https://atsu3sh1n1.github.io/yumikou/project-top/index.html" />
-  
+
   <!-- Twitterカード用メタタグ -->
   <meta name="twitter:card" content="images/Excel.png" />
   <meta name="twitter:title" content="Excelショートカット検索と一覧" />
   <meta name="twitter:description" content="Excelのショートカットを検索・一覧表示できる便利なツールです。" />
   <meta name="twitter:image" content="images/Excel.png" /> <!-- Twitter用画像URL -->
-  
+
   <!-- ファビコンとブックマークアイコン -->
   <link rel="icon" href="images/Excel.png" type="image/x-icon" />
   <link rel="icon" href="images/Excel.png" sizes="32x32" />
   <link rel="icon" href="images/Excel.png" sizes="16x16" />
   <link rel="apple-touch-icon" href="images/Excel.png" />
-  
+
   <title>Excelショートカット検索と一覧</title>
-  
+
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-  
+
   <!-- 外部CSS -->
   <link rel="stylesheet" href="style.css" />
 </head>
@@ -47,17 +47,34 @@
     <div class="card">
       <input type="text" id="searchBox" class="search-box" placeholder="ショートカットを検索" />
     </div>
-    
+
     <!-- Created by YUMIKOU Inc.を検索フォームの下に追加 -->
     <p class="created-by">
       <a href="https://atsu3sh1n1.github.io/yumikou/" target="_blank">Created by YUMIKOU Inc.</a>
     </p>
-    
+
+    <div>
+      <button onclick="filterShortcuts('table')">データ集計・報告書作成</button>
+      <button onclick="filterShortcuts('edit')">売上・予算管理表</button>
+      <button onclick="filterShortcuts('image')">定型フォーマットにデータを貼るとき</button>
+      <button onclick="filterShortcuts('save')">大量データをチェック・クレンジング</button>
+      <button onclick="filterShortcuts('search')">グラフや資料をビジュアル化</button>
+      <button onclick="filterShortcuts('search')">作業スピードを上げたい</button>
+      <button onclick="filterShortcuts('search')">プレゼン前の見栄え調整</button>
+      <button onclick="filterShortcuts('search')">他部署とファイルを共有・やり取り</button>
+      <button onclick="filterShortcuts('search')">日次・週次ルーチン業務</button>
+      <button onclick="filterShortcuts('search')">トラブル対応・ミス修正</button>
+      <button onclick="filterShortcuts('search')">複数シートやファイルを行き来</button>
+      <button onclick="filterShortcuts('search')">マクロや自動化と併用</button>
+      <button onclick="filterShortcuts('all')">すべて表示</button>
+    </div>
+  
+
+    <!-- 結果の表示エリア -->
     <ul id="results"></ul>
 
     <br>
     <div id="shortcutList"></div>
-    <ul id="results"></ul>
   </div>
 
   <!-- JavaScript -->
@@ -65,8 +82,8 @@
 
   <footer>
     <a href="https://atsu3sh1n1.github.io/yumikou/" style="display: block; color: white; text-decoration: none; padding: 0.9rem;">
-      <p>2025 有限会社弓工 All rights reserved.
-      </a>
-    </footer>
+      <p>2025 有限会社弓工 All rights reserved.</p>
+    </a>
+  </footer>
 </body>
 </html>

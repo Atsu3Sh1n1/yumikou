@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>ショートカット一覧</title>
+  <link rel="stylesheet" href="styles.css"> <!-- 外部CSSファイル -->
+</head>
+<body>
+
+  <h1>ショートカット一覧</h1>
+
+  <!-- カテゴリ選択ボタン -->
+  <div>
+    <button onclick="filterShortcuts('table')">表作成向け</button>
+    <button onclick="filterShortcuts('edit')">編集向け</button>
+    <button onclick="filterShortcuts('image')">画像編集向け</button>
+    <button onclick="filterShortcuts('save')">保存向け</button>
+    <button onclick="filterShortcuts('search')">検索向け</button>
+    <button onclick="filterShortcuts('all')">すべて表示</button>
+  </div>
+
+  <!-- ショートカット表示エリア -->
+  <div id="shortcuts"></div>
+
+  <script src="scripts.js"></script> <!-- JavaScriptファイルを外部参照 -->
+</body>
+</html>
