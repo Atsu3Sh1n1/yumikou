@@ -1,44 +1,129 @@
-// ショートカットデータ
-const shortcutsData = [
-  { "key": "Ctrl + T", "action": "表作成", "category": "table" },
-  { "key": "Ctrl + 0", "action": "列を非表示", "category": "table" },
-  { "key": "Ctrl + C", "action": "コピー", "category": "edit" },
-  { "key": "Ctrl + V", "action": "貼り付け", "category": "edit" },
-  { "key": "Ctrl + E", "action": "画像編集", "category": "image" },
-  { "key": "Ctrl + R", "action": "回転", "category": "image" },
-  { "key": "Ctrl + S", "action": "保存", "category": "save" },
-  { "key": "Ctrl + Shift + S", "action": "名前を付けて保存", "category": "save" },
-  { "key": "Ctrl + F", "action": "検索", "category": "search" },
-  { "key": "F3", "action": "次を検索", "category": "search" },
-  // ここに追加でデータを増やしてください（計400件程度）
-];
+const categorizedShortcuts = {
+  "Ctrl + [単キー]": [
+    // ... 既存のCtrl + [単キー]のデータ ...
+  ],
+  "Ctrl + [Shift] + [キー]": [
+    // ... 既存のCtrl + [Shift] + [キー]のデータ ...
+  ],
+  "Alt + [キー] シーケンス": [
+    // ... 既存のAlt + [キー] シーケンスのデータ ...
+  ],
+  "ファンクションキー": [
+    // ... 既存のファンクションキーのデータ ...
+  ],
+  "Shift + ファンクションキー": [   
+    // ... 既存のShift + ファンクションキーのデータ ...
+  ],
+  "Ctrl + ファンクションキー": [    
+    // ... 既存のCtrl + ファンクションキーのデータ ...
+  ],
+  "その他の特殊組合せ": [
+    // ... 既存のその他の特殊組合せのデータ ...
+  ]
+};
 
-// 初期表示のため、全ショートカットを表示する関数
-function renderShortcuts() {
-  const shortcutsContainer = document.getElementById('shortcuts');
-  shortcutsContainer.innerHTML = '';  // 既存のコンテンツをクリア
-  shortcutsData.forEach(shortcut => {
-    const div = document.createElement('div');
-    div.classList.add('shortcut', shortcut.category);
-    div.textContent = `${shortcut.action}：${shortcut.key}`;
-    shortcutsContainer.appendChild(div);
+const allShortcuts = Object.values(categorizedShortcuts).flat();
+
+// カテゴリボタンを生成
+function createCategoryButtons() {
+  const buttonsContainer = document.getElementById("categoryButtons");
+  const categories = Object.keys(categorizedShortcuts);
+  
+  // 全カテゴリボタン
+  const allButton = document.createElement("button");
+  allButton.textContent = "すべて";
+  allButton.className = "category-btn active";
+  allButton.addEventListener("click", () => {
+    // すべてのボタンからactiveクラスを削除
+    document.querySelectorAll(".category-btn").forEach(btn => {
+      btn.classList.remove("active");
+    });
+    allButton.classList.add("active");
+    renderShortcutsByCategory(null); // nullを渡すと全カテゴリ表示
+  });
+  buttonsContainer.appendChild(allButton);
+  
+  // 各カテゴリボタン
+  categories.forEach(category => {
+    const button = document.createElement("button");
+    button.textContent = category;
+    button.className = "category-btn";
+    button.addEventListener("click", () => {
+      // すべてのボタンからactiveクラスを削除
+      document.querySelectorAll(".category-btn").forEach(btn => {
+        btn.classList.remove("active");
+      });
+      button.classList.add("active");
+      renderShortcutsByCategory(category);
+    });
+    buttonsContainer.appendChild(button);
   });
 }
 
-// カテゴリでフィルタリングする関数
-function filterShortcuts(category) {
-  const shortcuts = document.querySelectorAll('.shortcut');
-  shortcuts.forEach(el => {
-    if (category === 'all') {
-      el.classList.add('active');
-    } else if (el.classList.contains(category)) {
-      el.classList.add('active');
-    } else {
-      el.classList.remove('active');
+// 指定したカテゴリのショートカットを表示
+function renderShortcutsByCategory(category) {
+  const listContainer = document.getElementById("shortcutList");
+  listContainer.innerHTML = "";
+  
+  if (!category) {
+    // 全カテゴリ表示
+    for (const cat in categorizedShortcuts) {
+      renderCategory(cat, categorizedShortcuts[cat], listContainer);
     }
-  });
+  } else {
+    // 特定カテゴリ表示
+    renderCategory(category, categorizedShortcuts[category], listContainer);
+  }
 }
 
-// 初期表示で全ショートカットを表示
-renderShortcuts();
-filterShortcuts('all');
+// 個々のカテゴリをレンダリング
+function renderCategory(category, shortcuts, container) {
+  const section = document.createElement("div");
+  const title = document.createElement("h3");
+  title.textContent = category;
+  section.appendChild(title);
+
+  const ul = document.createElement("ul");
+  shortcuts.forEach(shortcut => {
+    const li = document.createElement("li");
+    li.innerHTML = `<strong>${shortcut.key}</strong>: ${shortcut.action}`;
+    ul.appendChild(li);
+  });
+
+  section.appendChild(ul);
+  container.appendChild(section);
+}
+
+// 検索機能
+document.getElementById("searchBox").addEventListener("input", function () {
+  const query = this.value.toLowerCase();
+  const shortcutList = document.getElementById("shortcutList");
+  const resultsContainer = document.getElementById("results");
+  const header = document.getElementById("shortcutHeader");
+
+  if (query) {
+    const result = allShortcuts.filter(item =>
+      item.key.toLowerCase().includes(query) || item.action.toLowerCase().includes(query)
+    );
+
+    resultsContainer.innerHTML = result.map(item =>
+      `<li><strong>${item.key}</strong>: ${item.action}</li>`
+    ).join("");
+    shortcutList.style.display = "none";
+    header.style.display = "none";
+    resultsContainer.style.display = "block";
+  } else {
+    resultsContainer.innerHTML = "";
+    shortcutList.style.display = "block";
+    header.style.display = "block";
+    resultsContainer.style.display = "none";
+  }
+});
+
+// 初期化
+function init() {
+  createCategoryButtons();
+  renderShortcutsByCategory(null); // 最初は全カテゴリ表示
+}
+
+init();

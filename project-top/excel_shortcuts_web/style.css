@@ -171,21 +171,13 @@ footer a:hover {
 
 button {
   margin: 8px;
-  padding: 12px 24px;
+  padding: 5px 9px;
   border: none;
   border-radius: 8px;
-  background: linear-gradient(135deg, #3acece, #7be7e7); /* 濃→薄のグラデーション */
+  background: linear-gradient(135deg, #707070, #6d6d6d); /* 濃→薄のグラデーション */
   color: #ffffff;
   font-size: 1rem;
   font-weight: bold;
   font-family: 'Segoe UI', sans-serif;
   cursor: pointer;
-  box-shadow: 0 4px 12px rgba(0, 128, 128, 0.25);
-  transition: all 0.3s ease;
-}
-
-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(0, 128, 128, 0.3);
-  opacity: 0.95;
 }

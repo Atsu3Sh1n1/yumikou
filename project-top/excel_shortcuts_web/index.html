@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <!-- SEOメタタグ -->
   <meta name="description" content="Excelのショートカットキーを検索・一覧表示するサイトです。すべてのショートカットを簡単に探すことができます。" />
@@ -36,6 +37,7 @@
   <!-- 外部CSS -->
   <link rel="stylesheet" href="style.css" />
 </head>
+
 <body>
   <div class="container">
     <p>
@@ -54,21 +56,19 @@
     </p>
 
     <div>
-      <button onclick="filterShortcuts('table')">データ集計・報告書作成</button>
-      <button onclick="filterShortcuts('edit')">売上・予算管理表</button>
-      <button onclick="filterShortcuts('image')">定型フォーマットにデータを貼るとき</button>
-      <button onclick="filterShortcuts('save')">大量データをチェック・クレンジング</button>
-      <button onclick="filterShortcuts('search')">グラフや資料をビジュアル化</button>
-      <button onclick="filterShortcuts('search')">作業スピードを上げたい</button>
-      <button onclick="filterShortcuts('search')">プレゼン前の見栄え調整</button>
-      <button onclick="filterShortcuts('search')">他部署とファイルを共有・やり取り</button>
-      <button onclick="filterShortcuts('search')">日次・週次ルーチン業務</button>
-      <button onclick="filterShortcuts('search')">トラブル対応・ミス修正</button>
-      <button onclick="filterShortcuts('search')">複数シートやファイルを行き来</button>
-      <button onclick="filterShortcuts('search')">マクロや自動化と併用</button>
+      <button onclick="filterShortcuts('table')">会計・経理業務</button>
+      <button onclick="filterShortcuts('edit')">在庫管理・表作成</button>
+      <button onclick="filterShortcuts('image')">営業資料・レポート作成</button>
+      <button onclick="filterShortcuts('save')">データ分析・集計業務</button>
+      <button onclick="filterShortcuts('search')">時短入力・編集作業</button>
+      <button onclick="filterShortcuts('search')">資料提出・印刷準備</button>
+      <button onclick="filterShortcuts('search')">チームでの共同作業向け</button>
       <button onclick="filterShortcuts('all')">すべて表示</button>
     </div>
-  
+
+
+    <!-- ショートカット表示エリア -->
+    <div id="shortcuts"></div>
 
     <!-- 結果の表示エリア -->
     <ul id="results"></ul>
@@ -81,9 +81,11 @@
   <script src="script.js"></script>
 
   <footer>
-    <a href="https://atsu3sh1n1.github.io/yumikou/" style="display: block; color: white; text-decoration: none; padding: 0.9rem;">
+    <a href="https://atsu3sh1n1.github.io/yumikou/"
+      style="display: block; color: white; text-decoration: none; padding: 0.9rem;">
       <p>2025 有限会社弓工 All rights reserved.</p>
     </a>
   </footer>
 </body>
+
 </html>
