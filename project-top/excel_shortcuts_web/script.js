@@ -1,18 +1,47 @@
-function selectButton(button) {
-  // すべてのボタンから selected を削除
-  document.querySelectorAll('button').forEach(btn => {
-    btn.classList.remove('selected');
-  });
-
-  // クリックされたボタンに selected を追加
-  button.classList.add('selected');
+function toggleDropdown() {
+  const list = document.getElementById("dropdownList");
+  list.style.display = list.style.display === "block" ? "none" : "block";
 }
 
-function filterShortcuts(category) {
-  // フィルター処理（既存の処理）
-  console.log("Filtering category:", category);
+function selectOption(category) {
+  filterShortcuts(category);
+  document.querySelector(".dropdown-button").textContent = getLabel(category);
+  document.getElementById("dropdownList").style.display = "none";
 }
 
+function getLabel(value) {
+  const labels = {
+    basic_operations: "基本操作",
+    cell_editing: "セル編集・入力",
+    navigation_selection: "セル移動・選択",
+    formatting: "数値入力・書式設定",
+    formula_function: "数式・関数",
+    row_column_sheet: "シート操作",
+    find_replace: "検索・置換",
+    data_filter_sort: "並べ替え・フィルター",
+    chart_table: "表・グラフ関連",
+    ui_display: "表示・ズーム操作",
+    file_management: "ファイル管理",
+    help: "ヘルプ",
+    proofing: "文章校正",
+    data_manipulation: "データ操作",
+    data_analysis: "データ分析",
+    comments_notes: "コメント・メモ",
+    collaboration: "共同作業",
+    macros: "マクロ関連",
+    data_import_export: "インポート/エクスポート",
+    miscellaneous: "その他",
+    all: "すべて表示",
+  };
+  return labels[value] || value;
+}
+
+// 閉じる処理（画面外クリック）
+window.addEventListener("click", function (e) {
+  if (!e.target.closest(".dropdown")) {
+    document.getElementById("dropdownList").style.display = "none";
+  }
+});
 let allShortcuts = [
   { type: "title", label: "ファンクションキー" },
   { "key": "F1", "action": "ヘルプを表示", "category": "help" },

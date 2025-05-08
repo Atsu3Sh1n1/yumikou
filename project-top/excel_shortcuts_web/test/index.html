@@ -1,240 +1,116 @@
-<!DOCTYPE html>
-<html lang="ja">
+<style>
+  .wheel-container {
+    height: 135px; /* 3 items: 45px each */
+    overflow-y: scroll;
+    scroll-snap-type: y mandatory;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background: #fff;
+    font-size: 16px;
+    position: relative;
+  }
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ショートカット表示</title>
-  <style>
-    #shortcutList {
-      margin-top: 20px;
+  .wheel-item {
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    scroll-snap-align: center;
+    color: #666;
+    transition: color 0.2s;
+  }
+
+  .wheel-item.active {
+    color: #0078d7;
+    font-weight: bold;
+    font-size: 18px;
+  }
+
+  /* ダークモード対応 */
+  @media (prefers-color-scheme: dark) {
+    .wheel-container {
+      background: #222;
+      border-color: #444;
+      color: #ccc;
     }
 
-    .category-buttons button {
-      margin-right: 10px;
-      margin-bottom: 10px;
+    .wheel-item.active {
+      color: #33aaff;
     }
+  }
 
-    h3 {
-      margin-top: 1em;
-      color: #333;
-    }
-  </style>
-</head>
+  /* 中央ライン（デバッグ用） */
+  .center-line {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    height: 1px;
+    width: 100%;
+    background: red;
+    pointer-events: none;
+    z-index: 10;
+  }
+</style>
 
-<body>
+<div class="wheel-container" id="wheel">
+  <div class="wheel-item" data-category="basic_operations">基本操作</div>
+  <div class="wheel-item" data-category="cell_editing">セル編集・入力</div>
+  <div class="wheel-item" data-category="navigation_selection">セル移動・選択</div>
+  <div class="wheel-item" data-category="formatting">数値入力・書式設定</div>
+  <div class="wheel-item" data-category="formula_function">数式・関数</div>
+  <div class="wheel-item" data-category="row_column_sheet">シート操作</div>
+  <div class="wheel-item" data-category="find_replace">検索・置換</div>
+  <div class="wheel-item" data-category="data_filter_sort">並べ替え・フィルター</div>
+  <div class="wheel-item" data-category="chart_table">表・グラフ関連</div>
+  <div class="wheel-item" data-category="ui_display">表示・ズーム操作</div>
+  <div class="wheel-item" data-category="file_management">ファイル管理</div>
+  <div class="wheel-item" data-category="help">ヘルプ</div>
+  <div class="wheel-item" data-category="proofing">文章校正</div>
+  <div class="wheel-item" data-category="data_manipulation">データ操作</div>
+  <div class="wheel-item" data-category="data_analysis">データ分析</div>
+  <div class="wheel-item" data-category="comments_notes">コメント・メモ</div>
+  <div class="wheel-item" data-category="collaboration">共同作業</div>
+  <div class="wheel-item" data-category="macros">マクロ関連</div>
+  <div class="wheel-item" data-category="data_import_export">インポート/エクスポート</div>
+  <div class="wheel-item" data-category="miscellaneous">その他</div>
+  <div class="wheel-item" data-category="all">すべて表示</div>
+</div>
 
-  <div class="category-buttons">
-    <button onclick="filterShortcuts('editing')">編集</button>
-    <button onclick="filterShortcuts('analysis')">分析</button>
-    <button onclick="filterShortcuts('collab')">共同作業</button>
-    <button onclick="filterShortcuts('sales')">営業</button>
-    <button onclick="filterShortcuts('inventory')">在庫</button>
-    <button onclick="filterShortcuts('function')">ファンクションキー</button>
-    <button onclick="filterShortcuts('all')">すべて表示</button>
-  </div>
+<script>
+  const wheel = document.getElementById('wheel');
+  let lastCategory = null;
 
-  <input type="text" id="searchBox" placeholder="ショートカットを検索">
+  function updateCenterItem() {
+    const items = wheel.querySelectorAll('.wheel-item');
+    const center = wheel.scrollTop + wheel.clientHeight / 2;
 
-  <ul id="shortcutList"></ul>
+    let closestItem = null;
+    let closestDistance = Infinity;
 
-  <script>
-    let allShortcuts = [
-      { type: "title", label: "ファンクションキー" },
-      { key: "F1", action: "ヘルプを表示", category: "help" },
-      { key: "F2", action: "セル編集モードに切り替え", category: "editing" },
-      { key: "F3", action: "[名前の貼り付け]ダイアログを開く", category: "navigation" },
-      { key: "F4", action: "絶対参照切替/直前操作繰り返し", category: "editing" },
-      { key: "F5", action: "[ジャンプ]ダイアログを開く", category: "navigation" },
-      { key: "F6", action: "ペイン間移動", category: "navigation" },
-      { key: "F7", action: "[スペルチェック]ダイアログを開く", category: "review" },
-      { key: "F8", action: "拡張選択モードに切り替え", category: "selection" },
-      { key: "F9", action: "ワークシート再計算", category: "calculation" },
-      { key: "F10", action: "キーヒントの表示", category: "help" },
-      { key: "F11", action: "新しいグラフシート作成", category: "chart" },
-      { key: "F12", action: "[名前を付けて保存]ダイアログを開く", category: "file" },
+    items.forEach(item => {
+      const itemTop = item.offsetTop;
+      const itemCenter = itemTop + item.offsetHeight / 2;
+      const distance = Math.abs(center - itemCenter);
 
-      { type: "title", label: "Ctrl キーショートカット" },
-      { key: "Ctrl + 0", action: "列を非表示", category: "formatting" },
-      { key: "Ctrl + 1", action: "[セルの書式設定]ダイアログを開く", category: "formatting" },
-      { key: "Ctrl + 2", action: "太字の切り替え", category: "formatting" },
-      { key: "Ctrl + 3", action: "斜体の切り替え", category: "formatting" },
-      { key: "Ctrl + 4", action: "下線の切り替え", category: "formatting" },
-      { key: "Ctrl + 5", action: "取消線の切り替え", category: "formatting" },
-      { key: "Ctrl + 6", action: "オブジェクトの表示/非表示切り替え", category: "view" },
-      { key: "Ctrl + 7", action: "[ツール]バーの表示切り替え", category: "view" },
-      { key: "Ctrl + 8", action: "アウトライン記号の表示切り替え", category: "view" },
-      { key: "Ctrl + 9", action: "行を非表示", category: "formatting" },
-      { key: "Ctrl + A", action: "全選択/数式全体選択", category: "selection" },
-      { key: "Ctrl + B", action: "太字の切り替え", category: "formatting" },
-      { key: "Ctrl + C", action: "選択範囲をコピー", category: "clipboard" },
-      { key: "Ctrl + D", action: "下方向にコピー", category: "editing" },
-      { key: "Ctrl + E", action: "Flash Fill (データの自動展開)", category: "data" },
-      { key: "Ctrl + F", action: "[検索]ダイアログを開く", category: "editing" },
-      { key: "Ctrl + G", action: "[ジャンプ]ダイアログを開く", category: "navigation" },
-      { key: "Ctrl + H", action: "[置換]ダイアログを開く", category: "editing" },
-      { key: "Ctrl + I", action: "斜体の切り替え", category: "formatting" },
-      { key: "Ctrl + J", action: "改行文字入力 (環境依存)", category: "editing" },
-      { key: "Ctrl + K", action: "[ハイパーリンクの挿入]ダイアログを開く", category: "insert" },
-      { key: "Ctrl + L", action: "[テーブルの作成]ダイアログを開く", category: "data" },
-      { key: "Ctrl + M", action: "インデント増加 (環境依存)", category: "formatting" },
-      { key: "Ctrl + N", action: "新規ブックを作成", category: "file" },
-      { key: "Ctrl + O", action: "[ファイルを開く]ダイアログを開く", category: "file" },
-      { key: "Ctrl + P", action: "[印刷]ダイアログを開く", category: "file" },
-      { key: "Ctrl + Q", action: "[クイック分析]ツールを表示", category: "data" },
-      { key: "Ctrl + R", action: "右方向にコピー", category: "editing" },
-      { key: "Ctrl + S", action: "上書き保存", category: "file" },
-      { key: "Ctrl + T", action: "[テーブルの作成]ダイアログを開く", category: "data" },
-      { key: "Ctrl + U", action: "下線の切り替え", category: "formatting" },
-      { key: "Ctrl + V", action: "貼り付け", category: "clipboard" },
-      { key: "Ctrl + W", action: "ブックを閉じる", category: "file" },
-      { key: "Ctrl + X", action: "切り取り", category: "clipboard" },
-      { key: "Ctrl + Y", action: "繰り返し", category: "editing" },
-      { key: "Ctrl + Z", action: "元に戻す", category: "editing" },
-
-      { type: "title", label: "Ctrl + Shift + キー" },
-      { "key": "Ctrl + Shift + \"", "action": "上のセルの値をコピー", "category": "editing" },
-      { "key": "Ctrl + Shift + &", "action": "外枠罫線を適用", "category": "formatting" },
-      { "key": "Ctrl + Shift + _", "action": "罫線を削除", "category": "formatting" },
-      { "key": "Ctrl + Shift + ~", "action": "標準表示形式に設定", "category": "formatting" },
-      { "key": "Ctrl + Shift + !", "action": "桁区切りスタイルに設定", "category": "formatting" },
-      { "key": "Ctrl + Shift + @", "action": "時刻表示形式に設定", "category": "formatting" },
-      { "key": "Ctrl + Shift + #", "action": "日付表示形式に設定", "category": "formatting" },
-      { "key": "Ctrl + Shift + $", "action": "通貨表示形式に設定", "category": "formatting" },
-      { "key": "Ctrl + Shift + %", "action": "パーセント表示形式に設定", "category": "formatting" },
-      { "key": "Ctrl + Shift + ^", "action": "指数表示形式に設定", "category": "formatting" },
-      { "key": "Ctrl + Shift + *", "action": "現在領域を選択", "category": "selection" },
-      { "key": "Ctrl + Shift + +", "action": "セルの挿入", "category": "editing" },
-      { "key": "Ctrl + Shift + -", "action": "セルの削除", "category": "editing" },
-      { "key": "Ctrl + Shift + (", "action": "非表示行を再表示", "category": "view" },
-      { "key": "Ctrl + Shift + )", "action": "非表示列を再表示", "category": "view" },
-      { "key": "Ctrl + Shift + A", "action": "関数名の引数挿入", "category": "formula" },
-      { "key": "Ctrl + Shift + B", "action": "フォトアルバム更新", "category": "misc" },
-      { "key": "Ctrl + Shift + C", "action": "書式のみコピー", "category": "clipboard" },
-      { "key": "Ctrl + Shift + D", "action": "下方向に書式コピー", "category": "formatting" },
-      { "key": "Ctrl + Shift + E", "action": "共享ワークブックの変更履歴を表示", "category": "collaboration" },
-      { "key": "Ctrl + Shift + F", "action": "[フォント]タブを開く", "category": "formatting" },
-      { "key": "Ctrl + Shift + G", "action": "[ジャンプ]ダイアログを開く", "category": "navigation" },
-      { "key": "Ctrl + Shift + H", "action": "置換履歴を表示", "category": "editing" },
-      { "key": "Ctrl + Shift + I", "action": "インクコメント表示", "category": "review" },
-      { "key": "Ctrl + Shift + J", "action": "特殊フィルタを適用", "category": "data" },
-      { "key": "Ctrl + Shift + K", "action": "新規アドイン作成", "category": "development" },
-      { "key": "Ctrl + Shift + L", "action": "フィルタの切り替え", "category": "data" },
-      { "key": "Ctrl + Shift + M", "action": "メモの管理", "category": "review" },
-      { "key": "Ctrl + Shift + N", "action": "ノートの挿入", "category": "review" },
-      { "key": "Ctrl + Shift + O", "action": "コメントのあるセルを選択", "category": "review" },
-      { "key": "Ctrl + Shift + P", "action": "[フォントサイズ]選択", "category": "formatting" },
-      { "key": "Ctrl + Shift + Q", "action": "オブジェクト情報を表示", "category": "view" },
-      { "key": "Ctrl + Shift + R", "action": "相対参照の切り替え", "category": "formula" },
-      { "key": "Ctrl + Shift + S", "action": "名前付き範囲の作成", "category": "formula" },
-      { "key": "Ctrl + Shift + T", "action": "総計行の追加", "category": "data" },
-      { "key": "Ctrl + Shift + U", "action": "数式バーの拡張", "category": "view" },
-      { "key": "Ctrl + Shift + V", "action": "値の貼り付け", "category": "clipboard" },
-      { "key": "Ctrl + Shift + W", "action": "ワークスペースの保存", "category": "file" },
-      { "key": "Ctrl + Shift + X", "action": "XMLデータのエクスポート", "category": "data" },
-      { "key": "Ctrl + Shift + Y", "action": "マクロの記録", "category": "development" },
-      { "key": "Ctrl + Shift + Z", "action": "操作の再実行", "category": "editing" },
-
-      { type: "title", label: "Alt + [キー] シーケンス" },
-      { "key": "Alt + F1", "action": "現在の範囲のグラフ作成", "category": "chart" },
-      { "key": "Alt + F2", "action": "[名前を付けて保存]ダイアログを開く", "category": "file" },
-      { "key": "Alt + F4", "action": "Excelを終了", "category": "file" },
-      { "key": "Alt + F8", "action": "[マクロ]ダイアログを開く", "category": "development" },
-      { "key": "Alt + F11", "action": "VBAエディタを開く", "category": "development" },
-      { "key": "Alt + Shift + F1", "action": "新しいワークシート挿入", "category": "sheet" },
-      { "key": "Alt + Shift + F2", "action": "上書き保存", "category": "file" },
-      { "key": "Alt + Shift + F4", "action": "ウィンドウを閉じる", "category": "view" },
-      { "key": "Alt + Shift + F10", "action": "スマートタグメニューを表示", "category": "help" },
-      { "key": "Alt + Shift + F11", "action": "Microsoftスクリプトエディタを開く", "category": "development" },
-
-      { type: "title", label: "Shift + ファンクションキー" },
-      { "key": "Shift + F1", "action": "コンテキストヘルプを表示", "category": "help" },
-      { "key": "Shift + F2", "action": "セルにコメント追加", "category": "review" },
-      { "key": "Shift + F3", "action": "[関数の挿入]ダイアログを開く", "category": "formula" },
-      { "key": "Shift + F4", "action": "最後の検索を繰り返す", "category": "navigation" },
-      { "key": "Shift + F5", "action": "[検索]ダイアログを開く", "category": "editing" },
-      { "key": "Shift + F6", "action": "前のペインに移動", "category": "navigation" },
-      { "key": "Shift + F7", "action": "[類義語辞典]ダイアログを開く", "category": "review" },
-      { "key": "Shift + F8", "action": "追加選択モードに切り替え", "category": "selection" },
-      { "key": "Shift + F9", "action": "アクティブシート再計算", "category": "calculation" },
-      { "key": "Shift + F10", "action": "コンテキストメニューを表示", "category": "help" },
-      { "key": "Shift + F11", "action": "新しいワークシート挿入", "category": "sheet" },
-      { "key": "Shift + F12", "action": "上書き保存", "category": "file" },
-
-      { type: "title", label: "Ctrl + ファンクションキー" },
-      { "key": "Ctrl + F1", "action": "リボンの表示切替", "category": "view" },
-      { "key": "Ctrl + F2", "action": "印刷プレビューを表示", "category": "file" },
-      { "key": "Ctrl + F3", "action": "[名前の定義]ダイアログを開く", "category": "formula" },
-      { "key": "Ctrl + F4", "action": "ウィンドウを閉じる", "category": "view" },
-      { "key": "Ctrl + F5", "action": "ウィンドウサイズ復元", "category": "view" },
-      { "key": "Ctrl + F6", "action": "次のウィンドウに移動", "category": "view" },
-      { "key": "Ctrl + F7", "action": "ウィンドウ移動モード", "category": "view" },
-      { "key": "Ctrl + F8", "action": "ウィンドウサイズ変更モード", "category": "view" },
-      { "key": "Ctrl + F9", "action": "ブックウィンドウ最小化", "category": "view" },
-      { "key": "Ctrl + F10", "action": "ブックウィンドウ最大化", "category": "view" },
-      { "key": "Ctrl + F11", "action": "Excel 4.0マクロシート挿入", "category": "development" },
-      { "key": "Ctrl + F12", "action": "[ファイルを開く]ダイアログを開く", "category": "file" },
-
-      { type: "title", label: "その他の特殊組合せ" },
-      { "key": "Ctrl + Alt + V", "action": "[形式を選択して貼り付け]ダイアログを開く", "category": "clipboard" },
-      { "key": "Ctrl + Alt + F9", "action": "全シートの強制再計算", "category": "calculation" },
-      { "key": "Ctrl + Alt + Shift + F9", "action": "依存関係の再チェック", "category": "calculation" },
-      { "key": "Ctrl + Shift + Enter", "action": "配列数式確定", "category": "formula" },
-      { "key": "Ctrl + PageUp", "action": "前のシートに移動", "category": "navigation" },
-      { "key": "Ctrl + PageDown", "action": "次のシートに移動", "category": "navigation" },
-      { "key": "Alt + Enter", "action": "セル内改行", "category": "editing" },
-      { "key": "Alt + PageUp", "action": "1画面左にスクロール", "category": "navigation" },
-      { "key": "Alt + PageDown", "action": "1画面右にスクロール", "category": "navigation" },
-      { "key": "Alt + ;", "action": "表示セルのみ選択", "category": "selection" },
-      { "key": "Shift + Space", "action": "行全体選択", "category": "selection" },
-      { "key": "Ctrl + Space", "action": "列全体選択", "category": "selection" },
-      { "key": "Ctrl + Shift + Space", "action": "シート全体選択", "category": "selection" },
-      { "key": "Ctrl + Shift + PageUp", "action": "複数シート選択", "category": "selection" },
-      { "key": "Ctrl + Shift + PageDown", "action": "複数シート選択", "category": "selection" }
-
-    ];
-
-
-    function filterShortcuts(category) {
-      const filtered = allShortcuts.filter(item => {
-        if (category === 'all') {
-          return true; // すべて表示ならタイトル含めて全部
-        }
-        // 個別カテゴリのときは title を除外
-        return item.type !== "title" && item.category === category;
-      });
-      renderShortcuts(filtered);
-    }
-
-    function renderShortcuts(items) {
-      const listContainer = document.getElementById("shortcutList");
-      listContainer.innerHTML = "";
-
-      items.forEach(item => {
-        if (item.type === "title") {
-          const h3 = document.createElement("h3");
-          h3.textContent = item.label;
-          listContainer.appendChild(h3);
-        } else {
-          const li = document.createElement("li");
-          li.innerHTML = `<strong>${item.key}</strong>: ${item.action}`;
-          listContainer.appendChild(li);
-        }
-      });
-    }
-
-    renderShortcuts(allShortcuts);
-
-    document.getElementById("searchBox").addEventListener("input", function () {
-      const query = this.value.toLowerCase();
-      const filtered = allShortcuts.filter(item => {
-        if (item.type === "title") return true;
-        return item.key.toLowerCase().includes(query) || item.action.includes(query);
-      });
-      renderShortcuts(filtered);
+      if (distance < closestDistance) {
+        closestDistance = distance;
+        closestItem = item;
+      }
     });
-  </script>
 
-</body>
+    if (closestItem && closestItem.dataset.category !== lastCategory) {
+      lastCategory = closestItem.dataset.category;
+      filterShortcuts(lastCategory);
 
-</html>
+      items.forEach(i => i.classList.remove('active'));
+      closestItem.classList.add('active');
+    }
+  }
+
+  wheel.addEventListener('scroll', () => {
+    clearTimeout(wheel._scrollTimeout);
+    wheel._scrollTimeout = setTimeout(updateCenterItem, 100);
+  });
+
+  window.addEventListener('load', updateCenterItem);
+</script>

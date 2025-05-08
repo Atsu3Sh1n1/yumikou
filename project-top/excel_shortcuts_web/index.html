@@ -55,29 +55,33 @@
       <a href="https://atsu3sh1n1.github.io/yumikou/" target="_blank">Created by YUMIKOU Inc.</a>
     </p>
 
-    <div>
-      <button onclick="selectButton(this); filterShortcuts('basic_operations')">基本操作</button>
-      <button onclick="selectButton(this); filterShortcuts('cell_editing')">セル編集・入力</button>
-      <button onclick="selectButton(this); filterShortcuts('navigation_selection')">セル移動・選択</button>
-      <button onclick="selectButton(this); filterShortcuts('formatting')">数値入力・書式設定</button>
-      <button onclick="selectButton(this); filterShortcuts('formula_function')"> 数式・関数</button>
-      <button onclick="selectButton(this); filterShortcuts('row_column_sheet')">シート操作</button>
-      <button onclick="selectButton(this); filterShortcuts('find_replace')">検索・置換</button>
-      <button onclick="selectButton(this); filterShortcuts('data_filter_sort')">データの並べ替え・フィルター</button>
-      <button onclick="selectButton(this); filterShortcuts('chart_table')">表・グラフ関連</button>
-      <button onclick="selectButton(this); filterShortcuts('ui_display')">表示・ズーム操作</button>
-      <button onclick="selectButton(this); filterShortcuts('file_management')">ファイル管理</button>
-      <button onclick="selectButton(this); filterShortcuts('help')">ヘルプ</button>
-      <button onclick="selectButton(this); filterShortcuts('proofing')">文章校正</button>
-      <button onclick="selectButton(this); filterShortcuts('data_manipulation')">データ操作</button>
-      <button onclick="selectButton(this); filterShortcuts('data_analysis')">データ分析</button>
-      <button onclick="selectButton(this); filterShortcuts('comments_notes')">コメント・メモ</button>
-      <button onclick="selectButton(this); filterShortcuts('collaboration')">共同作業</button>
-      <button onclick="selectButton(this); filterShortcuts('macros')">マクロ関連</button>
-      <button onclick="selectButton(this); filterShortcuts('data_import_export')">データインポート/エクスポート</button>
-      <button onclick="selectButton(this); filterShortcuts('miscellaneous ')">その他</button>
-      <button onclick="selectButton(this); filterShortcuts('all')">すべて表示</button>
+    <div class="dropdown">
+      <div class="dropdown-button" onclick="toggleDropdown()">カテゴリを選択</div>
+      <div class="dropdown-list" id="dropdownList">
+        <div onclick="selectOption('basic_operations')">基本操作</div>
+        <div onclick="selectOption('cell_editing')">セル編集・入力</div>
+        <div onclick="selectOption('navigation_selection')">セル移動・選択</div>
+        <div onclick="selectOption('formatting')">数値入力・書式設定</div>
+        <div onclick="selectOption('formula_function')">数式・関数</div>
+        <div onclick="selectOption('row_column_sheet')">シート操作</div>
+        <div onclick="selectOption('find_replace')">検索・置換</div>
+        <div onclick="selectOption('data_filter_sort')">並べ替え・フィルター</div>
+        <div onclick="selectOption('chart_table')">表・グラフ関連</div>
+        <div onclick="selectOption('ui_display')">表示・ズーム操作</div>
+        <div onclick="selectOption('file_management')">ファイル管理</div>
+        <div onclick="selectOption('help')">ヘルプ</div>
+        <div onclick="selectOption('proofing')">文章校正</div>
+        <div onclick="selectOption('data_manipulation')">データ操作</div>
+        <div onclick="selectOption('data_analysis')">データ分析</div>
+        <div onclick="selectOption('comments_notes')">コメント・メモ</div>
+        <div onclick="selectOption('collaboration')">共同作業</div>
+        <div onclick="selectOption('macros')">マクロ関連</div>
+        <div onclick="selectOption('data_import_export')">インポート/エクスポート</div>
+        <div onclick="selectOption('miscellaneous')">その他</div>
+        <div onclick="selectOption('all')">すべて表示</div>
+      </div>
     </div>
+        
 
 
     <!-- 結果表示エリア -->
