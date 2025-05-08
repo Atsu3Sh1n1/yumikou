@@ -55,33 +55,34 @@
       <a href="https://atsu3sh1n1.github.io/yumikou/" target="_blank">Created by YUMIKOU Inc.</a>
     </p>
 
-    <div class="dropdown">
-      <div class="dropdown-button" onclick="toggleDropdown()">カテゴリを選択</div>
-      <div class="dropdown-list" id="dropdownList">
-        <div onclick="selectOption('basic_operations')">基本操作</div>
-        <div onclick="selectOption('cell_editing')">セル編集・入力</div>
-        <div onclick="selectOption('navigation_selection')">セル移動・選択</div>
-        <div onclick="selectOption('formatting')">数値入力・書式設定</div>
-        <div onclick="selectOption('formula_function')">数式・関数</div>
-        <div onclick="selectOption('row_column_sheet')">シート操作</div>
-        <div onclick="selectOption('find_replace')">検索・置換</div>
-        <div onclick="selectOption('data_filter_sort')">並べ替え・フィルター</div>
-        <div onclick="selectOption('chart_table')">表・グラフ関連</div>
-        <div onclick="selectOption('ui_display')">表示・ズーム操作</div>
-        <div onclick="selectOption('file_management')">ファイル管理</div>
-        <div onclick="selectOption('help')">ヘルプ</div>
-        <div onclick="selectOption('proofing')">文章校正</div>
-        <div onclick="selectOption('data_manipulation')">データ操作</div>
-        <div onclick="selectOption('data_analysis')">データ分析</div>
-        <div onclick="selectOption('comments_notes')">コメント・メモ</div>
-        <div onclick="selectOption('collaboration')">共同作業</div>
-        <div onclick="selectOption('macros')">マクロ関連</div>
-        <div onclick="selectOption('data_import_export')">インポート/エクスポート</div>
-        <div onclick="selectOption('miscellaneous')">その他</div>
-        <div onclick="selectOption('all')">すべて表示</div>
+    <div class="category-selector">
+      <button class="dropdown-button" onclick="toggleDropdown()">
+        <span id="selected-category">カテゴリを選択</span>
+      </button>
+      <div class="dropdown-menu" id="dropdown-menu">
+        <div class="dropdown-item" onclick="selectCategory(this, 'basic_operations')">基本操作</div>
+        <div class="dropdown-item" onclick="selectCategory(this, 'cell_editing')">セル編集・入力</div>
+        <div class="dropdown-item" onclick="selectCategory(this, 'navigation_selection')">セル移動・選択</div>
+        <div class="dropdown-item" onclick="selectCategory(this, 'formatting')">数値入力・書式設定</div>
+        <div class="dropdown-item" onclick="selectCategory(this, 'formula_function')">数式・関数</div>
+        <div class="dropdown-item" onclick="selectCategory(this, 'row_column_sheet')">シート操作</div>
+        <div class="dropdown-item" onclick="selectCategory(this, 'find_replace')">検索・置換</div>
+        <div class="dropdown-item" onclick="selectCategory(this, 'data_filter_sort')">データの並べ替え・フィルター</div>
+        <div class="dropdown-item" onclick="selectCategory(this, 'chart_table')">表・グラフ関連</div>
+        <div class="dropdown-item" onclick="selectCategory(this, 'ui_display')">表示・ズーム操作</div>
+        <div class="dropdown-item" onclick="selectCategory(this, 'file_management')">ファイル管理</div>
+        <div class="dropdown-item" onclick="selectCategory(this, 'help')">ヘルプ</div>
+        <div class="dropdown-item" onclick="selectCategory(this, 'proofing')">文章校正</div>
+        <div class="dropdown-item" onclick="selectCategory(this, 'data_manipulation')">データ操作</div>
+        <div class="dropdown-item" onclick="selectCategory(this, 'data_analysis')">データ分析</div>
+        <div class="dropdown-item" onclick="selectCategory(this, 'comments_notes')">コメント・メモ</div>
+        <div class="dropdown-item" onclick="selectCategory(this, 'collaboration')">共同作業</div>
+        <div class="dropdown-item" onclick="selectCategory(this, 'macros')">マクロ関連</div>
+        <div class="dropdown-item" onclick="selectCategory(this, 'data_import_export')">データインポート/エクスポート</div>
+        <div class="dropdown-item" onclick="selectCategory(this, 'miscellaneous')">その他</div>
+        <div class="dropdown-item" onclick="selectCategory(this, 'all')">すべて表示</div>
       </div>
     </div>
-        
 
 
     <!-- 結果表示エリア -->

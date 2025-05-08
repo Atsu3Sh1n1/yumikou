@@ -1,47 +1,47 @@
 function toggleDropdown() {
-  const list = document.getElementById("dropdownList");
-  list.style.display = list.style.display === "block" ? "none" : "block";
+  const dropdownMenu = document.getElementById('dropdown-menu');
+  const dropdownButton = document.querySelector('.dropdown-button');
+  
+  dropdownMenu.classList.toggle('open');
+  dropdownButton.classList.toggle('open');
 }
 
-function selectOption(category) {
+function selectCategory(element, category) {
+  // すべてのアイテムからselectedクラスを削除
+  document.querySelectorAll('.dropdown-item').forEach(item => {
+    item.classList.remove('selected');
+  });
+  
+  // 選択したアイテムにselectedクラスを追加
+  element.classList.add('selected');
+  
+  // ドロップダウンボタンのテキストを更新
+  document.getElementById('selected-category').textContent = element.textContent;
+  
+  // ドロップダウンを閉じる
+  toggleDropdown();
+  
+  // フィルター処理を実行
   filterShortcuts(category);
-  document.querySelector(".dropdown-button").textContent = getLabel(category);
-  document.getElementById("dropdownList").style.display = "none";
 }
 
-function getLabel(value) {
-  const labels = {
-    basic_operations: "基本操作",
-    cell_editing: "セル編集・入力",
-    navigation_selection: "セル移動・選択",
-    formatting: "数値入力・書式設定",
-    formula_function: "数式・関数",
-    row_column_sheet: "シート操作",
-    find_replace: "検索・置換",
-    data_filter_sort: "並べ替え・フィルター",
-    chart_table: "表・グラフ関連",
-    ui_display: "表示・ズーム操作",
-    file_management: "ファイル管理",
-    help: "ヘルプ",
-    proofing: "文章校正",
-    data_manipulation: "データ操作",
-    data_analysis: "データ分析",
-    comments_notes: "コメント・メモ",
-    collaboration: "共同作業",
-    macros: "マクロ関連",
-    data_import_export: "インポート/エクスポート",
-    miscellaneous: "その他",
-    all: "すべて表示",
-  };
-  return labels[value] || value;
-}
-
-// 閉じる処理（画面外クリック）
-window.addEventListener("click", function (e) {
-  if (!e.target.closest(".dropdown")) {
-    document.getElementById("dropdownList").style.display = "none";
+// ドキュメント全体のクリックを監視して、ドロップダウン外をクリックしたら閉じる
+document.addEventListener('click', function(event) {
+  const dropdownMenu = document.getElementById('dropdown-menu');
+  const dropdownButton = document.querySelector('.dropdown-button');
+  
+  if (!dropdownButton.contains(event.target) && !dropdownMenu.contains(event.target)) {
+    dropdownMenu.classList.remove('open');
+    dropdownButton.classList.remove('open');
   }
 });
+
+// 既存のfilterShortcuts関数
+function filterShortcuts(category) {
+  console.log("Filtering category:", category);
+  // ここに実際のフィルタリング処理を実装
+}
+
 let allShortcuts = [
   { type: "title", label: "ファンクションキー" },
   { "key": "F1", "action": "ヘルプを表示", "category": "help" },

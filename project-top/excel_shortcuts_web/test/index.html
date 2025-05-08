@@ -1,116 +1,57 @@
-<style>
-  .wheel-container {
-    height: 135px; /* 3 items: 45px each */
-    overflow-y: scroll;
-    scroll-snap-type: y mandatory;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    background: #fff;
-    font-size: 16px;
-    position: relative;
-  }
+button {
+  margin: 5px;
+  padding: 2px 6px;
+  border: none;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #707070, #6d6d6d);
+  color: #ffffff;
+  font-size: 1rem;
+  font-weight: bold;
+  font-family: 'Segoe UI', sans-serif;
+  cursor: pointer;
+  transition: background 0.3s;
+}
 
-  .wheel-item {
-    height: 45px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    scroll-snap-align: center;
-    color: #666;
-    transition: color 0.2s;
-  }
+/* 選択されたときのスタイル */
+.selected {
+  background: linear-gradient(135deg, #018a28, #098f45); /* 青系グラデ */
+}
 
-  .wheel-item.active {
-    color: #0078d7;
-    font-weight: bold;
-    font-size: 18px;
-  }
-
-  /* ダークモード対応 */
-  @media (prefers-color-scheme: dark) {
-    .wheel-container {
-      background: #222;
-      border-color: #444;
-      color: #ccc;
-    }
-
-    .wheel-item.active {
-      color: #33aaff;
-    }
-  }
-
-  /* 中央ライン（デバッグ用） */
-  .center-line {
-    position: absolute;
-    top: 50%;
-    left: 0;
-    height: 1px;
-    width: 100%;
-    background: red;
-    pointer-events: none;
-    z-index: 10;
-  }
-</style>
-
-<div class="wheel-container" id="wheel">
-  <div class="wheel-item" data-category="basic_operations">基本操作</div>
-  <div class="wheel-item" data-category="cell_editing">セル編集・入力</div>
-  <div class="wheel-item" data-category="navigation_selection">セル移動・選択</div>
-  <div class="wheel-item" data-category="formatting">数値入力・書式設定</div>
-  <div class="wheel-item" data-category="formula_function">数式・関数</div>
-  <div class="wheel-item" data-category="row_column_sheet">シート操作</div>
-  <div class="wheel-item" data-category="find_replace">検索・置換</div>
-  <div class="wheel-item" data-category="data_filter_sort">並べ替え・フィルター</div>
-  <div class="wheel-item" data-category="chart_table">表・グラフ関連</div>
-  <div class="wheel-item" data-category="ui_display">表示・ズーム操作</div>
-  <div class="wheel-item" data-category="file_management">ファイル管理</div>
-  <div class="wheel-item" data-category="help">ヘルプ</div>
-  <div class="wheel-item" data-category="proofing">文章校正</div>
-  <div class="wheel-item" data-category="data_manipulation">データ操作</div>
-  <div class="wheel-item" data-category="data_analysis">データ分析</div>
-  <div class="wheel-item" data-category="comments_notes">コメント・メモ</div>
-  <div class="wheel-item" data-category="collaboration">共同作業</div>
-  <div class="wheel-item" data-category="macros">マクロ関連</div>
-  <div class="wheel-item" data-category="data_import_export">インポート/エクスポート</div>
-  <div class="wheel-item" data-category="miscellaneous">その他</div>
-  <div class="wheel-item" data-category="all">すべて表示</div>
+<div>
+  <button onclick="selectButton(this); filterShortcuts('basic_operations')">基本操作</button>
+  <button onclick="selectButton(this); filterShortcuts('cell_editing')">セル編集・入力</button>
+  <button onclick="selectButton(this); filterShortcuts('navigation_selection')">セル移動・選択</button>
+  <button onclick="selectButton(this); filterShortcuts('formatting')">数値入力・書式設定</button>
+  <button onclick="selectButton(this); filterShortcuts('formula_function')"> 数式・関数</button>
+  <button onclick="selectButton(this); filterShortcuts('row_column_sheet')">シート操作</button>
+  <button onclick="selectButton(this); filterShortcuts('find_replace')">検索・置換</button>
+  <button onclick="selectButton(this); filterShortcuts('data_filter_sort')">データの並べ替え・フィルター</button>
+  <button onclick="selectButton(this); filterShortcuts('chart_table')">表・グラフ関連</button>
+  <button onclick="selectButton(this); filterShortcuts('ui_display')">表示・ズーム操作</button>
+  <button onclick="selectButton(this); filterShortcuts('file_management')">ファイル管理</button>
+  <button onclick="selectButton(this); filterShortcuts('help')">ヘルプ</button>
+  <button onclick="selectButton(this); filterShortcuts('proofing')">文章校正</button>
+  <button onclick="selectButton(this); filterShortcuts('data_manipulation')">データ操作</button>
+  <button onclick="selectButton(this); filterShortcuts('data_analysis')">データ分析</button>
+  <button onclick="selectButton(this); filterShortcuts('comments_notes')">コメント・メモ</button>
+  <button onclick="selectButton(this); filterShortcuts('collaboration')">共同作業</button>
+  <button onclick="selectButton(this); filterShortcuts('macros')">マクロ関連</button>
+  <button onclick="selectButton(this); filterShortcuts('data_import_export')">データインポート/エクスポート</button>
+  <button onclick="selectButton(this); filterShortcuts('miscellaneous ')">その他</button>
+  <button onclick="selectButton(this); filterShortcuts('all')">すべて表示</button>
 </div>
 
-<script>
-  const wheel = document.getElementById('wheel');
-  let lastCategory = null;
-
-  function updateCenterItem() {
-    const items = wheel.querySelectorAll('.wheel-item');
-    const center = wheel.scrollTop + wheel.clientHeight / 2;
-
-    let closestItem = null;
-    let closestDistance = Infinity;
-
-    items.forEach(item => {
-      const itemTop = item.offsetTop;
-      const itemCenter = itemTop + item.offsetHeight / 2;
-      const distance = Math.abs(center - itemCenter);
-
-      if (distance < closestDistance) {
-        closestDistance = distance;
-        closestItem = item;
-      }
-    });
-
-    if (closestItem && closestItem.dataset.category !== lastCategory) {
-      lastCategory = closestItem.dataset.category;
-      filterShortcuts(lastCategory);
-
-      items.forEach(i => i.classList.remove('active'));
-      closestItem.classList.add('active');
-    }
-  }
-
-  wheel.addEventListener('scroll', () => {
-    clearTimeout(wheel._scrollTimeout);
-    wheel._scrollTimeout = setTimeout(updateCenterItem, 100);
+function selectButton(button) {
+  // すべてのボタンから selected を削除
+  document.querySelectorAll('button').forEach(btn => {
+    btn.classList.remove('selected');
   });
 
-  window.addEventListener('load', updateCenterItem);
-</script>
+  // クリックされたボタンに selected を追加
+  button.classList.add('selected');
+}
+
+function filterShortcuts(category) {
+  // フィルター処理（既存の処理）
+  console.log("Filtering category:", category);
+}
