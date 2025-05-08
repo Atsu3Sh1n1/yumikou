@@ -1,19 +1,32 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>シンプルリンクページ</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>有限会社弓工 社員考案 事業計画書</title>
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
     body {
       margin: 0;
+      padding: 0;
+      height: 100%;
       background-color: #1e1e1e;
       font-family: 'Helvetica Neue', sans-serif;
       color: #ffffff;
       display: flex;
+      flex-direction: column;
+    }
+
+    .content {
+      flex: 1;
+      display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
     }
 
     .card {
@@ -22,7 +35,10 @@
       border-radius: 12px;
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
       text-align: center;
-      width: 320px;
+      display: inline-block;
+      /* ← 内容に合わせて広がる */
+      max-width: 90vw;
+      /* ← 画面の90%まで広がる（スマホ対策） */
     }
 
     .title {
@@ -45,17 +61,39 @@
     .link-list a:hover {
       color: #ffffff;
     }
+
+    footer {
+      text-align: center;
+      padding: 0.9rem;
+      background-color: #1e1e1e;
+      color: white;
+    }
+
+    footer a {
+      color: white;
+      text-decoration: none;
+    }
   </style>
 </head>
+
 <body>
-  <div class="card">
-    <div class="title">社員提案 事業計画書 一覧</div>
-    <div class="link-list">
-      <a href="UMAMI/index.html">〜「UMAMI」を世界の飲料文化に〜</a>
-      <a href="#"></a>
-      <a href="#"></a>
-      <a href="#"></a>
+  <div class="content">
+    <div class="card">
+      <div class="title">社員提案 事業計画書 一覧</div>
+      <div class="link-list">
+        <a href="UMAMI/index.html">〜「UMAMI」を世界の飲料文化に〜</a>
+        <a href="#"></a>
+        <a href="#"></a>
+        <a href="#"></a>
+      </div>
     </div>
   </div>
+
+  <footer>
+    <a href="https://atsu3sh1n1.github.io/yumikou/">
+      <p>2025 有限会社弓工 All rights reserved.</p>
+    </a>
+  </footer>
 </body>
+
 </html>
