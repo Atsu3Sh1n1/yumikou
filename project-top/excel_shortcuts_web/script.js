@@ -43,7 +43,7 @@ function filterShortcuts(category) {
 }
 
 let allShortcuts = [
-  { type: "title", label: "ファンクションキー" },
+  { type: "title", label: " ファンクションキー" },
   { "key": "F1", "action": "ヘルプを表示", "category": "help" },
   { "key": "F2", "action": "セル編集モードに切り替え", "category": "cell_editing" },
   { "key": "F3", "action": "[名前の貼り付け]ダイアログを開く", "category": "formula_function" },
