@@ -2,24 +2,25 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>弓工 ご挨拶</title>
   <style>
+    html {
+  font-size: 18px; /* 1rem = 18px に設定 */
+}
+
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-      user-select: none;
     }
 
     body {
       margin: 0;
       background: black;
-      overflow: hidden;
       font-family: 'Arial', sans-serif;
       height: 100vh;
-      opacity: 0;
-      transition: opacity 2s ease-in;
+      overflow: hidden;
     }
 
     canvas {
@@ -49,26 +50,27 @@
       color: yellow;
       font-weight: bold;
       text-align: center;
-      animation: crawl 150s linear forwards;
+      animation: crawl 100s linear forwards;
     }
 
+    /* PC向けアニメーション（20%の高さから開始） */
     @keyframes crawl {
       0% {
-        transform: rotateX(25deg) translateY(var(--scroll-start, 20vh));  /* 開始位置 */
+        transform: rotateX(25deg) translateY(300vh);
       }
       100% {
-        transform: rotateX(25deg) translateY(-300vh);  /* 画面外までスクロール */
+        transform: rotateX(25deg) translateY(-300vh);
       }
     }
 
     .title {
-      font-size: 8vw; /* ビューポート幅に基づく設定 */
+      font-size: clamp(24px, 8vw, 64px);
       margin-bottom: 60px;
       text-align: center;
     }
 
     .content {
-      font-size: 5vw; /* ビューポート幅に基づく設定 */
+      font-size: 2.4rem;
       line-height: 1.8;
       text-align: center;
     }
@@ -81,73 +83,73 @@
       position: fixed;
       bottom: 20px;
       right: 20px;
-      background-color: rgba(0, 0, 0, 0.5); /* 黒の透明 */
-      color: white; /* 文字を白く */
+      background-color: rgba(0, 0, 0, 0.5);
+      color: white;
       border: none;
       padding: 10px 20px;
       font-size: 16px;
       cursor: pointer;
-      display: none;
       border-radius: 5px;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-      opacity: 0;
-      transition: opacity 0.5s ease-in-out;
       z-index: 2;
+      transition: opacity 0.3s ease;
     }
 
-    /* --- スマホ専用設定 --- */
+    /* スマホ向けスタイル（40%の高さから開始） */
     @media (max-width: 768px) {
       .scrolling-text {
-        width: 100%;
-        animation: crawl-mobile 200s linear forwards;
-      }
-
-      .title {
-        font-size: 10vw;  /* スマホ版でタイトルをデカく */
-      }
-
-      .content {
-        font-size: 11vw;  /* スマホ版で本文をデカく */
+        width: 95%;
+        animation: crawl-mobile 100s linear forwards;
       }
 
       @keyframes crawl-mobile {
         0% {
-          transform: rotateX(25deg) translateY(var(--scroll-start-mobile, 50vh));  /* スマホは画面の50%から開始 */
+          transform: rotateX(25deg) translateY(240vh);
         }
         100% {
           transform: rotateX(25deg) translateY(-300vh);
         }
+      }
+
+      .title {
+        font-size: clamp(24px, 10vw, 48px);
+      }
+
+      .content {
+        font-size: 1.3rem;
       }
     }
   </style>
 </head>
 
 <body>
-
   <canvas id="warpCanvas"></canvas>
 
   <div class="star-wars-intro">
     <div class="scrolling-text">
-      <div class="title">
-        
-      </div>
       <div class="content">
-        <p>ホームページは、企業やサービスの「顔」であり、第一印象を左右する大切な存在です。<br>
-          ですが、ただつくるだけでは、時とともに色あせ、動きを失ってしまうこともあります。</p>
-          
-          <p>有限会社弓工は、そんなホームページを“活きた存在”に育てていくことを大切にしています。<br>
-          心に届き、行動を促し、そして何より、つくった後も手をかけて育てていくことで、はじめて本当の役割を果たす――それが私たちの考える「活きたホームページ」です。</p>
-          
-          <p>お客様の想いに真摯に向き合い、言葉やデザインの力で、情報が本来持つ価値を伝える。<br>
-          その姿勢は、ホームページ制作に限らず、私たちが手がけるすべての仕事に共通するものです。かたちは違えど、「伝える」ことの本質を見失うことはありません。</p>
-          
-          <p>小さな会社だからこそ、見落とさず、手を抜かず、深く届ける。<br>
-          “伝える”を“届く”に変えるために、私たちは今日も、静かに燃えるような情熱で、ものづくりと向き合っています。</p>
-          
-          <p>どうか、皆さまの温かなご期待とご縁を、これからもいただけましたら幸いです。</p>
-          
-          <p>有限会社弓工<br>代表 弓岡 泰晃</p>
-          
+        ホームページは、企業やサービスの「顔」であり、第一印象を左右する大切な存在です。
+
+        ですが、ただつくるだけでは、時とともに色あせ、動きを失ってしまうこともあります。<br><br>
+        
+        有限会社弓工は、そんなホームページを"活きた存在"に育てていくことを大切にしています。<br><br>
+
+        心に届き、行動を促し、そして何より、つくった後も手をかけて育てていくことで、はじめて本当の役割を果たす。
+        
+        それが私たちの考える「会社の笑顔」です。<br><br>
+        
+        お客様の想いに真摯に向き合い、言葉やデザインの力で、情報が本来持つ価値を伝える。
+        その姿勢は、ホームページ制作に限らず、私たちが手がけるすべての仕事に共通するものです。<br><br>
+
+        かたちは違えど、「伝える」ことの本質を見失うことはありません。
+        
+        小さな会社だからこそ、見落とさず、手を抜かず、深く届ける。<br><br>
+
+        "伝える"を"届く"に変えるために、私たちは今日も、静かに燃えるような情熱で、ものづくりと向き合っています。<br><br>
+        
+        どうか、皆さまの温かなご期待とご縁を、これからもいただけましたら幸いです。<br><br>
+        
+        <p>有限会社弓工<br>代表 弓岡 泰晃</p>
       </div>
     </div>
   </div>
@@ -155,91 +157,73 @@
   <button class="skip-btn" onclick="window.location.href='index.html';">スキップ</button>
 
   <script>
-    // ビューポートの高さを取得
-    const viewportHeight = window.innerHeight;
-
-    // スマホかPCかを判定
-    const isMobile = window.innerWidth <= 768;
-
-    // スクロール開始位置を設定
-    const root = document.documentElement;
-
-    // スマホ用とPC用の開始位置を設定
-    if (isMobile) {
-      root.style.setProperty('--scroll-start-mobile', `${viewportHeight * 5}px`);  // スマホは画面の50%から開始
-    } else {
-      root.style.setProperty('--scroll-start', `${viewportHeight * 6.3}px`);  // PCは画面の20%から開始
-    }
-
-    const canvas = document.getElementById('warpCanvas');
-    const ctx = canvas.getContext('2d');
-
-    let stars = [];
-    const numStars = 500;
-    let width, height, focalLength;
-
-    function init() {
-      width = window.innerWidth;
-      height = window.innerHeight;
-      focalLength = width / 2;
-
-      canvas.width = width;
-      canvas.height = height;
-
-      stars = Array.from({ length: numStars }, () => ({
-        x: Math.random() * width - width / 2,
-        y: Math.random() * height - height / 2,
-        z: Math.random() * width
-      }));
-    }
-
-    function draw() {
-      ctx.fillStyle = 'black';
-      ctx.fillRect(0, 0, width, height);
-
-      stars.forEach(star => {
-        star.z -= 1;
-        if (star.z <= 0) {
-          star.x = Math.random() * width - width / 2;
-          star.y = Math.random() * height - height / 2;
-          star.z = width;
-        }
-
-        const k = focalLength / star.z;
-        const sx = star.x * k + width / 2;
-        const sy = star.y * k + height / 2;
-        const size = (1 - star.z / width) * 3;
-
-        ctx.beginPath();
-        ctx.arc(sx, sy, size, 0, Math.PI * 2);
-        ctx.fillStyle = 'white';
-        ctx.fill();
+    document.addEventListener('DOMContentLoaded', function() {
+      const canvas = document.getElementById('warpCanvas');
+      const ctx = canvas.getContext('2d');
+      let stars = [];
+      const numStars = 300;
+      
+      function initCanvas() {
+        const width = window.innerWidth;
+        const height = window.innerHeight;
+        
+        canvas.width = width;
+        canvas.height = height;
+        
+        stars = Array.from({ length: numStars }, () => ({
+          x: Math.random() * width - width / 2,
+          y: Math.random() * height - height / 2,
+          z: Math.random() * width
+        }));
+      }
+      
+      function drawStars() {
+        const width = canvas.width;
+        const height = canvas.height;
+        const focalLength = width / 2;
+        
+        ctx.fillStyle = 'black';
+        ctx.fillRect(0, 0, width, height);
+        
+        stars.forEach(star => {
+          star.z -= 1;
+          if (star.z <= 0) {
+            star.x = Math.random() * width - width / 2;
+            star.y = Math.random() * height - height / 2;
+            star.z = width;
+          }
+          
+          const k = focalLength / star.z;
+          const sx = star.x * k + width / 2;
+          const sy = star.y * k + height / 2;
+          const size = (1 - star.z / width) * 2;
+          
+          ctx.beginPath();
+          ctx.arc(sx, sy, size, 0, Math.PI * 2);
+          ctx.fillStyle = 'white';
+          ctx.fill();
+        });
+        
+        requestAnimationFrame(drawStars);
+      }
+      
+      let resizeTimeout;
+      window.addEventListener('resize', function() {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(initCanvas, 100);
       });
-
-      requestAnimationFrame(draw);
-    }
-
-    window.addEventListener('resize', init);
-    init();
-    draw();
-
-    window.onload = function() {
-      document.body.style.opacity = 1;
-    };
-
-    setTimeout(function() {
-      const skipBtn = document.querySelector('.skip-btn');
-      skipBtn.style.display = 'block';
-      setTimeout(function() {
-        skipBtn.style.opacity = '1';
-      }, 50);
-
-      // スクロール終了後に自動でリンクに飛ばす
-      setTimeout(function() {
+      
+      initCanvas();
+      drawStars();
+      
+      setTimeout(() => {
+        document.querySelector('.skip-btn').style.opacity = '1';
+      }, 2000);
+      
+      setTimeout(() => {
         window.location.href = 'index.html';
-      }, 120000);  // 150秒後（アニメーション終了のタイミング）にページ遷移
-    }, 2000);
+      }, 60000);
+    });
   </script>
-
 </body>
 </html>
