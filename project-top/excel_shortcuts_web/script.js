@@ -282,7 +282,7 @@ let allShortcuts = [
   { "key": "Alt + W, V", "action": "ウィンドウを分割", "category": "alt" },
   { "key": "Alt + X", "action": "カット", "category": "alt" },
   { "key": "Alt + Y", "action": "繰り返し操作", "category": "alt" },
-  { "key": "Alt + Z", "action": "ズーム機能", "category": "alt" }
+  { "key": "Alt + Z", "action": "ズーム機能", "category": "alt" },
   { "key": "Alt + F1", "action": "現在の範囲のグラフ作成", "category": "alt" },
   { "key": "Alt + F2", "action": "[名前を付けて保存]ダイアログを開く", "category": "alt" },
   { "key": "Alt + F3", "action": "名前の定義ダイアログを表示", "category": "alt" },
