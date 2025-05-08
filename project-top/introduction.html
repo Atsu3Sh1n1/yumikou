@@ -6,8 +6,8 @@
   <title>弓工 ご挨拶</title>
   <style>
     html {
-  font-size: 18px; /* 1rem = 18px に設定 */
-}
+      font-size: 18px; /* 1rem = 18px に設定 */
+    }
 
     * {
       margin: 0;
@@ -50,13 +50,15 @@
       color: yellow;
       font-weight: bold;
       text-align: center;
+      position: relative;
+      top: 0;
       animation: crawl 100s linear forwards;
     }
 
-    /* PC向けアニメーション（20%の高さから開始） */
+    /* 共通アニメーション */
     @keyframes crawl {
       0% {
-        transform: rotateX(25deg) translateY(300vh);
+        transform: rotateX(25deg) translateY(var(--start-position, 300px));
       }
       100% {
         transform: rotateX(25deg) translateY(-300vh);
@@ -95,24 +97,10 @@
       transition: opacity 0.3s ease;
     }
 
-    /* スマホ向けスタイル（40%の高さから開始） */
+    /* スマホ向けスタイル */
     @media (max-width: 768px) {
       .scrolling-text {
         width: 95%;
-        animation: crawl-mobile 100s linear forwards;
-      }
-
-      @keyframes crawl-mobile {
-        0% {
-          transform: rotateX(25deg) translateY(240vh);
-        }
-        100% {
-          transform: rotateX(25deg) translateY(-300vh);
-        }
-      }
-
-      .title {
-        font-size: clamp(24px, 10vw, 48px);
       }
 
       .content {
@@ -126,7 +114,7 @@
   <canvas id="warpCanvas"></canvas>
 
   <div class="star-wars-intro">
-    <div class="scrolling-text">
+    <div class="scrolling-text" id="scrollingText">
       <div class="content">
         ホームページは、企業やサービスの「顔」であり、第一印象を左右する大切な存在です。
 
@@ -158,6 +146,22 @@
 
   <script>
     document.addEventListener('DOMContentLoaded', function() {
+      // 開始位置を動的に設定
+      const scrollingText = document.getElementById('scrollingText');
+      const isMobile = window.innerWidth <= 768;
+      
+      // デバイスに応じた開始位置を計算
+      const startPosition = isMobile ? 
+        window.innerHeight * 2.6 : // スマホは画面の80%の位置から開始
+        window.innerHeight * 2.9;   // PCは画面の1.5倍の位置から開始
+      
+      // CSS変数に設定
+      document.documentElement.style.setProperty(
+        '--start-position', 
+        `${startPosition}px`
+      );
+
+      // 星のアニメーション
       const canvas = document.getElementById('warpCanvas');
       const ctx = canvas.getContext('2d');
       let stars = [];
@@ -207,10 +211,22 @@
         requestAnimationFrame(drawStars);
       }
       
+      // リサイズ時の処理
       let resizeTimeout;
       window.addEventListener('resize', function() {
         clearTimeout(resizeTimeout);
-        resizeTimeout = setTimeout(initCanvas, 100);
+        resizeTimeout = setTimeout(function() {
+          initCanvas();
+          const isMobile = window.innerWidth <= 768;
+          const newStartPosition = isMobile ? 
+            window.innerHeight * 0.8 : 
+            window.innerHeight * 1.5;
+          
+          document.documentElement.style.setProperty(
+            '--start-position', 
+            `${newStartPosition}px`
+          );
+        }, 100);
       });
       
       initCanvas();
