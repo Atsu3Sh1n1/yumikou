@@ -358,9 +358,32 @@ renderShortcuts(allShortcuts);
 
 document.getElementById("searchBox").addEventListener("input", function () {
   const query = this.value.toLowerCase();
-  const filtered = allShortcuts.filter(item => {
-    if (item.type === "title") return true;
-    return item.key.toLowerCase().includes(query) || item.action.includes(query);
+  const result = [];
+  let currentGroup = [];
+  let inGroup = false;
+
+  allShortcuts.forEach(item => {
+    if (item.type === "title") {
+      // 前のグループを追加（ショートカット付きのみ）
+      if (currentGroup.length > 1) result.push(...currentGroup);
+      currentGroup = [item];
+      inGroup = true;
+    } else {
+      const match =
+        item.key.toLowerCase().includes(query) ||
+        item.action.toLowerCase().includes(query);
+
+      if (match) {
+        if (!inGroup) currentGroup = []; // タイトルなしのグループも許可
+        currentGroup.push(item);
+      }
+    }
   });
-  renderShortcuts(filtered);
+
+  // 最後のグループも忘れずに追加
+  if (currentGroup.length > 1 || (currentGroup.length === 1 && currentGroup[0].type !== "title")) {
+    result.push(...currentGroup);
+  }
+
+  renderShortcuts(result);
 });

@@ -178,7 +178,7 @@ footer a:hover {
 }
 
 .dropdown-button {
-  width: 100%;
+  width: 150%;
   padding: 12px 16px;
   background: #2c2c2c;
   color: #ffffff;
@@ -202,7 +202,7 @@ footer a:hover {
 
 .dropdown-button:after {
   content: "▼";
-  font-size: 0.7rem;
+  font-size: 0.8rem;
   margin-left: 10px;
   transition: transform 0.3s;
 }
@@ -215,7 +215,7 @@ footer a:hover {
   position: absolute;
   top: 100%;
   left: 0;
-  width: 100%;
+  width: 150%;
   max-height: 300px;
   overflow-y: auto;
   background: #2c2c2c;
