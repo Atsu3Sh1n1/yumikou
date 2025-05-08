@@ -43,6 +43,26 @@ function filterShortcuts(category) {
 }
 
 let allShortcuts = [
+  { type: "title", label: "基本操作 " },
+  { "key": "Enter", "action": "セルの確定／下のセルに移動", "category": "basic" },
+  { "key": "Space", "action": "セルの選択／チェックボックスの切り替え", "category": "basic" },
+  { "key": "Alt", "action": "リボンのキーヒント表示", "category": "basic" },
+  { "key": "Delete", "action": "セル内容の削除", "category": "basic" },
+  { "key": "Tab", "action": "セルの確定／右のセルに移動", "category": "basic" },
+  { "key": "Esc", "action": "入力のキャンセル", "category": "basic" },
+  { "key": "Backspace", "action": "1文字削除", "category": "basic" },
+  { "key": "Home", "action": "行の先頭に移動", "category": "basic" },
+  { "key": "End", "action": "データ範囲の端に移動", "category": "basic" },
+  { "key": "Page Up", "action": "1画面分上にスクロール", "category": "basic" },
+  { "key": "Page Down", "action": "1画面分下にスクロール", "category": "basic" },
+  { "key": "Insert", "action": "上書きモードの切り替え", "category": "basic" },
+  { "key": "Caps Lock", "action": "大文字入力モードの切り替え", "category": "basic" },
+  { "key": "Num Lock", "action": "テンキーの数字/機能切り替え", "category": "basic" },
+  { "key": "↑", "action": "上のセルに移動", "category": "basic" },
+  { "key": "↓", "action": "下のセルに移動", "category": "basic" },
+  { "key": "←", "action": "左のセルに移動", "category": "basic" },
+  { "key": "→", "action": "右のセルに移動", "category": "basic" },
+
   { type: "title", label: " ファンクションキー" },
   { "key": "F1", "action": "ヘルプを表示", "category": "help" },
   { "key": "F2", "action": "セル編集モードに切り替え", "category": "cell_editing" },
