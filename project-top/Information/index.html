@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>タイトル未定</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Roboto', sans-serif;
+      background-color: #111;
+      color: #f9f9f9;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    h1 {
+      text-align: center;
+      color: #deae10;
+      margin: 40px 0;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+      padding: 0 20px 40px;
+    }
+    .card {
+      background-color: #1e1e1e;
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      transition: transform 0.3s;
+      text-decoration: none;
+      color: inherit;
+      display: block;
+    }
+    .card:hover {
+      transform: translateY(-5px);
+      background-color: #2a2a2a;
+    }
+    .card h2 {
+      color: #deae10;
+      font-size: 1.2rem;
+      margin-top: 0;
+    }
+    .card p {
+      font-size: 0.95rem;
+      color: #ccc;
+    }
+
+    footer {
+      background-color: #222;
+      text-align: center;
+      padding: 1rem 0;
+      margin-top: auto;
+    }
+    footer a {
+      color: #bbb;
+      text-decoration: none;
+    }
+    footer a:hover {
+      color: #fff;
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <h1>タイトル未定</h1>
+  <div class="grid">
+    <a href="report/chatgpt_office_guide.html" class="card">
+      <h2>ChatGPTでできる！事務作業の効率化アイデア10選</h2>
+      <p>文書作成・議事録・Excelまで、AIがあなたの事務仕事をサポート！</p>
+    </a>
+    <a href="report/chatgpt_prompt_tips.html" class="card">
+      <h2>ChatGPTプロンプト活用術10選</h2>
+      <p>もう「何て聞けばいいの？」で迷わない。
+
+      </p>
+    </a>
+  </div>
+
+  <footer>
+    <a href="https://atsu3sh1n1.github.io/yumikou/">
+      <p>2025 有限会社弓工 All rights reserved.</p>
+    </a>
+  </footer>
+</body>
+</html>

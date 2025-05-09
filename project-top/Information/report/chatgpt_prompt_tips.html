@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>【完全版】ChatGPTでできる！事務作業の効率化アイデアと実用プロンプト集</title>
+  <meta name="description" content="ChatGPTを活用した実務向けプロンプトを厳選紹介。すぐに使えるメール文例やExcel自動化、議事録整理まで実用例を掲載。" />
+  <meta name="keywords" content="ChatGPT, 事務効率化, AI, ビジネス文書, 自動化, Excel, 議事録, メール, 業務改善, プロンプト集" />
+  <meta name="author" content="AI活用ブログ by 弓工" />
+
+  <style>
+    :root {
+      --bg-color: #121212;
+      --text-color: #f0f0f0;
+      --accent-color: #deae10;
+      --card-bg: #1e1e1e;
+      --border-radius: 16px;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Roboto', sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      line-height: 1.6;
+      padding: 20px;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 40px;
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    h1 {
+      font-size: 2rem;
+      color: var(--accent-color);
+    }
+
+    section {
+      max-width: 800px;
+      margin: 0 auto 40px auto;
+      background-color: var(--card-bg);
+      padding: 24px;
+      border-radius: var(--border-radius);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+      transition: transform 0.3s ease;
+    }
+
+    section:hover {
+      transform: translateY(-5px);
+    }
+
+    h2 {
+      color: var(--accent-color);
+      font-size: 1.5rem;
+      margin-top: 0;
+    }
+
+    button,
+    .cta-button {
+      background-color: var(--accent-color);
+      color: var(--bg-color);
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      text-decoration: none;
+      display: inline-block;
+      margin-top: 16px;
+    }
+
+    button:hover,
+    .cta-button:hover {
+      background-color: #008ba3;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 1.5rem;
+      }
+
+      h2 {
+        font-size: 1.2rem;
+      }
+
+      section {
+        padding: 16px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>ChatGPT プロンプト活用術10選 </h1>
+    <p>〜具体的なプロンプト例とその応用方法で、AI活用の効果を最大化する〜</p>
+  </header>
+
+  <section>
+    <h2>1. ビジネスメールの即作成</h2>
+    <p>やり取りの多いメールを数秒で自動生成。</p>
+    <pre>
+以下の条件でビジネスメールを作成して：
+・件名：納期のご相談
+・宛先：株式会社〇〇 田中様
+・本文：部品の納品を5月25日→6月1日に延期したい。理由は物流遅延。
+・文調：丁寧で誠実な印象
+</pre>
+    <p>💡応用：メールの返信が必要な場合は「このメールへの適切な返信文を作成してください」と依頼。</p>
+  </section>
+
+  <section>
+    <h2>2. Excel関数の自然文変換</h2>
+    <p>関数が苦手でも日本語で指示するだけ。</p>
+    <pre>
+以下の条件に合うExcel関数を教えて：
+・A列に点数があり、100点以上なら「合格」、それ未満なら「不合格」とB列に表示。
+</pre>
+    <p>💡応用：「複数条件で評価したい」と伝えるとIF関数＋ANDやORも対応可。</p>
+  </section>
+
+  <section>
+    <h2>3. 議事録や報告書の要約生成</h2>
+    <p>雑多なメモや音声起こしから要点を抽出。</p>
+    <pre>
+以下のメモを議事録として要約してください：
+「本日、売上報告を共有。前年比110%。課題は物流の遅れ。対策は倉庫拡充。」
+</pre>
+    <p>💡応用：「報告書形式で整えてください」と頼めば正式な文書化も可能。</p>
+  </section>
+
+  <section>
+    <h2>4. 業務マニュアルの自動作成</h2>
+    <p>属人化した手順をマニュアル化。</p>
+    <pre>
+以下の作業内容をマニュアルにしてください：
+・備品発注の流れ：在庫確認 → 発注書作成 → 上長承認 → 業者へ送信。
+</pre>
+    <p>💡応用：「新入社員でもわかるように」と付けるとより丁寧に説明。</p>
+  </section>
+
+  <section>
+    <h2>5. タスク整理と優先度提案</h2>
+    <p>やることが多すぎるときの整理に。</p>
+    <pre>
+以下のタスクを重要度・緊急度で分類し、優先順位をつけて：
+・メール返信
+・来週の会議資料作成
+・備品補充
+・新人研修対応
+</pre>
+    <p>💡応用：「時間配分付きでスケジュールも提案して」と加えると実行計画に。</p>
+  </section>
+
+  <section>
+    <h2>6. SNS・ブログの投稿文生成</h2>
+    <p>言葉に詰まったときの下書きに最適。</p>
+    <pre>
+テーマ：「ChatGPTの活用法」
+この内容でブログタイトルを10個提案して。ターゲットは中小企業の事務担当者。
+</pre>
+    <p>💡応用：「SEOを意識したタイトルにして」と加えると検索対策にも対応。</p>
+  </section>
+
+  <section>
+    <h2>7. データ入力の効率化アドバイス</h2>
+    <p>手作業が多い入力作業を効率化。</p>
+    <pre>
+エクセルで日報を効率的に入力する方法を提案して：
+・入力ミスが多い
+・毎日似たような内容
+</pre>
+    <p>💡応用：「関数やテンプレで具体的に提案して」と付けるとすぐ実践可能。</p>
+  </section>
+
+  <section>
+    <h2>8. 社内メール・挨拶文のテンプレ化</h2>
+    <p>形式に悩みがちなメール文も一瞬で。</p>
+    <pre>
+以下の内容で退職のご挨拶メールを作って：
+・今月末で退職
+・在職5年
+・お世話になった感謝を伝えたい
+</pre>
+    <p>💡応用：「カジュアルな社内向けと、取引先向けの2パターンで」と依頼。</p>
+  </section>
+
+  <section>
+    <h2>9. チェックリスト自動生成</h2>
+    <p>忘れがちな確認項目を網羅的に。</p>
+    <pre>
+「新入社員の受け入れ準備」のチェックリストを作ってください。
+</pre>
+    <p>💡応用：「担当部署ごとに分けて」と加えると役割別に明確化。</p>
+  </section>
+
+  <section>
+    <h2>10. Excel自動化コード（VBA等）生成</h2>
+    <p>手作業のルーチンをスクリプトで自動化。</p>
+    <pre>
+以下の条件でVBAコードを作成して：
+・Sheet1のA列の内容をSheet2のB列に転記
+・空白行は無視
+・ボタンで実行可能に
+</pre>
+    <p>💡応用：「毎日9時に自動実行するマクロに変更して」と依頼でタイマー実行も可能。</p>
+  </section>
+
+  <section class="conclusion">
+    <h2>まとめ：ChatGPTは事務の強力な相棒</h2>
+    <p>もうAIは特別な人だけのツールではありません。日々の業務で「めんどくさい」と思ったら、それをChatGPTに投げる癖をつけるだけで、業務効率は劇的に変わります。</p>
+    <a href="https://openai.com/ja-JP/chatgpt/overview/" target="_blank" class="cta-button">ChatGPTを使ってみる</a>
+  </section>
+
+  <section>
+    <h2>今日から試せる一歩</h2>
+    <ul>
+      <li>📧 よく使うメール →「この内容でテンプレ作って」</li>
+      <li>📝 議事録が大変 →「メモから要点まとめて」</li>
+      <li>📊 Excelで困った →「この条件で関数教えて」</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>今後もアップデート予定</h2>
+    <p>本記事は随時プロンプトを追加・更新していきます。ブックマーク推奨です！</p>
+  </section>
+
+  <footer style="text-align:center; margin-top:40px;">
+    <!-- ページの先頭に戻るボタン（アンカーリンクとして） -->
+    <a href="#" onclick="window.scrollTo({ top: 0, behavior: 'smooth' })">
+      <button>▲ ページの先頭へ戻る</button>
+    </a>
+    
+    <p style="margin-top:20px; font-size: 0.9rem; color: #888;">
+      &copy; 2025 <a href="https://atsu3sh1n1.github.io/yumikou/" style="color: #888; text-decoration: none;">有限会社弓工</a> All rights reserved.
+    </p>
+    
+    <!-- 他のリンク例 -->
+    <p>
+      <a href="" style="color: #888; text-decoration: none;">プライバシーポリシー</a> | 
+      <a href="" style="color: #888; text-decoration: none;">利用規約</a>
+    </p>
+  </footer>
+</body>
+
+</html>

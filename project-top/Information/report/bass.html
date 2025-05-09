@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ページタイトル</title>
+  <meta name="description" content="ページの説明" />
+  <meta name="keywords" content="キーワード1, キーワード2" />
+  <meta name="author" content="サイト名または著者名" />
+  <meta name="robots" content="index, follow" />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="OGタイトル" />
+  <meta property="og:description" content="OG説明文" />
+  <meta property="og:image" content="images/icon.webp" />
+  <meta property="og:url" content="ページURL" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="サイト名" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Twitterタイトル" />
+  <meta name="twitter:description" content="Twitter説明文" />
+  <meta name="twitter:image" content="images/icon.webp" />
+
+  <link rel="icon" href="images/icon.webp" />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-color: #121212;
+      --text-color: #f0f0f0;
+      --accent-color: #deae10;
+      --card-bg: #1e1e1e;
+      --border-radius: 16px;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Roboto', sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      line-height: 1.6;
+      padding: 20px;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 40px;
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    h1 {
+      font-size: 2rem;
+      color: var(--accent-color);
+    }
+
+    section {
+      max-width: 800px;
+      margin: 0 auto 40px auto;
+      background-color: var(--card-bg);
+      padding: 24px;
+      border-radius: var(--border-radius);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+      transition: transform 0.3s ease;
+    }
+
+    section:hover {
+      transform: translateY(-5px);
+    }
+
+    h2 {
+      color: var(--accent-color);
+      font-size: 1.5rem;
+      margin-top: 0;
+    }
+
+    button,
+    .cta-button {
+      background-color: var(--accent-color);
+      color: var(--bg-color);
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      text-decoration: none;
+      display: inline-block;
+      margin-top: 16px;
+    }
+
+    button:hover,
+    .cta-button:hover {
+      background-color: #008ba3;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 1.5rem;
+      }
+
+      h2 {
+        font-size: 1.2rem;
+      }
+
+      section {
+        padding: 16px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>ページのメインタイトル</h1>
+    <p>サブタイトルまたはリード文（任意）</p>
+  </header>
+
+  <!-- セクション1 -->
+  <section>
+    <h2>セクション1のタイトル</h2>
+    <p>セクション1の内容や詳細を記載</p>
+    
+    <!-- 補足・ヒント・活用例 -->
+    <div class="hint">
+      <strong>活用例:</strong> ここに具体的な活用例を挿入します。
+      <br>
+      <strong>ヒント:</strong> ここに便利なヒントを挿入します。
+    </div>
+  </section>
+
+  <!-- セクション2 -->
+  <section>
+    <h2>セクション2のタイトル</h2>
+    <p>セクション2の内容や詳細を記載</p>
+    
+    <!-- 補足・ヒント・活用例 -->
+    <div class="hint">
+      <strong>活用例:</strong> ここに具体的な活用例を挿入します。
+      <br>
+      <strong>ヒント:</strong> ここに便利なヒントを挿入します。
+    </div>
+  </section>
+
+  <!-- セクション3 -->
+  <section>
+    <h2>セクション3のタイトル</h2>
+    <p>セクション3の内容や詳細を記載</p>
+    
+    <!-- 補足・ヒント・活用例 -->
+    <div class="hint">
+      <strong>活用例:</strong> ここに具体的な活用例を挿入します。
+      <br>
+      <strong>ヒント:</strong> ここに便利なヒントを挿入します。
+    </div>
+  </section>
+
+  <!-- 他のセクションも同様に -->
+  <section class="conclusion">
+    <h2>まとめ・結論</h2>
+    <p>ここにまとめや行動喚起の文言を記載</p>
+    <a href="リンク先URL" target="_blank" class="cta-button">行動ボタンの文言</a>
+  </section>
+
+  <section>
+    <h2>今日から試せる一歩</h2>
+    <ul>
+      <li>使い始める方法1</li>
+      <li>使い始める方法2</li>
+      <li>使い始める方法3</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>さらに知りたい方へ</h2>
+    <p>関連情報、次のステップなど</p>
+  </section>
+
+  <footer style="text-align:center; margin-top:40px;">
+    <!-- ページの先頭に戻るボタン（アンカーリンクとして） -->
+    <a href="#" onclick="window.scrollTo({ top: 0, behavior: 'smooth' })">
+      <button>▲ ページの先頭へ戻る</button>
+    </a>
+    
+    <p style="margin-top:20px; font-size: 0.9rem; color: #888;">
+      &copy; 2025 <a href="https://atsu3sh1n1.github.io/yumikou/" style="color: #888; text-decoration: none;">有限会社弓工</a> All rights reserved.
+    </p>
+    
+    <!-- 他のリンク例 -->
+    <p>
+      <a href="" style="color: #888; text-decoration: none;">プライバシーポリシー</a> | 
+      <a href="" style="color: #888; text-decoration: none;">利用規約</a>
+    </p>
+  </footer>
+  
+</body>
+
+</html>

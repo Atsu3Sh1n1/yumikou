@@ -44,36 +44,44 @@ function filterShortcuts(category) {
 
 let allShortcuts = [
   { type: "title", label: "基本操作 " },
-  { "key": "Esc", "action": "入力のキャンセル", "category": "basic" },
-  { "key": "F1", "action": "ヘルプを表示", "category": "basic" },
-  { "key": "F2", "action": "セル編集モードに切り替え", "category": "basic" },
-  { "key": "F3", "action": "[名前の貼り付け]ダイアログを開く", "category": "basic" },
-  { "key": "F4", "action": "絶対参照切替/直前操作繰り返し", "category": "formubasicla_function" },
-  { "key": "F5", "action": "[ジャンプ]ダイアログを開く", "category": "basic" },
-  { "key": "F6", "action": "ペイン間移動", "category": "basic" },
-  { "key": "F7", "action": "[スペルチェック]ダイアログを開く", "category": "basic" },
-  { "key": "F8", "action": "拡張選択モードに切り替え", "category": "basic" },
-  { "key": "F9", "action": "ワークシート再計算", "category": "basic" },
-  { "key": "F10", "action": "キーヒントの表示", "category": "basic" },
-  { "key": "F11", "action": "新しいグラフシート作成", "category": "basic" },
-  { "key": "F12", "action": "[名前を付けて保存]ダイアログを開く", "category": "basic" },
-  { "key": "Insert", "action": "上書きモードの切り替え", "category": "basic" },
+  { 
+    "key": "Ctrl + A", 
+    "action": "すべて選択", 
+    "category": "Ctrl",
+    "description": "現在のドキュメントや選択可能な要素をすべて選択します。テキストエディタ、ファイルブラウザ、表計算ソフトなどで使用できます。"
+  },
+  { "key": "Enter", "action": "セルの確定／下のセルに移動", "category": "basic" },
+  { "key": "Space", "action": "セルの選択／チェックボックスの切り替え", "category": "basic" },
+  { "key": "Alt", "action": "リボンのキーヒント表示", "category": "basic" },
   { "key": "Delete", "action": "セル内容の削除", "category": "basic" },
+  { "key": "Tab", "action": "セルの確定／右のセルに移動", "category": "basic" },
+  { "key": "Esc", "action": "入力のキャンセル", "category": "basic" },
+  { "key": "Backspace", "action": "1文字削除", "category": "basic" },
   { "key": "Home", "action": "行の先頭に移動", "category": "basic" },
   { "key": "End", "action": "データ範囲の端に移動", "category": "basic" },
   { "key": "Page Up", "action": "1画面分上にスクロール", "category": "basic" },
   { "key": "Page Down", "action": "1画面分下にスクロール", "category": "basic" },
-  { "key": "Backspace", "action": "1文字削除", "category": "basic" },
-  { "key": "Num Lock", "action": "テンキーの数字/機能切り替え", "category": "basic" },
-  { "key": "Enter", "action": "セルの確定／下のセルに移動", "category": "basic" },
-  { "key": "Alt", "action": "リボンのキーヒント表示", "category": "basic" },
-  { "key": "Space", "action": "セルの選択／チェックボックスの切り替え", "category": "basic" },
-  { "key": "Tab", "action": "セルの確定／右のセルに移動", "category": "basic" },
+  { "key": "Insert", "action": "上書きモードの切り替え", "category": "basic" },
   { "key": "Caps Lock", "action": "大文字入力モードの切り替え", "category": "basic" },
+  { "key": "Num Lock", "action": "テンキーの数字/機能切り替え", "category": "basic" },
   { "key": "↑", "action": "上のセルに移動", "category": "basic" },
   { "key": "↓", "action": "下のセルに移動", "category": "basic" },
   { "key": "←", "action": "左のセルに移動", "category": "basic" },
   { "key": "→", "action": "右のセルに移動", "category": "basic" },
+
+  { type: "title", label: " ファンクションキー" },
+  { "key": "F1", "action": "ヘルプを表示", "category": "help" },
+  { "key": "F2", "action": "セル編集モードに切り替え", "category": "cell_editing" },
+  { "key": "F3", "action": "[名前の貼り付け]ダイアログを開く", "category": "formula_function" },
+  { "key": "F4", "action": "絶対参照切替/直前操作繰り返し", "category": "formula_function" },
+  { "key": "F5", "action": "[ジャンプ]ダイアログを開く", "category": "navigation_selection" },
+  { "key": "F6", "action": "ペイン間移動", "category": "navigation_selection" },
+  { "key": "F7", "action": "[スペルチェック]ダイアログを開く", "category": "proofing" },
+  { "key": "F8", "action": "拡張選択モードに切り替え", "category": "navigation_selection" },
+  { "key": "F9", "action": "ワークシート再計算", "category": "formula_function" },
+  { "key": "F10", "action": "キーヒントの表示", "category": "ui_display" },
+  { "key": "F11", "action": "新しいグラフシート作成", "category": "chart_table" },
+  { "key": "F12", "action": "[名前を付けて保存]ダイアログを開く", "category": "file_management" },
 
   { type: "title", label: "Ctrl + " },
   { "key": "Ctrl + A", "action": "すべて選択", "category": "Ctrl" },
@@ -272,73 +280,130 @@ let allShortcuts = [
   { "key": "Alt + F8", "action": "マクロダイアログを開く", "category": "alt" },
   { "key": "Alt + F11", "action": "VBAエディタを開く", "category": "alt" },
   { "key": "Alt + Enter", "action": "セル内で改行", "category": "alt" },
+  { 
+    "key": "Win + R", 
+    "action": "ファイル名を指定して実行", 
+    "category": "Windows",
+    "description": "コマンドやプログラムを直接実行するダイアログを開きます。"
+},
+{ 
+    "key": "Win + S", 
+    "action": "検索", 
+    "category": "Windows",
+    "description": "Windowsの検索ボックスを開きます。アプリ、ファイル、設定などを検索できます。"
+},
+{ 
+    "key": "Win + V", 
+    "action": "クリップボード履歴", 
+    "category": "Windows",
+    "description": "クリップボードの履歴を表示します。複数の項目をコピーして選択貼り付けが可能です。"
+}
 ];
 
 
-function filterShortcuts(category) {
-  const filtered = allShortcuts.filter(item => {
-    if (category === 'all') {
-      return true; // すべて表示ならタイトル含めて全部
-    }
+        // ショートカットをレンダリング
+        function renderShortcuts(items) {
+          const listContainer = document.getElementById("shortcutList");
+          listContainer.innerHTML = "";
 
-    // category が配列の場合、どれかのカテゴリにマッチするかをチェック
-    if (Array.isArray(category)) {
-      return item.type !== "title" && category.some(cat => item.category.includes(cat));
-    }
-
-    // 個別カテゴリの場合
-    return item.type !== "title" && item.category === category;
-  });
-  renderShortcuts(filtered);
-}
-
-function renderShortcuts(items) {
-  const listContainer = document.getElementById("shortcutList");
-  listContainer.innerHTML = "";
-
-  items.forEach(item => {
-    if (item.type === "title") {
-      const h3 = document.createElement("h3");
-      h3.textContent = item.label;
-      listContainer.appendChild(h3);
-    } else {
-      const li = document.createElement("li");
-      li.innerHTML = `<strong>${item.key}</strong>: ${item.action}`;
-      listContainer.appendChild(li);
-    }
-  });
-}
-
-renderShortcuts(allShortcuts);
-
-document.getElementById("searchBox").addEventListener("input", function () {
-  const query = this.value.toLowerCase();
-  const result = [];
-  let currentGroup = [];
-  let inGroup = false;
-
-  allShortcuts.forEach(item => {
-    if (item.type === "title") {
-      // 前のグループを追加（ショートカット付きのみ）
-      if (currentGroup.length > 1) result.push(...currentGroup);
-      currentGroup = [item];
-      inGroup = true;
-    } else {
-      const match =
-        item.key.toLowerCase().includes(query) ||
-        item.action.toLowerCase().includes(query);
-
-      if (match) {
-        if (!inGroup) currentGroup = []; // タイトルなしのグループも許可
-        currentGroup.push(item);
+          let currentCategory = "";
+          
+          items.forEach(item => {
+              if (item.type === "title") {
+                  currentCategory = item.label;
+                  const title = document.createElement("h3");
+                  title.className = "category-title";
+                  title.textContent = item.label;
+                  listContainer.appendChild(title);
+              } else {
+                  const card = document.createElement("div");
+                  card.className = "shortcut-card";
+                  card.innerHTML = `
+                      <div class="key-combo">${item.key}</div>
+                      <div class="action">${item.action}</div>
+                      <div class="description">${item.description || '説明がありません'}</div>
+                  `;
+                  
+                  card.addEventListener("click", function() {
+                      // 他のカードを非アクティブ化
+                      document.querySelectorAll('.shortcut-card.active').forEach(el => {
+                          if (el !== this) el.classList.remove('active');
+                      });
+                      // クリックしたカードをトグル
+                      this.classList.toggle("active");
+                  });
+                  
+                  listContainer.appendChild(card);
+              }
+          });
       }
-    }
-  });
 
-  // 最後のグループも忘れずに追加
-  if (currentGroup.length > 1 || (currentGroup.length === 1 && currentGroup[0].type !== "title")) {
-    result.push(...currentGroup);
-  }
+      // フィルタリング関数
+      function filterShortcuts(category) {
+          const filtered = allShortcuts.filter(item => {
+              if (category === 'all') {
+                  return true;
+              }
+              
+              if (Array.isArray(category)) {
+                  return item.type !== "title" && category.some(cat => item.category.includes(cat));
+              }
+              
+              return item.type !== "title" && item.category === category;
+          });
+          
+          // タイトルを含めるために追加処理
+          const result = [];
+          let lastCategory = null;
+          
+          allShortcuts.forEach(item => {
+              if (item.type === "title") {
+                  const hasItems = filtered.some(f => f.category === item.category);
+                  if (hasItems) {
+                      result.push(item);
+                      lastCategory = item.category;
+                  }
+              } else if (filtered.includes(item)) {
+                  result.push(item);
+              }
+          });
+          
+          renderShortcuts(result);
+      }
 
-  renderShortcuts(result);
-});
+      // 検索機能
+      document.getElementById("searchBox").addEventListener("input", function () {
+          const query = this.value.toLowerCase();
+          if (!query) {
+              const activeFilter = document.querySelector(".filter-btn.active").dataset.category;
+              filterShortcuts(activeFilter === "all" ? "all" : activeFilter);
+              return;
+          }
+          
+          const result = allShortcuts.filter(item => {
+              return item.type === "title" || 
+                  item.key.toLowerCase().includes(query) || 
+                  item.action.toLowerCase().includes(query) || 
+                  (item.description && item.description.toLowerCase().includes(query));
+          });
+          
+          renderShortcuts(result);
+      });
+
+      // フィルターボタンの処理
+      document.querySelectorAll(".filter-btn").forEach(btn => {
+          btn.addEventListener("click", function() {
+              document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+              this.classList.add("active");
+              
+              const category = this.dataset.category;
+              if (category === "all") {
+                  renderShortcuts(allShortcuts);
+              } else {
+                  filterShortcuts(category);
+              }
+          });
+      });
+
+      // 初期表示
+      renderShortcuts(allShortcuts);

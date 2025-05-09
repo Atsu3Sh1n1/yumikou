@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ショートカットキーリファレンス</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 30px;
+        }
+        
+        .search-container {
+            margin-bottom: 20px;
+            display: flex;
+            gap: 10px;
+        }
+        
+        #searchBox {
+            flex-grow: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        
+        .filter-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .filter-btn {
+            padding: 8px 15px;
+            background-color: #e0e0e0;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .filter-btn:hover {
+            background-color: #d0d0d0;
+        }
+        
+        .filter-btn.active {
+            background-color: #3498db;
+            color: white;
+        }
+        
+        #shortcutList {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 15px;
+        }
+        
+        .shortcut-card {
+            background-color: white;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            position: relative;
+        }
+        
+        .shortcut-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+        
+        .shortcut-card .key-combo {
+            font-weight: bold;
+            color: #2980b9;
+            font-size: 18px;
+            margin-bottom: 5px;
+        }
+        
+        .shortcut-card .action {
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+        
+        .shortcut-card .description {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            font-size: 14px;
+            color: #555;
+            line-height: 1.5;
+        }
+        
+        .shortcut-card.active .description {
+            max-height: 200px;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid #eee;
+        }
+        
+        .category-title {
+            grid-column: 1 / -1;
+            font-size: 20px;
+            margin: 20px 0 10px;
+            padding-bottom: 5px;
+            border-bottom: 2px solid #3498db;
+            color: #2c3e50;
+        }
+        
+        @media (max-width: 600px) {
+            #shortcutList {
+                grid-template-columns: 1fr;
+            }
+            
+            .filter-buttons {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>ショートカットキーリファレンス</h1>
+    
+    <div class="search-container">
+        <input type="text" id="searchBox" placeholder="ショートカットを検索...">
+    </div>
+    
+    <div class="filter-buttons">
+        <button class="filter-btn active" data-category="all">すべて</button>
+        <button class="filter-btn" data-category="Ctrl">Ctrlキー</button>
+        <button class="filter-btn" data-category="Alt">Altキー</button>
+        <button class="filter-btn" data-category="Shift">Shiftキー</button>
+        <button class="filter-btn" data-category="Windows">Windowsキー</button>
+    </div>
+    
+    <div id="shortcutList"></div>
+    
+    <script>
+        // ショートカットデータ
+        const allShortcuts = [
+            { 
+                "type": "title",
+                "label": "Ctrlキー ショートカット",
+                "category": "Ctrl"
+            },
+            { 
+                "key": "Ctrl + A", 
+                "action": "すべて選択", 
+                "category": "Ctrl",
+                "description": "現在のドキュメントや選択可能な要素をすべて選択します。テキストエディタ、ファイルブラウザ、表計算ソフトなどで使用できます。"
+            },
+            { 
+                "key": "Ctrl + B", 
+                "action": "太字", 
+                "category": "Ctrl",
+                "description": "選択したテキストを太字にします。再度押すと太字が解除されます。多くのテキストエディタやワープロソフトで使用できます。"
+            },
+            { 
+                "key": "Ctrl + C", 
+                "action": "コピー", 
+                "category": "Ctrl",
+                "description": "選択した項目をクリップボードにコピーします。テキスト、ファイル、画像など、さまざまなアプリケーションで使用可能です。"
+            },
+            { 
+                "key": "Ctrl + D", 
+                "action": "上のセルの内容をコピー", 
+                "category": "Ctrl",
+                "description": "表計算ソフトで、上のセルの内容や書式を現在のセルにコピーします。ExcelやGoogleスプレッドシートで有効です。"
+            },
+            { 
+                "key": "Ctrl + F", 
+                "action": "検索", 
+                "category": "Ctrl",
+                "description": "ドキュメント内やページ内のテキストを検索します。ほとんどのアプリケーションやウェブブラウザで使用できます。"
+            },
+            { 
+                "key": "Ctrl + N", 
+                "action": "新規作成", 
+                "category": "Ctrl",
+                "description": "新しいドキュメント、ウィンドウ、タブを作成します。アプリケーションによって動作が異なる場合があります。"
+            },
+            { 
+                "key": "Ctrl + O", 
+                "action": "開く", 
+                "category": "Ctrl",
+                "description": "既存のファイルを開くダイアログを表示します。多くのアプリケーションでサポートされています。"
+            },
+            { 
+                "key": "Ctrl + P", 
+                "action": "印刷", 
+                "category": "Ctrl",
+                "description": "現在のドキュメントを印刷します。印刷プレビューが表示されることが一般的です。"
+            },
+            { 
+                "key": "Ctrl + S", 
+                "action": "保存", 
+                "category": "Ctrl",
+                "description": "現在のドキュメントを保存します。初めて保存する場合は名前を付けて保存ダイアログが表示されます。"
+            },
+            { 
+                "key": "Ctrl + V", 
+                "action": "貼り付け", 
+                "category": "Ctrl",
+                "description": "クリップボードの内容を現在の位置に貼り付けます。コピーまたは切り取り後に使用します。"
+            },
+            { 
+                "key": "Ctrl + X", 
+                "action": "切り取り", 
+                "category": "Ctrl",
+                "description": "選択した項目を切り取り、クリップボードに保存します。元の場所からは削除されます。"
+            },
+            { 
+                "key": "Ctrl + Z", 
+                "action": "元に戻す", 
+                "category": "Ctrl",
+                "description": "直前の操作を取り消します。多くのアプリケーションで複数回押すことで複数の操作を順に取り消せます。"
+            },
+            { 
+                "key": "Ctrl + Y", 
+                "action": "やり直す", 
+                "category": "Ctrl",
+                "description": "元に戻した操作をやり直します。Ctrl+Zで取り消した変更を再適用します。"
+            },
+            { 
+                "key": "Ctrl + Tab", 
+                "action": "タブ切り替え", 
+                "category": "Ctrl",
+                "description": "タブやウィンドウ間を順番に切り替えます。ブラウザやIDEなど、タブを持つアプリケーションで有効です。"
+            },
+            
+            { 
+                "type": "title",
+                "label": "Altキー ショートカット",
+                "category": "Alt"
+            },
+            { 
+                "key": "Alt + Tab", 
+                "action": "アプリ切り替え", 
+                "category": "Alt",
+                "description": "開いているアプリケーション間を切り替えます。Tabキーを押し続けると選択肢が表示されます。"
+            },
+            { 
+                "key": "Alt + F4", 
+                "action": "ウィンドウを閉じる", 
+                "category": "Alt",
+                "description": "現在のウィンドウを閉じます。デスクトップで使用するとシャットダウンオプションが表示されます。"
+            },
+            
+            { 
+                "type": "title",
+                "label": "Shiftキー ショートカット",
+                "category": "Shift"
+            },
+            { 
+                "key": "Shift + Delete", 
+                "action": "完全削除", 
+                "category": "Shift",
+                "description": "ごみ箱を経由せずにファイルを完全に削除します。復元できないので注意が必要です。"
+            },
+            
+            { 
+                "type": "title",
+                "label": "Windowsキー ショートカット",
+                "category": "Windows"
+            },
+            { 
+                "key": "Win + D", 
+                "action": "デスクトップ表示", 
+                "category": "Windows",
+                "description": "すべてのウィンドウを最小化してデスクトップを表示します。もう一度押すと元に戻ります。"
+            },
+            { 
+                "key": "Win + E", 
+                "action": "エクスプローラー起動", 
+                "category": "Windows",
+                "description": "ファイルエクスプローラーを起動します。PCやクイックアクセスが表示されます。"
+            },
+            { 
+                "key": "Win + L", 
+                "action": "ロック", 
+                "category": "Windows",
+                "description": "PCをロックします。再開するにはパスワードが必要です。席を離れる際に便利です。"
+            },
+            { 
+                "key": "Win + R", 
+                "action": "ファイル名を指定して実行", 
+                "category": "Windows",
+                "description": "コマンドやプログラムを直接実行するダイアログを開きます。"
+            },
+            { 
+                "key": "Win + S", 
+                "action": "検索", 
+                "category": "Windows",
+                "description": "Windowsの検索ボックスを開きます。アプリ、ファイル、設定などを検索できます。"
+            },
+            { 
+                "key": "Win + V", 
+                "action": "クリップボード履歴", 
+                "category": "Windows",
+                "description": "クリップボードの履歴を表示します。複数の項目をコピーして選択貼り付けが可能です。"
+            }
+        ];
+
+        // ショートカットをレンダリング
+        function renderShortcuts(items) {
+            const listContainer = document.getElementById("shortcutList");
+            listContainer.innerHTML = "";
+
+            let currentCategory = "";
+            
+            items.forEach(item => {
+                if (item.type === "title") {
+                    currentCategory = item.label;
+                    const title = document.createElement("h3");
+                    title.className = "category-title";
+                    title.textContent = item.label;
+                    listContainer.appendChild(title);
+                } else {
+                    const card = document.createElement("div");
+                    card.className = "shortcut-card";
+                    card.innerHTML = `
+                        <div class="key-combo">${item.key}</div>
+                        <div class="action">${item.action}</div>
+                        <div class="description">${item.description || '説明がありません'}</div>
+                    `;
+                    
+                    card.addEventListener("click", function() {
+                        // 他のカードを非アクティブ化
+                        document.querySelectorAll('.shortcut-card.active').forEach(el => {
+                            if (el !== this) el.classList.remove('active');
+                        });
+                        // クリックしたカードをトグル
+                        this.classList.toggle("active");
+                    });
+                    
+                    listContainer.appendChild(card);
+                }
+            });
+        }
+
+        // フィルタリング関数
+        function filterShortcuts(category) {
+            const filtered = allShortcuts.filter(item => {
+                if (category === 'all') {
+                    return true;
+                }
+                
+                if (Array.isArray(category)) {
+                    return item.type !== "title" && category.some(cat => item.category.includes(cat));
+                }
+                
+                return item.type !== "title" && item.category === category;
+            });
+            
+            // タイトルを含めるために追加処理
+            const result = [];
+            let lastCategory = null;
+            
+            allShortcuts.forEach(item => {
+                if (item.type === "title") {
+                    const hasItems = filtered.some(f => f.category === item.category);
+                    if (hasItems) {
+                        result.push(item);
+                        lastCategory = item.category;
+                    }
+                } else if (filtered.includes(item)) {
+                    result.push(item);
+                }
+            });
+            
+            renderShortcuts(result);
+        }
+
+        // 検索機能
+        document.getElementById("searchBox").addEventListener("input", function () {
+            const query = this.value.toLowerCase();
+            if (!query) {
+                const activeFilter = document.querySelector(".filter-btn.active").dataset.category;
+                filterShortcuts(activeFilter === "all" ? "all" : activeFilter);
+                return;
+            }
+            
+            const result = allShortcuts.filter(item => {
+                return item.type === "title" || 
+                    item.key.toLowerCase().includes(query) || 
+                    item.action.toLowerCase().includes(query) || 
+                    (item.description && item.description.toLowerCase().includes(query));
+            });
+            
+            renderShortcuts(result);
+        });
+
+        // フィルターボタンの処理
+        document.querySelectorAll(".filter-btn").forEach(btn => {
+            btn.addEventListener("click", function() {
+                document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+                this.classList.add("active");
+                
+                const category = this.dataset.category;
+                if (category === "all") {
+                    renderShortcuts(allShortcuts);
+                } else {
+                    filterShortcuts(category);
+                }
+            });
+        });
+
+        // 初期表示
+        renderShortcuts(allShortcuts);
+    </script>
+</body>
+</html>
