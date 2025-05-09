@@ -54,7 +54,7 @@
       text-align: center;
       position: relative;
       top: 0;
-      animation: crawl 150s linear forwards;
+      animation: crawl 180s linear forwards;
     }
 
     /* 共通アニメーション */
@@ -75,7 +75,7 @@
     }
 
     .content {
-      font-size: 2.7rem;
+      font-size: 2.5rem;
       line-height: 1.8;
       text-align: center;
     }
@@ -119,8 +119,11 @@
   <div class="star-wars-intro">
     <div class="scrolling-text" id="scrollingText">
       <div class="content">
-        平素は格別のご高配を賜り、厚く御礼申し上げます。<br><br>
-此度は弊所の拙きホームページを御高覧賜り、誠に忝（かたじけな）く存じ上げ奉ります。<br><br>
+        拝啓　時下益々ご清栄のこととお慶び申し上げ奉ります。<br>
+平素は格別のご高配を賜り、誠に有難く、厚く御礼申し上げ奉ります。
+さて此度、弊所が微力ながらも日頃より積み重ねて参りました所業の一端を、僅かながら世に開示すべく拵えましたホームページを、かくもご多忙の折に御高覧賜り候儀、誠に忝なく、身に余る光栄と存じ奉ります。
+
+<br><br>
 
 ――とは申しましても、このように改まったご挨拶ばかりでは、私どもの素顔が伝わりにくいかもしれません。
 せっかくご覧いただいたこの機会に、少し肩の力を抜いて、
@@ -140,8 +143,8 @@
 かたちが異なっても、「伝える」という本質を見失うことは決してありません。
 小さな会社だからこそ、見落とさず、手を抜かず、深く届ける。<br><br>
 
-“伝える”を“届く”に変えるために――
-私たちは今日も、静かに燃えるような情熱とともに、ものづくりに向き合っております。<br><br>
+“伝える”を“届く”に変えるために、
+私たちは今日も静かに燃えるような情熱とともに、ものづくりに向き合っております。<br><br>
 
 皆さまの温かなご期待とご縁を、今後とも賜れましたら幸いに存じます。<br><br>
 
@@ -160,8 +163,8 @@
 
       // デバイスに応じた開始位置を計算
       const startPosition = isMobile ?
-        window.innerHeight * 4.5: // スマホは画面の80%の位置から開始
-        window.innerHeight * 6;   // PCは画面の1.5倍の位置から開始
+        window.innerHeight * 4.8: // スマホは画面の80%の位置から開始
+        window.innerHeight * 5.5 // PCは画面の1.5倍の位置から開始
 
       // CSS変数に設定
       document.documentElement.style.setProperty(
