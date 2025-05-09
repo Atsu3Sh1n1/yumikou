@@ -1,0 +1,269 @@
+/* ベースのフォントと背景 */
+html, body {
+  font-family: 'Poppins', sans-serif;
+  background-color: #1e1e1e;
+  color: #e5e5e5;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  user-select: none;
+  -webkit-user-select: none; /* Safari / iOS 対応 */
+  -moz-user-select: none;    /* Firefox 対応 */
+  -ms-user-select: none;     /* 古いIE対応（念のため） */
+  box-sizing: border-box;
+}
+
+
+*, *::before, *::after {
+  box-sizing: inherit;
+}
+
+/* コピークレジット */
+.created-by {
+  font-size: 14px;
+  color: #555;
+  text-align: center;
+  margin-top: 5px;
+}
+
+p {
+  line-height: 1.2;
+  font-size: 0.9rem;
+}
+
+
+.created-by a {
+  text-decoration: none;
+  color: #007BFF;
+}
+
+.created-by a:hover {
+  text-decoration: underline;
+  color: #0056b3;
+}
+
+/* メインコンテナ */
+.container {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 30px;
+  background-color: #2d2d2d;
+  border-radius: 12px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+  color: #e5e5e5;
+  margin-bottom: 0px; /* ここで下部にスペースを追加 */
+}
+
+/* タイトル */
+h1 {
+  font-size: 2.5rem;
+  color: #f39c12;
+  margin-bottom: 20px;
+  text-align: center;
+  word-break: break-word;
+}
+
+/* 検索ボックス */
+input[type="text"],
+.search-box {
+  width: 100%;
+  padding: 14px;
+  background-color: #444;
+  border: none;
+  color: #fff;
+  font-size: 1rem;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  transition: background-color 0.3s ease;
+  box-sizing: border-box;
+}
+
+input[type="text"]:focus {
+  background-color: #555;
+  outline: none;
+}
+
+#searchBox {
+  user-select: text;
+}
+
+/* リスト表示 */
+ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+li {
+  padding: 12px;
+  background-color: #333;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  transition: background-color 0.3s ease;
+  font-size: 1rem;
+  word-break: break-word;
+}
+
+li:hover {
+  background-color: #444;
+}
+
+strong {
+  font-weight: bold;
+  color: #f39c12;
+}
+
+/* セクション見出し */
+h2 {
+  font-size: 1.8rem;
+  color: #f39c12;
+  margin-top: 40px;
+}
+
+h3 {
+  font-size: 1.5rem;
+  color: #ddd;
+  margin-top: 30px;
+}
+
+section {
+  margin-bottom: 20px;
+}
+
+/* スマホ用レスポンシブ対応 */
+@media (max-width: 600px) {
+  .container {
+    padding: 1rem;
+  }
+
+  h1 {
+    font-size: 1.8rem;
+  }
+
+  h2,
+  h3 {
+    font-size: 1.5rem;
+  }
+
+  li {
+    font-size: 1.1rem;
+  }
+
+  input[type="text"],
+  .search-box {
+    padding: 10px;
+    font-size: 1rem;
+  }
+}
+
+footer a {
+  display: block;
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  padding: 0.9rem;
+}
+
+footer a:hover {
+  background-color: #444; /* ホバー時の背景色 */
+}
+
+.category-selector {
+  position: relative;
+  display: inline-block;
+  font-family: 'Segoe UI', sans-serif;
+  margin: 10px;
+  width: 200px;
+}
+
+.dropdown-button {
+  width: 160%;
+  padding: 12px 16px;
+  background: #2c2c2c;
+  color: #ffffff;
+  border: 1px solid #444;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.dropdown-button:hover {
+  background: #383838;
+  border-color: #555;
+}
+
+.dropdown-button:after {
+  content: "▼";
+  font-size: 0.8rem;
+  margin-left: 10px;
+  transition: transform 0.3s;
+}
+
+.dropdown-button.open:after {
+  transform: rotate(180deg);
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 160%;
+  max-height: 300px;
+  overflow-y: auto;
+  background: #2c2c2c;
+  border: 1px solid #444;
+  border-radius: 0 0 6px 6px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+  z-index: 1000;
+  display: none;
+  margin-top: 5px;
+}
+
+.dropdown-menu.open {
+  display: block;
+}
+
+.dropdown-item {
+  padding: 10px 16px;
+  color: #e0e0e0;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 0.9rem;
+}
+
+.dropdown-item:hover {
+  background: #383838;
+  color: #fff;
+}
+
+.dropdown-item.selected {
+  background: linear-gradient(135deg, #018a28, #098f45);
+  color: white;
+  font-weight: 500;
+}
+
+/* スクロールバーのスタイリング */
+.dropdown-menu::-webkit-scrollbar {
+  width: 6px;
+}
+
+.dropdown-menu::-webkit-scrollbar-track {
+  background: #383838;
+}
+
+.dropdown-menu::-webkit-scrollbar-thumb {
+  background: #555;
+  border-radius: 3px;
+}
+
+.dropdown-menu::-webkit-scrollbar-thumb:hover {
+  background: #666;
+}

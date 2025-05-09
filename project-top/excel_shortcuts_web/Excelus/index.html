@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="Search and browse all Excel keyboard shortcuts. The ultimate reference for Excel power users to boost productivity." />
+  <meta name="keywords" content="Excel, shortcuts, cheat sheet, keyboard shortcuts, time saving, productivity, Microsoft Excel" />
+  <meta name="author" content="YUMIKOU Inc." />
+
+  <!-- Open Graph (OGP) Meta Tags -->
+  <meta property="og:title" content="Complete Excel Keyboard Shortcuts Reference" />
+  <meta property="og:description" content="Searchable list of all Excel shortcuts to work faster in spreadsheets." />
+  <meta property="og:image" content="images/Excel.png" />
+  <meta property="og:url" content="https://atsu3sh1n1.github.io/yumikou/en/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="en_US" />
+
+  <!-- Twitter Card Meta Tags -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Complete Excel Shortcuts Cheat Sheet" />
+  <meta name="twitter:description" content="Ultimate reference for Excel keyboard shortcuts with search functionality" />
+  <meta name="twitter:image" content="images/Excel.png" />
+
+  <!-- Favicon and Bookmark Icons -->
+  <link rel="icon" href="images/Excel.png" type="image/x-icon" />
+  <link rel="icon" href="images/Excel.png" sizes="32x32" />
+  <link rel="icon" href="images/Excel.png" sizes="16x16" />
+  <link rel="apple-touch-icon" href="images/Excel.png" />
+
+  <title>Excel Keyboard Shortcuts Cheat Sheet</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+  <!-- External CSS -->
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+  <div class="container">
+    <p>
+      Ctrl + P means "Press Ctrl and P keys simultaneously"<br><br>
+      Alt + H, A, C means "Press Alt and H together, release, then press A, then C sequentially"<br><br><br>
+    </p>
+
+    <h1>Excel Shortcuts Search</h1>
+    <div class="card">
+      <input type="text" id="searchBox" class="search-box" placeholder="Search shortcuts..." />
+    </div>
+
+    <!-- Created by YUMIKOU Inc. -->
+    <p class="created-by">
+      <a href="https://atsu3sh1n1.github.io/yumikou/" target="_blank">Created by YUMIKOU Inc.</a>
+    </p>
+
+    <div class="category-selector">
+      <button class="dropdown-button" onclick="toggleDropdown()">
+        <span id="selected-category">Select Category</span>
+      </button>
+      <div class="dropdown-menu" id="dropdown-menu">
+        <div class="dropdown-item" onclick="selectCategory(this, 'Billing')">Create Forms<br>/ Invoices, Quotes, Orders</div>
+        <div class="dropdown-item" onclick="selectCategory(this, 'cell_editing')">Data Analysis<br>/ Sales Reports, Timesheets, Inventory</div>
+        <div class="dropdown-item" onclick="selectCategory(this, 'navigation_selection')">List Management<br>/ Employee Directory, CRM, Product Master</div>
+        <div class="dropdown-item" onclick="selectCategory(this, 'formatting')">Document Preparation<br>/ Reports, Presentations, Submissions</div>
+        <div class="dropdown-item" onclick="selectCategory(this, 'formula_function')">Data Processing<br>/ Analytics, Charts, Trends</div>
+        <div class="dropdown-item" onclick="selectCategory(this, 'row_column_sheet')">Schedule Management<br>/ Projects, Deadlines</div>
+        <div class="dropdown-item" onclick="selectCategory(this, 'find_replace')">Workflow Automation<br>/ Macros, Calculations</div>
+        <div class="dropdown-item" onclick="selectCategory(this, 'data_filter_sort')">Financial Calculations<br>/ Budgeting, Expenses</div>
+        <div class="dropdown-item" onclick="selectCategory(this, 'all')">Show All</div>
+      </div>
+    </div>
+
+    <!-- Results Display Area -->
+    <ul id="shortcutList"></ul>
+
+    <!-- JavaScript -->
+    <script src="script.js"></script>
+
+    <footer>
+      <a href="https://atsu3sh1n1.github.io/yumikou/"
+        style="display: block; color: white; text-decoration: none; padding: 0.9rem;">
+        <p>© 2025 YUMIKOU Inc. All rights reserved.</p>
+      </a>
+    </footer>
+</body>
+</html>

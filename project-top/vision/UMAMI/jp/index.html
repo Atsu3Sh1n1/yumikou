@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DASHI - 世界を魅了する飲み物へ</title>
+    <meta name="description" content="Discover DASHI, a revolutionary umami-rich beverage inspired by traditional Japanese flavors. Learn how we're bringing dashi to the global stage.">
+    <meta name="keywords" content="Dashi, Umami Drink, Japanese Beverage, Healthy Drink, Global Strategy, Traditional Japanese Taste">
+    <meta name="author" content="DASHI Inc.">
+    <link rel="canonical" href="https://atsu3sh1n1.github.io/yumikou/">
+
+    <!-- Favicon -->
+    <link rel="icon" href="images/icon.webp" type="image/x-icon">
+    <link rel="apple-touch-icon" href="images/icon.webp">
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+
+    <!-- Open Graph Meta Tags (Facebook etc.) -->
+    <meta property="og:title" content="DASHI – Global Umami Beverage Strategy">
+    <meta property="og:description" content="Experience the rich tradition of Japanese dashi reimagined as a modern, healthy beverage.">
+    <meta property="og:image" content="images/icon.webp">
+    <meta property="og:url" content="https://atsu3sh1n1.github.io/yumikou/">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="en_US">
+
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="DASHI – Global Umami Beverage Strategy">
+    <meta name="twitter:description" content="Introducing DASHI – A new beverage concept built on Japanese umami tradition.">
+    <meta name="twitter:image" content="images/yumikou.png">
+
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "DASHI Inc.",
+        "url": "https://atsu3sh1n1.github.io/yumikou/",
+        "logo": "images/yumikou.png",
+        "sameAs": [
+            "https://atsu3sh1n1.github.io/yumikou/",
+            
+        ]
+    }
+    </script>
+    <style>
+        :root {
+            --primary: #2a363b;
+            --secondary: #e84a5f;
+            --accent: #ff847c;
+            --light: #fecea8;
+            --text: #333333;
+            --bg: #f9f9f9;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            color: var(--text);
+            background-color: var(--bg);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary), #1a2428);
+            color: white;
+            padding: 80px 0 120px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        header::after {
+            content: '';
+            position: absolute;
+            bottom: -50px;
+            left: 0;
+            right: 0;
+            height: 100px;
+            background: var(--bg);
+            transform: skewY(-3deg);
+            z-index: 1;
+        }
+        
+        .header-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            animation: fadeIn 1s ease-out;
+        }
+        
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+        
+        .tagline {
+            font-size: 1.5rem;
+            opacity: 0.9;
+            margin-bottom: 40px;
+        }
+        
+        .vision-box {
+            background-color: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 8px;
+            padding: 30px;
+            max-width: 800px;
+            margin: 0 auto;
+            border-left: 4px solid var(--accent);
+            transform: translateY(20px);
+            opacity: 0;
+            animation: slideUp 0.8s ease-out 0.3s forwards;
+        }
+        
+        .vision-text {
+            font-size: 1.8rem;
+            font-weight: 500;
+            line-height: 1.4;
+            position: relative;
+        }
+        
+        .vision-text::before {
+            content: '“';
+            position: absolute;
+            left: -25px;
+            top: -15px;
+            font-size: 4rem;
+            color: var(--accent);
+            opacity: 0.3;
+        }
+        
+        section {
+            padding: 80px 0;
+            position: relative;
+        }
+        
+        h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            margin-bottom: 50px;
+            text-align: center;
+            position: relative;
+            color: var(--primary);
+        }
+        
+        h2::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 4px;
+            background: var(--secondary);
+            margin: 15px auto 0;
+        }
+        
+        .section-title {
+            display: inline-block;
+            background-color: var(--secondary);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+            letter-spacing: 1px;
+        }
+        
+        .market-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+        
+        .market-card {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        
+        .market-card:nth-child(1) { animation: fadeInUp 0.6s ease-out 0.2s forwards; }
+        .market-card:nth-child(2) { animation: fadeInUp 0.6s ease-out 0.4s forwards; }
+        .market-card:nth-child(3) { animation: fadeInUp 0.6s ease-out 0.6s forwards; }
+        
+        .market-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+        }
+        
+        .market-header {
+            background: var(--primary);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .market-body {
+            padding: 25px;
+        }
+        
+        .market-body ul {
+            list-style-type: none;
+        }
+        
+        .market-body li {
+            margin-bottom: 12px;
+            position: relative;
+            padding-left: 25px;
+        }
+        
+        .market-body li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+            font-weight: bold;
+        }
+        
+        .product-concept {
+            background-color: var(--primary);
+            color: white;
+            padding: 60px 0;
+            position: relative;
+        }
+        
+        .product-concept::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            left: 0;
+            right: 0;
+            height: 100px;
+            background: var(--bg);
+            transform: skewY(3deg);
+            z-index: 1;
+        }
+        
+        .product-concept h2 {
+            color: white;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .product-concept h2::after {
+            background: var(--light);
+        }
+        
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+        
+        .product-card {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 8px;
+            padding: 30px;
+            border: 1px solid rgba(255,255,255,0.2);
+            transition: transform 0.3s ease;
+            opacity: 0;
+        }
+        
+        .product-card:nth-child(1) { animation: fadeIn 0.6s ease-out 0.2s forwards; }
+        .product-card:nth-child(2) { animation: fadeIn 0.6s ease-out 0.4s forwards; }
+        .product-card:nth-child(3) { animation: fadeIn 0.6s ease-out 0.6s forwards; }
+        
+        .product-card:hover {
+            transform: scale(1.03);
+            background: rgba(255,255,255,0.15);
+        }
+        
+        .product-name {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: var(--light);
+            font-weight: 700;
+        }
+        
+        .strategy-timeline {
+            position: relative;
+            max-width: 800px;
+            margin: 60px auto 0;
+            padding-left: 50px;
+        }
+        
+        .strategy-timeline::before {
+            content: '';
+            position: absolute;
+            left: 20px;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: var(--secondary);
+        }
+        
+        .timeline-item {
+            position: relative;
+            margin-bottom: 50px;
+            opacity: 0;
+            transform: translateX(-30px);
+        }
+        
+        .timeline-item:nth-child(1) { animation: slideRight 0.6s ease-out 0.2s forwards; }
+        .timeline-item:nth-child(2) { animation: slideRight 0.6s ease-out 0.4s forwards; }
+        .timeline-item:nth-child(3) { animation: slideRight 0.6s ease-out 0.6s forwards; }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -46px;
+            top: 5px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--primary);
+            border: 4px solid var(--secondary);
+        }
+        
+        .timeline-phase {
+            font-weight: 700;
+            color: var(--secondary);
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+        }
+        
+        .timeline-content {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        
+        .financial-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 40px auto;
+            max-width: 700px;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 0.6s ease-out 0.4s forwards;
+        }
+        
+        .financial-table th, .financial-table td {
+            padding: 15px;
+            text-align: center;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .financial-table th {
+            background-color: var(--primary);
+            color: white;
+            font-weight: 500;
+        }
+        
+        .financial-table tr:nth-child(even) {
+            background-color: #f5f5f5;
+        }
+        
+        .financial-table tr:hover {
+            background-color: #ebebeb;
+        }
+        
+        .risk-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+        
+        .risk-card {
+            background: white;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            border-top: 4px solid var(--accent);
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        
+        .risk-card:nth-child(1) { animation: fadeInUp 0.6s ease-out 0.2s forwards; }
+        .risk-card:nth-child(2) { animation: fadeInUp 0.6s ease-out 0.4s forwards; }
+        .risk-card:nth-child(3) { animation: fadeInUp 0.6s ease-out 0.6s forwards; }
+        
+        .risk-title {
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: var(--primary);
+            font-size: 1.2rem;
+        }
+        
+        footer {
+            background: var(--primary);
+            color: white;
+            text-align: center;
+            padding: 40px 0;
+            margin-top: 80px;
+        }
+        
+        .footer-logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+        
+        .copyright {
+            opacity: 0.7;
+            font-size: 0.9rem;
+        }
+        
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes slideUp {
+            from { 
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes fadeInUp {
+            from { 
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes slideRight {
+            from { 
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            .tagline {
+                font-size: 1.2rem;
+            }
+            
+            .vision-text {
+                font-size: 1.4rem;
+            }
+            
+            h2 {
+                font-size: 2rem;
+            }
+            
+            .strategy-timeline {
+                padding-left: 30px;
+            }
+            
+            .timeline-item::before {
+                left: -36px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <h1>DASHI</h1>
+                <p class="tagline">世界を魅了する飲み物へ</p>
+                <div class="vision-box">
+                    <p class="vision-text">和の旨味で、世界に新しい"飲み物文化"を届ける。</p>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <section id="market">
+        <div class="container">
+            <span class="section-title">ターゲット市場</span>
+            <h2>グローバルマーケット戦略</h2>
+            
+            <div class="market-grid">
+                <div class="market-card">
+                    <div class="market-header">
+                        <h3>北米市場</h3>
+                    </div>
+                    <div class="market-body">
+                        <ul>
+                            <li>健康志向・ビーガンブームの流れで「ダシ」が注目</li>
+                            <li>機能性飲料市場規模: $82億</li>
+                            <li>主な販路: オーガニックスーパー、ヨガスタジオ</li>
+                            <li>価格帯: $3.99-$5.99/200ml</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="market-card">
+                    <div class="market-header">
+                        <h3>欧州市場</h3>
+                    </div>
+                    <div class="market-body">
+                        <ul>
+                            <li>発酵食品・自然食に関心が高い</li>
+                            <li>自然食品市場成長率: 年6.8%</li>
+                            <li>主な販路: 高級スーパー、ミシュランレストラン</li>
+                            <li>価格帯: €3.50-€5.50/200ml</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="market-card">
+                    <div class="market-header">
+                        <h3>アジア市場</h3>
+                    </div>
+                    <div class="market-body">
+                        <ul>
+                            <li>日本食文化に親和性が高い</li>
+                            <li>RTD飲料市場規模: $120億</li>
+                            <li>主な販路: コンビニ、高級カフェ</li>
+                            <li>価格帯: ¥400-¥600/200ml</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section class="product-concept" id="product">
+        <div class="container">
+            <span class="section-title">商品コンセプト</span>
+            <h2>プレミアムダシ飲料ラインアップ</h2>
+            
+            <div class="product-grid">
+                <div class="product-card">
+                    <h3 class="product-name">DASHI SHOT®</h3>
+                    <p>濃縮タイプの機能性ダシ。朝のルーティンやスポーツ後のリカバリーに最適。</p>
+                    <p><strong>素材:</strong> 昆布、かつお節、椎茸</p>
+                    <p><strong>特徴:</strong> 無添加・グルテンフリー・常温保存可能</p>
+                </div>
+                
+                <div class="product-card">
+                    <h3 class="product-name">UMAMI SIP™</h3>
+                    <p>スパークリング仕立てのRTD（Ready-to-Drink）ダシ飲料。</p>
+                    <p><strong>フレーバー:</strong> ゆず、レモン、ジンジャー</p>
+                    <p><strong>特徴:</strong> ノンアルコール・ビーガン・低カロリー</p>
+                </div>
+                
+                <div class="product-card">
+                    <h3 class="product-name">KONBU BOOST®</h3>
+                    <p>アスリート向け高電解質ダシドリンク。</p>
+                    <p><strong>特長:</strong> 天然ミネラル豊富・人工甘味料不使用</p>
+                    <p><strong>ターゲット:</strong> トレーニング前後・ファスティング中</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section id="strategy">
+        <div class="container">
+            <span class="section-title">戦略ステップ</span>
+            <h2>市場参入ロードマップ</h2>
+            
+            <div class="strategy-timeline">
+                <div class="timeline-item">
+                    <div class="timeline-phase">STEP 1: 市場調査 & 試作品テスト (0-12ヶ月)</div>
+                    <div class="timeline-content">
+                        <p>海外展示会（Natural Products Expo等）出展</p>
+                        <p>現地飲料業界・バイヤー・消費者からのフィードバック収集</p>
+                        <p>FDA GRAS認証（米国）、Novel Food承認（EU）取得</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-phase">STEP 2: ソフトローンチ (12-24ヶ月)</div>
+                    <div class="timeline-content">
+                        <p>Amazon FBA、Shopifyでのオンライン販売開始</p>
+                        <p>Erewhon、Whole Foods等のスペシャリティストアと提携</p>
+                        <p>Blue Bottle、%Arabica等のカフェチェーンとコラボ</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-phase">STEP 3: 本格展開 (24-36ヶ月)</div>
+                    <div class="timeline-content">
+                        <p>現地法人設立（米国デラウェアC-Corp、シンガポールHQ）</p>
+                        <p>EU・米国での共同製造パートナーシップ締結</p>
+                        <p>ミシュラン星付きレストランへのB2B販売拡大</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section id="finance">
+        <div class="container">
+            <span class="section-title">財務予測</span>
+            <h2>3年間の成長見込み</h2>
+            
+            <table class="financial-table">
+                <thead>
+                    <tr>
+                        <th>年度</th>
+                        <th>売上高</th>
+                        <th>粗利益率</th>
+                        <th>販路</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>2025</td>
+                        <td>$1.2M</td>
+                        <td>58%</td>
+                        <td>オンライン/50テスト店舗</td>
+                    </tr>
+                    <tr>
+                        <td>2026</td>
+                        <td>$8.5M</td>
+                        <td>62%</td>
+                        <td>1,200+小売店</td>
+                    </tr>
+                    <tr>
+                        <td>2027</td>
+                        <td>$22M</td>
+                        <td>65%</td>
+                        <td>グローバルフードサービス</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <div style="text-align: center; margin-top: 40px;">
+                <p><strong>資金調達必要額:</strong> $2.5Mシードラウンド（生産拡大向け）</p>
+                <p><strong>戦略的投資家候補:</strong> 三菱商事（流通）、Califia Farms（飲料専門知識）</p>
+            </div>
+        </div>
+    </section>
+    
+    <section id="risk">
+        <div class="container">
+            <span class="section-title">リスク管理</span>
+            <h2>課題と対応策</h2>
+            
+            <div class="risk-grid">
+                <div class="risk-card">
+                    <div class="risk-title">味の馴染みがない</div>
+                    <p><strong>対応策:</strong> 無料サンプル提供、シェフとのレシピ共同開発。ローカライズ（レモン風味やジンジャー追加）で味覚調整。</p>
+                </div>
+                
+                <div class="risk-card">
+                    <div class="risk-title">保存・流通の問題</div>
+                    <p><strong>対応策:</strong> 常温保存可能な濃縮タイプ、パウチ包装を開発。チリ（昆布）とインドネシア（鰹節）で二重調達体制構築。</p>
+                </div>
+                
+                <div class="risk-card">
+                    <div class="risk-title">ブランド認知度不足</div>
+                    <p><strong>対応策:</strong> 「JAPAN PREMIUM」認証取得。ブランド名を前面に出し、ストーリーテリングを強化。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <footer>
+        <div class="container">
+            <div class="footer-logo">YUMIKOU Inc.</div>
+            <p>「和の旨味で、世界に新しい"飲み物文化"を届ける。」</p>
+            <a href="UMAMI\eng\index.html" style="display: block; color: white; padding: 0.9rem;">
+                <p>海外版モックアップ</p>
+              </a>
+            <p class="copyright">© 2025 有限会社弓工. All Rights Reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>

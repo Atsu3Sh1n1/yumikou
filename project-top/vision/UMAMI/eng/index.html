@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>DASHI – Global Umami Beverage Strategy | Japanese Dashi Revolution</title>
+        <meta name="description" content="Discover DASHI, a revolutionary umami-rich beverage inspired by traditional Japanese flavors. Learn how we're bringing dashi to the global stage.">
+        <meta name="keywords" content="Dashi, Umami Drink, Japanese Beverage, Healthy Drink, Global Strategy, Traditional Japanese Taste">
+        <meta name="author" content="DASHI Inc.">
+        <link rel="canonical" href="https://atsu3sh1n1.github.io/yumikou/">
+    
+        <!-- Favicon -->
+        <link rel="icon" href="images/icon.webp" type="image/x-icon">
+        <link rel="apple-touch-icon" href="images/icon.webp">
+    
+        <!-- Fonts -->
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;700&family=Montserrat:wght@400;600;800&display=swap">
+    
+        <!-- Open Graph Meta Tags (Facebook etc.) -->
+        <meta property="og:title" content="DASHI – Global Umami Beverage Strategy">
+        <meta property="og:description" content="Experience the rich tradition of Japanese dashi reimagined as a modern, healthy beverage.">
+        <meta property="og:image" content="images/icon.webp">
+        <meta property="og:url" content="https://atsu3sh1n1.github.io/yumikou/">
+        <meta property="og:type" content="website">
+        <meta property="og:locale" content="en_US">
+    
+        <!-- Twitter Card Meta Tags -->
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:title" content="DASHI – Global Umami Beverage Strategy">
+        <meta name="twitter:description" content="Introducing DASHI – A new beverage concept built on Japanese umami tradition.">
+        <meta name="twitter:image" content="images/yumikou.png">
+    
+        <!-- Structured Data (JSON-LD) -->
+        <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "Organization",
+            "name": "DASHI Inc.",
+            "url": "https://atsu3sh1n1.github.io/yumikou/",
+            "logo": "images/yumikou.png",
+            "sameAs": [
+                "https://atsu3sh1n1.github.io/yumikou/",
+                
+            ]
+        }
+        </script>
+ 
+      <style>
+        :root {
+            --primary: #2A363B;
+            --secondary: #E84A5F;
+            --accent: #FF847C;
+            --light: #FECEAB;
+            --bg: #F9F9F9;
+            --text: #333333;
+            --text-light: #777777;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Montserrat', 'Noto Sans JP', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+        
+        /* Navigation */
+        .nav-container {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255,255,255,0.96);
+            box-shadow: 0 2px 20px rgba(0,0,0,0.05);
+            z-index: 100;
+            backdrop-filter: blur(8px);
+        }
+        
+        nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-weight: 800;
+            font-size: 1.8rem;
+            color: var(--primary);
+            letter-spacing: -1px;
+        }
+        
+        .logo span {
+            color: var(--secondary);
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text);
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--secondary);
+            transition: width 0.3s ease;
+        }
+        
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+        
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 0 2rem;
+            background: linear-gradient(135deg, rgba(42,54,59,0.9) 0%, rgba(42,54,59,0.7) 100%), 
+                        url('https://images.unsplash.com/photo-1606787366850-de6330128bfc?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') no-repeat center center/cover;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .hero h1 {
+            font-size: 4rem;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 1s ease forwards 0.3s;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin-bottom: 2rem;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 1s ease forwards 0.6s;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background: var(--secondary);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 1s ease forwards 0.9s;
+        }
+        
+        .btn:hover {
+            background: var(--accent);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        
+        /* Sections */
+        section {
+            padding: 6rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+        
+        .section-header h2 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+        
+        .section-header p {
+            color: var(--text-light);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        /* Vision Section */
+        .vision-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .vision-card {
+            background: white;
+            border-radius: 10px;
+            padding: 2.5rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        
+        .vision-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+        
+        .vision-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+        
+        .vision-card p {
+            color: var(--text-light);
+        }
+        
+        /* Market Section */
+        .market-tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .tab-btn {
+            padding: 0.8rem 1.5rem;
+            background: none;
+            border: none;
+            border-bottom: 2px solid transparent;
+            font-family: inherit;
+            font-weight: 600;
+            color: var(--text-light);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .tab-btn.active {
+            color: var(--secondary);
+            border-bottom: 2px solid var(--secondary);
+        }
+        
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .market-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .market-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        
+        .market-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+        
+        .market-card-content {
+            padding: 1.5rem;
+        }
+        
+        .market-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+        }
+        
+        .market-card p {
+            color: var(--text-light);
+            margin-bottom: 1rem;
+        }
+        
+        /* Product Section */
+        .product-slider {
+            position: relative;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .slider-container {
+            display: flex;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+            margin-bottom: 1rem;
+            scrollbar-width: none;
+        }
+        
+        .slider-container::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .slide {
+            min-width: 100%;
+            scroll-snap-align: start;
+            padding: 1rem;
+        }
+        
+        .product-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            height: 100%;
+        }
+        
+        .product-card-img {
+            height: 300px;
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .product-card-content {
+            padding: 2rem;
+        }
+        
+        .product-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+        }
+        
+        .product-card .price {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--secondary);
+            margin-bottom: 1rem;
+        }
+        
+        .product-card p {
+            color: var(--text-light);
+            margin-bottom: 1.5rem;
+        }
+        
+        /* Strategy Section */
+        .timeline {
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .timeline::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            width: 2px;
+            background: var(--light);
+            transform: translateX(-50%);
+        }
+        
+        .timeline-item {
+            padding: 1rem 2rem;
+            position: relative;
+            width: 50%;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        
+        .timeline-item:nth-child(odd) {
+            left: 0;
+            text-align: right;
+        }
+        
+        .timeline-item:nth-child(even) {
+            left: 50%;
+        }
+        
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            top: 2rem;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--secondary);
+            transform: translateY(-50%);
+        }
+        
+        .timeline-item:nth-child(odd)::after {
+            right: -10px;
+        }
+        
+        .timeline-item:nth-child(even)::after {
+            left: -10px;
+        }
+        
+        .timeline-content {
+            padding: 1.5rem;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        
+        .timeline-content h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+        }
+        
+        /* Financial Section */
+        .financial-highlights {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        .highlight-card {
+            background: white;
+            border-radius: 10px;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        
+        .highlight-card h3 {
+            font-size: 2.5rem;
+            color: var(--secondary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .highlight-card p {
+            color: var(--text-light);
+            font-weight: 600;
+        }
+        
+        /* Footer */
+        footer {
+            background: var(--primary);
+            color: white;
+            padding: 4rem 2rem;
+            text-align: center;
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .footer-links a {
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .footer-links a:hover {
+            color: var(--light);
+        }
+        
+        .copyright {
+            color: rgba(255,255,255,0.7);
+            font-size: 0.9rem;
+        }
+        
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        
+        /* Intersection Observer Animations */
+        .animate {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s ease;
+        }
+        
+        .animate.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .timeline::before {
+                left: 30px;
+            }
+            
+            .timeline-item {
+                width: 100%;
+                padding-left: 70px;
+                padding-right: 0;
+                text-align: left;
+            }
+            
+            .timeline-item:nth-child(even) {
+                left: 0;
+            }
+            
+            .timeline-item::after {
+                left: 20px;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <div class="nav-container">
+        <nav>
+            <div class="logo">DASHI<span>Global</span></div>
+            <div class="nav-links">
+                <a href="#vision">Vision</a>
+                <a href="#market">Markets</a>
+                <a href="#product">Products</a>
+                <a href="#strategy">Strategy</a>
+                <a href="#financials">Financials</a>
+            </div>
+        </nav>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Redefining Global Beverage Culture Through Japanese Umami</h1>
+            <p>Introducing the world's first premium dashi-based functional drinks, merging 1,200 years of Japanese tradition with modern health science.</p>
+            <a href="#vision" class="btn">Explore Our Vision</a>
+        </div>
+    </section>
+
+    <!-- Vision Section -->
+    <section id="vision" class="animate">
+        <div class="section-header">
+            <h2>Our Vision & Mission</h2>
+            <p>Creating a new beverage category that bridges Japanese culinary heritage with contemporary wellness needs</p>
+        </div>
+        <div class="vision-cards">
+            <div class="vision-card animate" style="animation-delay: 0.1s">
+                <h3>Cultural Bridge</h3>
+                <p>Introduce authentic Japanese umami as a global superfood, positioning dashi alongside matcha and kombucha in the premium beverage space.</p>
+            </div>
+            <div class="vision-card animate" style="animation-delay: 0.3s">
+                <h3>Health Innovation</h3>
+                <p>Develop scientifically-backed functional drinks leveraging dashi's natural electrolytes, amino acids, and low-calorie nutritional profile.</p>
+            </div>
+            <div class="vision-card animate" style="animation-delay: 0.5s">
+                <h3>Sustainable Future</h3>
+                <p>Build ocean-positive kelp farming partnerships that restore marine ecosystems while creating economic opportunities.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Market Section -->
+    <section id="market" class="animate">
+        <div class="section-header">
+            <h2>Target Markets</h2>
+            <p>Strategic expansion into high-potential global markets with tailored approaches</p>
+        </div>
+        <div class="market-tabs">
+            <button class="tab-btn active" data-tab="north-america">North America</button>
+            <button class="tab-btn" data-tab="europe">Europe</button>
+            <button class="tab-btn" data-tab="asia">Asia Pacific</button>
+        </div>
+        <div class="tab-content active" id="north-america">
+            <div class="market-grid">
+                <div class="market-card animate" style="animation-delay: 0.1s">
+                    <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="USA Market">
+                    <div class="market-card-content">
+                        <h3>United States</h3>
+                        <p>$8.2B functional beverage market with 12% annual growth. Vegan/plant-based trend (+300% since 2018) creates perfect entry point.</p>
+                    </div>
+                </div>
+                <div class="market-card animate" style="animation-delay: 0.3s">
+                    <img src="https://images.unsplash.com/photo-1536599424071-0b215a388ba7?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Canada Market">
+                    <div class="market-card-content">
+                        <h3>Canada</h3>
+                        <p>Health-conscious consumers with high disposable income. Strong retail partnerships with Whole Foods and Loblaws.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="tab-content" id="europe">
+            <div class="market-grid">
+                <div class="market-card">
+                    <img src="https://images.unsplash.com/photo-1508050919630-b135583b29ab?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="France Market">
+                    <div class="market-card-content">
+                        <h3>France</h3>
+                        <p>Established market for fermented foods. Michelin chef partnerships can drive premium positioning.</p>
+                    </div>
+                </div>
+                <div class="market-card">
+                    <img src="https://images.unsplash.com/photo-1467269204594-9661b134dd2b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Germany Market">
+                    <div class="market-card-content">
+                        <h3>Germany</h3>
+                        <p>Natural food CAGR of 6.8%. Strong e-commerce infrastructure for direct-to-consumer sales.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="tab-content" id="asia">
+            <div class="market-grid">
+                <div class="market-card">
+                    <img src="https://images.unsplash.com/photo-1528360983277-13d401cdc186?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Taiwan Market">
+                    <div class="market-card-content">
+                        <h3>Taiwan</h3>
+                        <p>$12B RTD tea market with affinity for Japanese products. Ideal test market for flavor adaptations.</p>
+                    </div>
+                </div>
+                <div class="market-card">
+                    <img src="https://images.unsplash.com/photo-1536098767743-7a4b78821a8c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Singapore Market">
+                    <div class="market-card-content">
+                        <h3>Singapore</h3>
+                        <p>High disposable income with sophisticated palates. Strategic hub for Southeast Asian expansion.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Product Section -->
+    <section id="product" class="animate">
+        <div class="section-header">
+            <h2>Product Concepts</h2>
+            <p>Three distinct lines targeting different consumer needs and occasions</p>
+        </div>
+        <div class="product-slider">
+            <div class="slider-container">
+                <div class="slide">
+                    <div class="product-card">
+                        <div class="product-card-img" style="background-image: url('https://images.unsplash.com/photo-1606787366850-de6330128bfc?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80')"></div>
+                        <div class="product-card-content">
+                            <h3>DASHI SHOT®</h3>
+                            <div class="price">$4.99 / 50ml</div>
+                            <p>Concentrated umami boost. Pure kelp/katsuobushi blend with 5g protein per serving. Perfect for athletes and fasting.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="slide">
+                    <div class="product-card">
+                        <div class="product-card-img" style="background-image: url('https://images.unsplash.com/photo-1550583724-b2692b85b150?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80')"></div>
+                        <div class="product-card-content">
+                            <h3>UMAMI SIP™</h3>
+                            <div class="price">$3.99 / 200ml</div>
+                            <p>Sparkling citrus-infused ready-to-drink. Yuzu and lemon notes make umami approachable for new consumers.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="slide">
+                    <div class="product-card">
+                        <div class="product-card-img" style="background-image: url('https://images.unsplash.com/photo-1519817650390-64a93db51149?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80')"></div>
+                        <div class="product-card-content">
+                            <h3>KONBU BOOST®</h3>
+                            <div class="price">$9.99 / 5 sachets</div>
+                            <p>Hot brew format with ginger and turmeric. Wellness-focused with immune-supporting properties.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Strategy Section -->
+    <section id="strategy" class="animate">
+        <div class="section-header">
+            <h2>Market Entry Strategy</h2>
+            <p>Phased approach ensuring product-market fit before scaling</p>
+        </div>
+        <div class="timeline">
+            <div class="timeline-item animate" style="animation-delay: 0.1s">
+                <div class="timeline-content">
+                    <h3>Phase 1: Validation (0-12 Months)</h3>
+                    <p>MVP testing at Natural Products Expo West. Regulatory approvals (FDA GRAS, EU Novel Food).</p>
+                </div>
+            </div>
+            <div class="timeline-item animate" style="animation-delay: 0.3s">
+                <div class="timeline-content">
+                    <h3>Phase 2: Soft Launch (12-24 Months)</h3>
+                    <p>Amazon FBA and specialty retail (Erewhon, Whole Foods). Cafe partnerships in major cities.</p>
+                </div>
+            </div>
+            <div class="timeline-item animate" style="animation-delay: 0.5s">
+                <div class="timeline-content">
+                    <h3>Phase 3: Scaling (24-36 Months)</h3>
+                    <p>Establish local entities in US and Singapore. Co-packing partnerships for EU distribution.</p>
+                </div>
+            </div>
+            <div class="timeline-item animate" style="animation-delay: 0.7s">
+                <div class="timeline-content">
+                    <h3>Phase 4: Brand Maturity (36+ Months)</h3>
+                    <p>Global foodservice partnerships. Potential acquisition or IPO exit strategy.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Financial Section -->
+    <section id="financials" class="animate">
+        <div class="section-header">
+            <h2>Financial Projections</h2>
+            <p>Conservative estimates based on comparable beverage category growth</p>
+        </div>
+        <div class="financial-highlights">
+            <div class="highlight-card animate" style="animation-delay: 0.1s">
+                <h3>$1.2M</h3>
+                <p>Year 1 Revenue</p>
+            </div>
+            <div class="highlight-card animate" style="animation-delay: 0.3s">
+                <h3>58%</h3>
+                <p>Gross Margin</p>
+            </div>
+            <div class="highlight-card animate" style="animation-delay: 0.5s">
+                <h3>$22M</h3>
+                <p>Year 3 Revenue</p>
+            </div>
+            <div class="highlight-card animate" style="animation-delay: 0.7s">
+                <h3>$2.5M</h3>
+                <p>Seed Round Target</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="logo" style="color: white; margin-bottom: 2rem;">DASHI<span>Global</span></div>
+            <div class="footer-links">
+                <a href="#vision">Vision</a>
+                <a href="#market">Markets</a>
+                <a href="#product">Products</a>
+                <a href="#strategy">Strategy</a>
+                <a href="#financials">Financials</a>
+            </div>
+            <p class="copyright">© 2025 YUMIKOU Inc. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Tab functionality
+        const tabBtns = document.querySelectorAll('.tab-btn');
+        const tabContents = document.querySelectorAll('.tab-content');
+        
+        tabBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const tabId = btn.getAttribute('data-tab');
+                
+                // Remove active class from all buttons and contents
+                tabBtns.forEach(btn => btn.classList.remove('active'));
+                tabContents.forEach(content => content.classList.remove('active'));
+                
+                // Add active class to clicked button and corresponding content
+                btn.classList.add('active');
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
+        
+        // Intersection Observer for animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('show');
+                }
+            });
+        }, {
+            threshold: 0.1
+        });
+        
+        document.querySelectorAll('.animate').forEach(el => {
+            observer.observe(el);
+        });
+        
+        // Smooth scrolling for navigation
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                
+                window.scrollTo({
+                    top: targetElement.offsetTop - 80,
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>
