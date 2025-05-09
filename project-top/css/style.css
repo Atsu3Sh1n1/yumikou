@@ -90,6 +90,29 @@ html, body {
     }
   }
   
+  .card .image-container {
+    position: relative;
+    width: 100%;
+    height: 160px; /* 画像の高さに合わせる */
+    overflow: hidden;
+}
+
+.card .fade-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+}
+
+.card .fade-image.active {
+    opacity: 1;
+}
+
+
+  
     a.card {
     text-decoration: none;
     color: inherit;
