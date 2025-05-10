@@ -197,4 +197,5 @@ body::-webkit-scrollbar {
   
   .footer a {
     color: #09ff00; /* 好きな色に変更（これは青） */
+    text-decoration: none;
   }
