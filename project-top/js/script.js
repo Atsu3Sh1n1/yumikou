@@ -8,6 +8,7 @@ function resizeCanvas() {
 window.addEventListener('resize', resizeCanvas);
 resizeCanvas();
 
+
 document.addEventListener("DOMContentLoaded", function() {
   const images = document.querySelectorAll(".fade-image");
   let currentIndex = 0;
