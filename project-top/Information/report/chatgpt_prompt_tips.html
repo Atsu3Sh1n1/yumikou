@@ -4,64 +4,115 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>【完全版】ChatGPTでできる！事務作業の効率化アイデアと実用プロンプト集</title>
-  <meta name="description" content="ChatGPTを活用した実務向けプロンプトを厳選紹介。すぐに使えるメール文例やExcel自動化、議事録整理まで実用例を掲載。" />
-  <meta name="keywords" content="ChatGPT, 事務効率化, AI, ビジネス文書, 自動化, Excel, 議事録, メール, 業務改善, プロンプト集" />
-  <meta name="author" content="AI活用ブログ by 弓工" />
+  <title>【実践版】ChatGPTプロンプト活用術10選｜すぐ使える具体例付き</title>
+  <meta name="description" content="ChatGPTのプロンプト作成術を完全解説。ビジネスメールからExcel自動化まで、実際に使えるプロンプト例と応用テクニックを10個厳選紹介。" />
+  <meta name="keywords" content="ChatGPT, プロンプト, AI活用, ビジネス効率化, Excel自動化, メールテンプレート, 議事録作成, VBA, 業務改善" />
+  <meta name="author" content="AI活用研究所 by 弓工" />
 
+  <!-- Open Graph (SNS用) -->
+  <meta property="og:title" content="【実践版】ChatGPTプロンプト活用術10選" />
+  <meta property="og:description" content="仕事が10倍楽になるChatGPTの具体的な使い方。プロンプト例付きで即実践可能！" />
+  <meta property="og:image" content="https://atsu3sh1n1.github.io/yumikou/images/prompt-guide.webp" />
+  <meta property="og:url" content="https://atsu3sh1n1.github.io/yumikou/chatgpt-prompt-guide.html" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="AI活用研究所" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="【実践版】ChatGPTプロンプト活用術10選" />
+  <meta name="twitter:description" content="明日から使えるChatGPTプロンプト具体例集" />
+  <meta name="twitter:image" content="https://atsu3sh1n1.github.io/yumikou/images/prompt-guide.webp" />
+
+  <!-- Favicon -->
+  <link rel="icon" href="images/icon.webp" />
+
+  <!-- FontとCSS -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
   <style>
-    :root {
-      --bg-color: #121212;
-      --text-color: #f0f0f0;
-      --accent-color: #deae10;
-      --card-bg: #1e1e1e;
-      --border-radius: 16px;
-    }
-
     body {
       margin: 0;
       font-family: 'Roboto', sans-serif;
-      background-color: var(--bg-color);
-      color: var(--text-color);
+      background-color: #111;
+      color: #f9f9f9;
+      min-height: 100vh;
       line-height: 1.6;
-      padding: 20px;
     }
 
-    header {
-      text-align: center;
-      margin-bottom: 40px;
-      animation: fadeIn 1s ease-in-out;
+    .wrapper {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    .main {
+      flex: 1;
+      padding: 20px;
+      max-width: 800px;
+      margin: 0 auto;
     }
 
     h1 {
-      font-size: 2rem;
-      color: var(--accent-color);
-    }
-
-    section {
-      max-width: 800px;
-      margin: 0 auto 40px auto;
-      background-color: var(--card-bg);
-      padding: 24px;
-      border-radius: var(--border-radius);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-      transition: transform 0.3s ease;
-    }
-
-    section:hover {
-      transform: translateY(-5px);
+      text-align: center;
+      color: #FFA500;
+      margin: 20px 0 10px;
+      font-size: 2.2rem;
     }
 
     h2 {
-      color: var(--accent-color);
+      color: #FFA500;
       font-size: 1.5rem;
-      margin-top: 0;
+      margin-top: 30px;
     }
 
-    button,
+    h3 {
+      text-align: center;
+      font-size: 1.2rem;
+      margin: 0 0 20px 0;
+      color: #ded7d7;
+    }
+
+    .card {
+      background-color: #1e1e1e;
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      transition: transform 0.3s;
+      margin-bottom: 24px;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      background-color: #2a2a2a;
+    }
+
+    p {
+      line-height: 1.6;
+      font-size: 0.95rem;
+      color: #ccc;
+      margin: 10px 0;
+    }
+
+    ul {
+      padding-left: 20px;
+    }
+
+    li {
+      margin-bottom: 10px;
+      color: #ccc;
+    }
+
+    a {
+      color: #00a9e6;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
     .cta-button {
-      background-color: var(--accent-color);
-      color: var(--bg-color);
+      background-color: #FFA500;
+      color: #111;
       border: none;
       padding: 10px 20px;
       border-radius: 8px;
@@ -73,221 +124,343 @@
       margin-top: 16px;
     }
 
-    button:hover,
     .cta-button:hover {
-      background-color: #008ba3;
+      background-color: #6ff5ff;
+      text-decoration: none;
     }
 
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+    footer {
+      text-align: center;
+      padding: 1rem 0;
+      margin-top: 40px;
     }
 
-    @media (max-width: 600px) {
-      h1 {
-        font-size: 1.4rem;
-      }
-
-      h2 {
-        font-size: 1.2rem;
-      }
-
-      section {
-        padding: 16px;
-      }
-      .card-meta {
-  margin-top: 16px;
-  background-color: #2a2a2a;
-  padding: 12px;
-  border-radius: 12px;
-  font-size: 0.95rem;
-}
-
-.card-meta > div {
-  margin-bottom: 8px;
-}
-
-.card-meta strong {
-  color: var(--accent-color);
-}
-
-    }
-    pre {
-  white-space: pre-wrap;
-  word-break: break-word;
-  overflow-wrap: break-word;
-  font-size: 1rem;
-}
-p {
-      font-size: 1rem;
-      
+    footer p {
+      color: #888;
+      font-size: 0.9rem;
     }
 
+    footer a {
+      color: #888;
+    }
 
+    footer a:hover {
+      color: #fff;
+    }
+
+    .back-to-top {
+      display: inline-block;
+      margin-bottom: 20px;
+    }
+
+    /* プロンプト表示用スタイル */
+    .prompt-box {
+      background-color: #2a2a2a;
+      border-left: 4px solid #FFA500;
+      padding: 15px;
+      margin: 15px 0;
+      border-radius: 0 8px 8px 0;
+      font-family: 'Courier New', monospace;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .tip {
+      background-color: rgba(222, 174, 16, 0.1);
+      padding: 12px;
+      border-radius: 8px;
+      margin: 10px 0;
+      font-size: 0.9rem;
+    }
+
+    .tip:before {
+      content: "💡 応用テク";
+      font-weight: bold;
+      color: #FFA500;
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .difficulty {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 12px;
+      font-size: 0.8rem;
+      margin-right: 8px;
+    }
+
+    .beginner {
+      background-color: rgba(0, 128, 0, 0.2);
+      color: #7cfc00;
+    }
+
+    .intermediate {
+      background-color: rgba(255, 165, 0, 0.2);
+      color: #FFA500;
+    }
+
+    .advanced {
+      background-color: rgba(255, 0, 0, 0.2);
+      color: #ff6347;
+    }
   </style>
 </head>
 
 <body>
+  <div class="wrapper">
+    <main class="main">
+      <h1>ChatGPT プロンプト活用術10選</h1>
+      <h3>〜具体的なプロンプト例と応用テクで、AI活用の効果を最大化する〜</h3>
 
-  
-  <header>
-    <h1>ChatGPT プロンプト活用術10選 </h1>
-    <p>〜具体的なプロンプト例とその応用方法で、AI活用の効果を最大化する〜</p>
-  </header>
+      <div class="card">
+        <h2>1. ビジネスメールの即時生成</h2>
+        <p>定型メールを瞬時に作成。文面のクオリティも調整可能。</p>
+        <div class="prompt-box">
+件名：納期延期のご連絡とお詫び
+本文：
+株式会社〇〇
+営業部 田中様
 
-  <section>
-    <h2>1. ビジネスメールの即作成</h2>
-    <p>やり取りの多いメールを数秒で自動生成。</p>
-    <pre>
-以下の条件でビジネスメールを作成して：
-・件名：納期のご相談
-・宛先：株式会社〇〇 田中様
-・本文：部品の納品を5月25日→6月1日に延期したい。理由は物流遅延。
-・文調：丁寧で誠実な印象
-</pre>
-    <p>💡応用：メールの返信が必要な場合は「このメールへの適切な返信文を作成してください」と依頼。</p>
-  </section>
+平素より大変お世話になっております。
+有限会社弓工の佐藤でございます。
 
-  <section>
-    <h2>2. Excel関数の自然文変換</h2>
-    <p>関数が苦手でも日本語で指示するだけ。</p>
-    <pre>
-以下の条件に合うExcel関数を教えて：
-・A列に点数があり、100点以上なら「合格」、それ未満なら「不合格」とB列に表示。
-</pre>
-    <p>💡応用：「複数条件で評価したい」と伝えるとIF関数＋ANDやORも対応可。</p>
-  </section>
+この度、誠に申し訳ございませんが、
+ご注文いただきました部品の納期を
+5月25日→6月1日に延期させていただきたく存じます。
 
-  <section>
-    <h2>3. 議事録や報告書の要約生成</h2>
-    <p>雑多なメモや音声起こしから要点を抽出。</p>
-    <pre>
-以下のメモを議事録として要約してください：
-「本日、売上報告を共有。前年比110%。課題は物流の遅れ。対策は倉庫拡充。」
-</pre>
-    <p>💡応用：「報告書形式で整えてください」と頼めば正式な文書化も可能。</p>
-  </section>
+理由としましては、物流業者の都合による
+予期せぬ遅延が発生したためです。
 
-  <section>
-    <h2>4. 業務マニュアルの自動作成</h2>
-    <p>属人化した手順をマニュアル化。</p>
-    <pre>
-以下の作業内容をマニュアルにしてください：
-・備品発注の流れ：在庫確認 → 発注書作成 → 上長承認 → 業者へ送信。
-</pre>
-    <p>💡応用：「新入社員でもわかるように」と付けるとより丁寧に説明。</p>
-  </section>
+ご迷惑をおかけしますこと深くお詫び申し上げます。
+何卒ご理解のほどよろしくお願い申し上げます。
 
-  <section>
-    <h2>5. タスク整理と優先度提案</h2>
-    <p>やることが多すぎるときの整理に。</p>
-    <pre>
-以下のタスクを重要度・緊急度で分類し、優先順位をつけて：
-・メール返信
-・来週の会議資料作成
-・備品補充
-・新人研修対応
-</pre>
-    <p>💡応用：「時間配分付きでスケジュールも提案して」と加えると実行計画に。</p>
-  </section>
+有限会社弓工
+佐藤 太郎
+        </div>
+        <div class="tip">
+          「より丁寧な表現で」「簡潔なバージョンで」など文調の調整も可能。取引先の業種に合わせた専門用語も自動反映。
+        </div>
+      </div>
 
-  <section>
-    <h2>6. SNS・ブログの投稿文生成</h2>
-    <p>言葉に詰まったときの下書きに最適。</p>
-    <pre>
-テーマ：「ChatGPTの活用法」
-この内容でブログタイトルを10個提案して。ターゲットは中小企業の事務担当者。
-</pre>
-    <p>💡応用：「SEOを意識したタイトルにして」と加えると検索対策にも対応。</p>
-  </section>
+      <div class="card">
+        <h2>2. Excel関数の自然言語変換</h2>
+        <p>関数が苦手でも日本語で質問するだけで解決。</p>
+        <div class="prompt-box">
+以下の条件を満たすExcel関数を教えてください：
+- A列にテストの点数(0-100点)がある
+- B列に「合格」「不合格」を表示
+- 合格基準：80点以上は「合格」、それ未満は「不合格」
+- さらにC列にAランク/Bランク/Cランクを表示
+  - 90点以上：Aランク
+  - 70-89点：Bランク
+  - 69点以下：Cランク
+        </div>
+        <div class="tip">
+          「この関数をGoogleスプレッドシート用に変換して」と追加すれば、他のプラットフォーム向けにも対応可能。
+        </div>
+      </div>
 
-  <section>
-    <h2>7. データ入力の効率化アドバイス</h2>
-    <p>手作業が多い入力作業を効率化。</p>
-    <pre>
-エクセルで日報を効率的に入力する方法を提案して：
-・入力ミスが多い
-・毎日似たような内容
-</pre>
-    <p>💡応用：「関数やテンプレで具体的に提案して」と付けるとすぐ実践可能。</p>
-  </section>
+      <div class="card">
+        <h2>3. 議事録の自動生成＆要約</h2>
+        <p>雑多なメモから構造化された議事録を作成。</p>
+        <div class="prompt-box">
+以下の会議メモを正式な議事録形式に整理してください：
+【プロジェクト進捗会議 5/15】
+- 参加者：山田、佐藤、鈴木
+- 前回からの進捗：デザイン案完成、クライアントからOK
+- 課題：開発リソース不足、納期厳守が困難
+- 決定事項：パートナー企業に外注、予算+15%
+- 次回MTG：5/22 14:00
 
-  <section>
-    <h2>8. 社内メール・挨拶文のテンプレ化</h2>
-    <p>形式に悩みがちなメール文も一瞬で。</p>
-    <pre>
-以下の内容で退職のご挨拶メールを作って：
-・今月末で退職
-・在職5年
-・お世話になった感謝を伝えたい
-</pre>
-    <p>💡応用：「カジュアルな社内向けと、取引先向けの2パターンで」と依頼。</p>
-  </section>
+出力形式：
+1. 会議概要
+2. 決定事項（★マーク）
+3. アクションアイテム（担当者と期限）
+4. 次回予定
+        </div>
+        <div class="tip">
+          「英語版も作成して」と依頼すれば多言語対応可能。音声文字起こしデータの整理にも最適。
+        </div>
+      </div>
 
-  <section>
-    <h2>9. チェックリスト自動生成</h2>
-    <p>忘れがちな確認項目を網羅的に。</p>
-    <pre>
-「新入社員の受け入れ準備」のチェックリストを作ってください。
-</pre>
-    <p>💡応用：「担当部署ごとに分けて」と加えると役割別に明確化。</p>
-  </section>
+      <div class="card">
+        <h2>4. マクロ/VBAコード生成</h2>
+        <p>プログラミング知識不要で業務自動化。</p>
+        <div class="prompt-box">
+以下の条件でExcelマクロを作成してください：
+1. 「入力」シートのA列（名前）とB列（売上）データを処理
+2. 売上が100万円以上の顧客を「優良顧客」シートに転記
+3. 転記項目：名前、売上、日付（今日の日付自動入力）
+4. 転記時に元データにチェックマークを付ける
+5. ボタンクリックで実行できるようにする
+6. 重複転記防止機能付き
+        </div>
+        <div class="tip">
+          「エラー処理を追加して」と指定すれば堅牢なコードに。PythonやGoogle Apps Scriptへの変換も可能。
+        </div>
+      </div>
 
-  <section>
-    <h2>10. Excel自動化コード（VBA等）生成</h2>
-    <p>手作業のルーチンをスクリプトで自動化。</p>
-    <pre>
-以下の条件でVBAコードを作成して：
-・Sheet1のA列の内容をSheet2のB列に転記
-・空白行は無視
-・ボタンで実行可能に
-</pre>
-    <p>💡応用：「毎日9時に自動実行するマクロに変更して」と依頼でタイマー実行も可能。</p>
-  </section>
+      <div class="card">
+        <h2>5. 市場分析レポート作成</h2>
+        <p>生データから洞察のある分析レポートを自動生成。</p>
+        <div class="prompt-box">
+以下の売上データを分析し、A4サイズ1枚のビジネスレポート形式でまとめてください：
+【2024年1-3月期 地域別売上】
+- 関東：¥12,450,000（前年比+8%）
+- 関西：¥8,760,000（前年比-2%）
+- 中部：¥6,320,000（前年比+15%）
+- 九州：¥3,890,000（前年比+5%）
 
-  <section class="conclusion">
-    <h2>まとめ：ChatGPTは事務の強力な相棒</h2>
-    <p>もうAIは特別な人だけのツールではありません。日々の業務で「めんどくさい」と思ったら、それをChatGPTに投げる癖をつけるだけで、業務効率は劇的に変わります。</p>
-    <a href="https://openai.com/ja-JP/chatgpt/overview/" target="_blank" class="cta-button">ChatGPTを使ってみる</a>
-  </section>
+含める内容：
+1. 総括（最大の成長地域と課題地域）
+2. グラフ（棒グラフと円グラフのテキスト表現）
+3. 次四半期への提言
+4. 注目すべき数値3選
+        </div>
+        <div class="tip">
+          「PowerPoint用のスライド形式で」と指定すればプレゼン資料に。特定業界の専門用語も反映可能。
+        </div>
+      </div>
 
-  <section>
-    <h2>今日から試せる一歩</h2>
-    <ul>
-      <li>📧 よく使うメール →「この内容でテンプレ作って」</li>
-      <li>📝 議事録が大変 →「メモから要点まとめて」</li>
-      <li>📊 Excelで困った →「この条件で関数教えて」</li>
-    </ul>
-  </section>
+      <div class="card">
+        <h2>6. 社内連絡文の自動生成</h2>
+        <p>定型連絡から緊急連絡まで、状況に合わせた文面を即時作成。</p>
+        <div class="prompt-box">
+以下の条件で社内連絡文を作成してください：
+【件名】社内ネットワークメンテナンスのご連絡
+【本文要件】
+- 日時：5月20日(月) 22:00～24:00
+- 影響範囲：全社ネットワークが10分程度切断
+- 対応：作業時間中のシステム利用を控える
+- 緊急連絡先：情報システム部 内線1234
+- トーン：丁寧だが簡潔な事務連絡
+- 追加情報：メンテナンス内容（サーバー更新）
+- 注意喚起：作業前にデータ保存を推奨
+- 文字数：400字程度
+        </div>
+        <div class="tip">
+          「より簡潔に」「部門別にカスタマイズ」などの調整が可能。英語版やPDF形式での出力も依頼可。過去の類似連絡から文体を統一することもできます。
+        </div>
+      </div>
 
-  <section>
-    <h2>今後もアップデート予定</h2>
-    <p>本記事は随時プロンプトを追加・更新していきます。ブックマーク推奨です！</p>
-  </section>
+      <div class="card">
+        <h2>7. プレゼン資料の骨子作成</h2>
+        <p>アイデアからすぐにプレゼン構成が完成。</p>
+        <div class="prompt-box">
+「AIを活用した事務作業の効率化」というテーマで、10分間のプレゼン資料の構成を作成してください。
 
-  <footer style="text-align:center; margin-top:40px;">
-    <!-- ページの先頭に戻るボタン（アンカーリンクとして） -->
-    <a href="#" onclick="window.scrollTo({ top: 0, behavior: 'smooth' })">
-      <button>▲ ページの先頭へ戻る</button>
-    </a>
-    
-    <p style="margin-top:20px; font-size: 0.9rem; color: #888;">
-      &copy; 2025 <a href="https://atsu3sh1n1.github.io/yumikou/" style="color: #888; text-decoration: none;">有限会社弓工</a> All rights reserved.
-    </p>
-    
-    <!-- 他のリンク例 -->
-    <p>
-      <a href="" style="color: #888; text-decoration: none;">プライバシーポリシー</a> | 
-      <a href="" style="color: #888; text-decoration: none;">利用規約</a>
-    </p>
-  </footer>
+含める内容：
+1. 現在の事務作業の課題（統計データ引用）
+2. AI活用の具体的なメリット（3事例）
+3. 導入ステップ（3段階）
+4. 想定される懸念とその解決策
+5. 成功事例（架空可）
+
+各スライドのタイトルと、話す内容の要点を箇条書きで。
+        </div>
+        <div class="tip">
+          「各スライドの注釈として話すべきポイントを追加」でより詳細な資料に。PowerPointのデザイン提案も可能。
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>8. カスタマーサポート対応</h2>
+        <p>クレーム対応からFAQ作成まで自動化。</p>
+        <div class="prompt-box">
+以下の顧客クレームに対する適切な返信文を作成してください：
+【顧客メール内容】
+「先週注文した商品（注文番号#12345）がまだ届きません。
+約束の納期は3営業日以内でしたが、既に5営業日経過しています。
+至急状況を確認してほしい。」
+
+返信条件：
+- 謝罪と原因説明（物流遅延）
+- 現在の状況（追跡番号付きで発送済み）
+- 補償案（次回10%割引クーポン）
+- 再発防止策
+- 丁寧で誠実なトーン
+        </div>
+        <div class="tip">
+          「英語版も作成」「より簡潔なバージョン」など多様なバリエーションを生成可能。過去の対応例から学習させることも可能。
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>9. チェックリスト自動作成</h2>
+        <p>作業の抜け漏れを防ぐ最適なリストを生成。</p>
+        <div class="prompt-box">
+「新入社員の初日オリエンテーション」のチェックリストを作成してください。
+
+項目：
+- 事前準備（1週間前〜前日）
+- 当日の流れ（午前・午後別）
+- 必要な書類と備品
+- 導入すべき社内システム
+- 1週間後のフォロー項目
+
+形式：
+- 表形式（項目、担当者、期限、備考）
+- 優先順位付き（★マーク）
+        </div>
+        <div class="tip">
+          「Googleスプレッドシート形式で」「完了欄付き」など用途に合わせてカスタマイズ可能。既存リストの改善提案も可。
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>10. データ分析＆可視化提案</h2>
+        <p>生データから洞察と適切な可視化方法を提案。</p>
+        <div class="prompt-box">
+以下の売上データを分析し、最も効果的な可視化方法を提案してください：
+【2023年 月別商品別売上（単位：万円）】
+月,商品A,商品B,商品C
+1月,120,85,65
+2月,135,78,72
+...
+12月,210,95,110
+
+求める出力：
+1. 主要なトレンドの指摘（3点）
+2. 推奨グラフタイプとその理由
+3. 注目すべき異常値
+4. 次年度への提言（2点）
+        </div>
+        <div class="tip">
+          「Pythonコード付きで」「Tableau用に」と指定すれば分析コードも自動生成。予測モデルの構築も可能。
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>プロンプト作成の3大原則</h2>
+        <ol>
+          <li><strong>具体的である</strong> - 「良い」ではなく「80点以上」と数値化</li>
+          <li><strong>出力形式を指定</strong> - 箇条書き、表形式、文字数など</li>
+          <li><strong>文脈を提供</strong> - 対象読者や使用目的を明記</li>
+        </ol>
+        <p>これらの原則を守れば、ChatGPTの出力品質が劇的に向上します。</p>
+        <a href="https://openai.com/ja-JP/chatgpt/overview/" target="_blank" class="cta-button">ChatGPTを使ってみる</a>
+      </div>
+
+      <div class="card">
+        <h2>レベル別おすすめ学習法</h2>
+        <p><strong>初級者</strong>：まずは「〜を作成して」と単純依頼からスタート</p>
+        <p><strong>中級者</strong>：出力形式やトーンを細かく指定してみる</p>
+        <p><strong>上級者</strong>：複数ステップのプロンプトチェーンを構築</p>
+      </div>
+
+      <div class="back-to-top">
+        <a href="#" onclick="window.scrollTo({ top: 0, behavior: 'smooth' })">▲ ページの先頭へ戻る</a>
+      </div>
+    </main>
+
+    <footer>
+      <p>
+        <a href="https://atsu3sh1n1.github.io/yumikou/privacy" target="_blank">プライバシーポリシー</a> | 
+        <a href="https://atsu3sh1n1.github.io/yumikou/terms" target="_blank">利用規約</a>
+      </p>
+      <p>&copy; 2025 <a href="https://atsu3sh1n1.github.io/yumikou/" target="_blank">有限会社弓工</a> All rights reserved.</p>
+    </footer>
+  </div>
 </body>
 
 </html>
