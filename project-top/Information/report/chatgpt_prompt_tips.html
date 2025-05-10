@@ -12,8 +12,8 @@
   <!-- Open Graph (SNS用) -->
   <meta property="og:title" content="【実践版】ChatGPTプロンプト活用術10選" />
   <meta property="og:description" content="仕事が10倍楽になるChatGPTの具体的な使い方。プロンプト例付きで即実践可能！" />
-  <meta property="og:image" content="https://atsu3sh1n1.github.io/yumikou/images/prompt-guide.webp" />
-  <meta property="og:url" content="https://atsu3sh1n1.github.io/yumikou/chatgpt-prompt-guide.html" />
+  <meta property="og:image" content="https://example.com/images/prompt-guide.webp" />
+  <meta property="og:url" content="https://example.com/chatgpt-prompt-guide.html" />
   <meta property="og:type" content="article" />
   <meta property="og:site_name" content="AI活用研究所" />
 
@@ -21,128 +21,154 @@
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="【実践版】ChatGPTプロンプト活用術10選" />
   <meta name="twitter:description" content="明日から使えるChatGPTプロンプト具体例集" />
-  <meta name="twitter:image" content="https://atsu3sh1n1.github.io/yumikou/images/prompt-guide.webp" />
+  <meta name="twitter:image" content="https://example.com/images/prompt-guide.webp" />
 
   <!-- Favicon -->
   <link rel="icon" href="images/icon.webp" />
 
   <!-- FontとCSS -->
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
   <style>
+    :root {
+      --primary-color: #FFA500;
+      --secondary-color: #6ff5ff;
+      --bg-color: #111;
+      --card-bg: #1e1e1e;
+      --text-color: #f9f9f9;
+      --light-text: #ccc;
+      --border-radius: 12px;
+      --box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+      --max-width: 800px;
+      --mobile-breakpoint: 768px;
+    }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
     html {
       font-size: 18px;
+      -webkit-text-size-adjust: 100%;
     }
 
     body {
-      margin: 0;
-      font-family: 'Roboto', sans-serif;
-      background-color: #111;
-      color: #f9f9f9;
-      min-height: 100vh;
+      font-family: 'Noto Sans JP', 'Roboto', sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-color);
       line-height: 1.6;
+      min-height: 100vh;
     }
 
     .wrapper {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 20px;
+      min-height: 100vh;
       display: flex;
       flex-direction: column;
-      min-height: 100vh;
     }
 
-    .main {
-      flex: 1;
-      padding: 20px;
-      max-width: 800px;
-      margin: 0 auto;
+    header {
+      margin-bottom: 30px;
     }
 
     h1 {
-      text-align: center;
-      color: #FFA500;
-      margin: 20px 0 10px;
+      color: var(--primary-color);
       font-size: 2.2rem;
+      margin: 15px 0 10px;
+      line-height: 1.3;
+      text-align: center;
     }
 
     h2 {
-      color: #FFA500;
-      font-size: 1.5rem;
-      margin-top: 30px;
+      color: var(--primary-color);
+      font-size: 1.6rem;
+      margin-top: 25px;
+      line-height: 1.3;
     }
 
     h3 {
-      text-align: center;
       font-size: 1.2rem;
-      margin: 0 0 20px 0;
+      margin: 0 0 15px 0;
       color: #ded7d7;
+      text-align: center;
     }
 
     .card {
-      background-color: #1e1e1e;
-      border-radius: 16px;
-      padding: 20px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-      transition: transform 0.3s;
-      margin-bottom: 24px;
-      margin: 24px auto;
-      /* 左右中央揃えにする */
-      width: 90%;
-      /* 横幅を調整：例90% */
-      max-width: 600px;
-      /* 最大幅を設定 */
+      background-color: var(--card-bg);
+      border-radius: var(--border-radius);
+      padding: 25px;
+      box-shadow: var(--box-shadow);
+      margin-bottom: 25px;
+      width: 100%;
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
 
     .card:hover {
       transform: translateY(-5px);
-      background-color: #2a2a2a;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
     }
 
     p {
       line-height: 1.6;
-      font-size: 0.95rem;
-      color: #ccc;
+      font-size: 1rem;
+      color: var(--light-text);
       margin: 10px 0;
     }
 
-    ul {
-      padding-left: 20px;
+    ul, ol {
+      padding-left: 25px;
+      margin: 15px 0;
     }
 
     li {
       margin-bottom: 10px;
-      color: #ccc;
+      color: var(--light-text);
     }
 
     a {
       color: #00a9e6;
       text-decoration: none;
+      transition: color 0.3s;
     }
 
     a:hover {
+      color: var(--secondary-color);
       text-decoration: underline;
     }
 
     .cta-button {
-      background-color: #FFA500;
+      background-color: var(--primary-color);
       color: #111;
       border: none;
-      padding: 10px 20px;
+      padding: 12px 25px;
       border-radius: 8px;
       font-weight: bold;
       cursor: pointer;
-      transition: background-color 0.3s;
+      transition: all 0.3s;
       text-decoration: none;
       display: inline-block;
-      margin-top: 16px;
+      margin: 20px auto;
+      text-align: center;
+      width: auto;
+      max-width: 300px;
     }
 
     .cta-button:hover {
-      background-color: #6ff5ff;
+      background-color: var(--secondary-color);
       text-decoration: none;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     }
 
     footer {
       text-align: center;
-      padding: 1rem 0;
+      padding: 1.5rem 0;
       margin-top: 40px;
+      font-size: 0.9rem;
     }
 
     footer p {
@@ -150,53 +176,45 @@
       font-size: 0.9rem;
     }
 
-    footer a {
-      color: #888;
-    }
-
-    footer a:hover {
-      color: #fff;
-    }
-
-    .back-to-top {
-      display: inline-block;
-      margin-bottom: 20px;
-    }
-
     /* プロンプト表示用スタイル */
     .prompt-box {
       background-color: #2a2a2a;
-      border-left: 4px solid #FFA500;
+      border-left: 4px solid var(--primary-color);
       padding: 15px;
       margin: 15px 0;
       border-radius: 0 8px 8px 0;
       font-family: 'Courier New', monospace;
       white-space: pre-wrap;
       word-break: break-word;
+      font-size: 0.95rem;
+      overflow-x: auto;
+      line-height: 1.5;
     }
 
     .tip {
       background-color: rgba(222, 174, 16, 0.1);
-      padding: 12px;
+      padding: 15px;
       border-radius: 8px;
-      margin: 10px 0;
-      font-size: 0.9rem;
+      margin: 15px 0;
+      font-size: 0.95rem;
+      border-left: 3px solid var(--primary-color);
     }
 
     .tip:before {
       content: "💡 応用テク";
       font-weight: bold;
-      color: #FFA500;
+      color: var(--primary-color);
       display: block;
-      margin-bottom: 5px;
+      margin-bottom: 8px;
+      font-size: 1rem;
     }
 
     .difficulty {
       display: inline-block;
-      padding: 3px 8px;
+      padding: 4px 10px;
       border-radius: 12px;
-      font-size: 0.8rem;
-      margin-right: 8px;
+      font-size: 0.85rem;
+      margin-right: 10px;
     }
 
     .beginner {
@@ -206,7 +224,7 @@
 
     .intermediate {
       background-color: rgba(255, 165, 0, 0.2);
-      color: #FFA500;
+      color: var(--primary-color);
     }
 
     .advanced {
@@ -214,345 +232,359 @@
       color: #ff6347;
     }
 
-    .prompt-box {
-      margin-left: 0 !important;
+    .subtitle {
+      color: var(--light-text);
+      font-size: 1.05rem;
+      margin-bottom: 20px;
+      text-align: center;
     }
 
-    @media (max-width: 600px) {
+    .back-to-top {
+      display: block;
+      text-align: center;
+      margin: 25px 0;
+      font-size: 0.95rem;
+      padding: 10px;
+    }
+
+    /* レスポンシブデザイン */
+    @media (max-width: 768px) {
+      html {
+        font-size: 16px;
+      }
+      
+      .wrapper {
+        padding: 15px;
+      }
+      
       h1 {
-        font-size: 2rem;
+        font-size: 1.8rem;
       }
-
+      
       h2 {
-        font-size: 1.2rem;
+        font-size: 1.4rem;
       }
+      
+      h3 {
+        font-size: 1.1rem;
+      }
+      
+      .card {
+        padding: 20px;
+      }
+      
+      .prompt-box {
+        font-size: 0.9rem;
+        padding: 12px;
+      }
+      
+      .tip {
+        padding: 12px;
+      }
+    }
 
-      .card h2 {
+    @media (max-width: 480px) {
+      html {
+        font-size: 15px;
+      }
+      
+      h1 {
+        font-size: 1.6rem;
+      }
+      
+      h2 {
         font-size: 1.3rem;
       }
-
-      .card h3 {
-        font-size: 1rem;
+      
+      .card {
+        padding: 18px;
       }
+      
+      ul, ol {
+        padding-left: 20px;
+      }
+      
+      .cta-button {
+        width: 100%;
+        padding: 12px;
+      }
+    }
 
+    /* PC向けの追加スタイル */
+    @media (min-width: 769px) {
+      .card {
+        margin: 25px auto;
+      }
+      
+      .prompt-box {
+        font-size: 0.95rem;
+      }
+      
+      .tip {
+        margin: 20px 0;
+      }
     }
   </style>
 </head>
 
 <body>
-
-   <div class="wrapper">
-    <main class="main">
+  <div class="wrapper">
+    <header>
       <h1>ChatGPT プロンプト活用術10選</h1>
       <h3>〜具体的なプロンプト例と応用テクで、AI活用の効果を最大化する〜</h3>
+    </header>
 
-    
-<div class="card">
-  <h2>1. ビジネスメールの即時生成</h2>
-  <p class="subtitle">定型メールを瞬時に作成する3ステップ手法</p>
+    <main>
+      <div class="card">
+        <h2>1. ビジネスメールの即時生成</h2>
+        <p class="subtitle">定型メールを瞬時に作成する3ステップ手法</p>
 
-  <div class="section">
-    <h3>▽ 基本手順</h3>
-    <div class="content-box">
-      <h4>1. 要件を箇条書きで整理</h4>
-      <ul>
-        <li>件名のキーワード（例：発注依頼・納期確認・見積依頼）</li>
-        <li>必須要素（品名・数量・希望納期・金額など）</li>
-        <li>求めるトーン（丁寧・簡潔・確認重視など）</li>
-      </ul>
+        <h3>▽ 基本手順</h3>
+        <ul>
+          <li><strong>要件を箇条書きで整理</strong><br>件名のキーワード・必須要素・求めるトーン</li>
+          <li><strong>ChatGPTに入力する基本フォーマット</strong></li>
+        </ul>
 
-      <h4>2. ChatGPTに入力する基本フォーマット</h4>
-      <div class="code-block">
-        【件名】[ここに件名のキーワード]<br>
-        【要件】<br>
-        - 宛先：[取引先名/部署名]<br>
-        - 目的：[用件を簡潔に]<br>
-        - 具体的なデータ：[品名・数量・希望納期など]<br>
-        - 特記事項：[納品先・支払い条件など]<br>
-        - 文調：[丁寧/簡潔/依頼口調など]<br>
-        - 文字数目安：[○字程度]
+        <div class="prompt-box">
+件名：アルミ部品加工の御見積依頼
+【要件】
+- 宛先：有限会社弓工 営業部 ご担当者様
+- 発信者：株式会社コウセイ 技術購買課 山田
+- 対象品目：アルミブラケット（型番：BR-550）
+- 数量：ロット100個／200個の2パターン
+- 希望納期：2025年6月15日まで
+- 特記事項：図面（PDF）添付予定
+- 文調：丁寧で要点を簡潔に
+- 文字数：400字程度
+        </div>
+
+        <div class="tip">
+          <strong>応用テク</strong><br>
+          • 「このフォーマットでテンプレートを作成」でストック可能<br>
+          • 「3パターン作成（簡潔版・詳細版・英語版）」で比較検討<br>
+          • 過去メールを学習させ自社フォーマットに準拠
+        </div>
+
+        <h3>▽ 注意点</h3>
+        <ul>
+          <li>機密情報は含めない（金額・個人情報など）</li>
+          <li>生成後は必ず内容を確認</li>
+          <li>謝罪文では責任所在が曖昧にならないよう注意</li>
+        </ul>
       </div>
 
-      <h4>3. 出力結果のブラッシュアップ</h4>
-      <ul>
-        <li>業界用語の確認（例：「ロット」「納品」「御見積」など）</li>
-        <li>数量・納期・金額の整合性確認</li>
-        <li>「明確さ」や「読みやすさ」重視で微調整</li>
-      </ul>
-    </div>
-  </div>
-
-<div class="section">
-  <h3>▽ 実践例：見積依頼メール</h3>
-  <div class="example-box">
-
-    <div class="prompt-box">
-      件名：アルミ部品加工の御見積依頼<br>
-      【要件】<br>
-      - 宛先：有限会社弓工 営業部 ご担当者様<br>
-      - 発信者：株式会社コウセイ 技術購買課 山田<br>
-      - 対象品目：アルミブラケット（型番：BR-550） 加工および表面処理含む<br>
-      - 数量：ロット100個／200個の2パターンで希望<br>
-      - 希望納期：2025年6月15日までに納品可能か<br>
-      - 特記事項：図面（PDF）添付予定・納期優先・支払い条件は従来通り<br>
-      - 文調：丁寧で要点を簡潔にまとめた依頼文<br>
-      - 文字数：400字程度
-    </div>
-  </div>
-</div>
-
-  <div class="section">
-    <div class="tip">
-    <div class="tip-box">
-      <div class="tip-item">
-        <strong>1. テンプレート化</strong>
-        <p>「このフォーマットでテンプレートを作成」と依頼すれば、よく使うメール型をストック可能</p>
+      <div class="card">
+        <h2>2. Excel関数の自然言語変換</h2>
+        <p>関数が苦手でも日本語で質問するだけで解決。</p>
+        <div class="prompt-box">
+以下の条件を満たすExcel関数を教えてください：
+- A列にテストの点数(0-100点)
+- B列に「合格」「不合格」を表示
+- 合格基準：80点以上は「合格」
+- さらにC列にAランク/Bランク/Cランクを表示
+- 90点以上：Aランク
+- 70-89点：Bランク
+- 69点以下：Cランク
+        </div>
+        <div class="tip">
+          「この関数をGoogleスプレッドシート用に変換して」と追加すれば、他のプラットフォーム向けにも対応可能。
+        </div>
       </div>
-      
-      <div class="tip-item">
-        <strong>2. バリエーション生成</strong>
-        <p>「3パターン作成（簡潔版・詳細版・英語版）」と指定すれば比較検討可能</p>
+
+      <div class="card">
+        <h2>3. 議事録の自動生成＆要約</h2>
+        <p>雑多なメモから構造化された議事録を作成。</p>
+        <div class="prompt-box">
+以下の会議メモを正式な議事録形式に整理：
+【プロジェクト進捗会議 5/15】
+- 参加者：山田、佐藤、鈴木
+- 前回からの進捗：デザイン案完成
+- 課題：開発リソース不足
+- 決定事項：パートナー企業に外注
+- 次回MTG：5/22 14:00
+
+出力形式：
+1. 会議概要
+2. 決定事項（★マーク）
+3. アクションアイテム
+4. 次回予定
+        </div>
+        <div class="tip">
+          「英語版も作成」で多言語対応可能。音声文字起こしデータの整理にも最適。
+        </div>
       </div>
-      
-      <div class="tip-item">
-        <strong>3. 過去メールを学習</strong>
-        <p>既存のメールを読み込ませ「この文体で新規作成」と依頼すれば自社フォーマットに準拠</p>
+
+      <div class="card">
+        <h2>4. マクロ/VBAコード生成</h2>
+        <p>プログラミング知識不要で業務自動化。</p>
+        <div class="prompt-box">
+以下の条件でExcelマクロを作成：
+1. 「入力」シートのA列（名前）とB列（売上）処理
+2. 売上100万円以上の顧客を「優良顧客」シートに転記
+3. 転記項目：名前、売上、日付（今日の日付自動入力）
+4. 転記時に元データにチェックマーク
+5. ボタンクリックで実行可能
+6. 重複転記防止機能付き
+        </div>
+        <div class="tip">
+          「エラー処理を追加」で堅牢なコードに。PythonやGoogle Apps Scriptへの変換も可能。
+        </div>
       </div>
-    </div>
-  </div>
-  </div>
 
-  <div class="section">
-    <h3>▽ 注意点</h3>
-    <div class="caution-box">
-      <ul>
-        <li>機密情報は含めない（実際の金額・個人情報など）</li>
-        <li>生成後は必ず内容を確認（AIは事実確認ができない）</li>
-        <li>特に謝罪文では責任所在が曖昧にならないよう注意</li>
-      </ul>
-    </div>
-  </div>
-</div>
+      <div class="card">
+        <h2>5. 市場分析レポート作成</h2>
+        <p>生データから洞察のある分析レポートを自動生成。</p>
+        <div class="prompt-box">
+以下の売上データをA4サイズ1枚のビジネスレポート形式でまとめて：
+【2024年1-3月期 地域別売上】
+- 関東：¥12,450,000（前年比+8%）
+- 関西：¥8,760,000（前年比-2%）
+- 中部：¥6,320,000（前年比+15%）
 
-  <div class="card">
-    <h2>2. Excel関数の自然言語変換</h2>
-    <p>関数が苦手でも日本語で質問するだけで解決。</p>
-    <div class="prompt-box">
-      以下の条件を満たすExcel関数を教えてください：
-      - A列にテストの点数(0-100点)がある
-      - B列に「合格」「不合格」を表示
-      - 合格基準：80点以上は「合格」、それ未満は「不合格」
-      - さらにC列にAランク/Bランク/Cランクを表示
-      - 90点以上：Aランク
-      - 70-89点：Bランク
-      - 69点以下：Cランク
-    </div>
-    <div class="tip">
-      「この関数をGoogleスプレッドシート用に変換して」と追加すれば、他のプラットフォーム向けにも対応可能。
-    </div>
-  </div>
+含める内容：
+1. 総括（成長地域と課題地域）
+2. グラフ（棒グラフと円グラフのテキスト表現）
+3. 次四半期への提言
+4. 注目すべき数値3選
+        </div>
+        <div class="tip">
+          「PowerPoint用スライド形式で」でプレゼン資料に。業界の専門用語も反映可能。
+        </div>
+      </div>
 
-  <div class="card">
-    <h2>3. 議事録の自動生成＆要約</h2>
-    <p>雑多なメモから構造化された議事録を作成。</p>
-    <div class="prompt-box">
-      以下の会議メモを正式な議事録形式に整理してください：
-      【プロジェクト進捗会議 5/15】
-      - 参加者：山田、佐藤、鈴木
-      - 前回からの進捗：デザイン案完成、クライアントからOK
-      - 課題：開発リソース不足、納期厳守が困難
-      - 決定事項：パートナー企業に外注、予算+15%
-      - 次回MTG：5/22 14:00
+      <div class="card">
+        <h2>6. 社内連絡文の自動生成</h2>
+        <p>定型連絡から緊急連絡まで、状況に合わせた文面を即時作成。</p>
+        <div class="prompt-box">
+以下の条件で社内連絡文を作成：
+【件名】社内ネットワークメンテナンスのご連絡
+【本文要件】
+- 日時：5月20日(月) 22:00～24:00
+- 影響範囲：全社ネットワークが10分程度切断
+- 対応：作業時間中のシステム利用を控える
+- 緊急連絡先：情報システム部 内線1234
+- トーン：丁寧だが簡潔な事務連絡
+- 文字数：400字程度
+        </div>
+        <div class="tip">
+          「より簡潔に」「部門別にカスタマイズ」で調整可能。英語版やPDF形式での出力も可。
+        </div>
+      </div>
 
-      出力形式：
-      1. 会議概要
-      2. 決定事項（★マーク）
-      3. アクションアイテム（担当者と期限）
-      4. 次回予定
-    </div>
-    <div class="tip">
-      「英語版も作成して」と依頼すれば多言語対応可能。音声文字起こしデータの整理にも最適。
-    </div>
-  </div>
+      <div class="card">
+        <h2>7. プレゼン資料の骨子作成</h2>
+        <p>アイデアからすぐにプレゼン構成が完成。</p>
+        <div class="prompt-box">
+「AIを活用した事務作業の効率化」で10分間プレゼン資料の構成を作成
 
-  <div class="card">
-    <h2>4. マクロ/VBAコード生成</h2>
-    <p>プログラミング知識不要で業務自動化。</p>
-    <div class="prompt-box">
-      以下の条件でExcelマクロを作成してください：
-      1. 「入力」シートのA列（名前）とB列（売上）データを処理
-      2. 売上が100万円以上の顧客を「優良顧客」シートに転記
-      3. 転記項目：名前、売上、日付（今日の日付自動入力）
-      4. 転記時に元データにチェックマークを付ける
-      5. ボタンクリックで実行できるようにする
-      6. 重複転記防止機能付き
-    </div>
-    <div class="tip">
-      「エラー処理を追加して」と指定すれば堅牢なコードに。PythonやGoogle Apps Scriptへの変換も可能。
-    </div>
-  </div>
+含める内容：
+1. 現在の事務作業の課題
+2. AI活用の具体的なメリット（3事例）
+3. 導入ステップ（3段階）
+4. 想定される懸念と解決策
+5. 成功事例（架空可）
 
-  <div class="card">
-    <h2>5. 市場分析レポート作成</h2>
-    <p>生データから洞察のある分析レポートを自動生成。</p>
-    <div class="prompt-box">
-      以下の売上データを分析し、A4サイズ1枚のビジネスレポート形式でまとめてください：
-      【2024年1-3月期 地域別売上】
-      - 関東：¥12,450,000（前年比+8%）
-      - 関西：¥8,760,000（前年比-2%）
-      - 中部：¥6,320,000（前年比+15%）
-      - 九州：¥3,890,000（前年比+5%）
+各スライドのタイトルと要点を箇条書きで
+        </div>
+        <div class="tip">
+          「各スライドの注釈として話すべきポイントを追加」で詳細な資料に。
+        </div>
+      </div>
 
-      含める内容：
-      1. 総括（最大の成長地域と課題地域）
-      2. グラフ（棒グラフと円グラフのテキスト表現）
-      3. 次四半期への提言
-      4. 注目すべき数値3選
-    </div>
-    <div class="tip">
-      「PowerPoint用のスライド形式で」と指定すればプレゼン資料に。特定業界の専門用語も反映可能。
-    </div>
-  </div>
+      <div class="card">
+        <h2>8. カスタマーサポート対応</h2>
+        <p>クレーム対応からFAQ作成まで自動化。</p>
+        <div class="prompt-box">
+以下の顧客クレームに対する返信文を作成：
+【顧客メール内容】
+「先週注文した商品（注文番号#12345）がまだ届きません。約束の納期は3営業日以内でしたが、既に5営業日経過」
 
-  <div class="card">
-    <h2>6. 社内連絡文の自動生成</h2>
-    <p>定型連絡から緊急連絡まで、状況に合わせた文面を即時作成。</p>
-    <div class="prompt-box">
-      以下の条件で社内連絡文を作成してください：
-      【件名】社内ネットワークメンテナンスのご連絡
-      【本文要件】
-      - 日時：5月20日(月) 22:00～24:00
-      - 影響範囲：全社ネットワークが10分程度切断
-      - 対応：作業時間中のシステム利用を控える
-      - 緊急連絡先：情報システム部 内線1234
-      - トーン：丁寧だが簡潔な事務連絡
-      - 追加情報：メンテナンス内容（サーバー更新）
-      - 注意喚起：作業前にデータ保存を推奨
-      - 文字数：400字程度
-    </div>
-    <div class="tip">
-      「より簡潔に」「部門別にカスタマイズ」などの調整が可能。英語版やPDF形式での出力も依頼可。過去の類似連絡から文体を統一することもできます。
-    </div>
-  </div>
+返信条件：
+- 謝罪と原因説明（物流遅延）
+- 現在の状況（追跡番号付きで発送済み）
+- 補償案（次回10%割引クーポン）
+- 再発防止策
+- 丁寧で誠実なトーン
+        </div>
+        <div class="tip">
+          「英語版も作成」「より簡潔なバージョン」など多様なバリエーション生成可能。
+        </div>
+      </div>
 
-  <div class="card">
-    <h2>7. プレゼン資料の骨子作成</h2>
-    <p>アイデアからすぐにプレゼン構成が完成。</p>
-    <div class="prompt-box">
-      「AIを活用した事務作業の効率化」というテーマで、10分間のプレゼン資料の構成を作成してください。
+      <div class="card">
+        <h2>9. チェックリスト自動作成</h2>
+        <p>作業の抜け漏れを防ぐ最適なリストを生成。</p>
+        <div class="prompt-box">
+「新入社員の初日オリエンテーション」のチェックリスト作成
 
-      含める内容：
-      1. 現在の事務作業の課題（統計データ引用）
-      2. AI活用の具体的なメリット（3事例）
-      3. 導入ステップ（3段階）
-      4. 想定される懸念とその解決策
-      5. 成功事例（架空可）
+項目：
+- 事前準備（1週間前〜前日）
+- 当日の流れ（午前・午後別）
+- 必要な書類と備品
+- 導入すべき社内システム
+- 1週間後のフォロー項目
 
-      各スライドのタイトルと、話す内容の要点を箇条書きで。
-    </div>
-    <div class="tip">
-      「各スライドの注釈として話すべきポイントを追加」でより詳細な資料に。PowerPointのデザイン提案も可能。
-    </div>
-  </div>
+形式：
+- 表形式（項目、担当者、期限、備考）
+- 優先順位付き（★マーク）
+        </div>
+        <div class="tip">
+          「Googleスプレッドシート形式で」「完了欄付き」など用途に合わせてカスタマイズ可能。
+        </div>
+      </div>
 
-  <div class="card">
-    <h2>8. カスタマーサポート対応</h2>
-    <p>クレーム対応からFAQ作成まで自動化。</p>
-    <div class="prompt-box">
-      以下の顧客クレームに対する適切な返信文を作成してください：
-      【顧客メール内容】
-      「先週注文した商品（注文番号#12345）がまだ届きません。
-      約束の納期は3営業日以内でしたが、既に5営業日経過しています。
-      至急状況を確認してほしい。」
+      <div class="card">
+        <h2>10. データ分析＆可視化提案</h2>
+        <p>生データから洞察と適切な可視化方法を提案。</p>
+        <div class="prompt-box">
+以下の売上データを分析し、効果的な可視化方法を提案：
+【2023年 月別商品別売上（単位：万円）】
+月,商品A,商品B,商品C
+1月,120,85,65
+2月,135,78,72
+...
+12月,210,95,110
 
-      返信条件：
-      - 謝罪と原因説明（物流遅延）
-      - 現在の状況（追跡番号付きで発送済み）
-      - 補償案（次回10%割引クーポン）
-      - 再発防止策
-      - 丁寧で誠実なトーン
-    </div>
-    <div class="tip">
-      「英語版も作成」「より簡潔なバージョン」など多様なバリエーションを生成可能。過去の対応例から学習させることも可能。
-    </div>
-  </div>
+求める出力：
+1. 主要なトレンドの指摘（3点）
+2. 推奨グラフタイプとその理由
+3. 注目すべき異常値
+4. 次年度への提言（2点）
+        </div>
+        <div class="tip">
+          「Pythonコード付きで」「Tableau用に」と指定すれば分析コードも自動生成。
+        </div>
+      </div>
 
-  <div class="card">
-    <h2>9. チェックリスト自動作成</h2>
-    <p>作業の抜け漏れを防ぐ最適なリストを生成。</p>
-    <div class="prompt-box">
-      「新入社員の初日オリエンテーション」のチェックリストを作成してください。
+      <div class="card">
+        <h2>プロンプト作成の3大原則</h2>
+        <ol>
+          <li><strong>具体的である</strong> - 「良い」ではなく「80点以上」と数値化</li>
+          <li><strong>出力形式を指定</strong> - 箇条書き、表形式、文字数など</li>
+          <li><strong>文脈を提供</strong> - 対象読者や使用目的を明記</li>
+        </ol>
+        <a href="https://openai.com/ja-JP/chatgpt/overview/" target="_blank" class="cta-button">ChatGPTを使ってみる</a>
+      </div>
 
-      項目：
-      - 事前準備（1週間前〜前日）
-      - 当日の流れ（午前・午後別）
-      - 必要な書類と備品
-      - 導入すべき社内システム
-      - 1週間後のフォロー項目
+      <div class="card">
+        <h2>レベル別おすすめ学習法</h2>
+        <p><strong>初級者</strong>：まずは「〜を作成して」と単純依頼からスタート</p>
+        <p><strong>中級者</strong>：出力形式やトーンを細かく指定してみる</p>
+        <p><strong>上級者</strong>：複数ステップのプロンプトチェーンを構築</p>
+      </div>
 
-      形式：
-      - 表形式（項目、担当者、期限、備考）
-      - 優先順位付き（★マーク）
-    </div>
-    <div class="tip">
-      「Googleスプレッドシート形式で」「完了欄付き」など用途に合わせてカスタマイズ可能。既存リストの改善提案も可。
-    </div>
-  </div>
+      <div class="back-to-top">
+        <a href="#" onclick="window.scrollTo({ top: 0, behavior: 'smooth' })">▲ ページの先頭へ戻る</a>
+      </div>
+    </main>
 
-  <div class="card">
-    <h2>10. データ分析＆可視化提案</h2>
-    <p>生データから洞察と適切な可視化方法を提案。</p>
-    <div class="prompt-box">
-      以下の売上データを分析し、最も効果的な可視化方法を提案してください：
-      【2023年 月別商品別売上（単位：万円）】
-      月,商品A,商品B,商品C
-      1月,120,85,65
-      2月,135,78,72
-      ...
-      12月,210,95,110
-
-      求める出力：
-      1. 主要なトレンドの指摘（3点）
-      2. 推奨グラフタイプとその理由
-      3. 注目すべき異常値
-      4. 次年度への提言（2点）
-    </div>
-    <div class="tip">
-      「Pythonコード付きで」「Tableau用に」と指定すれば分析コードも自動生成。予測モデルの構築も可能。
-    </div>
-  </div>
-
-  <div class="card">
-    <h2>プロンプト作成の3大原則</h2>
-    <ol>
-      <li><strong>具体的である</strong> - 「良い」ではなく「80点以上」と数値化</li>
-      <li><strong>出力形式を指定</strong> - 箇条書き、表形式、文字数など</li>
-      <li><strong>文脈を提供</strong> - 対象読者や使用目的を明記</li>
-    </ol>
-    <p>これらの原則を守れば、ChatGPTの出力品質が劇的に向上します。</p>
-    <a href="https://openai.com/ja-JP/chatgpt/overview/" target="_blank" class="cta-button">ChatGPTを使ってみる</a>
-  </div>
-
-  <div class="card">
-    <h2>レベル別おすすめ学習法</h2>
-    <p><strong>初級者</strong>：まずは「〜を作成して」と単純依頼からスタート</p>
-    <p><strong>中級者</strong>：出力形式やトーンを細かく指定してみる</p>
-    <p><strong>上級者</strong>：複数ステップのプロンプトチェーンを構築</p>
-  </div>
-
-  
-  </main>
-
-  <footer>
-    <div class="back-to-top">
-    <a href="#" onclick="window.scrollTo({ top: 0, behavior: 'smooth' })">▲ ページの先頭へ戻る</a>
-  </div>
-    <p>
-      <a href="https://atsu3sh1n1.github.io/yumikou/privacy" target="_blank">プライバシーポリシー</a> |
-      <a href="https://atsu3sh1n1.github.io/yumikou/terms" target="_blank">利用規約</a>
-    </p>
-    <p>&copy; 2025 <a href="https://atsu3sh1n1.github.io/yumikou/" target="_blank">有限会社弓工</a> All rights reserved.</p>
-  </footer>
+    <footer>
+      <p>
+        <a href="privacy" target="_blank">プライバシーポリシー</a> |
+        <a href="terms" target="_blank">利用規約</a>
+      </p>
+      <p>&copy; 2025 有限会社弓工 All rights reserved.</p>
+    </footer>
   </div>
 </body>
 

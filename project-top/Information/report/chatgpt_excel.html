@@ -31,110 +31,146 @@
   <!-- FontとCSS -->
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
   <style>
-    body {
+    :root {
+      --primary-color: #FFA500;
+      --secondary-color: #6ff5ff;
+      --bg-color: #111;
+      --card-bg: #1e1e1e;
+      --text-color: #f9f9f9;
+      --light-text: #ccc;
+      --border-radius: 12px;
+      --box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+      --max-width: 800px;
+      --mobile-breakpoint: 768px;
+    }
+    
+    * {
+      box-sizing: border-box;
       margin: 0;
-      font-family: 'Roboto', sans-serif;
-      background-color: #111;
-      color: #f9f9f9;
-      min-height: 100vh;
+      padding: 0;
+    }
+    
+    html {
+      font-size: 18px;
+      -webkit-text-size-adjust: 100%;
+    }
+
+    body {
+      font-family: 'Noto Sans JP', 'Roboto', sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-color);
       line-height: 1.6;
+      min-height: 100vh;
     }
 
     .wrapper {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 20px;
+      min-height: 100vh;
       display: flex;
       flex-direction: column;
-      min-height: 100vh;
     }
 
-    .main {
-      flex: 1;
-      padding: 20px;
-      max-width: 800px;
-      margin: 0 auto;
+    header {
+      margin-bottom: 30px;
     }
 
     h1 {
-      text-align: center;
-      color: #FFA500;
-      margin: 20px 0 10px;
+      color: var(--primary-color);
       font-size: 2.2rem;
+      margin: 15px 0 10px;
+      line-height: 1.3;
+      text-align: center;
     }
 
     h2 {
-      color: #FFA500;
-      font-size: 1.5rem;
-      margin-top: 30px;
+      color: var(--primary-color);
+      font-size: 1.6rem;
+      margin-top: 25px;
+      line-height: 1.3;
     }
 
     h3 {
-      text-align: center;
       font-size: 1.2rem;
-      margin: 0 0 20px 0;
+      margin: 0 0 15px 0;
       color: #ded7d7;
+      text-align: center;
     }
 
     .card {
-      background-color: #1e1e1e;
-      border-radius: 16px;
-      padding: 20px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-      transition: transform 0.3s;
-      margin-bottom: 24px;
+      background-color: var(--card-bg);
+      border-radius: var(--border-radius);
+      padding: 25px;
+      box-shadow: var(--box-shadow);
+      margin-bottom: 25px;
+      width: 100%;
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
 
     .card:hover {
       transform: translateY(-5px);
-      background-color: #2a2a2a;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
     }
 
     p {
       line-height: 1.6;
-      font-size: 1.2rem;
-      color: #ccc;
+      font-size: 1rem;
+      color: var(--light-text);
       margin: 10px 0;
     }
 
-    ul {
-      padding-left: 20px;
+    ul, ol {
+      padding-left: 25px;
+      margin: 15px 0;
     }
 
     li {
       margin-bottom: 10px;
-      color: #ccc;
+      color: var(--light-text);
     }
 
     a {
       color: #00a9e6;
       text-decoration: none;
+      transition: color 0.3s;
     }
 
     a:hover {
+      color: var(--secondary-color);
       text-decoration: underline;
     }
 
     .cta-button {
-      background-color: #FFA500;
+      background-color: var(--primary-color);
       color: #111;
       border: none;
-      padding: 10px 20px;
+      padding: 12px 25px;
       border-radius: 8px;
       font-weight: bold;
       cursor: pointer;
-      transition: background-color 0.3s;
+      transition: all 0.3s;
       text-decoration: none;
       display: inline-block;
-      margin-top: 16px;
+      margin: 20px auto;
+      text-align: center;
+      width: auto;
+      max-width: 300px;
     }
 
     .cta-button:hover {
-      background-color: #6ff5ff;
+      background-color: var(--secondary-color);
       text-decoration: none;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     }
 
     footer {
       text-align: center;
-      padding: 1rem 0;
+      padding: 1.5rem 0;
       margin-top: 40px;
+      font-size: 0.9rem;
     }
 
     footer p {
@@ -142,65 +178,153 @@
       font-size: 0.9rem;
     }
 
-    footer a {
-      color: #888;
+    /* プロンプト表示用スタイル */
+    .prompt-box {
+      background-color: #2a2a2a;
+      border-left: 4px solid var(--primary-color);
+      padding: 15px;
+      margin: 15px 0;
+      border-radius: 0 8px 8px 0;
+      font-family: 'Courier New', monospace;
+      white-space: pre-wrap;
+      word-break: break-word;
+      font-size: 0.95rem;
+      overflow-x: auto;
+      line-height: 1.5;
     }
 
-    footer a:hover {
-      color: #fff;
+    .tip {
+      background-color: rgba(222, 174, 16, 0.1);
+      padding: 15px;
+      border-radius: 8px;
+      margin: 15px 0;
+      font-size: 0.95rem;
+      border-left: 3px solid var(--primary-color);
+    }
+
+    .tip:before {
+      content: "💡 応用テク";
+      font-weight: bold;
+      color: var(--primary-color);
+      display: block;
+      margin-bottom: 8px;
+      font-size: 1rem;
+    }
+
+    .difficulty {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 0.85rem;
+      margin-right: 10px;
+    }
+
+    .beginner {
+      background-color: rgba(0, 128, 0, 0.2);
+      color: #7cfc00;
+    }
+
+    .intermediate {
+      background-color: rgba(255, 165, 0, 0.2);
+      color: var(--primary-color);
+    }
+
+    .advanced {
+      background-color: rgba(255, 0, 0, 0.2);
+      color: #ff6347;
+    }
+
+    .subtitle {
+      color: var(--light-text);
+      font-size: 1.05rem;
+      margin-bottom: 20px;
+      text-align: center;
     }
 
     .back-to-top {
-      display: inline-block;
-      margin-bottom: 20px;
+      display: block;
+      text-align: center;
+      margin: 25px 0;
+      font-size: 0.95rem;
+      padding: 10px;
     }
-    
-    .example {
-      background-color: #2d2d2d;
-      border-left: 4px solid #FFA500;
-      padding: 15px;
-      margin: 15px 0;
-      border-radius: 0 8px 8px 0;
+
+    /* レスポンシブデザイン */
+    @media (max-width: 768px) {
+      html {
+        font-size: 16px;
+      }
+      
+      .wrapper {
+        padding: 15px;
+      }
+      
+      h1 {
+        font-size: 1.8rem;
+      }
+      
+      h2 {
+        font-size: 1.4rem;
+      }
+      
+      h3 {
+        font-size: 1.1rem;
+      }
+      
+      .card {
+        padding: 20px;
+      }
+      
+      .prompt-box {
+        font-size: 0.9rem;
+        padding: 12px;
+      }
+      
+      .tip {
+        padding: 12px;
+      }
     }
-    
-    .example-title {
-      font-weight: bold;
-      color: #FFA500;
-      margin-bottom: 8px;
+
+    @media (max-width: 480px) {
+      html {
+        font-size: 15px;
+      }
+      
+      h1 {
+        font-size: 1.6rem;
+      }
+      
+      h2 {
+        font-size: 1.3rem;
+      }
+      
+      .card {
+        padding: 18px;
+      }
+      
+      ul, ol {
+        padding-left: 20px;
+      }
+      
+      .cta-button {
+        width: 100%;
+        padding: 12px;
+      }
     }
-    
-    .tip {
-      background-color: #1e2b1e;
-      border-left: 4px solid #4CAF50;
-      padding: 15px;
-      margin: 15px 0;
-      border-radius: 0 8px 8px 0;
-    }
-    
-    .tip-title {
-      font-weight: bold;
-      color: #4CAF50;
-      margin-bottom: 8px;
-    }
-    
-    .warning {
-      background-color: #2b1e1e;
-      border-left: 4px solid #f44336;
-      padding: 15px;
-      margin: 15px 0;
-      border-radius: 0 8px 8px 0;
-    }
-    
-    .warning-title {
-      font-weight: bold;
-      color: #f44336;
-      margin-bottom: 8px;
-    }
-    
-    .emoji {
-      font-size: 1.5rem;
-      margin-right: 8px;
-      vertical-align: middle;
+
+    /* PC向けの追加スタイル */
+    @media (min-width: 769px) {
+      .card {
+        margin: 25px auto;
+      }
+      
+      .prompt-box {
+        font-size: 0.95rem;
+      }
+      
+      .tip {
+        margin: 20px 0;
+      }
     }
   </style>
 </head>
@@ -212,7 +336,7 @@
       <h3>〜やりたいことだけ言えば、あとはAIがやってくれる究極の効率化〜</h3>
 
       <div class="card">
-        <h2><span class="emoji">📊</span>1. 「このデータ、整理しといて」</h2>
+        <h2>1. 「このデータ、整理しといて」</h2>
         <p>表をコピペして「見やすく整理して」「要点まとめて」と指示するだけで、ChatGPTが適切なフォーマットを提案。</p>
         
         <div class="example">
@@ -228,7 +352,7 @@
       </div>
 
       <div class="card">
-        <h2><span class="emoji">📈</span>2. 「グラフにして」</h2>
+        <h2>2. 「グラフにして」</h2>
         <p>データを貼り付けるだけで、適したグラフタイプを選んで解説付きで提案してくれます。</p>
         
         <div class="example">
@@ -244,7 +368,7 @@
       </div>
 
       <div class="card">
-        <h2><span class="emoji">🧮</span>3. 「この関数、いい感じにして」</h2>
+        <h2>3. 「この関数、いい感じにして」</h2>
         <p>中途半端な関数のアイデアを投げるだけで、修正・改善・解説までしてくれます。</p>
         
         <div class="example">
@@ -260,7 +384,7 @@
       </div>
 
       <div class="card">
-        <h2><span class="emoji">🤖</span>4. 「マクロ組んどいて」</h2>
+        <h2>4. 「マクロ組んどいて」</h2>
         <p>やりたいことを日本語で説明するだけで、VBAコードが完成します。</p>
         
         <div class="example">
@@ -276,7 +400,7 @@
       </div>
 
       <div class="card">
-        <h2><span class="emoji">⚙️</span>5. 「この業務、Excelで自動化できる？」</h2>
+        <h2>5. 「この業務、Excelで自動化できる？」</h2>
         <p>業務内容をざっくり説明するだけで、Excel化可能な部分と具体的な方法を提案。</p>
         
         <div class="example">
@@ -287,7 +411,7 @@
       </div>
 
       <div class="card">
-        <h2><span class="emoji">🧾</span>6. 「見積書っぽくして」</h2>
+        <h2>6. 「見積書っぽくして」</h2>
         <p>データと希望レイアウトを伝えるだけで、見積書フォーマットを提案。</p>
         
         <div class="example">
@@ -298,7 +422,7 @@
       </div>
 
       <div class="card">
-        <h2><span class="emoji">✅</span>7. 「チェックリスト化して」</h2>
+        <h2>7. 「チェックリスト化して」</h2>
         <p>業務フローを説明するだけで、Excel形式のチェックリストを作成。</p>
         
         <div class="example">
@@ -309,7 +433,7 @@
       </div>
 
       <div class="card">
-        <h2><span class="emoji">📖</span>8. 「Excelの説明書つけて」</h2>
+        <h2>8. 「Excelの説明書つけて」</h2>
         <p>他人が見てもわかるように使い方や関数の意味を自動で追加。</p>
         
         <div class="example">
@@ -320,7 +444,7 @@
       </div>
 
       <div class="card">
-        <h2><span class="emoji">🔍</span>9. 「何か変なとこある？」</h2>
+        <h2>9. 「何か変なとこある？」</h2>
         <p>Excelデータを共有すると、矛盾や不自然な点を指摘してくれます。</p>
         
         <div class="example">
@@ -331,7 +455,7 @@
       </div>
 
       <div class="card">
-        <h2><span class="emoji">📝</span>10. 「この表からレポート書いて」</h2>
+        <h2>10. 「この表からレポート書いて」</h2>
         <p>表データを渡すだけで、冒頭説明・分析・まとめまで文章化。</p>
         
         <div class="example">
@@ -342,7 +466,7 @@
       </div>
 
       <div class="card">
-        <h2><span class="emoji">🎯</span>実践的な活用テクニック</h2>
+        <h2><span class="emoji">🎯</span> 実践的な活用テクニック</h2>
         <ul>
           <li><strong>具体性が命</strong>：「できるだけ詳しく」より「A列の数値を千単位で丸めて」など具体的な指示を</li>
           <li><strong>段階的アプローチ</strong>：複雑な作業は「まず全体像を説明」→「各部分を詳細化」が効果的</li>
@@ -352,7 +476,7 @@
       </div>
 
       <div class="card">
-        <h2><span class="emoji">🚀</span>今日から始めるExcel × ChatGPT活用術</h2>
+        <h2><span class="emoji">🚀</span> 今日から始めるExcel × ChatGPT活用術</h2>
         <p>AIをExcel作業に活用するのは、もはや「できるかどうか」ではなく「どれだけ効率的にできるか」の時代です。この記事で紹介した10の方法を参考に、面倒なExcel作業はどんどんChatGPTに任せて、本当に重要な業務に集中しましょう。</p>
         <a href="https://openai.com/ja-JP/chatgpt/overview/" target="_blank" class="cta-button">ChatGPTを使ってみる</a>
         
