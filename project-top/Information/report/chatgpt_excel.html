@@ -2,503 +2,507 @@
 <html lang="ja">
 
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="index, follow" />
 
-  <title>【保存版】ChatGPT × Excel 丸投げ活用術10選｜AIで仕事が楽になる</title>
-  <meta name="description" content="ChatGPTをExcel業務に活用する10の実践テクニックをご紹介。データ整理からマクロ作成まで、AIに任せて仕事を効率化する方法が満載！" />
-  <meta name="keywords" content="ChatGPT, Excel, AI活用, 業務効率化, VBA, データ分析, 関数, マクロ, 自動化, ビジネスツール" />
-  <meta name="author" content="有限会社弓工 webエンジニア部 AI活用ブログ" />
-  <meta name="robots" content="index, follow" />
+    <title>【保存版】ChatGPT × Excel 丸投げ活用術10選｜AIで仕事が楽になる</title>
+    <meta name="description" content="ChatGPTをExcel業務に活用する10の実践テクニックをご紹介。データ整理からマクロ作成まで、AIに任せて仕事を効率化する方法が満載！" />
+    <meta name="keywords" content="ChatGPT, Excel, AI活用, 業務効率化, VBA, データ分析, 関数, マクロ, 自動化, ビジネスツール" />
+    <meta name="author" content="有限会社弓工 webエンジニア部 AI活用ブログ" />
+    <meta name="robots" content="index, follow" />
 
-  <!-- Open Graph (SNS用) -->
-  <meta property="og:title" content="ChatGPT × Excel 丸投げ活用術10選" />
-  <meta property="og:description" content="AIにExcel作業を丸投げして仕事を楽にする方法" />
-  <meta property="og:image" content="images/icon.webp" />
-  <meta property="og:url" content="https://atsu3sh1n1.github.io/yumikou/" />
-  <meta property="og:type" content="article" />
-  <meta property="og:site_name" content="ChatGPT AI活用ブログ" />
+    <!-- Open Graph (SNS用) -->
+    <meta property="og:title" content="ChatGPT × Excel 丸投げ活用術10選" />
+    <meta property="og:description" content="AIにExcel作業を丸投げして仕事を楽にする方法" />
+    <meta property="og:image" content="images/icon.webp" />
+    <meta property="og:url" content="https://atsu3sh1n1.github.io/yumikou/" />
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="ChatGPT AI活用ブログ" />
 
-  <!-- Twitter Card -->
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="ChatGPT × Excel 丸投げ活用術10選" />
-  <meta name="twitter:description" content="Excel作業をAIに任せて仕事を効率化する方法" />
-  <meta name="twitter:image" content="images/icon.webp" />
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="ChatGPT × Excel 丸投げ活用術10選" />
+    <meta name="twitter:description" content="Excel作業をAIに任せて仕事を効率化する方法" />
+    <meta name="twitter:image" content="images/icon.webp" />
 
-  <!-- Faviconなど -->
-  <link rel="icon" href="images/icon.webp" />
+    <!-- Faviconなど -->
+    <link rel="icon" href="images/icon.webp" />
 
-  <!-- FontとCSS -->
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --primary-color: #FFA500;
-      --secondary-color: #6ff5ff;
-      --bg-color: #111;
-      --card-bg: #1e1e1e;
-      --text-color: #f9f9f9;
-      --light-text: #ccc;
-      --border-radius: 12px;
-      --box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-      --max-width: 800px;
-      --mobile-breakpoint: 768px;
-    }
-    
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-    
-    html {
-      font-size: 18px;
-      -webkit-text-size-adjust: 100%;
-    }
+    <!-- FontとCSS -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #FFA500;
+            --secondary-color: #6ff5ff;
+            --bg-color: #111;
+            --card-bg: #1e1e1e;
+            --text-color: #f9f9f9;
+            --light-text: #ccc;
+            --border-radius: 12px;
+            --box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+            --max-width: 800px;
+            --mobile-breakpoint: 768px;
+        }
 
-    body {
-      font-family: 'Noto Sans JP', 'Roboto', sans-serif;
-      background-color: var(--bg-color);
-      color: var(--text-color);
-      line-height: 1.6;
-      min-height: 100vh;
-    }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
-    .wrapper {
-      max-width: var(--max-width);
-      margin: 0 auto;
-      padding: 20px;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
+        html {
+            font-size: 18px;
+            -webkit-text-size-adjust: 100%;
+        }
 
-    header {
-      margin-bottom: 30px;
-    }
+        body {
+            font-family: 'Noto Sans JP', 'Roboto', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
 
-    h1 {
-      color: var(--primary-color);
-      font-size: 2.2rem;
-      margin: 15px 0 10px;
-      line-height: 1.3;
-      text-align: center;
-    }
+        .wrapper {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
 
-    h2 {
-      color: var(--primary-color);
-      font-size: 1.6rem;
-      margin-top: 25px;
-      line-height: 1.3;
-    }
+        header {
+            margin-bottom: 30px;
+        }
 
-    h3 {
-      font-size: 1.2rem;
-      margin: 0 0 15px 0;
-      color: #ded7d7;
-      text-align: center;
-    }
+        h1 {
+            color: var(--primary-color);
+            font-size: 2.2rem;
+            margin: 15px 0 10px;
+            line-height: 1.3;
+            text-align: center;
+        }
 
-    .card {
-      background-color: var(--card-bg);
-      border-radius: var(--border-radius);
-      padding: 25px;
-      box-shadow: var(--box-shadow);
-      margin-bottom: 25px;
-      width: 100%;
-      overflow: hidden;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
+        h2 {
+            color: var(--primary-color);
+            font-size: 1.6rem;
+            margin-top: 25px;
+            line-height: 1.3;
+        }
 
-    .card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
-    }
+        h3 {
+            font-size: 1.2rem;
+            margin: 0 0 15px 0;
+            color: #ded7d7;
+            text-align: center;
+        }
 
-    p {
-      line-height: 1.6;
-      font-size: 1rem;
-      color: var(--light-text);
-      margin: 10px 0;
-    }
+        .card {
+            background-color: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 25px;
+            box-shadow: var(--box-shadow);
+            margin-bottom: 25px;
+            width: 100%;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
 
-    ul, ol {
-      padding-left: 25px;
-      margin: 15px 0;
-    }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+        }
 
-    li {
-      margin-bottom: 10px;
-      color: var(--light-text);
-    }
+        p {
+            line-height: 1.6;
+            font-size: 1rem;
+            color: var(--light-text);
+            margin: 10px 0;
+        }
 
-    a {
-      color: #00a9e6;
-      text-decoration: none;
-      transition: color 0.3s;
-    }
+        ul,
+        ol {
+            padding-left: 25px;
+            margin: 15px 0;
+        }
 
-    a:hover {
-      color: var(--secondary-color);
-      text-decoration: underline;
-    }
+        li {
+            margin-bottom: 10px;
+            color: var(--light-text);
+        }
 
-    .cta-button {
-      background-color: var(--primary-color);
-      color: #111;
-      border: none;
-      padding: 12px 25px;
-      border-radius: 8px;
-      font-weight: bold;
-      cursor: pointer;
-      transition: all 0.3s;
-      text-decoration: none;
-      display: inline-block;
-      margin: 20px auto;
-      text-align: center;
-      width: auto;
-      max-width: 300px;
-    }
+        a {
+            color: #00a9e6;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
 
-    .cta-button:hover {
-      background-color: var(--secondary-color);
-      text-decoration: none;
-      transform: translateY(-2px);
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    }
+        a:hover {
+            color: var(--secondary-color);
+            text-decoration: underline;
+        }
 
-    footer {
-      text-align: center;
-      padding: 1.5rem 0;
-      margin-top: 40px;
-      font-size: 0.9rem;
-    }
+        .cta-button {
+            background-color: var(--primary-color);
+            color: #111;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            margin: 20px auto;
+            text-align: center;
+            width: auto;
+            max-width: 300px;
+        }
 
-    footer p {
-      color: #888;
-      font-size: 0.9rem;
-    }
+        .cta-button:hover {
+            background-color: var(--secondary-color);
+            text-decoration: none;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
 
-    /* プロンプト表示用スタイル */
-    .prompt-box {
-      background-color: #2a2a2a;
-      border-left: 4px solid var(--primary-color);
-      padding: 15px;
-      margin: 15px 0;
-      border-radius: 0 8px 8px 0;
-      font-family: 'Courier New', monospace;
-      white-space: pre-wrap;
-      word-break: break-word;
-      font-size: 0.95rem;
-      overflow-x: auto;
-      line-height: 1.5;
-    }
+        footer {
+            text-align: center;
+            padding: 1.5rem 0;
+            margin-top: 40px;
+            font-size: 0.9rem;
+        }
 
-    .tip {
-      background-color: rgba(222, 174, 16, 0.1);
-      padding: 15px;
-      border-radius: 8px;
-      margin: 15px 0;
-      font-size: 0.95rem;
-      border-left: 3px solid var(--primary-color);
-    }
+        footer p {
+            color: #888;
+            font-size: 0.9rem;
+        }
 
-    .tip:before {
-      content: "💡 応用テク";
-      font-weight: bold;
-      color: var(--primary-color);
-      display: block;
-      margin-bottom: 8px;
-      font-size: 1rem;
-    }
+        /* プロンプト表示用スタイル */
+        .prompt-box {
+            background-color: #2a2a2a;
+            border-left: 4px solid var(--primary-color);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+            font-family: 'Courier New', monospace;
+            white-space: pre-wrap;
+            word-break: break-word;
+            font-size: 0.95rem;
+            overflow-x: auto;
+            line-height: 1.5;
+        }
 
-    .difficulty {
-      display: inline-block;
-      padding: 4px 10px;
-      border-radius: 12px;
-      font-size: 0.85rem;
-      margin-right: 10px;
-    }
+        .tip {
+            background-color: rgba(222, 174, 16, 0.1);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            font-size: 0.95rem;
+            border-left: 3px solid var(--primary-color);
+        }
 
-    .beginner {
-      background-color: rgba(0, 128, 0, 0.2);
-      color: #7cfc00;
-    }
+        .tip:before {
+            content: "💡 応用テク";
+            font-weight: bold;
+            color: var(--primary-color);
+            display: block;
+            margin-bottom: 8px;
+            font-size: 1rem;
+        }
 
-    .intermediate {
-      background-color: rgba(255, 165, 0, 0.2);
-      color: var(--primary-color);
-    }
+        .difficulty {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            margin-right: 10px;
+        }
 
-    .advanced {
-      background-color: rgba(255, 0, 0, 0.2);
-      color: #ff6347;
-    }
+        .beginner {
+            background-color: rgba(0, 128, 0, 0.2);
+            color: #7cfc00;
+        }
 
-    .subtitle {
-      color: var(--light-text);
-      font-size: 1.05rem;
-      margin-bottom: 20px;
-      text-align: center;
-    }
+        .intermediate {
+            background-color: rgba(255, 165, 0, 0.2);
+            color: var(--primary-color);
+        }
 
-    .back-to-top {
-      display: block;
-      text-align: center;
-      margin: 25px 0;
-      font-size: 0.95rem;
-      padding: 10px;
-    }
+        .advanced {
+            background-color: rgba(255, 0, 0, 0.2);
+            color: #ff6347;
+        }
 
-    /* レスポンシブデザイン */
-    @media (max-width: 768px) {
-      html {
-        font-size: 16px;
-      }
-      
-      .wrapper {
-        padding: 15px;
-      }
-      
-      h1 {
-        font-size: 1.8rem;
-      }
-      
-      h2 {
-        font-size: 1.4rem;
-      }
-      
-      h3 {
-        font-size: 1.1rem;
-      }
-      
-      .card {
-        padding: 20px;
-      }
-      
-      .prompt-box {
-        font-size: 0.9rem;
-        padding: 12px;
-      }
-      
-      .tip {
-        padding: 12px;
-      }
-    }
+        .subtitle {
+            color: var(--light-text);
+            font-size: 1.05rem;
+            margin-bottom: 20px;
+            text-align: center;
+        }
 
-    @media (max-width: 480px) {
-      html {
-        font-size: 15px;
-      }
-      
-      h1 {
-        font-size: 1.6rem;
-      }
-      
-      h2 {
-        font-size: 1.3rem;
-      }
-      
-      .card {
-        padding: 18px;
-      }
-      
-      ul, ol {
-        padding-left: 20px;
-      }
-      
-      .cta-button {
-        width: 100%;
-        padding: 12px;
-      }
-    }
+        .back-to-top {
+            display: block;
+            text-align: center;
+            margin: 25px 0;
+            font-size: 0.95rem;
+            padding: 10px;
+        }
 
-    /* PC向けの追加スタイル */
-    @media (min-width: 769px) {
-      .card {
-        margin: 25px auto;
-      }
-      
-      .prompt-box {
-        font-size: 0.95rem;
-      }
-      
-      .tip {
-        margin: 20px 0;
-      }
-    }
-  </style>
+        /* レスポンシブデザイン */
+        @media (max-width: 768px) {
+            html {
+                font-size: 16px;
+            }
+
+            .wrapper {
+                padding: 15px;
+            }
+
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            h2 {
+                font-size: 1.4rem;
+            }
+
+            h3 {
+                font-size: 1.1rem;
+            }
+
+            .card {
+                padding: 20px;
+            }
+
+            .prompt-box {
+                font-size: 0.9rem;
+                padding: 12px;
+            }
+
+            .tip {
+                padding: 12px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            html {
+                font-size: 15px;
+            }
+
+            h1 {
+                font-size: 1.6rem;
+            }
+
+            h2 {
+                font-size: 1.3rem;
+            }
+
+            .card {
+                padding: 18px;
+            }
+
+            ul,
+            ol {
+                padding-left: 20px;
+            }
+
+            .cta-button {
+                width: 100%;
+                padding: 12px;
+            }
+        }
+
+        /* PC向けの追加スタイル */
+        @media (min-width: 769px) {
+            .card {
+                margin: 25px auto;
+            }
+
+            .prompt-box {
+                font-size: 0.95rem;
+            }
+
+            .tip {
+                margin: 20px 0;
+            }
+        }
+    </style>
 </head>
 
 <body>
-  <div class="wrapper">
-    <main class="main">
-      <h1>ChatGPT × Excel 丸投げ活用術10選</h1>
-      <h3>〜やりたいことだけ言えば、あとはAIがやってくれる究極の効率化〜</h3>
+    <div class="wrapper">
+        <main class="main">
+            <h1>ChatGPT × Excel 丸投げ活用術10選</h1>
+            <h3>〜やりたいことだけ言えば、あとはAIがやってくれる究極の効率化〜</h3>
 
-      <div class="card">
-        <h2>1. 「このデータ、整理しといて」</h2>
-        <p>表をコピペして「見やすく整理して」「要点まとめて」と指示するだけで、ChatGPTが適切なフォーマットを提案。</p>
-        
-        <div class="example">
-          <div class="example-title">【実例】</div>
-          <p>指示文: 「以下の売上データを月別・商品カテゴリ別に集計し、見出しをつけて見やすく整理してください」</p>
-          <p>結果: 並べ替え・フィルタ・要約・見出し追加まで自動で提案</p>
-        </div>
-        
-        <div class="tip">
-          <div class="tip-title">💡 プロのコツ</div>
-          <p>「重要な数値を強調して」「比較しやすい形式で」など具体的な要望を追加すると、より使いやすい結果が得られます。</p>
-        </div>
-      </div>
+            <div class="card">
+                <h2>1. 「このデータ、整理しといて」</h2>
+                <p>表をコピペして「見やすく整理して」「要点まとめて」と指示するだけで、ChatGPTが適切なフォーマットを提案。</p>
 
-      <div class="card">
-        <h2>2. 「グラフにして」</h2>
-        <p>データを貼り付けるだけで、適したグラフタイプを選んで解説付きで提案してくれます。</p>
-        
-        <div class="example">
-          <div class="example-title">【実例】</div>
-          <p>指示文: 「この1年間の売上推移データを最も効果的に表現できるグラフを作成し、選択理由を説明してください」</p>
-          <p>結果: 折れ線グラフの画像コードと「時系列データの変化を表現するのに最適」という解説</p>
-        </div>
-        
-        <div class="warning">
-          <div class="warning-title">⚠️ 注意点</div>
-          <p>実際のExcelにグラフを作成する場合は、ChatGPTが生成するVBAコードを実行するか、提案を参考に手動で作成する必要があります。</p>
-        </div>
-      </div>
+                <div class="example">
+                    <div class="example-title">【実例】</div>
+                    <p>指示文: 「以下の売上データを月別・商品カテゴリ別に集計し、見出しをつけて見やすく整理してください」</p>
+                    <p>結果: 並べ替え・フィルタ・要約・見出し追加まで自動で提案</p>
+                </div>
 
-      <div class="card">
-        <h2>3. 「この関数、いい感じにして」</h2>
-        <p>中途半端な関数のアイデアを投げるだけで、修正・改善・解説までしてくれます。</p>
-        
-        <div class="example">
-          <div class="example-title">【実例】</div>
-          <p>指示文: 「A列に日付、B列に金額がある。C列に『今月分』なら金額を表示、『来月分』なら0と表示する関数を作りたい」</p>
-          <p>結果: =IF(TEXT(A2,"yyyymm")=TEXT(TODAY(),"yyyymm"),B2,0) という完成形と解説</p>
-        </div>
-        
-        <div class="tip">
-          <div class="tip-title">💡 活用のヒント</div>
-          <p>「もっと効率的な方法は？」「別の関数でも実現できますか？」と追質問すると、複数の解決策を得られます。</p>
-        </div>
-      </div>
+                <div class="tip">
+                    <div class="tip-title">💡 プロのコツ</div>
+                    <p>「重要な数値を強調して」「比較しやすい形式で」など具体的な要望を追加すると、より使いやすい結果が得られます。</p>
+                </div>
+            </div>
 
-      <div class="card">
-        <h2>4. 「マクロ組んどいて」</h2>
-        <p>やりたいことを日本語で説明するだけで、VBAコードが完成します。</p>
-        
-        <div class="example">
-          <div class="example-title">【実例】</div>
-          <p>指示文: 「毎朝9時にシートをチェックし、C列が『緊急』の行を赤くして、該当する部署長にメール送信するマクロを作成してください」</p>
-          <p>結果: 完全なVBAコードと設置手順を提供</p>
-        </div>
-        
-        <div class="warning">
-          <div class="warning-title">⚠️ 重要</div>
-          <p>生成されたマクロは必ずテスト環境で動作確認してから本番データに適用しましょう。セキュリティ設定の調整が必要な場合もあります。</p>
-        </div>
-      </div>
+            <div class="card">
+                <h2>2. 「グラフにして」</h2>
+                <p>データを貼り付けるだけで、適したグラフタイプを選んで解説付きで提案してくれます。</p>
 
-      <div class="card">
-        <h2>5. 「この業務、Excelで自動化できる？」</h2>
-        <p>業務内容をざっくり説明するだけで、Excel化可能な部分と具体的な方法を提案。</p>
-        
-        <div class="example">
-          <div class="example-title">【実例】</div>
-          <p>指示文: 「毎月、各支店からExcelで送られてくる売上データを1つにまとめて集計する作業を自動化したい」</p>
-          <p>結果: Power Queryを使った自動統合方法やVBAによる解決策を提案</p>
-        </div>
-      </div>
+                <div class="example">
+                    <div class="example-title">【実例】</div>
+                    <p>指示文: 「この1年間の売上推移データを最も効果的に表現できるグラフを作成し、選択理由を説明してください」</p>
+                    <p>結果: 折れ線グラフの画像コードと「時系列データの変化を表現するのに最適」という解説</p>
+                </div>
 
-      <div class="card">
-        <h2>6. 「見積書っぽくして」</h2>
-        <p>データと希望レイアウトを伝えるだけで、見積書フォーマットを提案。</p>
-        
-        <div class="example">
-          <div class="example-title">【実例】</div>
-          <p>指示文: 「以下の商品リストを見積書形式にレイアウトし、合計金額・消費税・総計を自動計算するようにしてください」</p>
-          <p>結果: 会社ロゴ位置・品目表・計算式が設定された見積書テンプレート</p>
-        </div>
-      </div>
+                <div class="warning">
+                    <div class="warning-title">⚠️ 注意点</div>
+                    <p>実際のExcelにグラフを作成する場合は、ChatGPTが生成するVBAコードを実行するか、提案を参考に手動で作成する必要があります。</p>
+                </div>
+            </div>
 
-      <div class="card">
-        <h2>7. 「チェックリスト化して」</h2>
-        <p>業務フローを説明するだけで、Excel形式のチェックリストを作成。</p>
-        
-        <div class="example">
-          <div class="example-title">【実例】</div>
-          <p>指示文: 「新入社員の入社手続きチェックリストを作成してください。必要な項目と確認すべき書類を含めて」</p>
-          <p>結果: チェックボックス付きの完成リストと進捗管理用の集計表</p>
-        </div>
-      </div>
+            <div class="card">
+                <h2>3. 「この関数、いい感じにして」</h2>
+                <p>中途半端な関数のアイデアを投げるだけで、修正・改善・解説までしてくれます。</p>
 
-      <div class="card">
-        <h2>8. 「Excelの説明書つけて」</h2>
-        <p>他人が見てもわかるように使い方や関数の意味を自動で追加。</p>
-        
-        <div class="example">
-          <div class="example-title">【実例】</div>
-          <p>指示文: 「この予算管理表に、各シートの使い方と主要な数式の説明をコメントとして追加してください」</p>
-          <p>結果: 各セルに詳細な注釈が追加されたバージョンを提案</p>
-        </div>
-      </div>
+                <div class="example">
+                    <div class="example-title">【実例】</div>
+                    <p>指示文: 「A列に日付、B列に金額がある。C列に『今月分』なら金額を表示、『来月分』なら0と表示する関数を作りたい」</p>
+                    <p>結果: =IF(TEXT(A2,"yyyymm")=TEXT(TODAY(),"yyyymm"),B2,0) という完成形と解説</p>
+                </div>
 
-      <div class="card">
-        <h2>9. 「何か変なとこある？」</h2>
-        <p>Excelデータを共有すると、矛盾や不自然な点を指摘してくれます。</p>
-        
-        <div class="example">
-          <div class="example-title">【実例】</div>
-          <p>指示文: 「この在庫管理表を確認して、数式やデータに不自然な点があれば教えてください」</p>
-          <p>結果: 「D列のSUM関数の範囲が正しく設定されていません」「突発的に大きな数値が入力されている行があります」などの指摘</p>
-        </div>
-      </div>
+                <div class="tip">
+                    <div class="tip-title">💡 活用のヒント</div>
+                    <p>「もっと効率的な方法は？」「別の関数でも実現できますか？」と追質問すると、複数の解決策を得られます。</p>
+                </div>
+            </div>
 
-      <div class="card">
-        <h2>10. 「この表からレポート書いて」</h2>
-        <p>表データを渡すだけで、冒頭説明・分析・まとめまで文章化。</p>
-        
-        <div class="example">
-          <div class="example-title">【実例】</div>
-          <p>指示文: 「この四半期売上データから、経営陣向けの簡潔な報告文を作成してください。主要なトレンドと課題を指摘して」</p>
-          <p>結果: 「第2四半期の売上は前年比15%増加しましたが、地域別では...」という分析レポート</p>
-        </div>
-      </div>
+            <div class="card">
+                <h2>4. 「マクロ組んどいて」</h2>
+                <p>やりたいことを日本語で説明するだけで、VBAコードが完成します。</p>
 
-      <div class="card">
-        <h2><span class="emoji">🎯</span> 実践的な活用テクニック</h2>
-        <ul>
-          <li><strong>具体性が命</strong>：「できるだけ詳しく」より「A列の数値を千単位で丸めて」など具体的な指示を</li>
-          <li><strong>段階的アプローチ</strong>：複雑な作業は「まず全体像を説明」→「各部分を詳細化」が効果的</li>
-          <li><strong>フォーマット指定</strong>：「Markdown形式で」「VBAコードとして」など出力形式を明示</li>
-          <li><strong>制約条件</strong>：「関数はSUMIFSのみ使用」「マクロは実行時間5秒以内」など条件を追加</li>
-        </ul>
-      </div>
+                <div class="example">
+                    <div class="example-title">【実例】</div>
+                    <p>指示文: 「毎朝9時にシートをチェックし、C列が『緊急』の行を赤くして、該当する部署長にメール送信するマクロを作成してください」</p>
+                    <p>結果: 完全なVBAコードと設置手順を提供</p>
+                </div>
 
-      <div class="card">
-        <h2><span class="emoji">🚀</span> 今日から始めるExcel × ChatGPT活用術</h2>
-        <p>AIをExcel作業に活用するのは、もはや「できるかどうか」ではなく「どれだけ効率的にできるか」の時代です。この記事で紹介した10の方法を参考に、面倒なExcel作業はどんどんChatGPTに任せて、本当に重要な業務に集中しましょう。</p>
-        <a href="https://openai.com/ja-JP/chatgpt/overview/" target="_blank" class="cta-button">ChatGPTを使ってみる</a>
-        
-        <div class="tip">
-          <div class="tip-title">💡 最初の一歩アドバイス</div>
-          <p>まずは「この関数の意味を教えて」といった簡単な質問から始め、慣れてきたら複雑な業務の自動化に挑戦しましょう。3回ほど実践するうちに、AIとの協働作業が自然にできるようになります。</p>
-        </div>
-      </div>
+                <div class="warning">
+                    <div class="warning-title">⚠️ 重要</div>
+                    <p>生成されたマクロは必ずテスト環境で動作確認してから本番データに適用しましょう。セキュリティ設定の調整が必要な場合もあります。</p>
+                </div>
+            </div>
 
-      <div class="back-to-top">
-        <a href="#" onclick="window.scrollTo({ top: 0, behavior: 'smooth' })">▲ ページの先頭へ戻る</a>
-      </div>
-    </main>
+            <div class="card">
+                <h2>5. 「この業務、Excelで自動化できる？」</h2>
+                <p>業務内容をざっくり説明するだけで、Excel化可能な部分と具体的な方法を提案。</p>
 
-    <footer>
-      <p>
-        <a href="https://atsu3sh1n1.github.io/yumikou/" target="_blank">プライバシーポリシー</a> | 
-        <a href="https://atsu3sh1n1.github.io/yumikou/" target="_blank">利用規約</a>
-      </p>
-      <p>&copy; 2025 <a href="https://atsu3sh1n1.github.io/yumikou/" target="_blank">有限会社弓工</a> All rights reserved.</p>
-    </footer>
-  </div>
+                <div class="example">
+                    <div class="example-title">【実例】</div>
+                    <p>指示文: 「毎月、各支店からExcelで送られてくる売上データを1つにまとめて集計する作業を自動化したい」</p>
+                    <p>結果: Power Queryを使った自動統合方法やVBAによる解決策を提案</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>6. 「見積書っぽくして」</h2>
+                <p>データと希望レイアウトを伝えるだけで、見積書フォーマットを提案。</p>
+
+                <div class="example">
+                    <div class="example-title">【実例】</div>
+                    <p>指示文: 「以下の商品リストを見積書形式にレイアウトし、合計金額・消費税・総計を自動計算するようにしてください」</p>
+                    <p>結果: 会社ロゴ位置・品目表・計算式が設定された見積書テンプレート</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>7. 「チェックリスト化して」</h2>
+                <p>業務フローを説明するだけで、Excel形式のチェックリストを作成。</p>
+
+                <div class="example">
+                    <div class="example-title">【実例】</div>
+                    <p>指示文: 「新入社員の入社手続きチェックリストを作成してください。必要な項目と確認すべき書類を含めて」</p>
+                    <p>結果: チェックボックス付きの完成リストと進捗管理用の集計表</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>8. 「Excelの説明書つけて」</h2>
+                <p>他人が見てもわかるように使い方や関数の意味を自動で追加。</p>
+
+                <div class="example">
+                    <div class="example-title">【実例】</div>
+                    <p>指示文: 「この予算管理表に、各シートの使い方と主要な数式の説明をコメントとして追加してください」</p>
+                    <p>結果: 各セルに詳細な注釈が追加されたバージョンを提案</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>9. 「何か変なとこある？」</h2>
+                <p>Excelデータを共有すると、矛盾や不自然な点を指摘してくれます。</p>
+
+                <div class="example">
+                    <div class="example-title">【実例】</div>
+                    <p>指示文: 「この在庫管理表を確認して、数式やデータに不自然な点があれば教えてください」</p>
+                    <p>結果: 「D列のSUM関数の範囲が正しく設定されていません」「突発的に大きな数値が入力されている行があります」などの指摘</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>10. 「この表からレポート書いて」</h2>
+                <p>表データを渡すだけで、冒頭説明・分析・まとめまで文章化。</p>
+
+                <div class="example">
+                    <div class="example-title">【実例】</div>
+                    <p>指示文: 「この四半期売上データから、経営陣向けの簡潔な報告文を作成してください。主要なトレンドと課題を指摘して」</p>
+                    <p>結果: 「第2四半期の売上は前年比15%増加しましたが、地域別では...」という分析レポート</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2><span class="emoji">🎯</span> 実践的な活用テクニック</h2>
+                <ul>
+                    <li><strong>具体性が命</strong>：「できるだけ詳しく」より「A列の数値を千単位で丸めて」など具体的な指示を</li>
+                    <li><strong>段階的アプローチ</strong>：複雑な作業は「まず全体像を説明」→「各部分を詳細化」が効果的</li>
+                    <li><strong>フォーマット指定</strong>：「Markdown形式で」「VBAコードとして」など出力形式を明示</li>
+                    <li><strong>制約条件</strong>：「関数はSUMIFSのみ使用」「マクロは実行時間5秒以内」など条件を追加</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h2><span class="emoji">🚀</span> 今日から始めるExcel × ChatGPT活用術</h2>
+                <p>AIをExcel作業に活用するのは、もはや「できるかどうか」ではなく「どれだけ効率的にできるか」の時代です。この記事で紹介した10の方法を参考に、面倒なExcel作業はどんどんChatGPTに任せて、本当に重要な業務に集中しましょう。
+                </p>
+                <a href="https://openai.com/ja-JP/chatgpt/overview/" target="_blank"
+                    class="cta-button">ChatGPTを使ってみる</a>
+
+                <div class="tip">
+                    <div class="tip-title">💡 最初の一歩アドバイス</div>
+                    <p>まずは「この関数の意味を教えて」といった簡単な質問から始め、慣れてきたら複雑な業務の自動化に挑戦しましょう。3回ほど実践するうちに、AIとの協働作業が自然にできるようになります。</p>
+                </div>
+            </div>
+
+            <div class="back-to-top">
+                <a href="#" onclick="window.scrollTo({ top: 0, behavior: 'smooth' })">▲ ページの先頭へ戻る</a>
+            </div>
+        </main>
+
+        <footer>
+            <p style="text-align: center; font-size: 0.9rem; color: #888;">
+                &copy; 2025 <a href="https://atsu3sh1n1.github.io/yumikou/"
+                    style="color: #888; text-decoration: none;">有限会社弓工</a>
+                All rights reserved.
+            </p>
+    </div>
 </body>
 
 </html>

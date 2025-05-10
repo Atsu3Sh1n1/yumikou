@@ -4,6 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="index, follow" />
 
   <title>【保存版】ChatGPTでできる！事務作業の効率化アイデア10選｜AIで仕事が楽になる</title>
   <meta name="description" content="ChatGPTを活用して、事務作業を効率化する10のアイデアをご紹介。ビジネス文書やExcel関数の自動化、議事録作成など、すぐに使える実践例が満載！" />
@@ -13,128 +14,168 @@
 
   <!-- Open Graph (SNS用) -->
   <meta property="og:title" content="ChatGPTでできる！事務作業の効率化アイデア10選" />
-  <meta property="og:description" content=" AIを活用して業務をもっとスマートに。ChatGPTで始める効率化のヒント集。" />
-  <meta property="og:image" content="images/icon.webp" />
-  <meta property="og:url" content="https://atsu3sh1n1.github.io/yumikou/" />
+  <meta property="og:description" content="AIを活用して業務をもっとスマートに。ChatGPTで始める効率化のヒント集。" />
+  <meta property="og:image" content="https://example.com/images/icon.webp" />
+  <meta property="og:url" content="https://example.com/" />
   <meta property="og:type" content="article" />
-  <meta property="og:site_name" content=" ChatGPT AI活用ブログ" />
+  <meta property="og:site_name" content="ChatGPT AI活用ブログ" />
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="ChatGPTでできる！事務作業の効率化アイデア10選" />
   <meta name="twitter:description" content="事務作業をもっとスマートに。AI活用アイデア10選を紹介。" />
-  <meta name="twitter:image" content="images/icon.webp" />
+  <meta name="twitter:image" content="https://example.com/images/icon.webp" />
 
-  <!-- Faviconなど -->
+  <!-- Favicon -->
   <link rel="icon" href="images/icon.webp" />
 
   <!-- FontとCSS -->
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Roboto:wght@400;700&display=swap"
+    rel="stylesheet">
   <style>
-    body {
+    :root {
+      --primary-color: #FFA500;
+      --secondary-color: #6ff5ff;
+      --bg-color: #111;
+      --card-bg: #1e1e1e;
+      --text-color: #f9f9f9;
+      --light-text: #ccc;
+      --border-radius: 12px;
+      --box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+      --max-width: 800px;
+      --mobile-breakpoint: 768px;
+    }
+
+    * {
+      box-sizing: border-box;
       margin: 0;
-      font-family: 'Roboto', sans-serif;
-      background-color: #111;
-      color: #f9f9f9;
-      min-height: 100vh;
+      padding: 0;
+    }
+
+    html {
+      font-size: 18px;
+      -webkit-text-size-adjust: 100%;
+    }
+
+    body {
+      font-family: 'Noto Sans JP', 'Roboto', sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-color);
       line-height: 1.6;
+      min-height: 100vh;
     }
 
     .wrapper {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 20px;
+      min-height: 100vh;
       display: flex;
       flex-direction: column;
-      min-height: 100vh;
     }
 
-    .main {
-      flex: 1;
-      padding: 20px;
-      max-width: 800px;
-      margin: 0 auto;
+    header {
+      margin-bottom: 30px;
     }
 
     h1 {
-      text-align: center;
-      color: #FFA500;
-      margin: 20px 0 10px;
+      color: var(--primary-color);
       font-size: 2.2rem;
+      margin: 15px 0 10px;
+      line-height: 1.3;
+      text-align: center;
     }
 
     h2 {
-      color: #FFA500;
-      font-size: 1.5rem;
-      margin-top: 30px;
+      color: var(--primary-color);
+      font-size: 1.6rem;
+      margin-top: 25px;
+      line-height: 1.3;
     }
 
     h3 {
-      text-align: center;
       font-size: 1.2rem;
-      margin: 0 0 20px 0;
+      margin: 0 0 15px 0;
       color: #ded7d7;
+      text-align: center;
     }
 
     .card {
-      background-color: #1e1e1e;
-      border-radius: 16px;
-      padding: 20px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-      transition: transform 0.3s;
-      margin-bottom: 24px;
+      background-color: var(--card-bg);
+      border-radius: var(--border-radius);
+      padding: 25px;
+      box-shadow: var(--box-shadow);
+      margin-bottom: 25px;
+      width: 100%;
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
 
     .card:hover {
       transform: translateY(-5px);
-      background-color: #2a2a2a;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
     }
 
     p {
       line-height: 1.6;
-      font-size: 1.2rem;
-      color: #ccc;
-      margin: 10px 0;
+      font-size: 1.1rem;
+      color: var(--light-text);
+      margin: 15px 0;
     }
 
-    ul {
-      padding-left: 20px;
+    ul,
+    ol {
+      padding-left: 25px;
+      margin: 15px 0;
     }
 
     li {
       margin-bottom: 10px;
-      color: #ccc;
+      color: var(--light-text);
+      line-height: 1.6;
     }
 
     a {
       color: #00a9e6;
       text-decoration: none;
+      transition: color 0.3s;
     }
 
     a:hover {
+      color: var(--secondary-color);
       text-decoration: underline;
     }
 
     .cta-button {
-      background-color: #FFA500;
+      background-color: var(--primary-color);
       color: #111;
       border: none;
-      padding: 10px 20px;
+      padding: 12px 25px;
       border-radius: 8px;
       font-weight: bold;
       cursor: pointer;
-      transition: background-color 0.3s;
+      transition: all 0.3s;
       text-decoration: none;
-      display: inline-block;
-      margin-top: 16px;
+      display: block;
+      margin: 25px auto;
+      text-align: center;
+      width: auto;
+      max-width: 300px;
     }
 
     .cta-button:hover {
-      background-color: #6ff5ff;
+      background-color: var(--secondary-color);
       text-decoration: none;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     }
 
     footer {
       text-align: center;
-      padding: 1rem 0;
+      padding: 1.5rem 0;
       margin-top: 40px;
+      font-size: 0.9rem;
     }
 
     footer p {
@@ -146,24 +187,90 @@
       color: #888;
     }
 
-    footer a:hover {
-      color: #fff;
+    .back-to-top {
+      display: block;
+      text-align: center;
+      margin: 25px 0;
+      font-size: 0.95rem;
+      padding: 10px;
     }
 
-    .back-to-top {
-      display: inline-block;
-      margin-bottom: 20px;
+    /* レスポンシブデザイン */
+    @media (max-width: 768px) {
+      html {
+        font-size: 16px;
+      }
+
+      .wrapper {
+        padding: 15px;
+      }
+
+      h1 {
+        font-size: 1.8rem;
+      }
+
+      h2 {
+        font-size: 1.4rem;
+      }
+
+      h3 {
+        font-size: 1.1rem;
+      }
+
+      .card {
+        padding: 20px;
+      }
+
+      p {
+        font-size: 1rem;
+      }
     }
-    
+
+    @media (max-width: 480px) {
+      html {
+        font-size: 15px;
+      }
+
+      h1 {
+        font-size: 1.6rem;
+      }
+
+      h2 {
+        font-size: 1.3rem;
+      }
+
+      .card {
+        padding: 18px;
+      }
+
+      ul,
+      ol {
+        padding-left: 20px;
+      }
+
+      .cta-button {
+        width: 100%;
+        padding: 12px;
+      }
+    }
+
+    /* PC向けの追加スタイル */
+    @media (min-width: 769px) {
+      .card {
+        margin: 25px auto;
+      }
+    }
   </style>
 </head>
 
 <body>
   <div class="wrapper">
-    <main class="main">
+    <header>
       <h1>ChatGPTでできる事務作業の効率化アイデア10選</h1>
       <h3>〜もうExcelやWordで悩まない。AIでスマートに仕事しよう〜</h3>
+    </header>
 
+    <main>
       <div class="card">
         <h2>1. ビジネス文書を自動作成</h2>
         <p>「見積もりの依頼メールを作って」と入力するだけで、数秒でプロ品質の文書が完成。</p>
@@ -171,7 +278,7 @@
 
       <div class="card">
         <h2>2. Excelの関数も聞けばすぐわかる</h2>
-        <p>「IF関数でA列が100以上なら“合格”と表示するには？」→ ChatGPTがすぐに答えます。</p>
+        <p>「IF関数でA列が100以上なら"合格"と表示するには？」→ ChatGPTがすぐに答えます。</p>
       </div>
 
       <div class="card">
@@ -216,7 +323,8 @@
 
       <div class="card">
         <h2>まとめ：ChatGPTは"デキる事務アシスタント"！</h2>
-        <p>AIを上手に使えば、面倒な事務作業もラクになる時代が来ました。最初から完璧を求めず、まずは「ちょっと頼んでみる」ことから始めてみましょう。この記事で紹介した10のアイデアが、あなたの仕事効率化の第一歩となれば幸いです。</p>
+        <p>AIを上手に使えば、面倒な事務作業もラクになる時代が来ました。最初から完璧を求めず、まずは「ちょっと頼んでみる」ことから始めてみましょう。この記事で紹介した10のアイデアが、あなたの仕事効率化の第一歩となれば幸いです。
+        </p>
         <a href="https://openai.com/ja-JP/chatgpt/overview/" target="_blank" class="cta-button">ChatGPTを使ってみる</a>
       </div>
 
@@ -235,12 +343,11 @@
     </main>
 
     <footer>
-      <p>
-        <a href="https://atsu3sh1n1.github.io/yumikou/" target="_blank">プライバシーポリシー</a> | 
-        <a href="https://atsu3sh1n1.github.io/yumikou/" target="_blank">利用規約</a>
+      <p style="text-align: center; font-size: 0.9rem; color: #888;">
+        &copy; 2025 <a href="https://atsu3sh1n1.github.io/yumikou/"
+          style="color: #888; text-decoration: none;">有限会社弓工</a>
+        All rights reserved.
       </p>
-      <p>&copy; 2025 <a href="https://atsu3sh1n1.github.io/yumikou/" target="_blank">有限会社弓工</a> All rights reserved.</p>
-    </footer>
   </div>
 </body>
 
