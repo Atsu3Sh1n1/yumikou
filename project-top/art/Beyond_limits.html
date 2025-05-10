@@ -3,8 +3,8 @@
 
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="robots" content="index, follow" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="index, follow">
   <title>限界突破 / Beyond Limits</title>
   <style>
     body {
@@ -50,7 +50,7 @@
 
     function setup() {
       createCanvas(windowWidth, windowHeight);
-      textFont('Segoe UI');
+      textFont('Segoe UI, sans-serif');
       textAlign(LEFT, TOP);
       frameRate(60);
     }
@@ -76,12 +76,22 @@
 
     function addPhrase() {
       let phrase = random(phrases);
-      let fontSize = random([20, 24, 28, 32, 36, 42]); // 大きなサイズも含む
+
+      // 画面幅に応じたフォントサイズ（3.5%程度、範囲制限）
+      let fontSize = constrain(windowWidth * 0.035, 18, 42);
       textSize(fontSize);
+
       let textW = textWidth(phrase);
       let textH = fontSize * 1.2;
-      let x = random(0, width - textW);
-      let y = random(0, height - textH);
+
+      // テキストが画面外にはみ出さないよう、範囲を制限
+      let margin = 10;
+      let xMax = max(width - textW - margin, margin);
+      let yMax = max(height - textH - margin, margin);
+
+      let x = random(margin, xMax);
+      let y = random(margin, yMax);
+
       floatingTexts.push(new FloatingText(phrase, x, y, fontSize));
     }
 
