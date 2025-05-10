@@ -20,6 +20,19 @@
       color: #ffffff;
       display: flex;
       flex-direction: column;
+      background-image: 
+        radial-gradient(circle at 10% 20%, rgba(97, 218, 251, 0.1) 0%, transparent 20%),
+        radial-gradient(circle at 90% 80%, rgba(247, 30, 30, 0.1) 0%, transparent 20%);
+      animation: bgPulse 15s infinite alternate;
+    }
+
+    @keyframes bgPulse {
+      0% {
+        background-position: 0% 0%, 100% 100%;
+      }
+      100% {
+        background-position: 10% 10%, 90% 90%;
+      }
     }
 
     .content {
@@ -27,65 +40,200 @@
       display: flex;
       justify-content: center;
       align-items: center;
+      perspective: 1000px;
     }
 
     .card {
-      background-color: #2c2c2c;
+      background-color: rgba(44, 44, 44, 0.9);
       padding: 40px;
       border-radius: 12px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+      box-shadow: 
+        0 4px 20px rgba(0, 0, 0, 0.5),
+        0 0 0 1px rgba(97, 218, 251, 0.1),
+        0 0 30px rgba(97, 218, 251, 0.2);
       text-align: center;
       display: inline-block;
-      /* ← 内容に合わせて広がる */
       max-width: 90vw;
-      /* ← 画面の90%まで広がる（スマホ対策） */
+      transform-style: preserve-3d;
+      transition: transform 0.5s ease, box-shadow 0.5s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card:hover {
+      transform: translateY(-5px) rotateX(5deg);
+      box-shadow: 
+        0 10px 30px rgba(0, 0, 0, 0.7),
+        0 0 0 1px rgba(97, 218, 251, 0.2),
+        0 0 40px rgba(97, 218, 251, 0.4);
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(
+        45deg,
+        transparent,
+        rgba(97, 218, 251, 0.1),
+        transparent
+      );
+      transform: rotate(45deg);
+      animation: shine 3s infinite;
+    }
+
+    @keyframes shine {
+      0% {
+        left: -50%;
+      }
+      100% {
+        left: 150%;
+      }
     }
 
     .title {
       font-size: 24px;
       font-weight: 600;
       margin-bottom: 24px;
-      border-bottom: 1px solid #444;
       padding-bottom: 12px;
+      position: relative;
+      display: inline-block;
+    }
+
+    .title::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 50%;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #61dafb, #d6ff64, transparent);
+      border-radius: 2px;
     }
 
     .link-list a {
       display: block;
-      margin: 12px 0;
+      margin: 16px 0;
       color: #61dafb;
       text-decoration: none;
       font-size: 16px;
-      transition: color 0.2s ease;
+      transition: all 0.3s ease;
+      position: relative;
+      padding: 8px 0;
+    }
+
+    .link-list a::before {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 1px;
+      background: #f71e1e;
+      transition: width 0.3s ease;
     }
 
     .link-list a:hover {
-      color: #f71e1e;
+      color: #ff0000;
+      letter-spacing: 1px;
     }
 
+    .link-list a:hover::before {
+      width: 100%;
+    }
 
-   a {
+    .created-by a {
       color: rgb(62, 215, 249);
       text-decoration: none;
+      transition: all 0.3s ease;
+      display: inline-block;
+    }
+
+    .created-by a:hover {
+      color: #f71e1e;
+      transform: scale(1.05);
+      text-shadow: 0 0 10px rgba(62, 215, 249, 0.5);
+    }
+
+    /* グラフィック要素を追加 */
+    .art-element {
+      position: absolute;
+      background: rgba(97, 218, 251, 0.1);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    /* ランダムなグラフィック要素を生成 */
+    .art-element:nth-child(1) {
+      width: 100px;
+      height: 100px;
+      top: 20%;
+      left: 10%;
+      animation: float 8s ease-in-out infinite;
+    }
+
+    .art-element:nth-child(2) {
+      width: 60px;
+      height: 60px;
+      bottom: 30%;
+      right: 15%;
+      animation: float 10s ease-in-out infinite 2s;
+    }
+
+    .art-element:nth-child(3) {
+      width: 40px;
+      height: 40px;
+      top: 60%;
+      left: 20%;
+      animation: float 7s ease-in-out infinite 1s;
+    }
+
+    @keyframes float {
+      0%, 100% {
+        transform: translateY(0) rotate(0deg);
+      }
+      50% {
+        transform: translateY(-20px) rotate(10deg);
+      }
     }
   </style>
 </head>
 
 <body>
+  <!-- アート的な背景要素 -->
+  <div class="art-element"></div>
+  <div class="art-element"></div>
+  <div class="art-element"></div>
+  
   <div class="content">
     <div class="card">
       <div class="title">プログラミングアート作品</div>
       <p class="created-by">
-      <a href="https://atsu3sh1n1.github.io/yumikou/" target="_blank">Created by YUMIKOU Inc.</a>
-    </p>
+        <a href="https://atsu3sh1n1.github.io/yumikou/" target="_blank">Created by YUMIKOU Inc.</a>
+      </p>
+
       <div class="link-list">
         <a href="https://atsu3sh1n1.github.io/yumikou/project-top/fireworks/fireworks.html">花火</a>
         <a href="Beyond_limits.html">限界を超えて</a>
-
+         <a href="Dont_Stop.html">止まらないものたち（Don’t Stop）</a>
       </div>
     </div>
   </div>
 
-  
+  <script>
+    // さらに動的な要素を追加
+    document.addEventListener('mousemove', (e) => {
+      const card = document.querySelector('.card');
+      const xAxis = (window.innerWidth / 2 - e.pageX) / 25;
+      const yAxis = (window.innerHeight / 2 - e.pageY) / 25;
+      card.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
+    });
+  </script>
 </body>
 
 </html>

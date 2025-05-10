@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>Real π Generator</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background: black;
+    }
+  </style>
+</head>
+<body>
+<script>
+  let x = 10;
+  let y = 20;
+  let fontSize = 20;
+  let margin = 10;
+  let digitIndex = 0;
+  let calculatedDigits = "";
+
+  function setup() {
+    createCanvas(windowWidth, windowHeight);
+    background(0);
+    fill(255);
+    textFont("monospace");
+    textSize(fontSize);
+    frameRate(1); // ゆっくり、考えるように
+    calculatedDigits = calculatePiDigits(50); // 初期で50桁計算しておく
+  }
+
+  function draw() {
+    if (digitIndex >= calculatedDigits.length) {
+      calculatedDigits = calculatePiDigits(calculatedDigits.length + 50); // 桁が足りなくなったら追加で計算
+    }
+
+    let digit = calculatedDigits.charAt(digitIndex);
+    if (digit === "") return;
+
+    text(digit, x, y);
+    x += textWidth(digit);
+
+    if (x > width - margin) {
+      x = margin;
+      y += fontSize;
+    }
+
+    if (y > height - margin) {
+      y = margin;
+    }
+
+    digitIndex++;
+  }
+
+  // Machin-like formula using fixed-point arithmetic
+  function calculatePiDigits(n) {
+    const digits = n + 10; // 多めに確保
+    const scale = BigInt("1" + "0".repeat(digits + 10));
+    const arctan = (invX) => {
+      const x = BigInt(invX);
+      let xpower = scale / x;
+      let sum = xpower;
+      let sign = -1n;
+      for (let i = 3n; i < 1000n; i += 2n) {
+        xpower = xpower / (x * x);
+        sum += sign * xpower / i;
+        sign *= -1n;
+      }
+      return sum;
+    };
+
+    const pi = 16n * arctan(5n) - 4n * arctan(239n);
+    const piStr = (pi / (scale / 10n ** BigInt(digits))).toString();
+
+    return piStr[0] + "." + piStr.slice(1); // "3." から始める
+  }
+
+  function windowResized() {
+    resizeCanvas(windowWidth, windowHeight);
+    background(0);
+    x = margin;
+    y = fontSize;
+  }
+</script>
+</body>
+</html>
