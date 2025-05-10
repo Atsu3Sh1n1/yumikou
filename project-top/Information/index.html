@@ -12,28 +12,37 @@
       font-family: 'Roboto', sans-serif;
       background-color: #111;
       color: #f9f9f9;
+      min-height: 100vh;
+    }
+
+    .wrapper {
       display: flex;
       flex-direction: column;
       min-height: 100vh;
     }
 
+    .main {
+      flex: 1;
+    }
+
     h1 {
       text-align: center;
       color: #deae10;
-      margin: 20px 0 10px; /* 上20px・下10pxに調整 */
-      font-size: 2.8rem;
+      margin: 20px 0 10px;
+      font-size: 2.2rem;
     }
 
     h2 {
       text-align: center;
-      font-size: 2rem; 
+      font-size: 2rem;
     }
 
     h3 {
       text-align: center;
-      font-size: 1rem; 
+      font-size: 1.2rem;
+      margin: 0;
     }
-    
+
     .grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -59,7 +68,7 @@
 
     .card h2 {
       color: #deae10;
-      font-size: 1.4rem;
+      font-size: 1.2rem;
       margin-top: 0;
     }
 
@@ -69,7 +78,6 @@
     }
 
     footer {
-      
       text-align: center;
       padding: 1rem 0;
       margin-top: auto;
@@ -94,35 +102,38 @@
 
     p a {
       color: #00a9e6;
-      /* リンクの色を指定（例：赤） */
       text-decoration: none;
-      /* 下線を消す */
     }
   </style>
 </head>
 
 <body>
-  <h1>ChatGPT 活用術</h1>
-  <p class="created-by">
-    <a href="https://atsu3sh1n1.github.io/yumikou/" target="_blank">Created by YUMIKOU Inc.</a>
-  </p>
-  <br>
-  <div class="grid">
-    <a href="report/chatgpt_office_guide.html" class="card">
-      <h2>事務作業の効率化アイデア10選</h2>
-      <h3>文書作成・議事録・Excelまで、AIがあなたの事務仕事をサポート！</h3>
-    </a>
-    <a href="report/chatgpt_prompt_tips.html" class="card">
-      <h2>ChatGPTプロンプト活用術10選</h2>
-      <h3>もう「何て聞けばいいの？」で迷わない。</h3>
-    </a>
-  </div>
+  <div class="wrapper">
+    <main class="main">
+      <h1>ChatGPT 活用術</h1>
+      <p class="created-by">
+        <a href="https://atsu3sh1n1.github.io/yumikou/" target="_blank">Created by YUMIKOU Inc.</a>
+      </p>
+      <br>
+      <div class="grid">
+        <a href="report/chatgpt_office_guide.html" class="card">
+          <h2>事務作業の効率化アイデア10選</h2>
+          <h3>文書作成・議事録・Excelまで、AIがあなたの事務仕事をサポート！</h3>
+        </a>
+        <a href="report/chatgpt_prompt_tips.html" class="card">
+          <h2>ChatGPTプロンプト活用術10選</h2>
+          <h3>もう「何て聞けばいいの？」で迷わない。仕事が格段に効率化！</h3>
+        </a>
+      </div>
+    </main>
 
-  <footer>
-    <a href="https://atsu3sh1n1.github.io/yumikou/">
-      <p>2025 有限会社弓工 All rights reserved.</p>
-    </a>
-  </footer>
+    <footer>
+      <p style="text-align: center; font-size: 0.9rem; color: #888;">
+        &copy; 2025 <a href="https://atsu3sh1n1.github.io/yumikou/" style="color: #888; text-decoration: none;">有限会社弓工</a>
+        All rights reserved.
+      </p>
+    </footer>
+  </div>
 </body>
 
 </html>
