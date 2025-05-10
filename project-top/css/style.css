@@ -1,20 +1,24 @@
-html, body {
-    margin: 0;
-    padding: 0;
-    height: 100%;
-    font-family: 'Helvetica Neue', sans-serif;
-    color: white;
-    background: black;
-    overflow-x: hidden;
-  }
-  
-  body::-webkit-scrollbar {
-    display: none;
-  }
-  body {
-    scrollbar-width: none;
-  }
-  
+ html {
+  overflow: -moz-scrollbars-none; /* Firefox用 */
+  scrollbar-width: none; /* Firefox用 */
+  -ms-overflow-style: none; /* IE/Edge用 */
+  height: 100%;
+}
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: 'Helvetica Neue', sans-serif;
+  color: white;
+  background: black;
+  overflow-y: scroll; /* 縦スクロールを許可 */
+  overflow-x: hidden; /* 横スクロールは禁止 */
+}
+
+/* Chrome/Safari/Edge用 */
+body::-webkit-scrollbar {
+  display: none;
+}
   @keyframes fadeIn {
     0% {
       opacity: 0;
