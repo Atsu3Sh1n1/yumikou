@@ -31,6 +31,8 @@ body {
 .scroll-container {
     position: relative;
     width: 100%;
+    margin: 0;
+    padding: 0;
 }
 
 section {
@@ -208,6 +210,8 @@ p {
     text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
     z-index: 1;
     border-bottom: none;
+    margin: 0;
+    padding: 0;
 }
 
 .stats-container {
@@ -571,8 +575,8 @@ footer h3 {
 }
 
 @media (max-width: 768px) {
-  .parallax {
-    background-attachment: scroll;
-    background-size: cover;
-  }
+    .parallax {
+        background-attachment: scroll;
+        background-size: cover;
+    }
 }
