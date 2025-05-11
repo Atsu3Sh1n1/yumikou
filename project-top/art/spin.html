@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>量子スピンの微粒子渦</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <style>
+        body { 
+            margin: 0; 
+            overflow: hidden; 
+            background: #000;
+        }
+        canvas { 
+            display: block; 
+        }
+    </style>
+</head>
+<body>
+    <script>
+        // シーン設定
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setClearColor(0x000000);
+        document.body.appendChild(renderer.domElement);
+
+        // 微粒子層の作成
+        const layers = [];
+        const layerCount = 3;
+        const colors = [0xff3366, 0x33ff66, 0x3366ff];
+        const particleCount = 5000; // 各層の粒子数を増加
+
+        // 粒子ジオメトリの作成（より細かな粒子）
+        const createParticleGeometry = (radius) => {
+            const geometry = new THREE.BufferGeometry();
+            const positions = [];
+            const sizes = [];
+            const randoms = []; // 個々の粒子の動き用ランダム値
+
+            for (let i = 0; i < particleCount; i++) {
+                // 球面上に不規則に粒子を配置
+                const theta = Math.random() * Math.PI * 2;
+                const phi = Math.acos(2 * Math.random() - 1);
+                const r = radius * (0.9 + Math.random() * 0.2); // より不規則に
+
+                const x = r * Math.sin(phi) * Math.cos(theta);
+                const y = r * Math.sin(phi) * Math.sin(theta);
+                const z = r * Math.cos(phi);
+
+                positions.push(x, y, z);
+                sizes.push(0.1 + Math.random() * 0.5); // より細かな粒子
+                randoms.push(
+                    Math.random() * 0.02, // 個々の回転速度
+                    Math.random() * Math.PI * 2, // 初期角度
+                    Math.random() * 0.1 + 0.05 // 半径変動量
+                );
+            }
+
+            geometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+            geometry.setAttribute('size', new THREE.Float32BufferAttribute(sizes, 1));
+            geometry.setAttribute('random', new THREE.Float32BufferAttribute(randoms, 3));
+            
+            return geometry;
+        };
+
+        // 3つの微粒子層を作成
+        for (let i = 0; i < layerCount; i++) {
+            const radius = 1.5 + i * 0.4;
+            const geometry = createParticleGeometry(radius);
+            
+            const material = new THREE.PointsMaterial({
+                color: colors[i],
+                size: 0.05, // より小さな粒子
+                sizeAttenuation: true,
+                transparent: true,
+                opacity: 0.9,
+                blending: THREE.AdditiveBlending
+            });
+
+            const layer = new THREE.Points(geometry, material);
+            layer.userData = {
+                baseSpeed: 0.01 + Math.random() * 0.02,
+                rotationAxis: new THREE.Vector3(
+                    (Math.random() - 0.5) * 2,
+                    (Math.random() - 0.5) * 2,
+                    (Math.random() - 0.5) * 2
+                ).normalize(),
+                originalRadius: radius,
+                turbulence: 0.2 + Math.random() * 0.3
+            };
+            
+            scene.add(layer);
+            layers.push(layer);
+        }
+
+        // カメラ位置
+        camera.position.z = 4;
+
+        // マウスインタラクション
+        let isDragging = false;
+        let previousMousePosition = { x: 0, y: 0 };
+        let zoom = 1;
+
+        document.addEventListener('mousedown', (e) => {
+            isDragging = true;
+            previousMousePosition = { x: e.clientX, y: e.clientY };
+        });
+
+        document.addEventListener('mouseup', () => {
+            isDragging = false;
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            if (isDragging) {
+                const deltaX = e.clientX - previousMousePosition.x;
+                const deltaY = e.clientY - previousMousePosition.y;
+                
+                camera.position.x -= deltaX * 0.01;
+                camera.position.y += deltaY * 0.01;
+                camera.lookAt(scene.position);
+                
+                previousMousePosition = { x: e.clientX, y: e.clientY };
+            }
+        });
+
+        document.addEventListener('wheel', (e) => {
+            zoom -= e.deltaY * 0.001;
+            zoom = Math.max(0.3, Math.min(zoom, 2));
+            camera.position.z = 4 / zoom;
+        });
+
+        // アニメーションループ
+        function animate() {
+            requestAnimationFrame(animate);
+            
+            const time = Date.now() * 0.001;
+            
+            layers.forEach((layer, layerIndex) => {
+                const geometry = layer.geometry;
+                const positions = geometry.attributes.position.array;
+                const randoms = geometry.attributes.random.array;
+                const baseRadius = layer.userData.originalRadius;
+                const turbulence = layer.userData.turbulence;
+                
+                // 層全体の回転
+                layer.rotateOnWorldAxis(layer.userData.rotationAxis, layer.userData.baseSpeed);
+                
+                // 各粒子の独立した動き
+                for (let i = 0; i < particleCount; i++) {
+                    const idx = i * 3;
+                    const rIdx = i * 3;
+                    
+                    const particleSpeed = randoms[rIdx];
+                    const particleAngle = randoms[rIdx+1] + time * particleSpeed * 10;
+                    const radiusVariation = randoms[rIdx+2];
+                    
+                    // 元の位置を計算
+                    const originalX = positions[idx];
+                    const originalY = positions[idx+1];
+                    const originalZ = positions[idx+2];
+                    const originalDir = new THREE.Vector3(originalX, originalY, originalZ).normalize();
+                    
+                    // 粒子ごとの回転
+                    const radius = baseRadius * (1 + Math.sin(time * 0.5 + i * 0.01) * radiusVariation);
+                    const turbulenceX = Math.sin(time * 2 + i) * turbulence;
+                    const turbulenceY = Math.cos(time * 1.5 + i * 0.7) * turbulence;
+                    const turbulenceZ = Math.sin(time * 1.2 + i * 0.3) * turbulence;
+                    
+                    // 新しい位置を計算
+                    positions[idx] = originalDir.x * radius + turbulenceX;
+                    positions[idx+1] = originalDir.y * radius + turbulenceY;
+                    positions[idx+2] = originalDir.z * radius + turbulenceZ;
+                }
+                
+                geometry.attributes.position.needsUpdate = true;
+                
+                // 層の色を微妙に変化
+                const color = new THREE.Color(colors[layerIndex]);
+                const hue = (color.getHSL().h + time * 0.01) % 1;
+                layer.material.color.setHSL(hue, 0.8, 0.6);
+            });
+            
+            renderer.render(scene, camera);
+        }
+        
+        animate();
+
+        // ウィンドウリサイズ対応
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+    </script>
+</body>
+</html>
