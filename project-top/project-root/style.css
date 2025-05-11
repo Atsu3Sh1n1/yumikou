@@ -1,34 +1,201 @@
+ html {
+  overflow: -moz-scrollbars-none; /* Firefox用 */
+  scrollbar-width: none; /* Firefox用 */
+  -ms-overflow-style: none; /* IE/Edge用 */
+  height: 100%;
+}
 body {
-  font-family: 'Inter', sans-serif;
   margin: 0;
   padding: 0;
-  line-height: 1.6;
-  background-color: #000000;
-  color: #ffffff;
-}
-
-header {
-  background-color: #000000;
+  height: 100%;
+  font-family: 'Helvetica Neue', sans-serif;
   color: white;
-  padding: 2rem;
-  text-align: center;
+  background: black;
+  overflow-y: scroll; /* 縦スクロールを許可 */
+  overflow-x: hidden; /* 横スクロールは禁止 */
 }
 
-main {
-  padding: 2rem;
+/* Chrome/Safari/Edge用 */
+body::-webkit-scrollbar {
+  display: none;
+}
+  @keyframes fadeIn {
+    0% {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .wrapper {
+    position: relative;
+    z-index: 2;
+    padding: 40px 20px;
+    padding-right: 17px;
+    animation: fadeIn 1s ease-out;
+  }
+  
+  .title {
+    text-align: center;
+    font-size: 3rem;
+    margin-bottom: 20px;
+    letter-spacing: 1px;
+    font-weight: 300;
+    white-space: nowrap;
+    opacity: 0;
+    animation: fadeIn 1s ease-out forwards;
+    animation-delay: 0.5s;
+  }
+  .title .yumioka {
+    font-size: 0.5em;
+    font-weight: 300;
+  }
+  .title .group {
+    font-size: 0.5em;
+    font-weight: 300;
+  }
+  
+  
+  canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 0;
+    pointer-events: none;
+  }
+  
+  .container {
+    width: 100%;
+    max-width: 1300px;
+    margin: 0 auto;
+  }
+  
+  .gallery {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin: 0 auto;
+  }
+  
+  @media (max-width: 1024px) {
+    .gallery {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (max-width: 480px) {
+    .gallery {
+      grid-template-columns: repeat(1, 1fr);
+    }
+    .title {
+      font-size: 1.6rem;
+    }
+  }
+  
+  .card .image-container {
+    position: relative;
+    width: 100%;
+    height: 160px; /* 画像の高さに合わせる */
+    overflow: hidden;
 }
 
-section {
-  margin-bottom: 2rem;
-  background-color: rgb(57, 57, 57);
-  padding: 1.5rem;
-  border-radius: 8px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+.card .fade-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
 }
 
-footer {
-  background-color: #333;
-  color: white;
-  text-align: center;
-  padding: 0.9rem;
+.card .fade-image.active {
+    opacity: 1;
 }
+
+
+  
+    a.card {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+  }
+  
+  .card {
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .card:hover {
+    transform: scale(1.03);
+  }
+  
+  .card img {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+    display: block;
+  }
+  
+  .card .info {
+    padding: 16px;
+    flex-grow: 1;
+    text-align: center;
+  }
+  
+  .card .info h3 {
+    margin: 0 0 8px 0;
+    font-size: 1.3rem;
+  }
+  
+  .card .info p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: #ccc;
+  }
+  
+  .map-embed iframe {
+    width: 100%;
+    height: 160px;
+    border: none;
+    display: block;
+  }
+  
+  .center-info {
+    text-align: center;
+    padding: 40px 0;
+  }
+  
+  .center-info i {
+    font-size: 2.5rem;
+    color: white;
+  }
+ 
+  .blur-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    z-index: 1;
+    pointer-events: none;
+  }
+  .footer {
+    text-align: center;
+  }
+  
+  .footer a {
+    color: #09ff00; /* 好きな色に変更（これは青） */
+    text-decoration: none;
+  }
