@@ -1,574 +1,118 @@
 <!DOCTYPE html>
 <html lang="ja">
-
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="robots" content="index, follow" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>姫路市 | 和モダン縦長ページ</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700&display=swap');
 
-    <title>ChatGPTの限界を知ろう：AIにできないことと、人間の役割</title>
-    <meta name="description" content="ChatGPTの限界と人間の役割を解説。AIが苦手な5つの領域と、人間が集中すべき10の価値創造ポイントを紹介します。" />
-    <meta name="keywords" content="ChatGPT, AI限界, 人間の役割, 創造性, 意思決定, リーダーシップ, 対人スキル, 問いの力" />
-    <meta name="author" content="有限会社弓工 webエンジニア部 AI活用ブログ" />
-    <meta name="robots" content="index, follow" />
+    body {
+      margin: 0;
+      font-family: 'Noto Serif JP', serif;
+      background-color: #f5f0e1;
+      color: #1a1a1a;
+      scroll-behavior: smooth;
+    }
 
-    <!-- Open Graph (SNS用) -->
-    <meta property="og:title" content="ChatGPTの限界を知ろう：AIにできないことと、人間の役割" />
-    <meta property="og:description" content="AI時代に人間が価値を発揮する領域を徹底解説" />
-    <meta property="og:image" content="images/icon.webp" />
-    <meta property="og:url" content="https://atsu3sh1n1.github.io/yumikou/" />
-    <meta property="og:type" content="article" />
-    <meta property="og:site_name" content="ChatGPT AI活用ブログ" />
+    section {
+      padding: 100px 20px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      opacity: 0;
+      transform: translateY(50px);
+      transition: all 1s ease-out;
+    }
 
-    <!-- Twitter Card -->
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="ChatGPTの限界を知ろう：AIにできないことと、人間の役割" />
-    <meta name="twitter:description" content="AI時代に人間が価値を発揮する領域を徹底解説" />
-    <meta name="twitter:image" content="images/icon.webp" />
+    section.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
 
-    <!-- Faviconなど -->
-    <link rel="icon" href="images/icon.webp" />
+    .hero {
+      background: url('https://upload.wikimedia.org/wikipedia/commons/thumb/7/76/Himeji_Castle_in_May_2015.jpg/1920px-Himeji_Castle_in_May_2015.jpg') no-repeat center center/cover;
+      color: white;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+    }
 
-    <!-- FontとCSS -->
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --primary-color: #FFA500;
-            --secondary-color: #6ff5ff;
-            --bg-color: #111;
-            --card-bg: #1e1e1e;
-            --text-color: #f9f9f9;
-            --light-text: #ccc;
-            --border-radius: 12px;
-            --box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-            --max-width: 800px;
-            --mobile-breakpoint: 768px;
-        }
+    .hero h1 {
+      font-size: 3rem;
+    }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+    .gold-line {
+      border-bottom: 2px solid #bfa17e;
+      display: inline-block;
+      padding-bottom: 5px;
+      margin-bottom: 20px;
+    }
 
-        html {
-            font-size: 18px;
-            -webkit-text-size-adjust: 100%;
-        }
-
-        body {
-            font-family: 'Noto Sans JP', 'Roboto', sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            line-height: 1.6;
-            min-height: 100vh;
-        }
-
-        .wrapper {
-            max-width: var(--max-width);
-            margin: 0 auto;
-            padding: 20px;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-
-        header {
-            margin-bottom: 30px;
-        }
-
-        h1 {
-            color: var(--primary-color);
-            font-size: 2.2rem;
-            margin: 15px 0 10px;
-            line-height: 1.3;
-            text-align: center;
-        }
-
-        h2 {
-            color: var(--primary-color);
-            font-size: 1.6rem;
-            margin-top: 25px;
-            line-height: 1.3;
-        }
-
-        h3 {
-            font-size: 1.2rem;
-            margin: 0 0 15px 0;
-            color: #ded7d7;
-            text-align: center;
-        }
-
-        .card {
-            background-color: var(--card-bg);
-            border-radius: var(--border-radius);
-            padding: 25px;
-            box-shadow: var(--box-shadow);
-            margin-bottom: 25px;
-            width: 100%;
-            overflow: hidden;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
-        }
-
-        p {
-            line-height: 1.6;
-            font-size: 1rem;
-            color: var(--light-text);
-            margin: 10px 0;
-        }
-
-        ul,
-        ol {
-            padding-left: 25px;
-            margin: 15px 0;
-        }
-
-        li {
-            margin-bottom: 10px;
-            color: var(--light-text);
-        }
-
-        a {
-            color: #00a9e6;
-            text-decoration: none;
-            transition: color 0.3s;
-        }
-
-        a:hover {
-            color: var(--secondary-color);
-            text-decoration: underline;
-        }
-
-        .cta-button {
-            background-color: var(--primary-color);
-            color: #111;
-            border: none;
-            padding: 12px 25px;
-            border-radius: 8px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s;
-            text-decoration: none;
-            display: inline-block;
-            margin: 20px auto;
-            text-align: center;
-            width: auto;
-            max-width: 300px;
-        }
-
-        .cta-button:hover {
-            background-color: var(--secondary-color);
-            text-decoration: none;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
-
-        footer {
-            text-align: center;
-            padding: 1.5rem 0;
-            margin-top: 40px;
-            font-size: 0.9rem;
-        }
-
-        footer p {
-            color: #888;
-            font-size: 0.9rem;
-        }
-
-        /* プロンプト表示用スタイル */
-        .prompt-box {
-            background-color: #2a2a2a;
-            border-left: 4px solid var(--primary-color);
-            padding: 15px;
-            margin: 15px 0;
-            border-radius: 0 8px 8px 0;
-            font-family: 'Courier New', monospace;
-            white-space: pre-wrap;
-            word-break: break-word;
-            font-size: 0.95rem;
-            overflow-x: auto;
-            line-height: 1.5;
-        }
-
-        .tip {
-            background-color: rgba(222, 174, 16, 0.1);
-            padding: 15px;
-            border-radius: 8px;
-            margin: 15px 0;
-            font-size: 0.95rem;
-            border-left: 3px solid var(--primary-color);
-        }
-
-        .tip:before {
-            content: "💡 深掘りポイント";
-            font-weight: bold;
-            color: var(--primary-color);
-            display: block;
-            margin-bottom: 8px;
-            font-size: 1rem;
-        }
-
-        .difficulty {
-            display: inline-block;
-            padding: 4px 10px;
-            border-radius: 12px;
-            font-size: 0.85rem;
-            margin-right: 10px;
-        }
-
-        .beginner {
-            background-color: rgba(0, 128, 0, 0.2);
-            color: #7cfc00;
-        }
-
-        .intermediate {
-            background-color: rgba(255, 165, 0, 0.2);
-            color: var(--primary-color);
-        }
-
-        .advanced {
-            background-color: rgba(255, 0, 0, 0.2);
-            color: #ff6347;
-        }
-
-        .subtitle {
-            color: var(--light-text);
-            font-size: 1.05rem;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-
-        .back-to-top {
-            display: block;
-            text-align: center;
-            margin: 25px 0;
-            font-size: 0.95rem;
-            padding: 10px;
-        }
-
-        .section-divider {
-            text-align: center;
-            margin: 40px 0;
-            position: relative;
-        }
-
-        .section-divider:before {
-            content: "";
-            display: block;
-            height: 1px;
-            background: linear-gradient(to right, transparent, var(--primary-color), transparent);
-            position: absolute;
-            top: 50%;
-            width: 100%;
-            z-index: -1;
-        }
-
-        .section-divider span {
-            background-color: var(--bg-color);
-            padding: 0 20px;
-            color: var(--primary-color);
-            font-size: 1.2rem;
-        }
-
-        .example {
-            background-color: #2a2a2a;
-            padding: 15px;
-            border-radius: 8px;
-            margin: 15px 0;
-        }
-
-        .example-title {
-            font-weight: bold;
-            color: var(--primary-color);
-            margin-bottom: 10px;
-        }
-
-        /* レスポンシブデザイン */
-        @media (max-width: 768px) {
-            html {
-                font-size: 16px;
-            }
-
-            .wrapper {
-                padding: 15px;
-            }
-
-            h1 {
-                font-size: 1.8rem;
-            }
-
-            h2 {
-                font-size: 1.4rem;
-            }
-
-            h3 {
-                font-size: 1.1rem;
-            }
-
-            .card {
-                padding: 20px;
-            }
-
-            .prompt-box {
-                font-size: 0.9rem;
-                padding: 12px;
-            }
-
-            .tip {
-                padding: 12px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            html {
-                font-size: 15px;
-            }
-
-            h1 {
-                font-size: 1.6rem;
-            }
-
-            h2 {
-                font-size: 1.3rem;
-            }
-
-            .card {
-                padding: 18px;
-            }
-
-            ul,
-            ol {
-                padding-left: 20px;
-            }
-
-            .cta-button {
-                width: 100%;
-                padding: 12px;
-            }
-        }
-
-        /* PC向けの追加スタイル */
-        @media (min-width: 769px) {
-            .card {
-                margin: 25px auto;
-            }
-
-            .prompt-box {
-                font-size: 0.95rem;
-            }
-
-            .tip {
-                margin: 20px 0;
-            }
-        }
-    </style>
+    footer {
+      background-color: #1a1a1a;
+      color: #bfa17e;
+      text-align: center;
+      padding: 30px 0;
+    }
+  </style>
 </head>
-
 <body>
-    <div class="wrapper">
-        <main class="main">
-            <h1>ChatGPTの限界を知ろう</h1>
-            <h3>〜AIにできないことと、人間の役割〜</h3>
 
-            <div class="card">
-                <p>ChatGPTをはじめとするAI技術は驚異的な進化を遂げていますが、人間にしかできない領域が明確に存在します。本記事では、AIの限界を理解し、人間が価値を発揮すべき領域を10のポイントに分けて解説します。</p>
-            </div>
+  <!-- HERO -->
+  <section class="hero">
+    <h1>白鷺城とともに歩むまち、姫路。</h1>
+    <p>歴史・文化・自然が融合する、播磨の心。</p>
+  </section>
 
-            <div class="section-divider">
-                <span>ChatGPTの5つの限界</span>
-            </div>
+  <!-- 姫路城 -->
+  <section class="section">
+    <h2 class="gold-line">姫路城</h2>
+    <p>
+      世界遺産・姫路城は、400年以上の歴史を誇る日本屈指の名城。
+      白く美しい外観から「白鷺城」と呼ばれ、国宝にも指定されています。
+    </p>
+  </section>
 
-            <div class="card">
-                <h2>1. 目的と意図の"曖昧なままの共有"は苦手</h2>
-                <p>「いい感じに資料作って」といった曖昧な指示では、ChatGPTは期待通りの結果を返せません。AIは「いい感じ」のニュアンスを理解できないからです。</p>
+  <!-- グルメ -->
+  <section class="section" style="background-color: #7c5c3b; color: white;">
+    <h2 class="gold-line">姫路グルメ</h2>
+    <p>
+      生姜醤油で食べる「姫路おでん」、瀬戸内の幸「穴子」、播州ラーメンなど、
+      地元の味が旅を彩ります。
+    </p>
+  </section>
 
-                <div class="example">
-                    <div class="example-title">【具体例】</div>
-                    <p>「若者向けのプレゼン資料を作成して」という指示に対して、AIは「若者」の定義（10代？20代？）や、どのようなトーンが適切か判断できません。</p>
-                </div>
+  <!-- 自然 -->
+  <section class="section">
+    <h2 class="gold-line">自然と風景</h2>
+    <p>
+      書写山圓教寺や好古園、桜や紅葉の名所としても知られる姫路は、
+      四季折々の美しさが訪れる人を魅了します。
+    </p>
+  </section>
 
-                <div class="tip">
-                    <p>人間の役割：目的を言語化・明確化できる力が重要です。「20代前半の新卒社員向けに、カジュアルなトーンで主要ポイントを3点に絞った1ページ資料」のように具体化しましょう。</p>
-                </div>
-            </div>
+  <!-- フッター -->
+  <footer>
+    <p>&copy; 2025 Himeji City | 和モダンスクロールページ</p>
+  </footer>
 
-            <div class="card">
-                <h2>2. 現場のニュアンスや"空気"を読む力</h2>
-                <p>社内の微妙な人間関係や、その場の雰囲気を考慮したコミュニケーションはAIには困難です。</p>
+  <script>
+    const sections = document.querySelectorAll('.section, .hero');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, {
+      threshold: 0.2,
+    });
 
-                <div class="example">
-                    <div class="example-title">【具体例】</div>
-                    <p>上司Aには直接的な表現で、部長Bには間接的な表現で同じ内容を伝えるといった、文脈に応じた調整ができません。</p>
-                </div>
+    sections.forEach(section => {
+      observer.observe(section);
+    });
+  </script>
 
-                <div class="tip">
-                    <p>人間の役割：場の文脈を読む「対人スキル」が不可欠です。相手の立場や組織文化を理解した上で、適切なコミュニケーション方法を選択しましょう。</p>
-                </div>
-            </div>
-
-            <div class="card">
-                <h2>3. 複数の前提・矛盾を含む問題への対処</h2>
-                <p>「利益を最大化したいが、顧客満足も落とせない」といった矛盾する要件への対応はAIの苦手分野です。</p>
-
-                <div class="example">
-                    <div class="example-title">【具体例】</div>
-                    <p>コスト削減と品質維持、短期利益と長期成長など、トレードオフの関係にある課題に対して、最適解を見出すことが困難です。</p>
-                </div>
-
-                <div class="tip">
-                    <p>人間の役割：「葛藤」や「ジレンマ」を受け止める柔軟性が求められます。相反する要素のバランスを取りながら、文脈に応じた判断を下すことが重要です。</p>
-                </div>
-            </div>
-
-            <div class="card">
-                <h2>4. 責任を取る意思決定</h2>
-                <p>AIは提案はできても、最終的な決定やその結果に対する責任を取ることはできません。</p>
-
-                <div class="example">
-                    <div class="example-title">【具体例】</div>
-                    <p>人員削減や大型投資といった重大な経営判断において、AIはデータに基づいた分析を提供できますが、決断とその結果の責任は人間が負う必要があります。</p>
-                </div>
-
-                <div class="tip">
-                    <p>人間の役割：リスクを引き受ける「判断者」としての覚悟が不可欠です。不確実性を含む状況下でも、責任を持って意思決定できる能力が重要です。</p>
-                </div>
-            </div>
-
-            <div class="card">
-                <h2>5. "問い"を生み出す力</h2>
-                <p>AIは与えられた問いに答えることは得意ですが、そもそも「何を問うべきか」を考えることはできません。</p>
-
-                <div class="example">
-                    <div class="example-title">【具体例】</div>
-                    <p>「売上を上げる方法」という問いに対しては答えられますが、「そもそも我々は何を目指すべきか」という根本的な問いを立てることはできません。</p>
-                </div>
-
-                <div class="tip">
-                    <p>人間の役割：問いを立て、方向性を創造する力が価値を生みます。既存の枠組みを超えた新しい視点や、本質的な課題設定ができることが人間の強みです。</p>
-                </div>
-            </div>
-
-            <div class="section-divider">
-                <span>限界を超えるための人間の役割</span>
-            </div>
-
-            <div class="card">
-                <h2>6. 「AIに任せる」と「人間がやる」の線引き</h2>
-                <p>ルーチン業務はAIに委ね、対人関係・戦略・創造的作業に人間のリソースを集中させましょう。</p>
-
-                <div class="example">
-                    <div class="example-title">【実践方法】</div>
-                    <ul>
-                        <li>データ入力・定型文作成 → AIに任せる</li>
-                        <li>クライアント交渉・企画開発 → 人間が担当</li>
-                    </ul>
-                </div>
-
-                <div class="tip">
-                    <p>これは「人間を弱くする」のではなく「人間を研ぎ澄ます」選択です。AIを活用することで、人間はより創造的で価値の高い仕事に集中できます。</p>
-                </div>
-            </div>
-
-            <div class="card">
-                <h2>7. AIの結果を鵜呑みにしない判断力</h2>
-                <p>ChatGPTの答えは時に間違ったり、偏ったり、古かったりします。常に批判的に検証する姿勢が重要です。</p>
-
-                <div class="example">
-                    <div class="example-title">【具体例】</div>
-                    <p>AIが生成した市場分析レポートには、最新の業界動向が反映されていない可能性があります。常に最新情報と照合する必要があります。</p>
-                </div>
-
-                <div class="tip">
-                    <p>私たちは「情報の選別者」であり続ける必要があります。AIの出力を盲信せず、専門知識や現場感覚と照らし合わせて判断しましょう。</p>
-                </div>
-            </div>
-
-            <div class="card">
-                <h2>8. AIを"相棒"として共創する</h2>
-                <p>ChatGPTに「やらせる」のではなく、「ともに考える」パートナーとして活用しましょう。</p>
-
-                <div class="example">
-                    <div class="example-title">【実践方法】</div>
-                    <ul>
-                        <li>アイデア出しのブレインストーミングパートナーとして</li>
-                        <li>自分の考えを整理するための対話相手として</li>
-                        <li>異なる視点を提供するディスカッションパートナーとして</li>
-                    </ul>
-                </div>
-
-                <div class="tip">
-                    <p>AIを「部下」ではなく「思考のパートナー」と位置付けることで、創造的な協働が可能になります。</p>
-                </div>
-            </div>
-
-            <div class="card">
-                <h2>9. 「非効率」に価値を見出す</h2>
-                <p>試行錯誤や失敗、回り道といったプロセスこそが、人間の創造性を育むことがあります。</p>
-
-                <div class="example">
-                    <div class="example-title">【具体例】</div>
-                    <p>AIは即座に「正解」を出そうとしますが、人間の創造プロセスには、無駄と思えるような探索や偶然の発見が重要な役割を果たします。</p>
-                </div>
-
-                <div class="tip">
-                    <p>効率化だけを追求せず、創造的なプロセスそのものを楽しむ余裕を持ちましょう。時にはAIをオフにして、自分の頭で考える時間も重要です。</p>
-                </div>
-            </div>
-
-            <div class="card">
-                <h2>10. 「人間とは何か」を問い直す</h2>
-                <p>AIの台頭によって、人間の存在意義がより問われる時代になりました。</p>
-
-                <div class="example">
-                    <div class="example-title">【考えるべき問い】</div>
-                    <ul>
-                        <li>人間にしかできないことは何か？</li>
-                        <li>AI時代における人間らしさとは？</li>
-                        <li>私たちはどのような価値を創造すべきか？</li>
-                    </ul>
-                </div>
-
-                <div class="tip">
-                    <p>「効率」や「正解」ではなく、「意味」や「物語」を生み出せるのが人間の本質的な強みです。この問いに向き合い続けることが重要です。</p>
-                </div>
-            </div>
-
-            <div class="card">
-                <h2>まとめ：AIにできないことは、人間の価値そのもの</h2>
-                <p>ChatGPTが苦手なこと＝人間にしかできないこと。AIの限界を知ることは、逆に人間の可能性を再発見する機会でもあります。</p>
-                
-                <ul>
-                    <li>AIは「手段」であり「目的」ではない</li>
-                    <li>人間の判断力・創造力・倫理観が不可欠</li>
-                    <li>AIと人間の協働で新たな価値を創造</li>
-                </ul>
-
-                <div class="tip">
-                    <p>AI時代において、私たちは「より人間らしい」能力を磨いていく必要があります。感情・直観・創造性・倫理観といった人間固有の能力を強化することが、AI時代を生き抜く鍵となります。</p>
-                </div>
-
-                <a href="https://openai.com/ja-JP/chatgpt/overview/" target="_blank"
-                    class="cta-button">ChatGPTの公式サイトを見る</a>
-            </div>
-
-            <div class="back-to-top">
-                <a href="#" onclick="window.scrollTo({ top: 0, behavior: 'smooth' })">▲ ページの先頭へ戻る</a>
-            </div>
-        </main>
-
-        <footer>
-            <p style="text-align: center; font-size: 0.9rem; color: #888;">
-                &copy; 2025 <a href="https://atsu3sh1n1.github.io/yumikou/"
-                    style="color: #888; text-decoration: none;">有限会社弓工</a>
-                All rights reserved.
-            </p>
-        </footer>
-    </div>
 </body>
-
 </html>

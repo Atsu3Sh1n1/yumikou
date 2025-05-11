@@ -1,0 +1,59 @@
+/* Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #0e0e0e;
+  color: #ccc;
+  font-family: 'EB Garamond', serif;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+canvas#bgCanvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.container {
+  z-index: 1;
+  text-align: center;
+}
+
+.title {
+  font-size: 2rem;
+  color: #888;
+  margin-bottom: 2rem;
+  letter-spacing: 1px;
+}
+
+.branches {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.branch {
+  font-size: 1.5rem;
+  color: #888;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  letter-spacing: 2px;
+}
+
+.branch:hover {
+  color: #f0f0f0;
+  transform: scale(1.05);
+  text-shadow: 0 0 6px rgba(255, 255, 255, 0.15);
+}

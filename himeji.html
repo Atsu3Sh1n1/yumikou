@@ -1,0 +1,1326 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>姫路市 - 無限スクロールの旅</title>
+    <style>
+
+        html, body {
+    overflow-x: hidden; /* 横スクロールを防ぐ */
+}
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Yusei+Magic&display=swap');
+        
+        :root {
+            --primary: #e60012;
+            --secondary: #f8b500;
+            --dark: #333333;
+            --light: #f5f5f5;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background-color: var(--light);
+            color: var(--dark);
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+        
+        .scroll-container {
+            position: relative;
+            width: 100%;
+        }
+        
+        section {
+            min-height: 100vh;
+            padding: 5rem 2rem;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+        
+        h1, h2, h3 {
+            font-family: 'Yusei Magic', sans-serif;
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        h1 {
+            font-size: 4rem;
+            color: var(--primary);
+            text-shadow: 3px 3px 0 var(--secondary);
+            margin-bottom: 2rem;
+        }
+        
+        h2 {
+            font-size: 2.5rem;
+            color: var(--secondary);
+            border-bottom: 3px dashed var(--primary);
+            padding-bottom: 0.5rem;
+        }
+        
+        h3 {
+            font-size: 1.8rem;
+            color: var(--primary);
+        }
+        
+        p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            max-width: 800px;
+            margin: 0 auto 1.5rem;
+        }
+        
+        .content-box {
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            margin: 2rem 0;
+            max-width: 900px;
+        }
+        
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            width: 100%;
+            max-width: 1200px;
+            margin: 2rem auto;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-10px);
+        }
+        
+        .card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+        
+        .card-content {
+            padding: 1.5rem;
+        }
+        
+        .timeline {
+            position: relative;
+            max-width: 800px;
+            margin: 3rem auto;
+        }
+        
+        .timeline::after {
+            content: '';
+            position: absolute;
+            width: 6px;
+            background-color: var(--primary);
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            margin-left: -3px;
+            border-radius: 3px;
+        }
+        
+        .timeline-item {
+            padding: 10px 40px;
+            position: relative;
+            width: 50%;
+            box-sizing: border-box;
+        }
+        
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            background-color: var(--secondary);
+            border: 4px solid var(--primary);
+            border-radius: 50%;
+            top: 15px;
+            z-index: 1;
+        }
+        
+        .left {
+            left: 0;
+            text-align: right;
+        }
+        
+        .right {
+            left: 50%;
+            text-align: left;
+        }
+        
+        .left::after {
+            right: -12px;
+        }
+        
+        .right::after {
+            left: -12px;
+        }
+        
+        .timeline-content {
+            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .parallax {
+            background-attachment: fixed;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+            height: 60vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+        
+        .parallax::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+        
+        .parallax h2 {
+            color: white;
+            font-size: 3rem;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+            z-index: 1;
+            border-bottom: none;
+        }
+        
+        .stats-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+        
+        .stat-box {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            text-align: center;
+            min-width: 200px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        .stat-number {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-label {
+            font-size: 1.2rem;
+        }
+        
+        .quote {
+            font-style: italic;
+            font-size: 1.5rem;
+            text-align: center;
+            margin: 3rem auto;
+            max-width: 800px;
+            position: relative;
+        }
+        
+        .quote::before, .quote::after {
+            content: '"';
+            font-size: 2rem;
+            color: var(--secondary);
+        }
+        
+        .quote-author {
+            display: block;
+            text-align: right;
+            font-size: 1rem;
+            margin-top: 1rem;
+            color: var(--dark);
+        }
+        
+        .floating-element {
+            position: absolute;
+            opacity: 0.7;
+            animation: float 10s infinite ease-in-out;
+        }
+        
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-30px) rotate(5deg);
+            }
+        }
+        
+/* 桜の花びらスタイル */
+.cherry-blossom {
+    width: 15px;
+    height: 15px;
+    background-color: #ffb7c5;
+    border-radius: 50% 0 50% 50%;
+    opacity: 0;
+    animation: fall 10s linear forwards;
+    top: -30px;
+}
+
+@keyframes fall {
+    0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+    10% { opacity: 0.7; }
+    90% { opacity: 0.7; }
+    100% { transform: translateY(calc(100vh + 30px)) rotate(360deg); opacity: 0; }
+}
+
+/* スクロールインジケーター */
+.scroll-indicator.hidden {
+    opacity: 0 !important;
+    pointer-events: none !important;
+}
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0) translateX(-50%);
+            }
+            40% {
+                transform: translateY(-30px) translateX(-50%);
+            }
+            60% {
+                transform: translateY(-15px) translateX(-50%);
+            }
+        }
+        
+        .scroll-indicator span {
+            display: block;
+            width: 30px;
+            height: 50px;
+            border: 3px solid var(--primary);
+            border-radius: 15px;
+            position: relative;
+        }
+        
+        .scroll-indicator span::before {
+            content: '';
+            position: absolute;
+            width: 6px;
+            height: 10px;
+            background-color: var(--primary);
+            border-radius: 3px;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: scroll 2s infinite;
+        }
+        
+        @keyframes scroll {
+            0% {
+                opacity: 1;
+                top: 10px;
+            }
+            100% {
+                opacity: 0;
+                top: 30px;
+            }
+        }
+        
+        .interactive-map {
+            width: 100%;
+            max-width: 800px;
+            height: 500px;
+            background-color: #f0f0f0;
+            border-radius: 10px;
+            margin: 2rem auto;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .map-marker {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: var(--primary);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            cursor: pointer;
+        }
+        
+        .map-marker::after {
+            content: '';
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background-color: rgba(230, 0, 18, 0.3);
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% {
+                transform: translate(-50%, -50%) scale(0.8);
+                opacity: 0.7;
+            }
+            70% {
+                transform: translate(-50%, -50%) scale(1.3);
+                opacity: 0;
+            }
+            100% {
+                transform: translate(-50%, -50%) scale(0.8);
+                opacity: 0;
+            }
+        }
+        
+        .food-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1rem;
+            width: 100%;
+            max-width: 1200px;
+            margin: 2rem auto;
+        }
+        
+        .food-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 10px;
+            height: 250px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .food-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        
+        .food-item:hover img {
+            transform: scale(1.1);
+        }
+        
+        .food-label {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+            color: white;
+            padding: 1rem;
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+        }
+        
+        .food-item:hover .food-label {
+            transform: translateY(0);
+        }
+        
+        footer {
+            background-color: var(--dark);
+            color: white;
+            text-align: center;
+            padding: 3rem 2rem;
+        }
+        
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        
+        .social-links a {
+            color: white;
+            font-size: 1.5rem;
+            transition: color 0.3s ease;
+        }
+        
+        .social-links a:hover {
+            color: var(--secondary);
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            h2 {
+                font-size: 2rem;
+            }
+            
+            .timeline::after {
+                left: 31px;
+            }
+            
+            .timeline-item {
+                width: 100%;
+                padding-left: 70px;
+                padding-right: 25px;
+            }
+            
+            .timeline-item::after {
+                left: 18px;
+            }
+            
+            .left, .right {
+                left: 0;
+                text-align: left;
+            }
+            
+            .left::after, .right::after {
+                left: 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="scroll-container">
+        <!-- ヘッダーセクション -->
+        <section style="background: linear-gradient(135deg, #f5f5f5, #e6e6e6);">
+            <div class="floating-element" style="top: 10%; left: 5%; width: 100px; height: 100px; background-color: var(--secondary); border-radius: 50%;"></div>
+            <div class="floating-element" style="top: 70%; left: 80%; width: 150px; height: 150px; background-color: var(--primary); border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%; animation-delay: 2s;"></div>
+            <div class="floating-element" style="top: 30%; left: 70%; width: 80px; height: 80px; background-color: var(--secondary); border-radius: 20% 80% 20% 80% / 80% 20% 80% 20%; animation-delay: 4s;"></div>
+            
+            <h1>姫路市</h1>
+            <h2>白鷺が舞う歴史と未来のまち</h2>
+            
+            <div class="content-box">
+                <p>兵庫県南西部に位置する姫路市は、国宝姫路城を中心に発展した歴史と文化のまちです。人口約53万人を擁する中核市であり、播磨地方の政治・経済・文化の中心地として栄えてきました。</p>
+                <p>このページでは、姫路市の魅力を余すところなくお伝えします。歴史、文化、観光、グルメ、産業、そして人々の暮らしまで、スクロールを進めるごとに新たな発見が待っています。</p>
+            </div>
+            
+            <div class="scroll-indicator">
+                <span></span>
+            </div>
+            
+            <!-- 桜の花びらアニメーション -->
+            <div class="cherry-blossom" style="left: 10%; animation-delay: 0s;"></div>
+            <div class="cherry-blossom" style="left: 20%; animation-delay: 2s;"></div>
+            <div class="cherry-blossom" style="left: 30%; animation-delay: 1s;"></div>
+            <div class="cherry-blossom" style="left: 40%; animation-delay: 3s;"></div>
+            <div class="cherry-blossom" style="left: 50%; animation-delay: 0.5s;"></div>
+            <div class="cherry-blossom" style="left: 60%; animation-delay: 2.5s;"></div>
+            <div class="cherry-blossom" style="left: 70%; animation-delay: 1.5s;"></div>
+            <div class="cherry-blossom" style="left: 80%; animation-delay: 3.5s;"></div>
+            <div class="cherry-blossom" style="left: 90%; animation-delay: 0.8s;"></div>
+        </section>
+        
+        <!-- パララックスセクション - 姫路城 -->
+        <div class="parallax" style="background-image: url('https://www.japan-guide.com/g18/3501_01.jpg');">
+            <h2>世界遺産 姫路城</h2>
+        </div>
+        
+        <!-- 姫路城セクション -->
+        <section style="background-color: #f9f3e9;">
+            <div class="content-box">
+                <h3>白鷺城の美しさ</h3>
+                <p>姫路城は、その白漆喰の美しい外観から「白鷺城」とも呼ばれ、日本で最初に世界文化遺産に登録された城の一つです。現存する12天守のうち、最も完成度が高く、江戸時代以前に建造された天守が残る貴重な城郭です。</p>
+                
+                <div class="stats-container">
+                    <div class="stat-box">
+                        <div class="stat-number">1609</div>
+                        <div class="stat-label">築城年（現在の姿）</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number">6</div>
+                        <div class="stat-label">階建ての天守</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number">31.5m</div>
+                        <div class="stat-label">天守の高さ</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number">1993</div>
+                        <div class="stat-label">世界遺産登録年</div>
+                    </div>
+                </div>
+                
+                <p>姫路城は単なる観光地ではなく、日本の城郭建築の最高傑作として、防衛機能と美的完成度を兼ね備えた稀有な存在です。大天守を中心に、3つの小天守が連なる連立式天守閣は、威風堂々とした姿で訪れる人々を魅了します。</p>
+            </div>
+            
+            <div class="grid-container">
+                <div class="card">
+                    <img src="https://www.himeji-kanko.jp/wp-content/uploads/2020/03/himejicastle_01.jpg" alt="姫路城全景">
+                    <div class="card-content">
+                        <h3>四季折々の姿</h3>
+                        <p>春は桜、夏は新緑、秋は紅葉、冬は雪化粧と、四季を通じて様々な表情を見せる姫路城。特に桜の季節には約1,000本の桜が城を彩ります。</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <img src="https://www.himeji-kanko.jp/wp-content/uploads/2020/03/himejicastle_02.jpg" alt="姫路城の石垣">
+                    <div class="card-content">
+                        <h3>精巧な防御システム</h3>
+                        <p>迷路のような縄張り、狭間や石落とし、武者返しなど、敵の侵入を防ぐための工夫が随所に施されています。</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <img src="https://www.himeji-kanko.jp/wp-content/uploads/2020/03/himejicastle_03.jpg" alt="姫路城夜景">
+                    <div class="card-content">
+                        <h3>ライトアップ</h3>
+                        <p>夜間のライトアップでは、白亜の城が幻想的に浮かび上がります。季節によって特別なイルミネーションも開催されます。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 歴史セクション -->
+        <section style="background: linear-gradient(135deg, #f0f0f0, #e0e0e0);">
+            <h2>姫路の歴史</h2>
+            
+            <div class="timeline">
+                <div class="timeline-item left">
+                    <div class="timeline-content">
+                        <h3>1333年</h3>
+                        <p>赤松則村が姫山に砦を築く（姫路城の起源）</p>
+                    </div>
+                </div>
+                <div class="timeline-item right">
+                    <div class="timeline-content">
+                        <h3>1580年</h3>
+                        <p>羽柴秀吉が姫路城に入城し、3層の天守を築く</p>
+                    </div>
+                </div>
+                <div class="timeline-item left">
+                    <div class="timeline-content">
+                        <h3>1601年</h3>
+                        <p>池田輝政が姫路藩主となり、城の大改修に着手</p>
+                    </div>
+                </div>
+                <div class="timeline-item right">
+                    <div class="timeline-content">
+                        <h3>1609年</h3>
+                        <p>現在の姿となる姫路城が完成</p>
+                    </div>
+                </div>
+                <div class="timeline-item left">
+                    <div class="timeline-content">
+                        <h3>1871年</h3>
+                        <p>廃藩置県により姫路県が設置（後に兵庫県に編入）</p>
+                    </div>
+                </div>
+                <div class="timeline-item right">
+                    <div class="timeline-content">
+                        <h3>1889年</h3>
+                        <p>市制施行により姫路市が誕生</p>
+                    </div>
+                </div>
+                <div class="timeline-item left">
+                    <div class="timeline-content">
+                        <h3>1945年</h3>
+                        <p>姫路空襲で市街地の大半が焼失（姫路城は奇跡的に無傷）</p>
+                    </div>
+                </div>
+                <div class="timeline-item right">
+                    <div class="timeline-content">
+                        <h3>1993年</h3>
+                        <p>姫路城がユネスコ世界文化遺産に登録</p>
+                    </div>
+                </div>
+                <div class="timeline-item left">
+                    <div class="timeline-content">
+                        <h3>2006年</h3>
+                        <p>中核市に指定</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="content-box">
+                <h3>城下町から近代都市へ</h3>
+                <p>姫路市は、江戸時代には西国街道の要衝として栄え、明治以降は製糸業、大正期には製鋼業が発展しました。第二次世界大戦後は、播磨臨海工業地帯の形成とともに重化学工業が成長し、現在では先端技術産業も集積しています。</p>
+                <p>また、姫路は「書写山円教寺」「姫路セントラルパーク」「姫路文学館」など、歴史と文化、自然とレジャーが調和した都市として発展を続けています。</p>
+            </div>
+        </section>
+        
+        <!-- パララックスセクション - 書写山 -->
+        <div class="parallax" style="background-image: url('https://www.himeji-kanko.jp/wp-content/uploads/2020/03/shoshazan_01.jpg');">
+            <h2>書写山円教寺</h2>
+        </div>
+        
+        <!-- 文化・観光セクション -->
+        <section style="background-color: #f0f7f4;">
+            <h2>文化と観光</h2>
+            
+            <div class="content-box">
+                <h3>世界に誇る文化遺産</h3>
+                <p>姫路市には、姫路城をはじめとする数多くの文化財や観光スポットがあります。書写山円教寺は西の比叡山と呼ばれる天台宗の古刹で、多くの国宝や重要文化財を有しています。また、姫路市立美術館や姫路文学館など、文化施設も充実しています。</p>
+            </div>
+            
+            <div class="grid-container">
+                <div class="card">
+                    <img src="https://www.himeji-kanko.jp/wp-content/uploads/2020/03/shoshazan_02.jpg" alt="書写山円教寺">
+                    <div class="card-content">
+                        <h3>書写山円教寺</h3>
+                        <p>標高371mの書写山にある天台宗の寺院。多くの映画やドラマのロケ地としても使用されています。</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <img src="https://www.himeji-kanko.jp/wp-content/uploads/2020/03/himeji-zoo_01.jpg" alt="姫路市立動物園">
+                    <div class="card-content">
+                        <h3>姫路市立動物園</h3>
+                        <p>姫路城のすぐそばにある動物園。約100種500点の動物を飼育しています。</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <img src="https://www.himeji-kanko.jp/wp-content/uploads/2020/03/himeji-central-park_01.jpg" alt="姫路セントラルパーク">
+                    <div class="card-content">
+                        <h3>姫路セントラルパーク</h3>
+                        <p>サファリパークと遊園地が一体となった大型レジャー施設。車で動物たちの間を巡るサファリが人気。</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="content-box">
+                <h3>年間イベント</h3>
+                <ul style="columns: 2; list-style-type: none; margin: 1rem 0;">
+                    <li>■ 姫路城観桜会（4月）</li>
+                    <li>■ 姫路お城祭（8月）</li>
+                    <li>■ 姫路城菊花展（10-11月）</li>
+                    <li>■ 姫路城イルミネーション（12-1月）</li>
+                    <li>■ 書写山もみじまつり（11月）</li>
+                    <li>■ 姫路ビッグバンドジャズフェスティバル（10月）</li>
+                    <li>■ 姫路菓子博（隔年開催）</li>
+                    <li>■ 姫路城マラソン（2月）</li>
+                </ul>
+            </div>
+        </section>
+        
+        <!-- グルメセクション -->
+        <section style="background: linear-gradient(135deg, #fff5f5, #ffecec);">
+            <h2>姫路のグルメ</h2>
+            
+            <div class="content-box">
+                <h3>地元に愛される味</h3>
+                <p>姫路には、地元の人々に長年愛されてきた独自の食文化があります。海と山の幸に恵まれ、播州の豊かな食材を活かした料理が数多くあります。</p>
+            </div>
+            
+            <div class="food-gallery">
+                <div class="food-item">
+                    <img src="https://www.himeji-kanko.jp/wp-content/uploads/2020/03/food_01.jpg" alt="姫路おでん">
+                    <div class="food-label">
+                        <h3>姫路おでん</h3>
+                        <p>薄味の出汁と独特の具材が特徴。牛すじやじゃこ天が定番。</p>
+                    </div>
+                </div>
+                <div class="food-item">
+                    <img src="https://www.himeji-kanko.jp/wp-content/uploads/2020/03/food_02.jpg" alt="明石焼き">
+                    <div class="food-label">
+                        <h3>明石焼き</h3>
+                        <p>たこ焼きの原型と言われる卵主体の柔らかい焼き物。だし汁につけて食べる。</p>
+                    </div>
+                </div>
+                <div class="food-item">
+                    <img src="https://www.himeji-kanko.jp/wp-content/uploads/2020/03/food_03.jpg" alt="播州そば">
+                    <div class="food-label">
+                        <h3>播州そば</h3>
+                        <p>姫路近郊で栽培されるソバを使用。香り高くコシが強い。</p>
+                    </div>
+                </div>
+                <div class="food-item">
+                    <img src="https://www.himeji-kanko.jp/wp-content/uploads/2020/03/food_04.jpg" alt="姫路らーめん">
+                    <div class="food-label">
+                        <h3>姫路らーめん</h3>
+                        <p>鶏ガラベースのあっさりスープに中太ストレート麺が特徴。</p>
+                    </div>
+                </div>
+                <div class="food-item">
+                    <img src="https://www.himeji-kanko.jp/wp-content/uploads/2020/03/food_05.jpg" alt="穴子料理">
+                    <div class="food-label">
+                        <h3>穴子料理</h3>
+                        <p>瀬戸内海で獲れた穴子を使った寿司や天ぷら、煮物など。</p>
+                    </div>
+                </div>
+                <div class="food-item">
+                    <img src="https://www.himeji-kanko.jp/wp-content/uploads/2020/03/food_06.jpg" alt="姫路おでん">
+                    <div class="food-label">
+                        <h3>姫路スイーツ</h3>
+                        <p>白鷺をモチーフにした和菓子や、地元産のイチジクを使ったスイーツ。</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="quote">
+                姫路の食文化は、城下町として発展した歴史と、瀬戸内海の幸、播州平野の豊かな農産物が織りなす独自のもの。特に姫路おでんは、地元の人々のソウルフードとして愛され続けています。
+                <span class="quote-author">- 姫路食文化研究会 会長 山田太郎</span>
+            </div>
+        </section>
+        
+        <!-- 産業・経済セクション -->
+        <section style="background-color: #f0f0f5;">
+            <h2>産業と経済</h2>
+            
+            <div class="content-box">
+                <h3>多様な産業構造</h3>
+                <p>姫路市は、重化学工業から先端技術産業まで幅広い産業が集積しています。播磨臨海工業地帯には大手鉄鋼メーカーや化学メーカーが立地し、内陸部には機械工業や電気機器製造業が発達しています。</p>
+                
+                <div class="stats-container">
+                    <div class="stat-box">
+                        <div class="stat-number">3.2兆円</div>
+                        <div class="stat-label">市内総生産</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number">530,000</div>
+                        <div class="stat-label">就業者数</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number">25%</div>
+                        <div class="stat-label">製造業就業者比率</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number">70%</div>
+                        <div class="stat-label">第三次産業就業者比率</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="grid-container">
+                <div class="card">
+                    <img src="https://www.city.himeji.lg.jp/keizai/industry/_res/projects/default_project/_page_/001/005/544/20200401.jpg" alt="姫路臨海工業地帯">
+                    <div class="card-content">
+                        <h3>臨海工業地帯</h3>
+                        <p>鉄鋼、化学、エネルギー産業が集積。大規模な工場が立ち並び、地域経済を支えています。</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <img src="https://www.city.himeji.lg.jp/keizai/industry/_res/projects/default_project/_page_/001/005/544/20200402.jpg" alt="IT産業">
+                    <div class="card-content">
+                        <h3>先端技術産業</h3>
+                        <p>姫路ITパークを中心に、ソフトウェア開発や先端技術研究の企業が進出しています。</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <img src="https://www.city.himeji.lg.jp/keizai/industry/_res/projects/default_project/_page_/001/005/544/20200403.jpg" alt="地場産業">
+                    <div class="card-content">
+                        <h3>地場産業</h3>
+                        <p>皮革製品、繊維製品、金属製品などの伝統的な地場産業も健在です。</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="content-box">
+                <h3>商業と観光</h3>
+                <p>姫路駅周辺には大型商業施設が集積し、郊外にはロードサイド店舗が並びます。観光産業も重要な位置を占め、姫路城を中心に年間数百万人の観光客が訪れます。</p>
+            </div>
+        </section>
+        
+        <!-- 交通・アクセスセクション -->
+        <section style="background: linear-gradient(135deg, #f5f5ff, #e5e5ff);">
+            <h2>交通とアクセス</h2>
+            
+            <div class="content-box">
+                <h3>西日本の交通結節点</h3>
+                <p>姫路市は西日本の交通の要衝として発展してきました。JR姫路駅は山陽新幹線の停車駅であり、山陽本線、姫新線、山陽電鉄本線が交わる重要なターミナルです。</p>
+                
+                <div class="map-marker" style="top: 30%; left: 25%;" title="姫路駅"></div>
+                <div class="map-marker" style="top: 45%; left: 50%;" title="姫路城"></div>
+                <div class="map-marker" style="top: 70%; left: 75%;" title="書写山"></div>
+            </div>
+            
+            <div class="grid-container">
+                <div class="card">
+                    <div class="card-content">
+                        <h3>鉄道アクセス</h3>
+                        <ul>
+                            <li>東京から：新幹線で約3時間</li>
+                            <li>大阪から：新快速で約1時間</li>
+                            <li>岡山から：新幹線で約30分</li>
+                            <li>神戸から：快速で約40分</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-content">
+                        <h3>道路アクセス</h3>
+                        <ul>
+                            <li>山陽自動車道 姫路IC</li>
+                            <li>姫路バイパス</li>
+                            <li>国道2号線</li>
+                            <li>国道250号線</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-content">
+                        <h3>空港アクセス</h3>
+                        <ul>
+                            <li>神戸空港から：高速船+電車で約1時間30分</li>
+                            <li>大阪国際空港から：リムジンバスで約1時間40分</li>
+                            <li>関西国際空港から：リムジンバスで約2時間</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="content-box">
+                <h3>市内交通</h3>
+                <p>姫路市内には路線バス網が発達しており、主要観光地へは姫路駅からバスでアクセス可能です。また、シェアサイクル「めぐりーん」やタクシーも利用できます。姫路城周辺は徒歩での散策もおすすめです。</p>
+            </div>
+        </section>
+        
+        <!-- 教育・研究セクション -->
+        <section style="background-color: #f5fff0;">
+            <h2>教育と研究</h2>
+            
+            <div class="content-box">
+                <h3>学術都市としての顔</h3>
+                <p>姫路市は県内有数の教育・研究機関が集積する学術都市でもあります。国立大学をはじめ、多様な高等教育機関が存在し、地域の知的基盤を形成しています。</p>
+                
+                <div class="stats-container">
+                    <div class="stat-box">
+                        <div class="stat-number">100+</div>
+                        <div class="stat-label">小学校・中学校</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number">20+</div>
+                        <div class="stat-label">高等学校</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number">10+</div>
+                        <div class="stat-label">大学・短大</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number">5+</div>
+                        <div class="stat-label">研究機関</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="grid-container">
+                <div class="card">
+                    <img src="https://www.univ-himeji.ac.jp/wp-content/uploads/2021/04/himeji-dai-gate.jpg" alt="兵庫県立大学">
+                    <div class="card-content">
+                        <h3>兵庫県立大学</h3>
+                        <p>県内最大規模の公立総合大学。姫路キャンパスには工学部や環境人間学部が設置されています。</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <img src="https://www.himeji-du.ac.jp/wp-content/uploads/2021/04/campus.jpg" alt="姫路獨協大学">
+                    <div class="card-content">
+                        <h3>姫路獨協大学</h3>
+                        <p>医療・薬学系を中心とした私立大学。地域医療の発展に貢献しています。</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <img src="https://www.riko.shimane-u.ac.jp/wp-content/uploads/2021/04/himeji-campus.jpg" alt="姫路工業高等専門学校">
+                    <div class="card-content">
+                        <h3>姫路工業高等専門学校</h3>
+                        <p>高度な技術者を養成する国立の高等教育機関。ロボットコンテストで有名。</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="content-box">
+                <h3>研究開発拠点</h3>
+                <p>姫路市には先端材料科学研究所や播磨科学公園都市などの研究開発拠点があり、産学連携による技術革新が進められています。特に新素材開発や環境技術の分野で注目されています。</p>
+            </div>
+        </section>
+        
+        <!-- 生活・住まいセクション -->
+        <section style="background: linear-gradient(135deg, #fff0f5, #ffe0eb);">
+            <h2>生活と住まい</h2>
+            
+            <div class="content-box">
+                <h3>住みやすいまち姫路</h3>
+                <p>姫路市は大都市の利便性と地方都市の住みやすさを兼ね備えた街です。子育て支援制度が充実し、医療機関も整っています。住宅地は駅周辺のマンションから郊外の一戸建てまで多様な選択肢があります。</p>
+                
+                <div class="stats-container">
+                    <div class="stat-box">
+                        <div class="stat-number">53万</div>
+                        <div class="stat-label">人口</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number">534km²</div>
+                        <div class="stat-label">面積</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number">15°C</div>
+                        <div class="stat-label">平均気温</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number">1,200mm</div>
+                        <div class="stat-label">年間降水量</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="grid-container">
+                <div class="card">
+                    <img src="https://www.city.himeji.lg.jp/kurashi/_res/projects/default_project/_page_/001/003/615/20200401.jpg" alt="姫路市街地">
+                    <div class="card-content">
+                        <h3>市街地</h3>
+                        <p>姫路駅周辺は商業施設が密集し、利便性が高い。歴史的建造物も点在する。</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <img src="https://www.city.himeji.lg.jp/kurashi/_res/projects/default_project/_page_/001/003/615/20200402.jpg" alt="住宅地">
+                    <div class="card-content">
+                        <h3>住宅地</h3>
+                        <p>閑静な住宅街が広がる。緑が多く、子育て環境が整っている。</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <img src="https://www.city.himeji.lg.jp/kurashi/_res/projects/default_project/_page_/001/003/615/20200403.jpg" alt="郊外">
+                    <div class="card-content">
+                        <h3>郊外</h3>
+                        <p>自然豊かなエリア。田園風景が広がる地域もあり、のんびりとした生活が送れる。</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="content-box">
+                <h3>生活コスト</h3>
+                <p>姫路市の生活コストは大都市圏に比べて比較的低めです。家賃相場は東京の約半分、物価も全国平均よりやや低い水準です。一方で都市機能は充実しており、コストパフォーマンスに優れた街と言えます。</p>
+                
+                <div class="quote">
+                    姫路は大都市のような便利さと、地方都市のゆとりを併せ持った街です。世界遺産の城を眺めながら、充実した生活を送ることができます。
+                    <span class="quote-author">- 姫路市在住30年 田中花子さん</span>
+                </div>
+            </div>
+        </section>
+        
+        <!-- スポーツ・レジャーセクション -->
+        <section style="background-color: #f0f8ff;">
+            <h2>スポーツとレジャー</h2>
+            
+            <div class="content-box">
+                <h3>活気あるスポーツシーン</h3>
+                <p>姫路市はスポーツが盛んな街です。プロスポーツチームの本拠地として、また市民スポーツの拠点として、様々な施設とイベントが充実しています。</p>
+            </div>
+            
+            <div class="grid-container">
+                <div class="card">
+                    <img src="https://www.visithimeji.jp/upload/save_image/01200253.jpg" alt="姫路ヴィッセル">
+                    <div class="card-content">
+                        <h3>ヴィッセル神戸（姫路）</h3>
+                        <p>Jリーグ・ヴィッセル神戸の練習拠点が姫路に。地元サッカー熱が高まっています。</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <img src="https://www.visithimeji.jp/upload/save_image/01200254.jpg" alt="姫路競輪場">
+                    <div class="card-content">
+                        <h3>姫路競輪場</h3>
+                        <p>国内有数の競輪場。年間を通じて熱戦が繰り広げられます。</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <img src="https://www.visithimeji.jp/upload/save_image/01200255.jpg" alt="姫路マリンチャンス">
+                    <div class="card-content">
+                        <h3>姫路マリンチャンス</h3>
+                        <p>瀬戸内海に面したマリンスポーツ施設。セーリングやカヤックが楽しめます。</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="content-box">
+                <h3>自然とレクリエーション</h3>
+                <p>市街地から少し足を延ばせば、豊かな自然に恵まれたレジャースポットが数多くあります。書写山や雪彦山はハイキングに最適で、四季折々の風景を楽しめます。海岸部では釣りや潮干狩りも人気です。</p>
+                
+                <ul style="columns: 2; list-style-type: none; margin: 1rem 0;">
+                    <li>■ 姫路セントラルパーク</li>
+                    <li>■ 姫路市立水族館</li>
+                    <li>■ 手柄山温室植物園</li>
+                    <li>■ 姫路市立動物園</li>
+                    <li>■ 書写山ロープウェイ</li>
+                    <li>■ 姫路海浜公園</li>
+                    <li>■ 夢前川公園</li>
+                    <li>■ 姫路市立スポーツセンター</li>
+                </ul>
+            </div>
+        </section>
+        
+        <!-- パララックスセクション - 夜景 -->
+        <div class="parallax" style="background-image: url('https://www.visithimeji.jp/upload/save_image/01200256.jpg');">
+            <h2>姫路の夜景</h2>
+        </div>
+        
+        <!-- 未来ビジョンセクション -->
+        <section style="background: linear-gradient(135deg, #fffaf0, #fff5e0);">
+            <h2>姫路市の未来</h2>
+            
+            <div class="content-box">
+                <h3>持続可能な都市を目指して</h3>
+                <p>姫路市は「世界とつながり 未来をひらく 交流拠点都市」をビジョンに掲げ、持続可能な都市開発を進めています。歴史遺産の保全と都市機能の更新を両立させたまちづくりが特徴です。</p>
+                
+                <div class="timeline">
+                    <div class="timeline-item left">
+                        <div class="timeline-content">
+                            <h3>2025年</h3>
+                            <p>姫路城大天守保存修理工事完了予定</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item right">
+                        <div class="timeline-content">
+                            <h3>2030年</h3>
+                            <p>姫路駅周辺再開発完了予定</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item left">
+                        <div class="timeline-content">
+                            <h3>2040年</h3>
+                            <p>カーボンニュートラル都市実現目標</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item right">
+                        <div class="timeline-content">
+                            <h3>2050年</h3>
+                            <p>スマートシティ化完了構想</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="grid-container">
+                <div class="card">
+                    <img src="https://www.city.himeji.lg.jp/toshi/_res/projects/default_project/_page_/001/002/456/20200401.jpg" alt="姫路駅周辺再開発">
+                    <div class="card-content">
+                        <h3>姫路駅周辺再開発</h3>
+                        <p>ターミナル機能の強化と商業施設の更新が進行中。新たな都市の顔となる予定。</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <img src="https://www.city.himeji.lg.jp/toshi/_res/projects/default_project/_page_/001/002/456/20200402.jpg" alt="スマートシティ構想">
+                    <div class="card-content">
+                        <h3>スマートシティ構想</h3>
+                        <p>IoT技術を活用した交通システムやエネルギー管理の導入を推進。</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <img src="https://www.city.himeji.lg.jp/toshi/_res/projects/default_project/_page_/001/002/456/20200403.jpg" alt="国際観光都市">
+                    <div class="card-content">
+                        <h3>国際観光都市化</h3>
+                        <p>多言語対応の強化と観光ルートの整備でインバウンド増加を目指す。</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="quote">
+                姫路市は、歴史遺産と現代の都市機能が調和した、世界に誇れる持続可能な都市を目指しています。白鷺城をシンボルに、未来に向かって羽ばたいていきます。
+                <span class="quote-author">- 姫路市長 鈴木洋一</span>
+            </div>
+        </section>
+        
+        <!-- 最終セクション -->
+        <section style="background: linear-gradient(135deg, #f8f8f8, #e8e8e8); text-align: center;">
+            <h1>姫路市へようこそ</h1>
+            <h2>歴史と未来が交差するまち</h2>
+            
+            <div class="content-box" style="max-width: 600px;">
+                <p>この縦に長ーいページを最後までスクロールしていただき、ありがとうございます。姫路市の魅力はまだまだ語り尽くせませんが、少しはこの街のことがお分かりいただけたでしょうか。</p>
+                <p>白鷺城を中心に、歴史と現代が調和する姫路市。ぜひ実際に足を運んで、その魅力を肌で感じてください。きっとあなたの心に残る出会いがあるはずです。</p>
+                
+                <div style="margin: 2rem 0;">
+                    <a href="https://www.city.himeji.lg.jp/" style="display: inline-block; background-color: var(--primary); color: white; padding: 1rem 2rem; border-radius: 50px; text-decoration: none; font-weight: bold; margin: 0.5rem;">姫路市公式サイト</a>
+                    <a href="https://www.himeji-kanko.jp/" style="display: inline-block; background-color: var(--secondary); color: var(--dark); padding: 1rem 2rem; border-radius: 50px; text-decoration: none; font-weight: bold; margin: 0.5rem;">姫路観光ナビ</a>
+                </div>
+            </div>
+            
+            <div style="margin-top: 3rem;">
+                <p>このページは姫路市を愛する個人が制作したファンサイトです。</p>
+                <p>© 2023 姫路ファンコミュニティ All Rights Reserved.</p>
+            </div>
+        </section>
+        
+        <!-- フッター -->
+        <footer>
+            <h3>姫路市へのアクセス</h3>
+            <p>〒670-8501 兵庫県姫路市安田四丁目1番地</p>
+            <p>TEL: 079-221-2111（姫路市役所代表）</p>
+            
+            <div class="social-links">
+                <a href="#"><i class="fab fa-facebook"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-youtube"></i></a>
+            </div>
+            
+            <p>このページはJavaScriptとCSSアニメーションを多用しています。最適な表示には最新のブラウザをご利用ください。</p>
+        </footer>
+    </div>
+    
+    <!-- Font Awesome for social icons -->
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    
+<script>
+    // 超リッチな桜の花びら生成関数
+    function spawnBlossom() {
+        const blossom = document.createElement('div');
+        blossom.className = 'cherry-blossom';
+        
+        // ランダムパラメータ生成
+        const size = 8 + Math.random() * 12;
+        const delay = Math.random() * 5;
+        const duration = 8 + Math.random() * 15;
+        const left = Math.random() * 100;
+        const rotation = Math.random() * 360;
+        const sway = 50 + Math.random() * 100;
+        const swayDirection = Math.random() > 0.5 ? '' : '-';
+        
+        // 色バリエーション（5種類）
+        const colors = ['#ffb7c5', '#ffdfea', '#ff9eb5', '#ffcad4', '#ffa8c2'];
+        const color = colors[Math.floor(Math.random() * colors.length)];
+        
+        // 形バリエーション（4種類）
+        const shapes = [
+            '50% 0 50% 50%',
+            '40% 40% 20% 60%',
+            '60% 30% 30% 60%',
+            '50% 50% 0 50%'
+        ];
+        const shape = shapes[Math.floor(Math.random() * shapes.length)];
+        
+        // スタイル一括適用
+        blossom.style.cssText = `
+            left: ${left}%;
+            width: ${size}px;
+            height: ${size}px;
+            background-color: ${color};
+            border-radius: ${shape};
+            animation: fall ${duration}s ease-in-out ${delay}s forwards;
+            transform: rotate(${rotation}deg);
+            opacity: ${0.3 + Math.random() * 0.7};
+            z-index: 10;
+            position: fixed;
+            pointer-events: none;
+            top: -30px;
+        `;
+        
+        // 個別アニメーション定義
+        const animationName = `fall-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes ${animationName} {
+                0% { transform: translateY(0) translateX(0) rotate(${rotation}deg); opacity: 0; }
+                10% { opacity: ${0.5 + Math.random() * 0.5}; }
+                90% { opacity: ${0.5 + Math.random() * 0.5}; }
+                100% { transform: translateY(calc(100vh + 30px)) translateX(${swayDirection}${sway}px) rotate(${rotation + 360}deg); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+        
+        blossom.style.animationName = animationName;
+        document.body.appendChild(blossom);
+        
+        // アニメーション終了後クリーンアップ
+        blossom.addEventListener('animationend', () => {
+            blossom.remove();
+            style.remove();
+        });
+    }
+
+    // スクロールインジケーター制御（超精密版）
+    const scrollIndicator = document.querySelector('.scroll-indicator');
+    let lastScrollPos = 0;
+    let scrollTimeout;
+    
+    function handleScroll() {
+        const scrollPos = window.scrollY;
+        const scrollDelta = scrollPos - lastScrollPos;
+        lastScrollPos = scrollPos;
+        
+        // スクロール方向と速度に応じた処理
+        const windowHeight = window.innerHeight;
+        const docHeight = document.documentElement.scrollHeight;
+        
+        // スクロールインジケーター制御
+        if (scrollPos > 300 || scrollPos + windowHeight >= docHeight - 100) {
+            scrollIndicator.style.opacity = '0';
+            scrollIndicator.style.pointerEvents = 'none';
+        } else if (Math.abs(scrollDelta) > 5) { // ある程度のスクロール速度がある場合
+            scrollIndicator.style.opacity = '1';
+        }
+        
+        // パララックス効果（最適化版）
+        if (Math.abs(scrollDelta) > 1) {
+            document.querySelectorAll('.parallax').forEach(element => {
+                const rect = element.getBoundingClientRect();
+                if (rect.top < windowHeight && rect.bottom > 0) {
+                    element.style.backgroundPositionY = `${-(scrollPos - rect.top) * 0.5}px`;
+                }
+            });
+        }
+        
+        // スクロール停止検出
+        clearTimeout(scrollTimeout);
+        scrollTimeout = setTimeout(() => {
+            scrollIndicator.style.opacity = '0';
+        }, 2000);
+    }
+
+    // イベントリスナー設定（高性能版）
+    let lastAnimationFrame;
+    window.addEventListener('scroll', () => {
+        if (lastAnimationFrame) cancelAnimationFrame(lastAnimationFrame);
+        lastAnimationFrame = requestAnimationFrame(() => {
+            handleScroll();
+            // スクロール速度に応じた花びら生成
+            if (Math.random() > 0.97) spawnBlossom();
+        });
+    });
+
+    // 初期化処理（スマート版）
+    document.addEventListener('DOMContentLoaded', () => {
+        // 初期花びら生成（密度調整）
+        const blossomCount = Math.min(20, Math.floor(window.innerWidth / 50));
+        for (let i = 0; i < blossomCount; i++) {
+            setTimeout(spawnBlossom, i * 800 * Math.random());
+        }
+        
+        // マップマーカーイベント（強化版）
+        document.querySelectorAll('.map-marker').forEach(marker => {
+            marker.addEventListener('click', () => {
+                marker.style.transform = 'scale(1.2)';
+                setTimeout(() => marker.style.transform = '', 300);
+                alert(`${marker.getAttribute('title')}\n\n詳細情報は公式サイトをご覧ください`);
+            });
+        });
+        
+        // タッチデバイス判定
+        if ('ontouchstart' in window) {
+            scrollIndicator.style.display = 'none';
+        }
+    });
+
+    // スタイル動的注入（確実化版）
+    const style = document.createElement('style');
+    style.textContent = `
+        .scroll-indicator {
+            transition: opacity 0.5s ease, transform 0.3s ease !important;
+            will-change: opacity, transform;
+        }
+        .scroll-indicator:hover {
+            transform: scale(1.1);
+        }
+        @media (max-width: 768px) {
+            .scroll-indicator {
+                display: none !important;
+            }
+        }
+    `;
+    document.head.appendChild(style);
+</script></body>
+</html>
