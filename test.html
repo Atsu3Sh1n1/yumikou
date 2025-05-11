@@ -1,118 +1,248 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>姫路市 | 和モダン縦長ページ</title>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700&display=swap');
-
-    body {
-      margin: 0;
-      font-family: 'Noto Serif JP', serif;
-      background-color: #f5f0e1;
-      color: #1a1a1a;
-      scroll-behavior: smooth;
-    }
-
-    section {
-      padding: 100px 20px;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      opacity: 0;
-      transform: translateY(50px);
-      transition: all 1s ease-out;
-    }
-
-    section.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    .hero {
-      background: url('https://upload.wikimedia.org/wikipedia/commons/thumb/7/76/Himeji_Castle_in_May_2015.jpg/1920px-Himeji_Castle_in_May_2015.jpg') no-repeat center center/cover;
-      color: white;
-      text-shadow: 0 2px 4px rgba(0,0,0,0.5);
-    }
-
-    .hero h1 {
-      font-size: 3rem;
-    }
-
-    .gold-line {
-      border-bottom: 2px solid #bfa17e;
-      display: inline-block;
-      padding-bottom: 5px;
-      margin-bottom: 20px;
-    }
-
-    footer {
-      background-color: #1a1a1a;
-      color: #bfa17e;
-      text-align: center;
-      padding: 30px 0;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3Dジグソーパズル</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #000;
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+            touch-action: none;
+            user-select: none;
+        }
+        
+        #container {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            perspective: 1200px;
+        }
+        
+        #puzzle-base {
+            width: 300px;
+            height: 300px;
+            position: relative;
+            transform-style: preserve-3d;
+            transform: rotateX(15deg) rotateY(15deg);
+        }
+        
+        #slot {
+            position: absolute;
+            top: 100px;
+            left: 100px;
+            width: 100px;
+            height: 100px;
+            transform-style: preserve-3d;
+            transform: translateZ(-1px);
+        }
+        
+        #slot::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border: 2px dashed rgba(0, 255, 100, 0.3);
+            clip-path: polygon(
+                0% 20%, 10% 20%, 10% 0%, 30% 0%, 30% 20%, 40% 20%,
+                40% 0%, 60% 0%, 60% 20%, 70% 20%, 70% 0%, 90% 0%,
+                90% 20%, 100% 20%, 100% 40%, 90% 40%, 90% 60%, 100% 60%,
+                100% 80%, 90% 80%, 90% 100%, 70% 100%, 70% 80%, 60% 80%,
+                60% 100%, 40% 100%, 40% 80%, 30% 80%, 30% 100%, 10% 100%,
+                10% 80%, 0% 80%, 0% 60%, 10% 60%, 10% 40%, 0% 40%
+            );
+        }
+        
+        #piece {
+            position: absolute;
+            top: 50px;
+            left: 50px;
+            width: 100px;
+            height: 100px;
+            cursor: grab;
+            transform-style: preserve-3d;
+            transition: transform 0.3s;
+            clip-path: polygon(
+                0% 20%, 10% 20%, 10% 0%, 30% 0%, 30% 20%, 40% 20%,
+                40% 0%, 60% 0%, 60% 20%, 70% 20%, 70% 0%, 90% 0%,
+                90% 20%, 100% 20%, 100% 40%, 90% 40%, 90% 60%, 100% 60%,
+                100% 80%, 90% 80%, 90% 100%, 70% 100%, 70% 80%, 60% 80%,
+                60% 100%, 40% 100%, 40% 80%, 30% 80%, 30% 100%, 10% 100%,
+                10% 80%, 0% 80%, 0% 60%, 10% 60%, 10% 40%, 0% 40%
+            );
+            background-color: transparent;
+            border: 2px solid #0f0;
+            box-shadow: 0 0 15px rgba(0, 255, 0, 0.7);
+        }
+        
+        #piece:active {
+            cursor: grabbing;
+        }
+        
+        #piece::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            clip-path: polygon(
+                0% 20%, 10% 20%, 10% 0%, 30% 0%, 30% 20%, 40% 20%,
+                40% 0%, 60% 0%, 60% 20%, 70% 20%, 70% 0%, 90% 0%,
+                90% 20%, 100% 20%, 100% 40%, 90% 40%, 90% 60%, 100% 60%,
+                100% 80%, 90% 80%, 90% 100%, 70% 100%, 70% 80%, 60% 80%,
+                60% 100%, 40% 100%, 40% 80%, 30% 80%, 30% 100%, 10% 100%,
+                10% 80%, 0% 80%, 0% 60%, 10% 60%, 10% 40%, 0% 40%
+            );
+            background-color: rgba(0, 255, 100, 0.1);
+            z-index: -1;
+        }
+        
+        .success {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #0f0;
+            font-size: 30px;
+            opacity: 0;
+            transition: opacity 0.5s;
+            pointer-events: none;
+            text-shadow: 0 0 15px #0f0;
+        }
+        
+        .hint {
+            position: absolute;
+            bottom: 20px;
+            width: 100%;
+            text-align: center;
+            color: rgba(0, 255, 100, 0.5);
+            font-size: 14px;
+        }
+    </style>
 </head>
 <body>
+    <div id="container">
+        <div id="puzzle-base">
+            <div id="slot"></div>
+            <div id="piece"></div>
+        </div>
+        <div class="success">✓</div>
+        <div class="hint">ピースを正しい位置にドラッグしてください</div>
+    </div>
 
-  <!-- HERO -->
-  <section class="hero">
-    <h1>白鷺城とともに歩むまち、姫路。</h1>
-    <p>歴史・文化・自然が融合する、播磨の心。</p>
-  </section>
-
-  <!-- 姫路城 -->
-  <section class="section">
-    <h2 class="gold-line">姫路城</h2>
-    <p>
-      世界遺産・姫路城は、400年以上の歴史を誇る日本屈指の名城。
-      白く美しい外観から「白鷺城」と呼ばれ、国宝にも指定されています。
-    </p>
-  </section>
-
-  <!-- グルメ -->
-  <section class="section" style="background-color: #7c5c3b; color: white;">
-    <h2 class="gold-line">姫路グルメ</h2>
-    <p>
-      生姜醤油で食べる「姫路おでん」、瀬戸内の幸「穴子」、播州ラーメンなど、
-      地元の味が旅を彩ります。
-    </p>
-  </section>
-
-  <!-- 自然 -->
-  <section class="section">
-    <h2 class="gold-line">自然と風景</h2>
-    <p>
-      書写山圓教寺や好古園、桜や紅葉の名所としても知られる姫路は、
-      四季折々の美しさが訪れる人を魅了します。
-    </p>
-  </section>
-
-  <!-- フッター -->
-  <footer>
-    <p>&copy; 2025 Himeji City | 和モダンスクロールページ</p>
-  </footer>
-
-  <script>
-    const sections = document.querySelectorAll('.section, .hero');
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
+    <script>
+        const piece = document.getElementById('piece');
+        const slot = document.getElementById('slot');
+        const success = document.querySelector('.success');
+        const container = document.getElementById('container');
+        let isDragging = false;
+        let startX, startY, pieceX = 50, pieceY = 50;
+        
+        // 3D効果の更新
+        function update3DEffect(x, y) {
+            const centerX = window.innerWidth / 2;
+            const centerY = window.innerHeight / 2;
+            const rotY = (x - centerX) / 50;
+            const rotX = -(y - centerY) / 50;
+            container.style.transform = `perspective(1200px) rotateX(${15 + rotX}deg) rotateY(${15 + rotY}deg)`;
         }
-      });
-    }, {
-      threshold: 0.2,
-    });
-
-    sections.forEach(section => {
-      observer.observe(section);
-    });
-  </script>
-
+        
+        // ドラッグ開始
+        function startDrag(e) {
+            isDragging = true;
+            const clientX = e.clientX || e.touches[0].clientX;
+            const clientY = e.clientY || e.touches[0].clientY;
+            startX = clientX - pieceX;
+            startY = clientY - pieceY;
+            piece.style.transition = 'none';
+            piece.style.boxShadow = '0 0 20px #0f0';
+            e.preventDefault();
+        }
+        
+        // ドラッグ中
+        function drag(e) {
+            if (!isDragging) return;
+            
+            const clientX = e.clientX || e.touches[0].clientX;
+            const clientY = e.clientY || e.touches[0].clientY;
+            
+            pieceX = clientX - startX;
+            pieceY = clientY - startY;
+            
+            piece.style.left = `${pieceX}px`;
+            piece.style.top = `${pieceY}px`;
+            
+            update3DEffect(clientX, clientY);
+            e.preventDefault();
+        }
+        
+        // ドラッグ終了
+        function endDrag() {
+            if (!isDragging) return;
+            isDragging = false;
+            piece.style.transition = 'transform 0.3s, box-shadow 0.3s';
+            piece.style.boxShadow = '0 0 15px rgba(0, 255, 0, 0.7)';
+            
+            // 当たり判定
+            const pieceRect = piece.getBoundingClientRect();
+            const slotRect = slot.getBoundingClientRect();
+            
+            const isSnapped = 
+                Math.abs(pieceRect.left - slotRect.left) < 25 &&
+                Math.abs(pieceRect.top - slotRect.top) < 25;
+            
+            if (isSnapped) {
+                // スナップ位置に固定
+                pieceX = 100;
+                pieceY = 100;
+                piece.style.left = '100px';
+                piece.style.top = '100px';
+                
+                // 3D効果強化
+                piece.style.transform = 'translateZ(30px) rotateZ(0deg)';
+                piece.style.boxShadow = '0 0 30px #0f0';
+                
+                // 成功アニメーション
+                success.style.opacity = '1';
+                setTimeout(() => {
+                    success.style.opacity = '0';
+                }, 1000);
+                
+                // メインページへリダイレクト
+                setTimeout(() => {
+                    window.location.href = 'main.html';
+                }, 1500);
+            }
+        }
+        
+        // イベントリスナー
+        piece.addEventListener('mousedown', startDrag);
+        piece.addEventListener('touchstart', startDrag, {passive: false});
+        
+        document.addEventListener('mousemove', drag);
+        document.addEventListener('touchmove', drag, {passive: false});
+        
+        document.addEventListener('mouseup', endDrag);
+        document.addEventListener('touchend', endDrag);
+        
+        // マウス移動で3D視点変更
+        document.addEventListener('mousemove', (e) => {
+            if (!isDragging) {
+                update3DEffect(e.clientX, e.clientY);
+            }
+        });
+        
+        // 初期アニメーション
+        setTimeout(() => {
+            piece.style.transform = 'translateZ(20px) rotateZ(5deg)';
+        }, 500);
+    </script>
 </body>
 </html>
