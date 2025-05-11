@@ -569,3 +569,10 @@ footer h3 {
     color: #4ca3ff;
     /* マウスオーバー時の色 */
 }
+
+@media (max-width: 768px) {
+  .parallax {
+    background-attachment: scroll;
+    background-size: cover;
+  }
+}

@@ -111,15 +111,21 @@ document.addEventListener('DOMContentLoaded', createHeron);
         }
         
         // パララックス効果（最適化版）
-        if (Math.abs(scrollDelta) > 1) {
-            document.querySelectorAll('.parallax').forEach(element => {
-                const rect = element.getBoundingClientRect();
-                if (rect.top < windowHeight && rect.bottom > 0) {
-                    element.style.backgroundPositionY = `${-(scrollPos - rect.top) * 0.5}px`;
-                }
-            });
+if (Math.abs(scrollDelta) > 1) {
+    const isMobile = window.innerWidth <= 768;
+    const parallaxStrength = isMobile ? 0.05 : 0.05; // スマホは弱く
+    const offsetY = isMobile ? -30 : -80; // 初期位置調整（必要に応じて調整）
+
+    document.querySelectorAll('.parallax').forEach(element => {
+        const rect = element.getBoundingClientRect();
+
+        if (rect.top < windowHeight && rect.bottom > 0) {
+            const scrollPos = window.scrollY;
+            const positionY = (scrollPos - rect.top) * -parallaxStrength + offsetY;
+            element.style.backgroundPositionY = `${positionY}px`;
         }
-        
+    });
+}        
         // スクロール停止検出
         clearTimeout(scrollTimeout);
         scrollTimeout = setTimeout(() => {
