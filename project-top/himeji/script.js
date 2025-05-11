@@ -113,7 +113,7 @@ document.addEventListener('DOMContentLoaded', createHeron);
         // パララックス効果（最適化版）
 if (Math.abs(scrollDelta) > 1) {
     const isMobile = window.innerWidth <= 768;
-    const parallaxStrength = isMobile ? 0.05 : 0.05; // スマホは弱く
+    const parallaxStrength = isMobile ? 0.02 : 0.05; // スマホは弱く
     const offsetY = isMobile ? -30 : -80; // 初期位置調整（必要に応じて調整）
 
     document.querySelectorAll('.parallax').forEach(element => {
