@@ -2,188 +2,84 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>姫路焼き｜出汁で食べる、新しいお好み焼き文化</title>
+  <title>Quantum Loader</title>
   <style>
-    :root {
-      --bg: #f9f9f9;
-      --text: #222;
-      --accent: #b22222;
-      --subtle: #888;
-      --white: #ffffff;
-      --button-bg: #b22222;
-      --button-hover: #a11f1f;
-    }
-
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      margin: 0;
-      font-family: 'Helvetica Neue', 'Noto Sans JP', sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      line-height: 1.7;
-      scroll-behavior: smooth;
-    }
-
-    header {
-      background: var(--accent);
-      color: var(--white);
-      text-align: center;
-      padding: 120px 20px 80px;
-    }
-
-    header h1 {
-      font-size: 3rem;
-      margin: 0 0 0.5rem;
-    }
-
-    header p {
-      font-size: 1.2rem;
-      color: #fffbe8;
-      margin-bottom: 2rem;
-    }
-
-    .btn {
-      display: inline-block;
-      padding: 0.75rem 1.5rem;
-      font-size: 1rem;
-      color: white;
-      background: var(--button-bg);
-      border: none;
-      border-radius: 30px;
-      text-decoration: none;
-      transition: background 0.3s ease;
-    }
-
-    .btn:hover {
-      background: var(--button-hover);
-    }
-
-    section {
-      padding: 100px 20px;
-      max-width: 960px;
-      margin: auto;
-      opacity: 0;
-      transform: translateY(40px);
-      transition: opacity 0.8s ease, transform 0.8s ease;
-    }
-
-    section.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    h2 {
-      font-size: 2rem;
-      margin-bottom: 1rem;
-      color: var(--accent);
-    }
-
-    h3 {
-      font-size: 1.2rem;
-      margin-top: 2rem;
-      margin-bottom: 0.5rem;
-    }
-
-    .highlight {
-      background: #fffef5;
-      padding: 2rem;
-      border-left: 5px solid var(--accent);
-      border-radius: 8px;
-      margin: 2rem 0;
-    }
-
-    ul {
-      padding-left: 1.5rem;
-    }
-
-    footer {
-      text-align: center;
-      padding: 60px 20px;
-      font-size: 0.9rem;
-      background: #111;
-      color: #aaa;
-    }
-
-    @media (max-width: 600px) {
-      header h1 {
-        font-size: 2rem;
-      }
-
-      h2 {
-        font-size: 1.5rem;
-      }
-    }
+    body { margin: 0; overflow: hidden; background: black; }
+    canvas { display: block; }
   </style>
 </head>
 <body>
-
-<header>
-  <h1>姫路焼き</h1>
-  <p>── 出汁で食べる、新しいお好み焼き文化 ──</p>
-  <a href="#concept" class="btn">コンセプトを見る</a>
-</header>
-
-<section id="concept">
-  <h2>姫路の美意識が宿る、静かな革新。</h2>
-  <p>2025年、ソースではなく“出汁”で食べるお好み焼きが姫路から誕生。「姫路焼き」は、地元の素材と和の感性を融合した、まったく新しい体験です。</p>
-</section>
-
-<section>
-  <h2>コンセプト</h2>
-  <div class="highlight">
-    <p><strong>姫路城の白壁</strong>を連想させる白系素材（山芋・白ネギ）と、<strong>繊細な出汁</strong>が決め手。</p>
-    <p>ソース文化とは一線を画す、やさしい旨味と香りの余韻が特徴です。</p>
-  </div>
-</section>
-
-<section>
-  <h2>素材のこだわり</h2>
-  <h3>山芋ベースのふわとろ生地</h3>
-  <p>地元産の山芋と国産小麦で、口に入れた瞬間にとろける軽やかさ。</p>
-  <h3>特製 白だし</h3>
-  <p>鰹・昆布・椎茸の旨味をブレンド。香りと余韻で勝負します。</p>
-</section>
-
-<section>
-  <h2>展開ビジョン</h2>
-  <ul>
-    <li>姫路観光名物として駅前・城前に専用店舗</li>
-    <li>地元飲食店の「姫路焼き認定」制度</li>
-    <li>冷凍惣菜・駅弁・土産物への商品化</li>
-    <li>体験型イベントやSNSを活用した全国展開</li>
-  </ul>
-</section>
-
-<section>
-  <h2>2025年 姫路焼きプロジェクト始動</h2>
-  <p>味覚だけでなく、“記憶”に残る。姫路らしさを伝える「食の名刺」として、次の文化を育てていきます。</p>
-  <a href="#top" class="btn">トップへ戻る</a>
-</section>
-
-<footer>
-  &copy; 2025 HIMEJIYAKI PROJECT｜Produced in Himeji, Japan.
-</footer>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r152/three.min.js"></script>
 <script>
-  // スクロールでアニメーション表示
-  const sections = document.querySelectorAll('section');
-  const observer = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
-        observer.unobserve(entry.target);
-      }
+  let scene, camera, renderer;
+  const layers = [];
+
+  init();
+  animate();
+
+  function init() {
+    scene = new THREE.Scene();
+
+    camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
+    camera.position.z = 10;
+
+    renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.body.appendChild(renderer.domElement);
+
+    const geometry = new THREE.BufferGeometry();
+    const count = 1000;
+    const positions = new Float32Array(count * 3);
+
+    for (let i = 0; i < count; i++) {
+      const r = Math.random() * 3 + 2;
+      const theta = Math.random() * 2 * Math.PI;
+      const phi = Math.acos(2 * Math.random() - 1);
+      const x = r * Math.sin(phi) * Math.cos(theta);
+      const y = r * Math.sin(phi) * Math.sin(theta);
+      const z = r * Math.cos(phi);
+      positions.set([x, y, z], i * 3);
+    }
+
+    geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+
+    const materialBase = new THREE.PointsMaterial({
+      color: 0xffffff,
+      size: 0.05,
+      transparent: true,
+      opacity: 0.7
     });
-  }, { threshold: 0.1 });
 
-  sections.forEach(section => {
-    observer.observe(section);
-  });
+    // 複数レイヤーを異なる回転で作成
+    for (let i = 0; i < 4; i++) {
+      const material = materialBase.clone();
+      material.opacity = 0.2 + i * 0.2;
+      const points = new THREE.Points(geometry.clone(), material);
+      points.scale.setScalar(1 + i * 0.3);
+      scene.add(points);
+      layers.push({
+        object: points,
+        speed: 0.001 + Math.random() * 0.002,
+        axis: new THREE.Vector3(Math.random(), Math.random(), Math.random()).normalize()
+      });
+    }
+
+    window.addEventListener('resize', onWindowResize, false);
+  }
+
+  function animate() {
+    requestAnimationFrame(animate);
+    layers.forEach(layer => {
+      layer.object.rotateOnAxis(layer.axis, layer.speed);
+    });
+    renderer.render(scene, camera);
+  }
+
+  function onWindowResize() {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+  }
 </script>
-
 </body>
 </html>
