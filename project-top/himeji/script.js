@@ -113,19 +113,31 @@ document.addEventListener('DOMContentLoaded', createHeron);
         // パララックス効果（最適化版）
 if (Math.abs(scrollDelta) > 1) {
     const isMobile = window.innerWidth <= 768;
-    const parallaxStrength = isMobile ? 0.02 : 0.05; // スマホは弱く
-    const offsetY = isMobile ? -30 : -450; // 初期位置調整（必要に応じて調整）
 
     document.querySelectorAll('.parallax').forEach(element => {
         const rect = element.getBoundingClientRect();
 
-        if (rect.top < windowHeight && rect.bottom > 0) {
+        if (rect.top < window.innerHeight && rect.bottom > 0) {
             const scrollPos = window.scrollY;
-            const positionY = (scrollPos - rect.top) * -parallaxStrength + offsetY;
+
+            // スマホとPCで data 属性を切り替えて取得
+            const strengthAttr = isMobile ? element.dataset.strengthSp : element.dataset.strengthPc;
+            const offsetAttr = isMobile ? element.dataset.offsetSp : element.dataset.offsetPc;
+            const zoomAttr = isMobile ? element.dataset.zoomSp : element.dataset.zoomPc;
+
+            const strength = parseFloat(strengthAttr) || (isMobile ? 0.02 : 0.05);
+            const offsetY = parseFloat(offsetAttr) || (isMobile ? 30 : -100);
+            const zoom = zoomAttr || (isMobile ? '100%' : 'cover');
+
+            // パララックス効果
+            const positionY = (scrollPos - rect.top) * -strength + offsetY;
             element.style.backgroundPositionY = `${positionY}px`;
+
+            // 背景画像の拡大
+            element.style.backgroundSize = zoom;
         }
     });
-}        
+}
         // スクロール停止検出
         clearTimeout(scrollTimeout);
         scrollTimeout = setTimeout(() => {
@@ -183,4 +195,5 @@ if (Math.abs(scrollDelta) > 1) {
             }
         }
     `;
+    
     document.head.appendChild(style);
