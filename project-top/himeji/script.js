@@ -114,7 +114,7 @@ document.addEventListener('DOMContentLoaded', createHeron);
 if (Math.abs(scrollDelta) > 1) {
     const isMobile = window.innerWidth <= 768;
     const parallaxStrength = isMobile ? 0.02 : 0.05; // スマホは弱く
-    const offsetY = isMobile ? -30 : -400; // 初期位置調整（必要に応じて調整）
+    const offsetY = isMobile ? -30 : -450; // 初期位置調整（必要に応じて調整）
 
     document.querySelectorAll('.parallax').forEach(element => {
         const rect = element.getBoundingClientRect();

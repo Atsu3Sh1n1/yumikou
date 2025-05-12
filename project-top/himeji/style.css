@@ -80,6 +80,28 @@ p {
     margin: 0 auto 1.5rem;
 }
 
+.notice-text {
+    text-align: center;
+    padding: 1rem 0;
+    margin: 0 auto;
+    font-size: 0.9rem;
+    color: #000;
+}
+
+.credit-link {
+    text-align: center;
+    margin: 0 auto;
+    font-size: 1rem;
+    color: #888;
+    max-width: 800px;
+}
+
+.credit-link a {
+    color: #FFA500;
+    text-decoration: none;
+}
+
+
 .content-box {
     background-color: rgba(255, 255, 255, 0.9);
     border-radius: 15px;
