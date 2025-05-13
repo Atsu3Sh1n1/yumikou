@@ -2,96 +2,67 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>量子的粒子球体</title>
+  <title>姫路市の紹介 / About Himeji City</title>
   <style>
-    body { margin: 0; background: black; overflow: hidden; }
-    canvas { display: block; }
+    body {
+      font-family: sans-serif;
+      line-height: 1.6;
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+    .section {
+      margin-bottom: 2rem;
+    }
+    .jp {
+      font-weight: bold;
+      color: #333;
+    }
+    .en {
+      font-style: italic;
+      color: #666;
+    }
   </style>
 </head>
 <body>
-<script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/three@0.160.0/examples/js/controls/OrbitControls.min.js"></script>
-<script>
-  const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-  camera.position.z = 5;
 
-  const renderer = new THREE.WebGLRenderer({ antialias: true });
-  renderer.setSize(window.innerWidth, window.innerHeight);
-  document.body.appendChild(renderer.domElement);
+  <h1>姫路市の紹介 / About Himeji City</h1>
 
-  const controls = new THREE.OrbitControls(camera, renderer.domElement);
+  <div class="section">
+    <p class="jp">
+      姫路市は、世界文化遺産・国宝に指定されている姫路城を中心に発展してきた、歴史と文化の薫る都市です。
+    </p>
+    <p class="en">
+      Himeji City is a historic and culturally rich city that has developed around Himeji Castle, a UNESCO World Cultural Heritage Site and National Treasure of Japan.
+    </p>
+  </div>
 
-  // ライトを追加
-  const pointLight = new THREE.PointLight(0xffffff, 1);
-  pointLight.position.set(0, 0, 0);
-  scene.add(pointLight);
+  <div class="section">
+    <p class="jp">
+      起源は1333年、赤松則村が築いた砦にさかのぼります。その後、息子の貞範、山名宗全、豊臣秀吉らが城郭の整備を進めました。
+    </p>
+    <p class="en">
+      The origins date back to 1333, when Norimura Akamatsu built a fort. His son Sadanori, as well as Sozen Yamana and Hideyoshi Toyotomi, later expanded it.
+    </p>
+  </div>
 
-  const ambientLight = new THREE.AmbientLight(0x8888ff, 0.5);
-  scene.add(ambientLight);
+  <div class="section">
+    <p class="jp">
+      現在の姿は1609年に池田輝政によって完成したもので、白漆喰の外観から「白鷺城」とも呼ばれています。
+    </p>
+    <p class="en">
+      The current form was completed in 1609 by Terumasa Ikeda, and its white plastered exterior has earned it the nickname “White Heron Castle.”
+    </p>
+  </div>
 
-  // 粒子の設定
-  const particleCount = 2000;
-  const radius = 2;
-  const positions = new Float32Array(particleCount * 3);
-  const colors = new Float32Array(particleCount * 3);
+  <div class="section">
+    <p class="jp">
+      現在、姫路市は人口約53万人を擁する中核市として、播磨地域の政治・経済・文化の中心として発展を続けています。
+    </p>
+    <p class="en">
+      Today, Himeji has a population of approximately 530,000 and serves as a core city in the Harima region, playing a vital role in politics, economy, and culture.
+    </p>
+  </div>
 
-  const geometry = new THREE.BufferGeometry();
-
-  for (let i = 0; i < particleCount; i++) {
-    const theta = Math.random() * Math.PI * 2;
-    const phi = Math.acos(2 * Math.random() - 1);
-    const x = radius * Math.sin(phi) * Math.cos(theta);
-    const y = radius * Math.sin(phi) * Math.sin(theta);
-    const z = radius * Math.cos(phi);
-    positions[i * 3] = x;
-    positions[i * 3 + 1] = y;
-    positions[i * 3 + 2] = z;
-
-    const color = new THREE.Color();
-    color.setHSL(i / particleCount, 1.0, 0.7);
-    colors[i * 3] = color.r;
-    colors[i * 3 + 1] = color.g;
-    colors[i * 3 + 2] = color.b;
-  }
-
-  geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-  geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
-
-  const material = new THREE.PointsMaterial({
-    size: 0.15,
-    vertexColors: true,
-    transparent: true,
-    opacity: 0.9,
-    blending: THREE.AdditiveBlending,
-    depthWrite: false,
-    sizeAttenuation: true
-  });
-
-  const points = new THREE.Points(geometry, material);
-  scene.add(points);
-
-  let time = 0;
-
-  function animate() {
-    requestAnimationFrame(animate);
-    time += 0.01;
-
-    // 回転のアニメーション
-    points.rotation.y += 0.002;
-    points.rotation.x += 0.001;
-
-    renderer.render(scene, camera);
-  }
-
-  animate();
-
-  // ウィンドウのリサイズ対応
-  window.addEventListener('resize', () => {
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth, window.innerHeight);
-  });
-</script>
 </body>
 </html>
