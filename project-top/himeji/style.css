@@ -1,4 +1,5 @@
-html, body {
+html,
+body {
     overflow-x: hidden;
 }
 
@@ -55,8 +56,27 @@ h1 {
     font-size: 4rem;
     color: var(--primary);
     text-shadow: 3px 3px 0 var(--secondary);
-    margin-bottom: 2rem;
-     z-index: 2;
+    z-index: 2;
+    text-align: center;
+    line-height: 1.1;
+    /* 全体の高さも抑える */
+    margin: 0;
+    padding: 0;
+}
+
+h1 .en {
+  display: block;
+  font-size: 0.7em;
+  transform: scale(0.95); /* 横幅も少し縮めると自然 */
+  transform-origin: center bottom;
+  margin: 0;
+  padding: 0;
+}
+
+h1 .jp {
+  display: block;
+  margin: 0;
+  padding: 0;
 }
 
 h2 {
@@ -65,19 +85,32 @@ h2 {
     border-bottom: 1px dashed var(--primary);
     padding-bottom: 0rem;
     margin: 0rem;
-    z-index: 2;s
-    
+    z-index: 2;
+
     /* 文字に影を追加 */
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    text-shadow: 2px 1px 4px rgba(0, 0, 0, 1);
 }
 
-.first-heading {
-    color: rgb(255, 162, 0); /* 色を変更 */
-    font-size: 2rem;
-   
+h2 .en {
+  display: block;
+  font-size: 0.5em;
+  transform: scale(0.95); /* 横幅も少し縮めると自然 */
+  transform-origin: center bottom;
+  margin: 0;
+  padding: 0;
+  line-height: 1;
 }
 
+h2 .jp {
+  display: block;
+  margin: 0;
+  padding: 0;
+}
 
+h2 .phrase {
+  margin-bottom: 1rem; /* 日本語の下にだけ余白 */
+  font-size: 2rem;
+}
 
 
 h3 {
@@ -121,6 +154,8 @@ p {
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
     margin: 2rem 0;
     max-width: 900px;
+        z-index: 2;
+
 }
 
 .grid-container {
@@ -148,7 +183,7 @@ p {
     width: 100%;
     height: 200px;
     object-fit: cover;
-     position: relative;
+    position: relative;
 }
 
 .card-content {
@@ -574,12 +609,16 @@ footer h3 {
 
 /* 白鷺専用アニメーション */
 @keyframes float-heron {
-    0%, 100% {
-        transform: translateY(0) rotate(-5deg) scale(2); /* 常に2倍拡大 */
+
+    0%,
+    100% {
+        transform: translateY(0) rotate(-5deg) scale(2);
+        /* 常に2倍拡大 */
     }
 
     50% {
-        transform: translateY(-20px) rotate(5deg) scale(2); /* ふわっと動いて拡大 */
+        transform: translateY(-20px) rotate(5deg) scale(2);
+        /* ふわっと動いて拡大 */
     }
 }
 
@@ -588,7 +627,8 @@ footer h3 {
     filter: drop-shadow(0 5px 10px rgba(0, 0, 0, 0.2));
     z-index: 1 !important;
     background-color: transparent;
-    position: absolute; /* 位置を変更するために絶対位置に */
+    position: absolute;
+    /* 位置を変更するために絶対位置に */
     top: 10%;
     left: 20%;
     width: 100px;
@@ -616,10 +656,13 @@ footer h3 {
         background-attachment: scroll;
         background-size: cover;
 
-    .heron {
-        top: 50%; /* スマホでは中央に配置 */
-        left: 40%; /* スマホでは中央に配置 */
-        transform: scale(1.5) translate(-50%, -50%); /* 拡大しつつ、中央に寄せる */
+        .heron {
+            top: 50%;
+            /* スマホでは中央に配置 */
+            left: 40%;
+            /* スマホでは中央に配置 */
+            transform: scale(1.5) translate(-50%, -50%);
+            /* 拡大しつつ、中央に寄せる */
+        }
     }
-}
 }
