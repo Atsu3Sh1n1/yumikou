@@ -127,7 +127,7 @@ h2 .jp {
 h2 .phrase {
     margin-bottom: 1rem;
     /* 日本語の下にだけ余白 */
-    font-size: 2rem;
+    font-size: 2.2rem;
 }
 
 
@@ -648,12 +648,12 @@ footer h3 {
 
     0%,
     100% {
-        transform: translateY(0) rotate(-5deg) scale(1.2);
+        transform: translateY(0) rotate(-5deg) scale(1);
         /* 常に2倍拡大 */
     }
 
     50% {
-        transform: translateY(-20px) rotate(5deg) scale(1.2);
+        transform: translateY(-20px) rotate(5deg) scale(1);
         /* ふわっと動いて拡大 */
     }
 }
