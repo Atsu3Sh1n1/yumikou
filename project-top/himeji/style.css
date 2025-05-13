@@ -44,6 +44,18 @@ section {
     overflow: hidden;
 }
 
+iframe {
+      width: 100%;
+      max-width: 960px;  /* 最大幅 */
+      height: 600px;     /* 高さ */
+      border: none;
+    }
+
+    .sketchfab-embed-wrapper {
+      width: 100%;
+      text-align: center;
+    }
+
 h1,
 h2,
 h3 {
