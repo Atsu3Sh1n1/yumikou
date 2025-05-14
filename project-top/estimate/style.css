@@ -166,3 +166,61 @@ button[type="submit"] {
 button[type="submit"]:hover {
     background-color: #9a6b00;
 }
+
+/* ファイルアップロード関連スタイル */
+.file-upload-container {
+    margin-top: 15px;
+}
+
+.file-upload-label {
+    display: inline-block;
+    padding: 8px 15px;
+    background-color: #f0f0f0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.file-upload-label:hover {
+    background-color: #e0e0e0;
+}
+
+.file-preview {
+    margin-top: 10px;
+}
+
+.file-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px;
+    background-color: #f9f9f9;
+    border: 1px solid #eee;
+    border-radius: 4px;
+    margin-bottom: 5px;
+}
+
+.file-name {
+    flex-grow: 1;
+    margin-right: 10px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.remove-file {
+    color: #ff4444;
+    cursor: pointer;
+    background: none;
+    border: none;
+    font-size: 1.1em;
+}
+
+.remove-file:hover {
+    color: #cc0000;
+}
+
+#file-input {
+    display: none;
+}

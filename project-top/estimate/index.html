@@ -131,8 +131,12 @@
 
         <fieldset>
             <legend>参考資料や写真</legend>
-            <input type="file" name="attachments" multiple>
-            <p style="font-size: 0.7em; color: #666;">※複数ファイル選択可能（最大10MB）</p>
+            <div class="file-upload-container">
+                <input type="file" name="attachments" id="file-input" multiple>
+                <label for="file-input" class="file-upload-label">ファイルを選択</label>
+                <div id="file-preview" class="file-preview"></div>
+            </div>
+            <p style="font-size: 0.9em; color: #666;">※複数ファイル選択可能（最大10MB）</p>
         </fieldset>
 
 
