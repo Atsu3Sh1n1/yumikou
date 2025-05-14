@@ -13,7 +13,7 @@
 <body>
     <section
         style="max-width: 800px; margin: 40px auto; color: #555; background: #fffbea; padding: 20px; border-radius: 10px; border: 1px solid #f0e1b3;">
-        <h2 style="color: #b07c00;  margin-bottom: 12px;">テスト　お見積もりに関するご案内　テスト</h2>
+        <h2 style="color: #b07c00; margin-bottom: 12px;">テスト　お見積もりに関するご案内　テスト</h2>
         <p style="text-align: left;">
             このフォームからのご依頼は<strong>無料でお受けしておりますが、ご相談内容によっては現地確認や資料の確認が必要となるため、お時間をいただく場合がございます。</strong><br /><br>
             また、ご相談内容やご依頼地域・状況により、<strong>対応が難しい・お引き受けできない場合</strong>がございます。あらかじめご了承ください。
@@ -27,12 +27,10 @@
         </p>
     </section>
 
-
-    <h1>お見積もり依頼</h1>
-
+    <h1>テスト　お見積もり依頼　テスト</h1>
     <p>ご希望の内容にチェックを入れて、必要事項をご記入の上、送信してください。</p>
 
-    <form>
+    <form action="submit_form.php" method="POST" enctype="multipart/form-data">
         <fieldset>
             <legend>お客様情報</legend>
             <label>お名前 <input type="text" name="name" required></label>
@@ -40,6 +38,17 @@
             <label>お電話番号 <input type="text" name="phone"></label>
             <label>メールアドレス <input type="email" name="email" required></label>
         </fieldset>
+
+        <br><br><br>
+
+        <a href="https://sumptuous-concrete-546.notion.site/1f3c61b2947f800e9ca9fa5a81f50f4c?v=1f3c61b2947f80548137000cc5c09fc9&pvs=4"
+            target="_blank" style=" color: inherit;">（動作テスト仮置き）プラント工事関連</a>
+        <br><br><br>
+        <iframe src="https://sumptuous-concrete-546.notion.site/ebd/1f3c61b2947f804bb5dff676e21836d9" width="800"
+            height="600" frameborder="0" allowfullscreen style="display: block; margin: 0 auto;">
+        </iframe>
+
+        <br><br><br>
 
         <fieldset class="category">
             <legend>プラント・現地工事</legend>
@@ -99,6 +108,12 @@
             <legend>参考資料や写真</legend>
             <label><input type="radio" name="reference_material" value="添付予定"> 添付予定</label>
             <label><input type="radio" name="reference_material" value="今はなし"> 今はなし</label>
+
+            <!-- ファイルアップロード欄 -->
+            <div id="file-upload-container" style="display:none;">
+                <label for="file-upload">ファイルを選択してください:</label>
+                <input type="file" id="file-upload" name="file-upload[]" accept="image/*,.pdf,.docx,.xlsx" multiple>
+            </div>
         </fieldset>
 
         <fieldset>
@@ -123,6 +138,20 @@
     <footer style="text-align: center; margin-top: 40px; font-size: 0.9rem; color: #777;">
         &copy; 2025 有限会社 弓工 All rights reserved.
     </footer>
+
+    <!-- JavaScript to toggle file upload visibility -->
+    <script>
+        document.querySelectorAll('input[name="reference_material"]').forEach(function (radio) {
+            radio.addEventListener('change', function () {
+                const fileUploadContainer = document.getElementById('file-upload-container');
+                if (document.querySelector('input[name="reference_material"]:checked').value === "添付予定") {
+                    fileUploadContainer.style.display = 'block';  // 添付予定が選択されたら表示
+                } else {
+                    fileUploadContainer.style.display = 'none';  // 今はなしが選択されたら非表示
+                }
+            });
+        });
+    </script>
 
 </body>
 
