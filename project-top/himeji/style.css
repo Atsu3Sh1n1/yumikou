@@ -647,7 +647,7 @@ footer h3 {
         z-index: 1 !important;
         background-color: transparent;
         position: absolute;
-        top: -100%;
+        top: 0%;
         left: -90%;
         width: 100px;
         height: 100px;

@@ -8,24 +8,27 @@
     <meta name="description" content="有限会社弓工は、姫路市を拠点に建設業務、プラント配管、飲食・レストラン業務、マリンスポーツ事業と多岐にわたる分野で事業を展開しています。">
     <title>有限会社弓工 - 見積もり依頼フォーム</title>
     <link rel="stylesheet" href="style.css" />
+    <script src="form-submission.js" defer></script>
 </head>
 
 <body>
     <section
-        style="max-width: 800px; margin: 40px auto; color: #555; background: #fffbea; padding: 20px; border-radius: 10px; border: 1px solid #f0e1b3;">
-        <h2 style="color: #b07c00;  margin-bottom: 12px;">お見積もりに関するご案内</h2>
-        <p style="text-align: left;">
-            このフォームからのご依頼は<strong>無料でお受けしておりますが、ご相談内容によっては現地確認や資料の確認が必要となるため、お時間をいただく場合がございます。</strong><br /><br>
-            また、ご相談内容やご依頼地域・状況により、<strong>対応が難しい・お引き受けできない場合</strong>がございます。あらかじめご了承ください。
-            <br><br>
-            お急ぎのご依頼や、至急のご対応が必要な場合は、<strong>お電話（直通）でのお問い合わせをおすすめ</strong>いたします。
-            <br><br>
-            ご相談内容には真摯に対応いたしますので、<strong>「こんなこと頼んでいいのかな？」と迷われるような内容でも、お気軽にご記入ください。</strong><br />
-            フォーム送信後、通常<strong>2〜3営業日以内</strong>にご連絡させていただきます。
-            <br><br>
-            ※ご入力いただいた情報は、見積もり・ご連絡以外の目的には使用いたしません。
-        </p>
-    </section>
+    style="max-width: 800px; text-align: center; margin: 40px auto; color: #555; background: #fffbea; padding: 20px; border-radius: 10px; border: 1px solid #f0e1b3;">
+    <h2 style="color: #b07c00;  margin-bottom: 12px;">お見積もりに関するご案内</h2>
+    <p style="text-align: left;">
+        このフォームからのご依頼は<strong>無料でお受けしておりますが、ご相談内容によっては現地確認や資料の確認が必要となるため、お時間をいただく場合がございます。</strong><br /><br>
+        また、ご相談内容やご依頼地域・状況により、<strong>対応が難しい・お引き受けできない場合</strong>がございます。あらかじめご了承ください。
+        <br><br>
+        お急ぎのご依頼や、至急のご対応が必要な場合は、<strong>お電話からのお問い合わせをおすすめ</strong>いたします。<br>
+        <strong><br>TEL：079-253-3343　<br>FAX：079-253-3393</strong>
+        <br><br>
+        ご相談内容には真摯に対応いたしますので、<strong>「こんなこと頼んでいいのかな？」と迷われるような内容でも、お気軽にご記入ください。</strong><br />
+        フォーム送信後、通常<strong>2〜3営業日以内</strong>にご連絡させていただきます。
+        <br><br>
+        ※ご入力いただいた情報は、見積もり・ご連絡以外の目的には使用いたしません。
+    </p>
+</section>
+
 
 
     <h1>お見積もり依頼</h1>
@@ -97,10 +100,27 @@
 
         <fieldset>
             <legend>参考資料や写真</legend>
-            <label><input type="radio" name="reference_material" value="添付予定"> 添付予定</label>
-            <label><input type="radio" name="reference_material" value="今はなし"> 今はなし</label>
+            <input type="file" name="attachments" multiple>
+            <p style="font-size: 0.9em; color: #666;">※複数ファイル選択可能（最大10MB）</p>
         </fieldset>
 
+
+       <fieldset>
+    <legend>ご予算（目安）</legend>
+    <label for="budget">おおよそのご予算帯を選択してください：</label><br>
+    <select name="budget" id="budget">
+        <option value="">選択してください</option>
+        <option value="50万円未満">50万円未満（点検・補修など）</option>
+        <option value="50〜150万円">50〜150万円（小規模工事）</option>
+        <option value="150〜500万円">150〜500万円（配管更新・構造物など）</option>
+        <option value="500〜1000万円">500〜1000万円（中規模一式）</option>
+        <option value="1000万円以上">1000万円以上（新設・大型工事）</option>
+        <option value="要相談">内容により相談したい</option>
+    </select>
+</fieldset>
+
+
+       
         <fieldset>
             <legend>ご希望の工事時期</legend>
             <div class="checkbox-list">
