@@ -1,54 +1,174 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
-  <meta charset="UTF-8" />
-  <title>姫路城 3Dモデル</title>
+  <meta charset="UTF-8">
+  <title>見積もり依頼フォーム</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
     body {
-      margin: 0;
-      background: #f9f9f9;
-      font-family: sans-serif;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+      font-size: clamp(14px, 2vw, 24px);
+      font-family: 'Helvetica Neue', sans-serif;
+      background-color: #f9f9f9;
+      padding: 20px;
+      color: #333;
     }
 
-    .sketchfab-embed-wrapper {
-      width: 100%;
-      max-width: 960px;
-      margin-top: 2rem;
-    }
-
-    iframe {
-      width: 100%;
-      height: 600px;
-      border: none;
-    }
-
-    p {
+    h1, p {
       text-align: center;
-      font-size: 13px;
-      color: #666;
+
+    }
+
+    /* タイトルのスタイル */
+    h1,
+    h2 {
+      color: #2c3e50;
+       font-size: 2.5rem;
+      margin-bottom: 20px;
+    }
+
+    form {
+      background: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    label {
+      display: block;
+      margin-top: 12px;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    textarea {
+      width: 100%;
+      padding: 10px;
+      margin-top: 4px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+
+    fieldset {
+      border: none;
+      margin-top: 20px;
+    }
+
+    legend {
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .category {
+      margin-bottom: 20px;
+    }
+
+    .checkbox-list label {
+      display: flex;
+      align-items: center;
+      margin: 4px 0;
+    }
+
+    .checkbox-list input {
+      margin-right: 8px;
+    }
+
+    button {
+      background-color: #2c3e50;
+      color: white;
+      padding: 12px 24px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      margin-top: 20px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #1a242f;
     }
   </style>
 </head>
+
 <body>
 
-  <h1>姫路城の3Dモデル</h1>
+  <h1>お見積もり依頼フォーム</h1>
+  <p>ご希望の工事・製作・清掃内容にチェックを入れて、必要事項をご記入の上、送信してください。</p>
 
-  <div class="sketchfab-embed-wrapper">
-    <iframe title="himeji" frameborder="0" allowfullscreen mozallowfullscreen="true"
-      webkitallowfullscreen="true" allow="autoplay; fullscreen; xr-spatial-tracking"
-      xr-spatial-tracking execution-while-out-of-viewport execution-while-not-rendered web-share
-      src="https://sketchfab.com/models/40035121d5d54d2f9b89073a52e07a27/embed">
-    </iframe>
-    <p>
-      <a href="https://sketchfab.com/3d-models/himeji-40035121d5d54d2f9b89073a52e07a27"
-        target="_blank" rel="nofollow">himeji</a> by
-      <a href="https://sketchfab.com/atsu3sh1n1" target="_blank" rel="nofollow">himeji1</a> on
-      <a href="https://sketchfab.com" target="_blank" rel="nofollow">Sketchfab</a>
-    </p>
-  </div>
+  <form>
+    <fieldset>
+      <legend>お客様情報</legend>
+      <label>お名前 <input type="text" name="name" required></label>
+      <label>ご住所 <input type="text" name="address"></label>
+      <label>お電話番号 <input type="text" name="phone"></label>
+      <label>メールアドレス <input type="email" name="email" required></label>
+    </fieldset>
+
+    <fieldset class="category">
+      <legend>プラント・現地工事</legend>
+      <div class="checkbox-list">
+        <label><input type="checkbox" name="工事" value="プラント工場の建設"> プラント工場の建設</label>
+        <label><input type="checkbox" name="工事" value="高圧パイプの配管工事"> 高圧パイプの配管工事</label>
+        <label><input type="checkbox" name="工事" value="機械設備の設置"> 機械設備の設置</label>
+        <label><input type="checkbox" name="工事" value="補修工事・工場製作"> その他補修工事、工場製作</label>
+      </div>
+    </fieldset>
+
+    <fieldset class="category">
+      <legend>製作・加工</legend>
+      <div class="checkbox-list">
+        <label><input type="checkbox" name="製作" value="製缶・配管製作"> 製缶・配管製作</label>
+        <label><input type="checkbox" name="製作" value="鉄工・溶接・組立加工"> 鉄工・組立・溶接の加工</label>
+        <label><input type="checkbox" name="製作" value="住宅・店舗用建築物"> 住宅・店舗用建築物</label>
+        <label><input type="checkbox" name="製作" value="鉄骨階段の制作取付"> 鉄骨階段制作取付</label>
+        <label><input type="checkbox" name="製作" value="金物手摺などの取付"> 金物手摺等の制作取付</label>
+        <label><input type="checkbox" name="製作" value="アイアン家具制作"> アイアン家具制作</label>
+      </div>
+    </fieldset>
+
+    <fieldset class="category">
+      <legend>リフォーム</legend>
+      <div class="checkbox-list">
+        <label><input type="checkbox" name="リフォーム" value="水回りリフォーム"> 水回りリフォーム</label>
+        <label><input type="checkbox" name="リフォーム" value="外壁塗装"> 外壁塗装</label>
+        <label><input type="checkbox" name="リフォーム" value="外構工事"> 外構工事</label>
+        <label><input type="checkbox" name="リフォーム" value="その他美装工事"> その他リフォーム、美装工事</label>
+        <label><input type="checkbox" name="リフォーム" value="賃貸マンション入退去時対応"> 賃貸マンション美装・リフォーム</label>
+      </div>
+    </fieldset>
+
+    <fieldset class="category">
+      <legend>清掃</legend>
+      <div class="checkbox-list">
+        <label><input type="checkbox" name="清掃" value="ホコリ除去"> ホコリ除去</label>
+        <label><input type="checkbox" name="清掃" value="水回り清掃"> 水回り清掃</label>
+        <label><input type="checkbox" name="清掃" value="床・壁・サッシの拭き上げ"> 床・壁・サッシ等の拭き上げ</label>
+        <label><input type="checkbox" name="清掃" value="エアコン清掃"> エアコン清掃</label>
+      </div>
+    </fieldset>
+
+    <fieldset class="category">
+      <legend>暮らしのサポート（高齢者・地域向け）</legend>
+      <div class="checkbox-list">
+        <label><input type="checkbox" name="地域サポート" value="草刈り作業"> 草刈り作業</label>
+        <label><input type="checkbox" name="地域サポート" value="田畑の見回り・管理"> 田畑の見回り・管理</label>
+        <label><input type="checkbox" name="地域サポート" value="農機具の点検・お手伝い"> 農機具の点検・お手伝い</label>
+        <label><input type="checkbox" name="地域サポート" value="屋外清掃や簡単な片付け"> 屋外清掃や簡単な片付け</label>
+        <label><input type="checkbox" name="地域サポート" value="その他生活のお困りごと相談"> その他生活のお困りごと相談</label>
+      </div>
+    </fieldset>
+
+
+    <fieldset>
+      <legend>ご希望・ご相談内容（任意）</legend>
+      <label><textarea name="message" rows="5" placeholder="ご希望の内容・日程・ご不明点などございましたらご記入ください。"></textarea></label>
+    </fieldset>
+
+    <button type="submit">送信する</button>
+  </form>
 
 </body>
+
 </html>
