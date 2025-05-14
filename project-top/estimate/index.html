@@ -5,18 +5,161 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <meta name="robots" content="index, follow" />
-    <meta name="description" content="有限会社弓工は、姫路市を拠点に建設業務、プラント配管、飲食・レストラン業務、マリンスポーツ事業と多岐にわたる分野で事業を展開しています。">
+    <meta name="description" content="有限会社弓工の見積もり依頼フォームです。建設業務、プラント配管、飲食・レストラン業務、マリンスポーツ事業など多岐にわたる分野に対応しています。">
     <title>有限会社弓工 - 見積もり依頼フォーム</title>
-    <link rel="stylesheet" href="style.css" />
-    <script src="form-submission.js" defer></script>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+        }
+        
+        .company-info {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            text-align: right;
+            font-size: 0.9em;
+            color: #555;
+            border: 1px solid #ddd;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        
+        h1 {
+            color: #b07c00;
+            text-align: center;
+            margin-top: 60px;
+            margin-bottom: 30px;
+        }
+        
+        fieldset {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        legend {
+            font-weight: bold;
+            padding: 0 10px;
+            color: #b07c00;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 15px;
+        }
+        
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+            margin-top: 5px;
+        }
+        
+        textarea {
+            height: 100px;
+        }
+        
+        button {
+            background-color: #b07c00;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-size: 1em;
+            border-radius: 5px;
+            cursor: pointer;
+            display: block;
+            margin: 30px auto;
+        }
+        
+        button:hover {
+            background-color: #9a6b00;
+        }
+        
+        .checkbox-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 10px;
+        }
+        
+        .checkbox-list label {
+            display: flex;
+            align-items: center;
+        }
+        
+        .checkbox-list input[type="checkbox"] {
+            margin-right: 10px;
+        }
+        
+        .file-upload-container {
+            margin-top: 15px;
+        }
+        
+        .file-upload-label {
+            display: inline-block;
+            background-color: #f0f0f0;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-bottom: 10px;
+        }
+        
+        .file-upload-label:hover {
+            background-color: #e0e0e0;
+        }
+        
+        .file-preview {
+            margin-top: 10px;
+            font-size: 0.9em;
+        }
+        
+        .notice {
+            background-color: #fffbea;
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #f0e1b3;
+            margin-bottom: 30px;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            font-size: 0.9rem;
+            color: #777;
+            border-top: 1px solid #eee;
+            padding-top: 20px;
+        }
+    </style>
 </head>
 
 <body>
-    <section
-        style="max-width: 800px; text-align: center; margin: 40px auto; color: #555; background: #fffbea; padding: 20px; border-radius: 10px; border: 1px solid #f0e1b3;">
-        <h2 style="color: #b07c00;  margin-bottom: 12px;">お見積もりに関するご案内</h2>
-        <p style="text-align: left;">
-            このフォームからのご依頼は<strong>無料でお受けしておりますが、ご相談内容によっては現地確認や資料の確認が必要となるため、お時間をいただく場合がございます。</strong><br /><br>
+    <div class="company-info">
+        <strong>有限会社 弓工</strong><br>
+        〒670-0012 兵庫県姫路市本町68<br>
+        TEL: 079-253-3343<br>
+        FAX: 079-253-3393<br>
+        Email: info@yumekou.co.jp
+    </div>
+
+    <h1>お見積もり依頼フォーム</h1>
+
+    <div class="notice">
+        <h2 style="color: #b07c00; margin-top: 0; margin-bottom: 12px;">お見積もりに関するご案内</h2>
+        <p>
+            このフォームからのご依頼は<strong>無料でお受けしておりますが、ご相談内容によっては現地確認や資料の確認が必要となるため、お時間をいただく場合がございます。</strong><br><br>
             また、ご相談内容やご依頼地域・状況により、<strong>対応が難しい・お引き受けできない場合</strong>がございます。あらかじめご了承ください。
             <br><br>
             お急ぎのご依頼や、至急のご対応が必要な場合は、<strong>お電話からのお問い合わせをおすすめ</strong>いたします。<br>
@@ -27,128 +170,104 @@
             <br><br>
             ※ご入力いただいた情報は、見積もり・ご連絡以外の目的には使用いたしません。
         </p>
-    </section>
-
-
-
-    <h1>お見積もり依頼</h1>
-
-    <p>ご希望の内容にチェックを入れて、必要事項をご記入の上、送信してください。</p>
+    </div>
 
     <form action="https://formspree.io/f/mbloglvn" method="POST" enctype="multipart/form-data">
-
-
         <fieldset>
-            <legend>お客様情報</legend>
-            <label>お名前 <input type="text" name="name" required></label>
-            <label>ご住所 <input type="text" name="address"></label>
-            <label>お電話番号 <input type="text" name="phone"></label>
+            <legend>貴社情報</legend>
+            <label>会社名 <input type="text" name="company_name" required></label>
+            <label>ご担当者名 <input type="text" name="contact_person" required></label>
+            <label>電話番号 <input type="tel" name="phone" required></label>
             <label>メールアドレス <input type="email" name="email" required></label>
-        </fieldset>
-
-        <fieldset class="category">
-            <legend>プラント・現地工事</legend>
-            <div class="checkbox-list">
-                <label><input type="checkbox" name="工事" value="プラント工場の建設"> プラント工場の建設</label>
-                <label><input type="checkbox" name="工事" value="高圧パイプの配管工事"> 高圧パイプの配管工事</label>
-                <label><input type="checkbox" name="工事" value="機械設備の設置"> 機械設備の設置</label>
-                <label><input type="checkbox" name="工事" value="補修工事・工場製作"> その他補修工事</label>
-            </div>
-        </fieldset>
-
-        <fieldset class="category">
-            <legend>製作・加工</legend>
-            <div class="checkbox-list">
-                <label><input type="checkbox" name="製作" value="製缶・配管製作"> 製缶・配管製作</label>
-                <label><input type="checkbox" name="製作" value="鉄工・溶接・組立加工"> 鉄工・組立・溶接加工</label>
-                <label><input type="checkbox" name="製作" value="住宅・店舗用建築物"> 住宅・店舗用建築物</label>
-                <label><input type="checkbox" name="製作" value="鉄骨階段の制作取付"> 鉄骨階段制作取付</label>
-                <label><input type="checkbox" name="製作" value="金物手摺などの取付"> 金物手摺等の制作取付</label>
-                <label><input type="checkbox" name="製作" value="アイアン家具制作"> アイアン家具制作</label>
-            </div>
-        </fieldset>
-
-        <fieldset class="category">
-            <legend>リフォーム</legend>
-            <div class="checkbox-list">
-                <label><input type="checkbox" name="リフォーム" value="水回りリフォーム"> 水回り</label>
-                <label><input type="checkbox" name="リフォーム" value="外壁塗装"> 外壁塗装</label>
-                <label><input type="checkbox" name="リフォーム" value="外構工事"> 外構工事</label>
-                <label><input type="checkbox" name="リフォーム" value="その他美装工事"> その他、美装工事</label>
-                <label><input type="checkbox" name="リフォーム" value="賃貸マンション入退去時対応"> 賃貸マンション美装</label>
-            </div>
-        </fieldset>
-
-        <fieldset class="category">
-            <legend>清掃</legend>
-            <div class="checkbox-list">
-                <label><input type="checkbox" name="清掃" value="ホコリ除去"> ホコリ除去</label>
-                <label><input type="checkbox" name="清掃" value="水回り清掃"> 水回り清掃</label>
-                <label><input type="checkbox" name="清掃" value="床・壁・サッシの拭き上げ"> 床・壁・サッシ等の拭き上げ</label>
-                <label><input type="checkbox" name="清掃" value="エアコン清掃"> エアコン清掃</label>
-            </div>
-        </fieldset>
-
-        <fieldset class="category">
-            <legend>暮らしのサポート<br>(高齢者・地域向け)</legend>
-            <div class="checkbox-list">
-                <label><input type="checkbox" name="地域サポート" value="草刈り作業"> 草刈り作業</label>
-                <label><input type="checkbox" name="地域サポート" value="田畑の見回り・管理"> 田畑の見回り・管理</label>
-                <label><input type="checkbox" name="地域サポート" value="農機具の点検・お手伝い"> 農機具の点検・お手伝い</label>
-                <label><input type="checkbox" name="地域サポート" value="屋外清掃や簡単な片付け"> 屋外清掃や簡単な片付け</label>
-                <label><input type="checkbox" name="地域サポート" value="その他生活のお困りごと相談"> その他、生活のお困りごと</label>
-            </div>
+            <label>ご住所 <input type="text" name="address" required></label>
         </fieldset>
 
         <fieldset>
-            <legend>ご希望・ご相談内容</legend>
-            <label><textarea name="message" rows="5"
-                    placeholder="できるだけ詳しくご記入いただけますと、より正確なお見積もりが可能です。"></textarea></label>
+            <legend>見積もり対象内容</legend>
+            <label>商品 / サービス名 <input type="text" name="product_service" required></label>
+            <label>数量・仕様等 <input type="text" name="quantity_spec"></label>
+            <label>詳細内容 <textarea name="details" required></textarea></label>
         </fieldset>
 
         <fieldset>
-            <legend>ご希望の時期</legend>
-            <div class="checkbox-list">
-                <label><input type="checkbox" name="schedule" value="なるべく早く"> なるべく早く</label>
-                <label><input type="checkbox" name="schedule" value="○月ごろから"> ○月ごろから</label>
-                <label><input type="checkbox" name="schedule" value="未定・相談したい"> 未定・相談したい</label>
-            </div>
+            <legend>希望条件</legend>
+            <label>希望納期 <input type="text" name="delivery_date" placeholder="例: 2025年6月中"></label>
+            <label>希望価格帯 / 予算感 
+                <select name="budget_range">
+                    <option value="">選択してください</option>
+                    <option value="10万円未満">10万円未満</option>
+                    <option value="10～50万円">10～50万円</option>
+                    <option value="50～100万円">50～100万円</option>
+                    <option value="100～300万円">100～300万円</option>
+                    <option value="300～500万円">300～500万円</option>
+                    <option value="500万円以上">500万円以上</option>
+                    <option value="要相談">要相談</option>
+                </select>
+            </label>
+            <label>支払い条件 <input type="text" name="payment_terms" placeholder="例: 着工時50%、完了時50%"></label>
         </fieldset>
 
         <fieldset>
-            <legend>ご予算の目安</legend>
-            <label for="budget">おおよそのご予算帯を選択してください：</label><br>
-            <select name="budget" id="budget">
-                <option value="">選択してください</option>
-                <option value="50万円未満">50万円未満</option>
-                <option value="50〜150万円">50〜150万円</option>
-                <option value="150〜500万円">150〜500万円</option>
-                <option value="500〜1000万円">500〜1000万円</option>
-                <option value="1000万円以上">1000万円以上</option>
-                <option value="要相談">内容により相談したい</option>
-            </select>
-        </fieldset>
-
-        <fieldset>
-            <legend>参考資料や写真</legend>
+            <legend>添付資料</legend>
+            <label>
+                <input type="radio" name="attachment_existence" value="有り" required> 有り
+                <input type="radio" name="attachment_existence" value="無し" style="margin-left: 20px;"> 無し
+            </label>
+            <label>添付ファイル名（複数ある場合はカンマ区切りで） <input type="text" name="attachment_names"></label>
             <div class="file-upload-container">
-                <input type="file" name="attachments" id="file-input" multiple>
-                <label for="file-input" class="file-upload-label">ファイルを選択</label>
+                <label class="file-upload-label" for="file-input">ファイルを選択</label>
+                <input type="file" name="attachments" id="file-input" multiple style="display: none;">
                 <div id="file-preview" class="file-preview"></div>
             </div>
             <p style="font-size: 0.9em; color: #666;">※複数ファイル選択可能（最大10MB）</p>
         </fieldset>
 
+        <fieldset>
+            <legend>その他ご要望</legend>
+            <label><textarea name="other_requests" placeholder="その他ご要望があればご記入ください"></textarea></label>
+        </fieldset>
 
-        <button type="submit">送信する</button>
-        
+        <fieldset>
+            <legend>備考</legend>
+            <p>記入後の送付方法：<br>
+            本フォーム送信後、自動返信メールが届きます。2～3営業日以内に担当者よりご連絡いたします。<br>
+            緊急の場合は直接お電話（079-253-3343）にてご連絡ください。</p>
+        </fieldset>
 
+        <button type="submit">見積もりを依頼する</button>
     </form>
 
-    <footer style="text-align: center; margin-top: 40px; font-size: 0.9rem; color: #777;">
+    <footer>
         &copy; 2025 有限会社 弓工 All rights reserved.
     </footer>
 
+    <script>
+        // ファイルアップロードのプレビュー表示
+        document.getElementById('file-input').addEventListener('change', function(e) {
+            const filePreview = document.getElementById('file-preview');
+            filePreview.innerHTML = '';
+            
+            if (this.files.length > 0) {
+                const fileList = document.createElement('ul');
+                for (let i = 0; i < this.files.length; i++) {
+                    const listItem = document.createElement('li');
+                    listItem.textContent = this.files[i].name + ' (' + formatFileSize(this.files[i].size) + ')';
+                    fileList.appendChild(listItem);
+                }
+                filePreview.appendChild(fileList);
+            } else {
+                filePreview.textContent = '選択されたファイルはありません';
+            }
+        });
+        
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+    </script>
 </body>
 
 </html>
