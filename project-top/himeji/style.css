@@ -24,7 +24,9 @@ body {
     background-color: var(--light);
     color: var(--dark);
     scroll-behavior: smooth;
-     font-size: clamp(14px, 2vw, 20px);
+    font-size: clamp(14px, 2vw, 20px);
+    line-height: 1.6;
+    /* ← 追加 */
 
 }
 
@@ -638,6 +640,7 @@ footer h3 {
         color: #4ca3ff;
         /* マウスオーバー時の色 */
     }
+
     .heron {
         animation: float-heron 8s infinite ease-in-out;
         filter: drop-shadow(0 5px 10px rgba(0, 0, 0, 0.2));
@@ -652,29 +655,29 @@ footer h3 {
 }
 
 
- .heron {
-        animation: float-heron 8s infinite ease-in-out;
-        filter: drop-shadow(0 5px 10px rgba(0, 0, 0, 0.2));
-        z-index: 1 !important;
-        background-color: transparent;
- 
+.heron {
+    animation: float-heron 8s infinite ease-in-out;
+    filter: drop-shadow(0 5px 10px rgba(0, 0, 0, 0.2));
+    z-index: 1 !important;
+    background-color: transparent;
+
+}
+
+/* 白鷺専用アニメーション */
+@keyframes float-heron {
+
+    0%,
+    100% {
+        transform: translateY(0) rotate(-5deg) scale(1.2);
     }
 
-    /* 白鷺専用アニメーション */
-    @keyframes float-heron {
-
-        0%,
-        100% {
-            transform: translateY(0) rotate(-5deg) scale(1.2);
-        }
-
-        50% {
-            transform: translateY(-20px) rotate(5deg) scale(1.2);
-        }
+    50% {
+        transform: translateY(-20px) rotate(5deg) scale(1.2);
     }
+}
 
 
-    /* 必要ならメディアクエリで調整例：
+/* 必要ならメディアクエリで調整例：
 @media screen and (max-width: 768px) {
     .sketchfab-embed-wrapper {
         height: 70vh;
