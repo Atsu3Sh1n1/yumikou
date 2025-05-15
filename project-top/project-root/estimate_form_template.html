@@ -2,95 +2,230 @@
 <html lang="ja">
 
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
     <title>工事見積もりフォーム</title>
     <style>
-        body {
+        /* html, bodyを画面全体に */
+        html, body {
+            height: 100%;
+            margin: 0;
             font-family: sans-serif;
-            max-width: 600px;
-            margin: auto;
+            background-color: #f9f9f9;
+        }
+
+        /* 画面全体で中央寄せ */
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
             padding: 20px;
         }
 
+        /* フォーム全体の最大幅とスタイル */
+        #estimateForm {
+            background-color: #fff;
+            padding: 30px 40px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 600px;
+            box-sizing: border-box;
+        }
+
         h2 {
-            border-bottom: 1px solid #ccc;
-            padding-bottom: 5px;
+            text-align: center;
+            margin-bottom: 20px;
         }
 
         .form-group {
             margin-bottom: 15px;
+            width: 100%;
+            text-align: center;  /* ラベルはブロックのまま中央寄せ */
         }
 
         label {
             display: block;
-            margin-bottom: 5px;
+            margin-bottom: 6px;
+            font-weight: 600;
+        }
+
+        /* 横並び入力 */
+        .inline-inputs {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: nowrap; /* 改行しない */
+            justify-content: center; /* 全体中央揃え */
+        }
+
+        .inline-inputs label {
+            width: 50px; /* ラベルの幅を固定 */
+            margin: 0;
+            white-space: nowrap;
+            font-weight: normal;
+            text-align: right; /* 右寄せで入力欄とラベルの隙間を確保 */
+            padding-right: 5px;
         }
 
         input[type="number"] {
-            width: 100%;
-            padding: 8px;
+            width: 80px;
+            min-width: 60px;
+            padding: 8px 10px;
+            font-size: 1em;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            text-align: center; 
+            transition: border-color 0.2s ease;
         }
 
-        .total {
+        input[type="number"]:focus {
+            border-color: #4caf50;
+            outline: none;
+        }
+
+        .total, .estimate {
             font-weight: bold;
             font-size: 1.2em;
             margin-top: 20px;
+            text-align: center;
         }
 
         .estimate {
             color: green;
-            font-size: 1.2em;
-            margin-top: 10px;
         }
 
         button {
-            padding: 10px 20px;
+            display: block;
+            padding: 12px 24px;
             font-size: 1em;
+            cursor: pointer;
+            margin: 30px auto 0;
+            width: 200px;
+            background-color: #4caf50;
+            border: none;
+            color: white;
+            border-radius: 6px;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .created-by {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 15px 0;
+            font-size: 0.9em;
+            color: #666;
+            background-color: #fff;
+            margin-top: 40px;
+            width: 100%;
+            max-width: 600px;
+            box-sizing: border-box;
+            border-radius: 0 0 8px 8px;
+        }
+
+        footer a {
+            color: #333;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* スマホ対応 */
+        @media (max-width: 600px) {
+            body {
+                padding: 15px;
+            }
+
+            #estimateForm {
+                padding: 20px;
+            }
+
+            input[type="number"] {
+                width: 70px;
+                font-size: 1.1em;
+            }
+
+            button {
+                width: 100%;
+                font-size: 1.2em;
+                padding: 14px 0;
+            }
         }
     </style>
 </head>
 
 <body>
-    <h2>簡易見積もりチェックフォーム</h2>
-
-     <p class="created-by">
-      <a href="https://atsu3sh1n1.github.io/yumikou/" target="_blank">Created by YUMIKOU Inc.</a>
-    </p>
-
     <form id="estimateForm">
+        <h2>簡易見積もりチェックフォーム</h2>
+
+        <p class="created-by">
+            <a href="https://atsu3sh1n1.github.io/yumikou/" target="_blank" rel="noopener noreferrer">Created by YUMIKOU Inc.</a>
+        </p>
+
         <div class="form-group">
-            <label>足場（スパン数）:</label>
-            <input type="number" id="scaffold" value="0" min="0">
+            <label for="scaffold">足場（スパン数）:</label>
+            <input type="number" id="scaffold" value="0" min="0" />
         </div>
+
         <div class="form-group">
             <label>配管取替（人数・日数）:</label>
-            人数: <input type="number" id="pipe_person" value="0" min="0">
-            日数: <input type="number" id="pipe_days" value="0" min="0">
+            <div class="inline-inputs">
+                <label for="pipe_person">人数:</label>
+                <input type="number" id="pipe_person" value="0" min="0" />
+                <label for="pipe_days">日数:</label>
+                <input type="number" id="pipe_days" value="0" min="0" />
+            </div>
         </div>
+
         <div class="form-group">
             <label>塗装（人数・日数）:</label>
-            人数: <input type="number" id="paint_person" value="0" min="0">
-            日数: <input type="number" id="paint_days" value="0" min="0">
+            <div class="inline-inputs">
+                <label for="paint_person">人数:</label>
+                <input type="number" id="paint_person" value="0" min="0" />
+                <label for="paint_days">日数:</label>
+                <input type="number" id="paint_days" value="0" min="0" />
+            </div>
         </div>
+
         <div class="form-group">
             <label>保温（人数・日数）:</label>
-            人数: <input type="number" id="insul_person" value="0" min="0">
-            日数: <input type="number" id="insul_days" value="0" min="0">
+            <div class="inline-inputs">
+                <label for="insul_person">人数:</label>
+                <input type="number" id="insul_person" value="0" min="0" />
+                <label for="insul_days">日数:</label>
+                <input type="number" id="insul_days" value="0" min="0" />
+            </div>
         </div>
 
         <div class="total" id="subtotal">小計: ¥0</div>
         <div class="estimate" id="estimate">概算見積（0.6掛け）: ¥0</div>
 
         <button type="submit">見積もり依頼する</button>
+
+        <footer>
+            <a href="https://atsu3sh1n1.github.io/yumikou/" target="_blank" rel="noopener noreferrer">
+                2025 有限会社弓工 All rights reserved.
+            </a>
+        </footer>
     </form>
 
     <script>
         const form = document.getElementById("estimateForm");
 
-        // 単価設定（編集可能）
-        const scaffold_unit = 5000;      // 足場（1スパン）
-        const work_unit = 27000;         // その他工数
-        const rate = 0.6;                // 掛け率
+        // 単価設定
+        const scaffold_unit = 5000;
+        const work_unit = 27000;
+        const rate = 0.6;
 
         function calculate() {
             const s = Number(document.getElementById("scaffold").value);
@@ -115,27 +250,13 @@
 
         form.addEventListener("input", calculate);
 
-        form.addEventListener("submit", function (e) {
+        form.addEventListener("submit", (e) => {
             e.preventDefault();
             alert("このままNotionに送信する処理を追加できます（Make等と連携）");
         });
 
         calculate();
-
     </script>
-<br><br>
-    <footer style="
-  width: 100%;
-  text-align: center;
-  background-color: #ffffff;
-  color: white;
-  padding: 0.9rem;
-">
-        <a href="https://atsu3sh1n1.github.io/yumikou/" style="display: block; color: rgb(0, 0, 0); text-decoration: none;">
-            <p style="margin: 0;">2025 有限会社弓工 All rights reserved.</p>
-        </a>
-    </footer>
-
 </body>
 
 </html>
