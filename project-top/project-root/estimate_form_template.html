@@ -4,7 +4,18 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-    <title>簡易見積フォーム</title>
+     <meta name="robots" content="index, follow" />
+    <title>簡易見積フォーム/有限会社弓工</title>
+    <link rel="apple-touch-icon" href="images/icon.webp">
+    <link rel="apple-touch-icon" sizes="180x180" href="images/icon.webp">
+    <link rel="apple-touch-icon" sizes="152x152" href="images/icon.webp">
+    <link rel="apple-touch-icon" sizes="120x120" href="images/icon.webp">
+    <link rel="apple-touch-icon" sizes="76x76" href="images/icon.webp">
+    <link rel="icon" href="images/icon.webp" type="image/x-icon">
+    <meta name="description" content="袖の下は振れませんが、御社が望むのは“言われた通り”か、“任せられる相手”か——">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <link rel="icon" href="images/icon.webp" />
+
     <style>
         body {
             font-family: sans-serif;
@@ -21,7 +32,7 @@
 
         h3 {
             text-align: center;
-            margin-bottom: 12px;
+            margin-bottom: 0.2rem;
             font-size: 1.5rem;
         }
 
@@ -154,13 +165,17 @@
         <h3>簡易見積フォーム</h3>
         <form id="form">
 
+            <div class="footer">
+                <a href="https://atsu3sh1n1.github.io/yumikou/" target="_blank">Created by YUMIKOU Inc.</a>
+            </div><br>
+
             <div class="form-group">
                 <div class="form-row">
                     <label></label>
                     <span>足場数</span>
                 </div>
                 <div class="input-group">
-                    <input type="number" id="s" placeholder="1スパン180×180" min="0" /> 
+                    <input type="number" id="s" placeholder="1スパン" min="0" />
                     <input type="number" id="sc" placeholder="単価" min="0" />
                 </div>
             </div>
@@ -205,38 +220,34 @@
         </form>
     </div>
 
-    <div class="footer">
-        <a href="https://atsu3sh1n1.github.io/yumikou/" target="_blank">© 2025 YUMIKOU Inc.</a>
-    </div>
+    <script>
+        const f = document.getElementById("form");
+        const u = { s: 5000, r: 0.6 };
 
-   <script>
-const f = document.getElementById("form");
-const u = { s: 5000, r: 0.6 };
+        function calc() {
+            const g = id => Number(document.getElementById(id).value);
+            const unitPrice = g("sc") || 27000; // 入力がなければ27000を使う
+            const st = g("s") * u.s;
+            const pt = g("pp") * g("pd") * unitPrice;
+            const tt = g("tp") * g("td") * unitPrice;
+            const it = g("ip") * g("id") * unitPrice;
+            const sub = st + pt + tt + it;
+            const est = sub * u.r;
+            subEl.textContent = `小計: ¥${sub.toLocaleString()}`;
+            estEl.textContent = `概算（0.6掛け）: ¥${est.toLocaleString()}`;
+        }
 
-function calc() {
-  const g = id => Number(document.getElementById(id).value);
-  const unitPrice = g("sc") || 27000; // 入力がなければ27000を使う
-  const st = g("s") * u.s;
-  const pt = g("pp") * g("pd") * unitPrice;
-  const tt = g("tp") * g("td") * unitPrice;
-  const it = g("ip") * g("id") * unitPrice;
-  const sub = st + pt + tt + it;
-  const est = sub * u.r;
-  subEl.textContent = `小計: ¥${sub.toLocaleString()}`;
-  estEl.textContent = `概算（0.6掛け）: ¥${est.toLocaleString()}`;
-}
+        const subEl = document.getElementById("sub");
+        const estEl = document.getElementById("est");
 
-const subEl = document.getElementById("sub");
-const estEl = document.getElementById("est");
+        f.addEventListener("input", calc);
+        f.addEventListener("submit", e => {
+            e.preventDefault();
+            alert("このままNotion等に送信可能です");
+        });
 
-f.addEventListener("input", calc);
-f.addEventListener("submit", e => {
-  e.preventDefault();
-  alert("このままNotion等に送信可能です");
-});
-
-calc();
-</script>
+        calc();
+    </script>
 
 </body>
 
