@@ -1,50 +1,209 @@
-<div style="max-width:360px;margin:auto;font-family:sans-serif;font-size:15px">
-  <h3 style="text-align:center">見積フォーム</h3>
-  <form id="form">
-    <div><label>必要な足場数(1スパン180×180):<input type="number" id="s" value="0" min="0" style="width:5em"></label></div>
-    <div>
-      <label>配管:人数・日数</label>
-      <input type="number" id="pp" value="0" min="0" style="width:4em" placeholder="人">
-      <input type="number" id="pd" value="0" min="0" style="width:4em" placeholder="日">
-    </div>
-    <div>
-      <label>塗装:人数・日数</label>
-      <input type="number" id="tp" value="0" min="0" style="width:4em" placeholder="人">
-      <input type="number" id="td" value="0" min="0" style="width:4em" placeholder="日">
-    </div>
-    <div>
-      <label>保温:人数・日数</label>
-      <input type="number" id="ip" value="0" min="0" style="width:4em" placeholder="人">
-      <input type="number" id="id" value="0" min="0" style="width:4em" placeholder="日">
-    </div>
-    <div id="sub" style="text-align:center;margin-top:10px">小計: ¥0</div>
-    <div id="est" style="text-align:center;color:green">概算（0.6掛け）: ¥0</div>
-    <button type="submit" style="width:100%;padding:8px;margin-top:10px">送信</button>
-  </form>
-  <div style="text-align:center;font-size:12px;margin-top:10px">
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>簡易見積フォーム</title>
+<style>
+  body {
+    font-family: sans-serif;
+    font-size: 14px;
+    margin: 0;
+    padding: 0;
+  }
+  .container {
+    max-width: 420px;
+    margin: auto;
+    padding: 12px;
+  }
+  h3 {
+    text-align: center;
+    margin-bottom: 12px;
+    font-size: 16px;
+  }
+  .form-group {
+    margin-bottom: 8px;
+  }
+  .form-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 4px;
+  }
+  label {
+    flex: 0 0 120px;
+    margin-bottom: 0;
+    font-size: 13px;
+  }
+  input[type="number"] {
+    font-size: 13px;
+    padding: 5px;
+    width: 5em;
+  }
+  .input-group {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    margin-left: 120px; /* ラベルの幅に合わせる */
+  }
+  #sub,
+  #est {
+    text-align: center;
+    margin-top: 8px;
+    font-size: 13px;
+  }
+  #est {
+    color: green;
+  }
+  button[type="submit"] {
+    display: block;
+    width: 8em;
+    padding: 6px;
+    margin: 10px auto 0;
+    font-size: 13px;
+    cursor: pointer;
+  }
+  .footer {
+    text-align: center;
+    font-size: 11px;
+    margin-top: 12px;
+  }
+  @media (max-width: 375px) { /* iPhone 13 mini幅以下 */
+  .container {
+    max-width: 100%;
+    padding: 10px;
+  }
+  .form-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  label {
+    flex: none;
+    width: 100%;
+    margin-bottom: 4px;
+    font-size: 14px;
+  }
+  .input-group {
+    margin-left: 0;
+    flex-wrap: wrap;
+    gap: 8px;
+    width: 100%;
+  }
+  input[type="number"] {
+    width: 45%;
+    min-width: 100px;
+  }
+  button[type="submit"] {
+    width: 100%;
+  }
+}
+@media (min-width: 376px) and (max-width: 414px) { /* iPhone 13/13 Pro */
+  .container {
+    max-width: 420px; /* 元々の最大幅 */
+    padding: 12px;
+  }
+  .form-row {
+    flex-direction: row;
+    align-items: center;
+  }
+  label {
+    flex: 0 0 120px;
+    font-size: 13px;
+    margin-bottom: 0;
+  }
+  .input-group {
+    margin-left: 120px;
+    flex-wrap: nowrap;
+  }
+  input[type="number"] {
+    width: 5em;
+  }
+  button[type="submit"] {
+    width: 8em;
+  }
+}
+
+</style>
+</head>
+
+<body>
+  <div class="container">
+    <h3>簡易見積フォーム</h3>
+    <form id="form">
+      <div class="form-group">
+        <div class="form-row">
+          <label></label>
+          <span>足場数(1スパン180×180)</span>
+        </div>
+        <div class="input-group">
+          <input type="number" id="s" value="0" min="0" />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="form-row">
+          <label></label>
+          <span>配管/人数・日数</span>
+        </div>
+        <div class="input-group">
+          <input type="number" id="pp" value="0" min="0" placeholder="人" />
+          <input type="number" id="pd" value="0" min="0" placeholder="日" />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="form-row">
+          <label></label>
+          <span>塗装/人数・日数</span>
+        </div>
+        <div class="input-group">
+          <input type="number" id="tp" value="0" min="0" placeholder="人" />
+          <input type="number" id="td" value="0" min="0" placeholder="日" />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="form-row">
+          <label></label>
+          <span>保温/人数・日数</span>
+        </div>
+        <div class="input-group">
+          <input type="number" id="ip" value="0" min="0" placeholder="人" />
+          <input type="number" id="id" value="0" min="0" placeholder="日" />
+        </div>
+      </div>
+
+      <div id="sub">小計: ¥0</div>
+      <div id="est">概算（0.6掛け）: ¥0</div>
+      <button type="submit">送信</button>
+    </form>
+  </div>
+
+  <div class="footer">
     <a href="https://atsu3sh1n1.github.io/yumikou/" target="_blank">© 2025 YUMIKOU Inc.</a>
   </div>
-</div>
 
-<script>
-  const f = document.getElementById("form");
-  const u = { s:5000, w:27000, r:0.6 };
-  function calc(){
-    const g = id => Number(document.getElementById(id).value);
-    const st = g("s")*u.s;
-    const pt = g("pp")*g("pd")*u.w;
-    const tt = g("tp")*g("td")*u.w;
-    const it = g("ip")*g("id")*u.w;
-    const sub = st+pt+tt+it, est = sub*u.r;
-    subEl.textContent = `小計: ¥${sub.toLocaleString()}`;
-    estEl.textContent = `概算（0.6掛け）: ¥${est.toLocaleString()}`;
-  }
-  const subEl = document.getElementById("sub");
-  const estEl = document.getElementById("est");
-  f.addEventListener("input", calc);
-  f.addEventListener("submit", e => {
-    e.preventDefault();
-    alert("このままNotion等に送信可能です");
-  });
-  calc();
-</script>
+  <script>
+    const f = document.getElementById("form");
+    const u = { s: 5000, w: 27000, r: 0.6 };
+    function calc() {
+      const g = (id) => Number(document.getElementById(id).value);
+      const st = g("s") * u.s;
+      const pt = g("pp") * g("pd") * u.w;
+      const tt = g("tp") * g("td") * u.w;
+      const it = g("ip") * g("id") * u.w;
+      const sub = st + pt + tt + it,
+        est = sub * u.r;
+      document.getElementById("sub").textContent = `小計: ¥${sub.toLocaleString()}`;
+      document.getElementById("est").textContent = `概算（0.6掛け）: ¥${est.toLocaleString()}`;
+    }
+    f.addEventListener("input", calc);
+    f.addEventListener("submit", (e) => {
+      e.preventDefault();
+      alert("このままNotion等に送信可能です");
+    });
+    calc();
+  </script>
+</body>
+
+</html>
