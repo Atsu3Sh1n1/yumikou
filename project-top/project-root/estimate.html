@@ -1,260 +1,165 @@
 <!DOCTYPE html>
 <html lang="ja">
-
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-    <meta name="robots" content="index, follow" />
-    <title>プラント工事関連事業者向け｜簡易見積もり自動計算機｜有限会社弓工</title>
-    <link rel="apple-touch-icon" href="images/icon.webp">
-    <link rel="apple-touch-icon" sizes="180x180" href="images/icon.webp">
-    <link rel="apple-touch-icon" sizes="152x152" href="images/icon.webp">
-    <link rel="apple-touch-icon" sizes="120x120" href="images/icon.webp">
-    <link rel="apple-touch-icon" sizes="76x76" href="images/icon.webp">
-    <link rel="icon" href="images/icon.webp" type="image/x-icon">
-    <meta name="description" content="袖の下は振れませんが、御社が望むのは“言われた通り”か、“任せられる相手”か——">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-    <link rel="icon" href="images/icon.webp" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <title>簡易見積もり計算機｜有限会社弓工</title>
+  <link rel="icon" href="images/icon.webp" type="image/x-icon" />
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #f9f9f9;
+      margin: 0;
+      padding: 40px 0;
+      display: flex;
+      justify-content: center;
+    }
 
-    <style>
-        body {
-            font-family: sans-serif;
-            font-size: clamp(20px, 2vw, 20px);
-            margin: 0;
-            padding: 0;
-        }
+    .container {
+      background: #fff;
+      padding: 25px 40px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      width: 300px;
+    }
 
-        .container {
-            max-width: 420px;
-            margin: auto;
-            padding: 12px;
-        }
+    h2 {
+      text-align: center;
+      margin-bottom: 10px;
+      font-size: 1.4rem;
+    }
 
-        h3 {
-            text-align: center;
-            margin-bottom: 0.2rem;
-            font-size: 1.5rem;
-        }
+    .form-group {
+      margin-bottom: 12px;
+    }
 
-        .form-group {
-            margin-bottom: 8px;
-        }
+    .form-row {
+      margin-bottom: 5px;
+      font-weight: bold;
+      font-size: 1.2rem;
+    }
 
-        .form-row {
-            display: flex;
-            align-items: center;
-            margin-bottom: 4px;
-        }
+    .input-group {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+    }
 
-        label {
-            flex: 0 0 120px;
-            margin-bottom: 0;
-            font-size: 13px;
-        }
+    input[type="number"] {
+      padding: 5px;
+      font-size: 1em;
+      width: 45%;
+    }
 
-        input[type="number"] {
-            font-size: 16px;
-            padding: 5px;
-            width: 5em;
-        }
+    .result {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 1.2em;
+      font-weight: bold;
+      color: green;
+    }
 
-        .input-group {
-            display: flex;
-            gap: 6px;
-            align-items: center;
-           justify-content: center;
-        }
+    .footer {
+      text-align: center;
+      font-size: 11px;
+      margin-top: 0;
+      padding: 0.5rem;
+    }
 
-        #sub,
-        #manhour {
-            text-align: center;
-            margin-top: 8px;
-            font-size: 1.2rem;
-            color: green;
-        }
+    button[type="submit"] {
+      display: block;
+      margin: 10px auto 0;
+      padding: 6px 12px;
+      font-size: 1em;
+      border: none;
+      border-radius: 4px;
+      background-color: #4CAF50;
+      color: white;
+      cursor: pointer;
+    }
 
-        button[type="submit"] {
-            display: block;
-            width: 8em;
-            padding: 6px;
-            margin: 10px auto 0;
-            font-size: 16px;
-            cursor: pointer;
-        }
-
-        .footer {
-            text-align: center;
-            font-size: 11px;
-            margin-top: 0;
-            padding: 0.5rem;
-        }
-
-        @media (max-width: 375px) {
-            .container {
-                max-width: 100%;
-                padding: 10px;
-            }
-
-            .form-row {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-
-            label {
-                flex: none;
-                width: 100%;
-                margin-bottom: 4px;
-                font-size: 14px;
-            }
-
-            .input-group {
-                margin-left: 0;
-                flex-wrap: wrap;
-                gap: 8px;
-                width: 100%;
-            }
-
-            input[type="number"] {
-                width: 35%;
-                min-width: 100px;
-            }
-
-            button[type="submit"] {
-                width: 100%;
-            }
-        }
-
-        .container {
-            background: #fff;
-            padding: 25px 40px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-            width: 300px;
-        }
-
-
-        @media (min-width: 376px) and (max-width: 414px) {
-            .container {
-                max-width: 420px;
-                padding: 12px;
-            }
-
-            .form-row {
-                flex-direction: row;
-                align-items: center;
-            }
-
-            label {
-                flex: 0 0 120px;
-                font-size: 1rem;
-                margin-bottom: 0;
-            }
-
-            .input-group {
-                margin-left: 120px;
-                flex-wrap: nowrap;
-            }
-
-            input[type="number"] {
-                width: 5em;
-            }
-
-            button[type="submit"] {
-                width: 8em;
-            }
-        }
-    </style>
+    button[type="submit"]:hover {
+      background-color: #45a049;
+    }
+  </style>
 </head>
-
 <body>
-    <div class="container">
-        <h3>見積計算機</h3>
-        <form id="form">
+  <div class="container">
+    <h2>見積計算機</h2>
 
-            <div class="footer">
-                <a href="https://atsu3sh1n1.github.io/yumikou/" target="_blank">Created by YUMIKOU Inc.</a>
-            </div>
-
-            <div class="form-group">
-                <div class="form-row">
-                    <span>必要足場数(仮)</span>
-                </div>
-                <div class="input-group">
-                    <input type="number" inputmode="numeric" pattern="[0-9]*" id="s" placeholder="1スパン" min="0" />
-                    <input type="number" inputmode="numeric" pattern="[0-9]*" id="sc" placeholder="単価" min="0" />
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="form-row">
-                    <span>配管</span>
-                </div>
-                <div class="input-group">
-                    <input type="number" inputmode="numeric" pattern="[0-9]*" id="pp" placeholder="人" min="0" />
-                    <input type="number" inputmode="numeric" pattern="[0-9]*" id="pd" placeholder="日" min="0" />
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="form-row">
-                    <span>塗装(仮)</span>
-                </div>
-                <div class="input-group">
-                    <input type="number" inputmode="numeric" pattern="[0-9]*" id="tp" placeholder="人" min="0" />
-                    <input type="number" inputmode="numeric" pattern="[0-9]*" id="td" placeholder="日" min="0" />
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="form-row">
-                    <span>保温(仮)</span>
-                </div>
-                <div class="input-group">
-                    <input type="number" inputmode="numeric" pattern="[0-9]*" id="ip" placeholder="人" min="0" />
-                    <input type="number" inputmode="numeric" pattern="[0-9]*" id="id" placeholder="日" min="0" />
-                </div>
-            </div>
-
-            <div id="manhour">総工数: 0人日</div>
-            <div id="sub">小計: ¥0</div>
-
-
-
-           
-        </form>
+    <div class="footer">
+      <a href="https://atsu3sh1n1.github.io/yumikou/" target="_blank">Created by YUMIKOU Inc.</a>
     </div>
 
-    <script>
-        const f = document.getElementById("form");
-        const u = { s: 5000, r: 0.6 };
+    <form id="form">
+      <div class="form-group">
+        <div class="form-row">必要足場数 (仮)</div>
+        <div class="input-group">
+          <input type="number" inputmode="numeric" pattern="[0-9]*" id="s" placeholder="1スパン180" min="0" />
+          <input type="number" inputmode="numeric" pattern="[0-9]*" id="sc" placeholder="単価" min="0" />
+        </div>
+      </div>
 
-        const subEl = document.getElementById("sub");
-        const manhourEl = document.getElementById("manhour");
+      <div class="form-group">
+        <div class="form-row">配管</div>
+        <div class="input-group">
+          <input type="number" inputmode="numeric" pattern="[0-9]*" id="pp" placeholder="人" min="0" />
+          <input type="number" inputmode="numeric" pattern="[0-9]*" id="pd" placeholder="日" min="0" />
+        </div>
+      </div>
 
-        function calc() {
-            const g = id => Number(document.getElementById(id).value);
-            const unitPrice = g("sc") || 27000;
-            const st = g("s") * u.s;
-            const pt = g("pp") * g("pd") * unitPrice;
-            const tt = g("tp") * g("td") * unitPrice;
-            const it = g("ip") * g("id") * unitPrice;
-            const sub = st + pt + tt + it;
-            const manhour = (g("pp") * g("pd")) + (g("tp") * g("td")) + (g("ip") * g("id"));
+      <div class="form-group">
+        <div class="form-row">塗装 (仮)</div>
+        <div class="input-group">
+          <input type="number" inputmode="numeric" pattern="[0-9]*" id="tp" placeholder="人" min="0" />
+          <input type="number" inputmode="numeric" pattern="[0-9]*" id="td" placeholder="日" min="0" />
+        </div>
+      </div>
 
-            subEl.textContent = `小計: ¥${sub.toLocaleString()}`;
-            manhourEl.textContent = `総工数: ${manhour}人日`;
-        }
+      <div class="form-group">
+        <div class="form-row">保温 (仮)</div>
+        <div class="input-group">
+          <input type="number" inputmode="numeric" pattern="[0-9]*" id="ip" placeholder="人" min="0" />
+          <input type="number" inputmode="numeric" pattern="[0-9]*" id="id" placeholder="日" min="0" />
+        </div>
+      </div>
 
-        f.addEventListener("input", calc);
-        f.addEventListener("submit", e => {
-            e.preventDefault();
-            alert("工事するなら、有限会社弓工");
-        });
+      <div class="result" id="manhour">総工数: 0人日</div>
+      <div class="result" id="sub">小計: ¥0</div>
 
-        calc();
-    </script>
+      <button type="submit">計算</button>
+    </form>
+  </div>
 
+  <script>
+    const f = document.getElementById("form");
+    const u = { s: 5000 };
+
+    const subEl = document.getElementById("sub");
+    const manhourEl = document.getElementById("manhour");
+
+    function calc() {
+      const g = id => Number(document.getElementById(id).value) || 0;
+      const unitPrice = g("sc") || 27000;
+      const st = g("s") * u.s;
+      const pt = g("pp") * g("pd") * unitPrice;
+      const tt = g("tp") * g("td") * unitPrice;
+      const it = g("ip") * g("id") * unitPrice;
+      const sub = st + pt + tt + it;
+      const manhour = (g("pp") * g("pd")) + (g("tp") * g("td")) + (g("ip") * g("id"));
+
+      subEl.textContent = `小計: ¥${sub.toLocaleString()}`;
+      manhourEl.textContent = `総工数: ${manhour}人日`;
+    }
+
+    f.addEventListener("input", calc);
+    f.addEventListener("submit", e => {
+      e.preventDefault();
+      alert("工事するなら、有限会社弓工");
+    });
+
+    calc();
+  </script>
 </body>
-
 </html>
