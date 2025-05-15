@@ -151,7 +151,7 @@
 
     <div class="form-group">
       <div id="scheduleButtons">
-        <button type="button" data-multiplier="1.0" class="schedule-btn active">SHC10</button>
+        <button type="button" data-multiplier="1.0" class="schedule-btn active">SCH10</button>
         <button type="button" data-multiplier="1.25" class="schedule-btn">SCH40</button>
         <button type="button" data-multiplier="1.5" class="schedule-btn">SCH80</button><br>
         <button type="button" id="additionalMultiplierBtn" class="additional-multiplier-btn">ステンレス</button>
@@ -184,12 +184,18 @@
       const straight = parseInt(document.getElementById("straightCount").value) || 0;
       const elbow = parseInt(document.getElementById("elbowCount").value) || 0;
       const tee = parseInt(document.getElementById("teeCount").value) || 0;
-      const baseUnitPrice = parseFloat(document.getElementById("unitPrice").value) || 0;
+      let baseUnitPrice = parseFloat(document.getElementById("unitPrice").value) || 0;
+
+      // SCH40/80×1.5ボタンがアクティブで、かつSCH40かSCH80が選択されている場合
+      const isSch40or80 =  currentMultiplier === 1 || currentMultiplier === 1.25 || currentMultiplier === 1.5;
+      if (document.getElementById("additionalMultiplierBtn").classList.contains("active") && isSch40or80) {
+        baseUnitPrice = baseUnitPrice * 1.5;
+      }
 
       const totalDB =
         (straight * dbTable[size].straight +
           elbow * dbTable[size].elbow +
-          tee * dbTable[size].tee) * currentMultiplier * additionalMultiplier;
+          tee * dbTable[size].tee) * currentMultiplier;
 
       const totalCost = Math.round(totalDB * baseUnitPrice);
 
@@ -212,10 +218,8 @@
       
       if (isActive) {
         this.classList.remove("active");
-        additionalMultiplier = 1.0;
       } else {
         this.classList.add("active");
-        additionalMultiplier = 1.5;
       }
       
       calculate();
