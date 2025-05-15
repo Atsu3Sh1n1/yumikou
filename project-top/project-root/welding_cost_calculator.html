@@ -19,7 +19,7 @@
       border: 1px solid #ccc;
       border-radius: 8px;
       box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-      width: 260px;
+      width: 300px;
     }
 
     h2 {
@@ -83,22 +83,22 @@
 
     <div class="form-group">
       <label>ストレート個数:</label>
-      <input type="number" id="straightCount" value="0" min="0">
+      <input type="number" inputmode="numeric" pattern="[0-9]*" id="straightCount"  placeholder="0" min="0">
     </div>
 
     <div class="form-group">
       <label>エルボ個数:</label>
-      <input type="number" id="elbowCount" value="0" min="0">
+      <input type="number" inputmode="numeric" pattern="[0-9]*" id="elbowCount"  placeholder="0" min="0">
     </div>
 
     <div class="form-group">
       <label>チーズ個数:</label>
-      <input type="number" id="teeCount" value="0" min="0">
+      <input type="number" inputmode="numeric" pattern="[0-9]*" id="teeCount" placeholder="0" min="0">
     </div>
 
     <div class="form-group">
       <label>単価 (円/DB):</label>
-      <input type="number" id="unitPrice" value="1000" min="0">
+      <input type="number" inputmode="numeric" pattern="[0-9]*" id="unitPrice" value="2500" min="0">
     </div>
 
     <div class="result" id="totalPrice">合計金額: ¥0</div>
