@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>溶接費用自動計算</title>
+</head>
+<body>
+  <h3>溶接費用計算機（リアルタイム計算）</h3>
+
+  <label>単価（円／DB）: <input type="number" id="unitPrice" value="5500" /></label><br/>
+  <label>配管径（インチ）: <input type="number" id="pipeDiameter" value="4" min="1" /></label><br/>
+  <label>直管の数: <input type="number" id="straightCount" value="0" min="0" /></label><br/>
+  <label>エルボの数: <input type="number" id="elbowCount" value="0" min="0" /></label><br/>
+  <label>チーズの数: <input type="number" id="teeCount" value="0" min="0" /></label><br/><br/>
+
+  <div id="result"></div>
+
+  <script>
+    const inputs = document.querySelectorAll('input');
+    inputs.forEach(input => input.addEventListener('input', calculate));
+
+    function calculate() {
+      const unitPrice = Number(document.getElementById('unitPrice').value);
+      const diameter = Number(document.getElementById('pipeDiameter').value);
+      const straight = Number(document.getElementById('straightCount').value);
+      const elbow = Number(document.getElementById('elbowCount').value);
+      const tee = Number(document.getElementById('teeCount').value);
+
+      const dbStraight = straight * 1 * diameter;
+      const dbElbow = elbow * 2 * diameter;
+      const dbTee = tee * 3 * diameter;
+
+      const totalDB = dbStraight + dbElbow + dbTee;
+      const totalCost = totalDB * unitPrice;
+
+      document.getElementById('result').textContent =
+        `合計DB: ${totalDB} DB\n合計費用: ${totalCost.toLocaleString()} 円`;
+    }
+
+    calculate(); // 初回実行
+  </script>
+</body>
+</html>
