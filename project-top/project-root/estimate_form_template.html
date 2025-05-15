@@ -1,236 +1,223 @@
 <!DOCTYPE html>
 <html lang="ja">
-
 <head>
-    <meta charset="UTF-8" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>工事見積もりフォーム</title>
     <style>
-        html, body {
-            height: 100%;
-            margin: 0;
-            font-family: sans-serif;
-            background-color: #f9f9f9;
-            font-size: 18px; /* 基本フォントサイズアップ */
-        }
-
         body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 30px;
-        }
-
-        #estimateForm {
-            background-color: #fff;
-            padding: 40px 50px;
-            border-radius: 8px;
-            box-shadow: 0 0 15px rgba(0,0,0,0.15);
-            width: 100%;
-            max-width: 700px; /* 幅を広げた */
-            box-sizing: border-box;
+            font-family: "Arial", sans-serif;
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 15px;
+            font-size: 18px;
+            line-height: 1.5;
+            color: #333;
+            -webkit-text-size-adjust: 100%;
         }
 
         h2 {
+            border-bottom: 2px solid #ccc;
+            padding-bottom: 8px;
+            font-size: 22px;
+            margin-bottom: 20px;
             text-align: center;
-            margin-bottom: 25px;
-            font-size: 2.2rem;
         }
 
         .form-group {
-            margin-bottom: 20px;
-            width: 100%;
-            text-align: center;
+            margin-bottom: 15px;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            background-color: #f9f9f9;
         }
 
         label {
             display: block;
             margin-bottom: 8px;
-            font-weight: 600;
-            font-size: 1.1rem;
-        }
-
-        .inline-inputs {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            flex-wrap: nowrap;
-            justify-content: center;
-        }
-
-        .inline-inputs label {
-            width: 60px;
-            margin: 0;
-            white-space: nowrap;
-            font-weight: normal;
-            text-align: right;
-            padding-right: 8px;
-            font-size: 1rem;
+            font-weight: bold;
+            font-size: 18px;
         }
 
         input[type="number"] {
-            width: 100px; /* 幅アップ */
-            min-width: 80px;
-            padding: 10px 12px;
-            font-size: 1.1rem; /* フォント大きめ */
+            width: 100%;
+            padding: 10px;
+            font-size: 18px;
+            border: 2px solid #ccc;
+            border-radius: 4px;
+            margin-bottom: 8px;
             box-sizing: border-box;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            text-align: center;
-            transition: border-color 0.2s ease;
         }
 
-        input[type="number"]:focus {
-            border-color: #4caf50;
-            outline: none;
+        .input-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
         }
 
-        .total, .estimate {
+        .input-group div {
+            flex: 1;
+        }
+
+        .input-group label {
+            font-size: 16px;
+            font-weight: normal;
+            margin-bottom: 5px;
+        }
+
+        .total {
             font-weight: bold;
-            font-size: 1.5rem;
-            margin-top: 30px;
+            font-size: 20px;
+            margin: 20px 0 10px;
+            padding: 12px;
+            background-color: #f0f0f0;
+            border-radius: 6px;
             text-align: center;
         }
 
         .estimate {
-            color: green;
+            font-weight: bold;
+            font-size: 20px;
+            color: #006400;
+            margin-bottom: 20px;
+            padding: 12px;
+            background-color: #f0f0f0;
+            border-radius: 6px;
+            text-align: center;
         }
 
         button {
             display: block;
-            padding: 16px 32px;
-            font-size: 1.3rem;
-            cursor: pointer;
-            margin: 40px auto 0;
-            width: 250px;
-            background-color: #4caf50;
-            border: none;
+            width: 100%;
+            padding: 15px;
+            font-size: 20px;
+            background-color: #4CAF50;
             color: white;
-            border-radius: 8px;
-            transition: background-color 0.3s ease;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            margin: 20px auto;
+            transition: background-color 0.3s;
         }
 
-        button:hover {
+        button:hover, button:focus {
             background-color: #45a049;
         }
 
-        .created-by {
+        .created-by, footer {
             text-align: center;
-            margin-bottom: 25px;
-            font-size: 1rem;
+            margin-top: 20px;
+            font-size: 14px;
         }
 
-        footer {
-            text-align: center;
-            padding: 18px 0;
-            font-size: 1rem;
-            color: #666;
-            background-color: #fff;
-            margin-top: 50px;
-            width: 100%;
-            max-width: 700px;
-            box-sizing: border-box;
-            border-radius: 0 0 8px 8px;
-        }
-
-        footer a {
-            color: #333;
+        a {
+            color: #0066cc;
             text-decoration: none;
         }
 
-        footer a:hover {
+        a:hover {
             text-decoration: underline;
         }
 
-        /* スマホ対応 */
-        @media (max-width: 600px) {
-            html, body {
+        /* タップターゲットを大きく */
+        input, button, label {
+            min-height: 44px;
+        }
+
+        /* スマホ向け調整 */
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
                 font-size: 16px;
             }
-
-            body {
-                padding: 20px;
-            }
-
-            #estimateForm {
-                padding: 30px 25px;
-                max-width: 100%;
-            }
-
+            
             h2 {
-                font-size: 1.8rem;
+                font-size: 20px;
             }
-
-            .inline-inputs label {
-                width: 55px;
-                padding-right: 6px;
-                font-size: 0.95rem;
+            
+            .form-group {
+                padding: 10px;
             }
-
+            
+            label {
+                font-size: 16px;
+            }
+            
             input[type="number"] {
-                width: 80px;
-                min-width: 70px;
-                font-size: 1rem;
-                padding: 8px 10px;
+                padding: 8px;
+                font-size: 16px;
             }
-
+            
+            .input-group {
+                flex-direction: column;
+                gap: 5px;
+            }
+            
             .total, .estimate {
-                font-size: 1.3rem;
+                font-size: 18px;
+                padding: 10px;
             }
-
+            
             button {
-                width: 100%;
-                font-size: 1.2rem;
-                padding: 16px 0;
-            }
-
-            footer {
-                font-size: 0.9rem;
-                max-width: 100%;
+                font-size: 18px;
+                padding: 12px;
             }
         }
     </style>
 </head>
 
 <body>
+    <h2>簡易見積もりチェックフォーム</h2>
+
+    <p class="created-by">
+        <a href="https://atsu3sh1n1.github.io/yumikou/" target="_blank">Created by YUMIKOU Inc.</a>
+    </p>
+
     <form id="estimateForm">
-        <h2>簡易見積もりチェックフォーム</h2>
-
-        <p class="created-by">
-            <a href="https://atsu3sh1n1.github.io/yumikou/" target="_blank" rel="noopener noreferrer">Created by YUMIKOU Inc.</a>
-        </p>
-
         <div class="form-group">
             <label for="scaffold">足場（スパン数）:</label>
-            <input type="number" id="scaffold" value="0" min="0" />
+            <input type="number" id="scaffold" value="0" min="0">
         </div>
-
+        
         <div class="form-group">
-            <label>配管取替（人数・日数）:</label>
-            <div class="inline-inputs">
-                <label for="pipe_person">人数:</label>
-                <input type="number" id="pipe_person" value="0" min="0" />
-                <label for="pipe_days">日数:</label>
-                <input type="number" id="pipe_days" value="0" min="0" />
+            <label>配管取替:</label>
+            <div class="input-group">
+                <div>
+                    <label for="pipe_person">人数:</label>
+                    <input type="number" id="pipe_person" value="0" min="0">
+                </div>
+                <div>
+                    <label for="pipe_days">日数:</label>
+                    <input type="number" id="pipe_days" value="0" min="0">
+                </div>
             </div>
         </div>
-
+        
         <div class="form-group">
-            <label>塗装（人数・日数）:</label>
-            <div class="inline-inputs">
-                <label for="paint_person">人数:</label>
-                <input type="number" id="paint_person" value="0" min="0" />
-                <label for="paint_days">日数:</label>
-                <input type="number" id="paint_days" value="0" min="0" />
+            <label>塗装:</label>
+            <div class="input-group">
+                <div>
+                    <label for="paint_person">人数:</label>
+                    <input type="number" id="paint_person" value="0" min="0">
+                </div>
+                <div>
+                    <label for="paint_days">日数:</label>
+                    <input type="number" id="paint_days" value="0" min="0">
+                </div>
             </div>
         </div>
-
+        
         <div class="form-group">
-            <label>保温（人数・日数）:</label>
-            <div class="inline-inputs">
-                <label for="insul_person">人数:</label>
-                <input type="number" id="insul_person" value="0" min="0" />
-                <label for="insul_days">日数:</label>
-                <input type="number" id="insul_days" value="0" min="0" />
+            <label>保温:</label>
+            <div class="input-group">
+                <div>
+                    <label for="insul_person">人数:</label>
+                    <input type="number" id="insul_person" value="0" min="0">
+                </div>
+                <div>
+                    <label for="insul_days">日数:</label>
+                    <input type="number" id="insul_days" value="0" min="0">
+                </div>
             </div>
         </div>
 
@@ -238,21 +225,21 @@
         <div class="estimate" id="estimate">概算見積（0.6掛け）: ¥0</div>
 
         <button type="submit">見積もり依頼する</button>
-
-        <footer>
-            <a href="https://atsu3sh1n1.github.io/yumikou/" target="_blank" rel="noopener noreferrer">
-                2025 有限会社弓工 All rights reserved.
-            </a>
-        </footer>
     </form>
+
+    <footer>
+        <a href="https://atsu3sh1n1.github.io/yumikou/" style="display: block; color: rgb(0, 0, 0); text-decoration: none;">
+            <p style="margin: 0;">2025 有限会社弓工 All rights reserved.</p>
+        </a>
+    </footer>
 
     <script>
         const form = document.getElementById("estimateForm");
 
-        // 単価設定
-        const scaffold_unit = 5000;
-        const work_unit = 27000;
-        const rate = 0.6;
+        // 単価設定（編集可能）
+        const scaffold_unit = 5000;      // 足場（1スパン）
+        const work_unit = 27000;         // その他工数
+        const rate = 0.6;                // 掛け率
 
         function calculate() {
             const s = Number(document.getElementById("scaffold").value);
@@ -277,7 +264,7 @@
 
         form.addEventListener("input", calculate);
 
-        form.addEventListener("submit", (e) => {
+        form.addEventListener("submit", function (e) {
             e.preventDefault();
             alert("このままNotionに送信する処理を追加できます（Make等と連携）");
         });
@@ -285,5 +272,4 @@
         calculate();
     </script>
 </body>
-
 </html>
