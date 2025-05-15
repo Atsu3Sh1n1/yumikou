@@ -19,7 +19,7 @@
     <style>
         body {
             font-family: sans-serif;
-            font-size: 14px;
+            font-size: clamp(20px, 2vw, 20px);
             margin: 0;
             padding: 0;
         }
@@ -62,7 +62,7 @@
             display: flex;
             gap: 6px;
             align-items: center;
-            margin-left: 120px;
+           justify-content: center;
         }
 
         #sub,
@@ -115,7 +115,7 @@
             }
 
             input[type="number"] {
-                width: 45%;
+                width: 35%;
                 min-width: 100px;
             }
 
@@ -123,6 +123,16 @@
                 width: 100%;
             }
         }
+
+        .container {
+            background: #fff;
+            padding: 25px 40px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            width: 300px;
+        }
+
 
         @media (min-width: 376px) and (max-width: 414px) {
             .container {
@@ -137,7 +147,7 @@
 
             label {
                 flex: 0 0 120px;
-                font-size: 13px;
+                font-size: 1rem;
                 margin-bottom: 0;
             }
 
@@ -168,7 +178,6 @@
 
             <div class="form-group">
                 <div class="form-row">
-                    <label></label>
                     <span>必要足場数(仮)</span>
                 </div>
                 <div class="input-group">
@@ -179,7 +188,6 @@
 
             <div class="form-group">
                 <div class="form-row">
-                    <label></label>
                     <span>配管</span>
                 </div>
                 <div class="input-group">
@@ -190,7 +198,6 @@
 
             <div class="form-group">
                 <div class="form-row">
-                    <label></label>
                     <span>塗装(仮)</span>
                 </div>
                 <div class="input-group">
@@ -201,7 +208,6 @@
 
             <div class="form-group">
                 <div class="form-row">
-                    <label></label>
                     <span>保温(仮)</span>
                 </div>
                 <div class="input-group">

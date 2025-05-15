@@ -4,72 +4,144 @@
   <meta charset="UTF-8">
   <title>溶接簡易見積もり計算機</title>
   <style>
-    body { font-family: sans-serif; padding: 20px; }
-    label, select, input { margin: 5px 0; display: block; }
-    .result { margin-top: 20px; font-size: 1.5em; font-weight: bold; }
+    body {
+      font-family: sans-serif;
+      background: #f9f9f9;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding-top: 40px;
+    }
+
+    .container {
+      background: #fff;
+      padding: 25px 40px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      width: 260px;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    label {
+      margin-top: 10px;
+      font-weight: bold;
+    }
+
+    select, input[type="number"] {
+      width: 100px;
+      padding: 5px;
+      margin: 5px 0 10px;
+      font-size: 1em;
+    }
+
+    .form-group {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .result {
+      margin-top: 25px;
+      font-size: 1.4em;
+      font-weight: bold;
+      color: green;
+      text-align: center;
+    }
+
+    .db-display {
+      font-size: 1em;
+      text-align: center;
+      margin-top: 10px;
+      color: #555;
+    }
   </style>
 </head>
 <body>
-  <h2>溶接 簡易見積もり計算機</h2>
+  <div class="container">
+    <h2>溶接簡易見積もり</h2>
 
-  <label for="size">配管サイズ:</label>
-  <select id="size">
-    <option value="25">25A</option>
-    <option value="32">32A</option>
-    <option value="40">40A</option>
-    <option value="50">50A</option>
-    <option value="65">65A</option>
-    <option value="80">80A</option>
-    <option value="100">100A</option>
-    <option value="125">125A</option>
-    <option value="150">150A</option>
-    <option value="200">200A</option>
-  </select>
+    <div class="form-group">
+      <label for="pipeSize">配管サイズ:</label>
+      <select id="pipeSize">
+        <option value="25">25A</option>
+        <option value="32">32A</option>
+        <option value="40">40A</option>
+        <option value="50">50A</option>
+        <option value="65">65A</option>
+        <option value="80">80A</option>
+        <option value="100">100A</option>
+        <option value="125">125A</option>
+        <option value="150">150A</option>
+        <option value="200">200A</option>
+      </select>
+    </div>
 
-  <label for="jointType">継手の種類:</label>
-  <select id="jointType">
-    <option value="straight">直管（1リング）</option>
-    <option value="elbow">エルボ（90°/45°・2リング）</option>
-    <option value="tee">チーズ（3リング）</option>
-  </select>
+    <div class="form-group">
+      <label>ストレート個数:</label>
+      <input type="number" id="straightCount" value="0" min="0">
+    </div>
 
-  <label for="quantity">数量:</label>
-  <input type="number" id="quantity" value="1" min="1">
+    <div class="form-group">
+      <label>エルボ個数:</label>
+      <input type="number" id="elbowCount" value="0" min="0">
+    </div>
 
-  <label for="unitPrice">1DBあたりの単価（円）:</label>
-  <input type="number" id="unitPrice" value="2500" min="0">
+    <div class="form-group">
+      <label>チーズ個数:</label>
+      <input type="number" id="teeCount" value="0" min="0">
+    </div>
 
-  <div class="result" id="totalCost">合計金額: ¥0</div>
+    <div class="form-group">
+      <label>単価 (円/DB):</label>
+      <input type="number" id="unitPrice" value="1000" min="0">
+    </div>
+
+    <div class="result" id="totalPrice">合計金額: ¥0</div>
+    <div class="db-display" id="totalDB">合計DB: 0</div>
+  </div>
 
   <script>
     const dbTable = {
-      straight: { 25: 1, 32: 1.25, 40: 1.5, 50: 2, 65: 2.5, 80: 3, 100: 4, 125: 5, 150: 6, 200: 8 },
-      elbow:    { 25: 2, 32: 2.5, 40: 3, 50: 4, 65: 5, 80: 6, 100: 8, 125: 10, 150: 12, 200: 16 },
-      tee:      { 25: 3, 32: 3.75, 40: 4.5, 50: 6, 65: 7.5, 80: 9, 100: 12, 125: 15, 150: 18, 200: 24 },
+      "25": { straight: 1, elbow: 2, tee: 3 },
+      "32": { straight: 1.25, elbow: 2.5, tee: 3.75 },
+      "40": { straight: 1.5, elbow: 3, tee: 4.5 },
+      "50": { straight: 2, elbow: 4, tee: 6 },
+      "65": { straight: 2.5, elbow: 5, tee: 7.5 },
+      "80": { straight: 3, elbow: 6, tee: 9 },
+      "100": { straight: 4, elbow: 8, tee: 12 },
+      "125": { straight: 5, elbow: 10, tee: 15 },
+      "150": { straight: 6, elbow: 12, tee: 18 },
+      "200": { straight: 8, elbow: 16, tee: 24 }
     };
 
-    const sizeInput = document.getElementById('size');
-    const typeInput = document.getElementById('jointType');
-    const qtyInput = document.getElementById('quantity');
-    const unitInput = document.getElementById('unitPrice');
-    const result = document.getElementById('totalCost');
+    function calculate() {
+      const size = document.getElementById("pipeSize").value;
+      const straight = parseInt(document.getElementById("straightCount").value) || 0;
+      const elbow = parseInt(document.getElementById("elbowCount").value) || 0;
+      const tee = parseInt(document.getElementById("teeCount").value) || 0;
+      const unitPrice = parseFloat(document.getElementById("unitPrice").value) || 0;
 
-    function updateTotal() {
-      const size = sizeInput.value;
-      const type = typeInput.value;
-      const qty = Number(qtyInput.value);
-      const unitPrice = Number(unitInput.value);
-      const dbValue = dbTable[type][size];
-      const total = dbValue * qty * unitPrice;
-      result.textContent = `合計金額: ¥${total.toLocaleString()}`;
+      const totalDB =
+        straight * dbTable[size].straight +
+        elbow * dbTable[size].elbow +
+        tee * dbTable[size].tee;
+
+      const totalCost = Math.round(totalDB * unitPrice);
+
+      document.getElementById("totalPrice").textContent = `合計金額: ¥${totalCost.toLocaleString()}`;
+      document.getElementById("totalDB").textContent = `合計DB: ${totalDB.toFixed(2)}`;
     }
 
-    sizeInput.onchange = updateTotal;
-    typeInput.onchange = updateTotal;
-    qtyInput.oninput = updateTotal;
-    unitInput.oninput = updateTotal;
+    document.querySelectorAll("select, input").forEach(el => {
+      el.addEventListener("input", calculate);
+    });
 
-    updateTotal(); // 初回表示
+    calculate(); // 初期表示
   </script>
 </body>
 </html>
