@@ -200,7 +200,7 @@
       const totalCost = Math.round(totalDB * baseUnitPrice);
 
       document.getElementById("totalPrice").textContent = `合計金額: ¥${totalCost.toLocaleString()}`;
-      document.getElementById("totalDB").textContent = `合計DB: ${totalDB.toFixed(2)}`;
+      document.getElementById("totalDB").textContent = `合計DB: ${totalDB.toFixed(1)}`;
     }
 
     document.querySelectorAll(".schedule-btn").forEach(btn => {
