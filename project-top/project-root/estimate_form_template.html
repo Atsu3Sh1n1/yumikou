@@ -66,14 +66,10 @@
         }
 
         #sub,
-        #est {
+        #manhour {
             text-align: center;
             margin-top: 8px;
             font-size: 1.2rem;
-            color: green;
-        }
-
-        #est {
             color: green;
         }
 
@@ -173,7 +169,7 @@
             <div class="form-group">
                 <div class="form-row">
                     <label></label>
-                    <span>足場数</span>
+                    <span>必要足場数(仮)</span>
                 </div>
                 <div class="input-group">
                     <input type="number" id="s" placeholder="1スパン" min="0" />
@@ -181,22 +177,21 @@
                 </div>
             </div>
 
-
             <div class="form-group">
                 <div class="form-row">
                     <label></label>
                     <span>配管</span>
                 </div>
                 <div class="input-group">
-                    <input type="number" id="pp" placeholder="人" min="0" />
-                    <input type="number" id="pd" placeholder="日" min="0" />
+                    <input type="number" id="pp" placeholder="人数" min="0" />
+                    <input type="number" id="pd" placeholder="日数" min="0" />
                 </div>
             </div>
 
             <div class="form-group">
                 <div class="form-row">
                     <label></label>
-                    <span>塗装</span>
+                    <span>塗装(仮)</span>
                 </div>
                 <div class="input-group">
                     <input type="number" id="tp" placeholder="人" min="0" />
@@ -207,7 +202,7 @@
             <div class="form-group">
                 <div class="form-row">
                     <label></label>
-                    <span>保温</span>
+                    <span>保温(仮)</span>
                 </div>
                 <div class="input-group">
                     <input type="number" id="ip" placeholder="人" min="0" />
@@ -215,6 +210,7 @@
                 </div>
             </div>
 
+            <div id="manhour">総工数: 0人日</div>
             <div id="sub">小計: ¥0</div>
 
             <button type="submit">送信</button>
@@ -225,21 +221,22 @@
         const f = document.getElementById("form");
         const u = { s: 5000, r: 0.6 };
 
+        const subEl = document.getElementById("sub");
+        const manhourEl = document.getElementById("manhour");
+
         function calc() {
             const g = id => Number(document.getElementById(id).value);
-            const unitPrice = g("sc") || 27000; // 入力がなければ27000を使う
+            const unitPrice = g("sc") || 27000;
             const st = g("s") * u.s;
             const pt = g("pp") * g("pd") * unitPrice;
             const tt = g("tp") * g("td") * unitPrice;
             const it = g("ip") * g("id") * unitPrice;
             const sub = st + pt + tt + it;
-            const est = sub * u.r;
-            subEl.textContent = `小計: ¥${sub.toLocaleString()}`;
-            estEl.textContent = `概算（0.6掛け）: ¥${est.toLocaleString()}`;
-        }
+            const manhour = (g("pp") * g("pd")) + (g("tp") * g("td")) + (g("ip") * g("id"));
 
-        const subEl = document.getElementById("sub");
-        const estEl = document.getElementById("est");
+            subEl.textContent = `小計: ¥${sub.toLocaleString()}`;
+            manhourEl.textContent = `総工数: ${manhour}人日`;
+        }
 
         f.addEventListener("input", calc);
         f.addEventListener("submit", e => {
