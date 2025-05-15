@@ -1,275 +1,50 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>工事見積もりフォーム</title>
-    <style>
-        body {
-            font-family: "Arial", sans-serif;
-            max-width: 500px;
-            margin: 0 auto;
-            padding: 15px;
-            font-size: 18px;
-            line-height: 1.5;
-            color: #333;
-            -webkit-text-size-adjust: 100%;
-        }
+<div style="max-width:360px;margin:auto;font-family:sans-serif;font-size:15px">
+  <h3 style="text-align:center">見積フォーム</h3>
+  <form id="form">
+    <div><label>必要な足場数(1スパン180×180):<input type="number" id="s" value="0" min="0" style="width:5em"></label></div>
+    <div>
+      <label>配管:人数・日数</label>
+      <input type="number" id="pp" value="0" min="0" style="width:4em" placeholder="人">
+      <input type="number" id="pd" value="0" min="0" style="width:4em" placeholder="日">
+    </div>
+    <div>
+      <label>塗装:人数・日数</label>
+      <input type="number" id="tp" value="0" min="0" style="width:4em" placeholder="人">
+      <input type="number" id="td" value="0" min="0" style="width:4em" placeholder="日">
+    </div>
+    <div>
+      <label>保温:人数・日数</label>
+      <input type="number" id="ip" value="0" min="0" style="width:4em" placeholder="人">
+      <input type="number" id="id" value="0" min="0" style="width:4em" placeholder="日">
+    </div>
+    <div id="sub" style="text-align:center;margin-top:10px">小計: ¥0</div>
+    <div id="est" style="text-align:center;color:green">概算（0.6掛け）: ¥0</div>
+    <button type="submit" style="width:100%;padding:8px;margin-top:10px">送信</button>
+  </form>
+  <div style="text-align:center;font-size:12px;margin-top:10px">
+    <a href="https://atsu3sh1n1.github.io/yumikou/" target="_blank">© 2025 YUMIKOU Inc.</a>
+  </div>
+</div>
 
-        h2 {
-            border-bottom: 2px solid #ccc;
-            padding-bottom: 8px;
-            font-size: 22px;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-
-        .form-group {
-            margin-bottom: 15px;
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            background-color: #f9f9f9;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: bold;
-            font-size: 18px;
-        }
-
-        input[type="number"] {
-            width: 100%;
-            padding: 10px;
-            font-size: 18px;
-            border: 2px solid #ccc;
-            border-radius: 4px;
-            margin-bottom: 8px;
-            box-sizing: border-box;
-        }
-
-        .input-group {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 10px;
-        }
-
-        .input-group div {
-            flex: 1;
-        }
-
-        .input-group label {
-            font-size: 16px;
-            font-weight: normal;
-            margin-bottom: 5px;
-        }
-
-        .total {
-            font-weight: bold;
-            font-size: 20px;
-            margin: 20px 0 10px;
-            padding: 12px;
-            background-color: #f0f0f0;
-            border-radius: 6px;
-            text-align: center;
-        }
-
-        .estimate {
-            font-weight: bold;
-            font-size: 20px;
-            color: #006400;
-            margin-bottom: 20px;
-            padding: 12px;
-            background-color: #f0f0f0;
-            border-radius: 6px;
-            text-align: center;
-        }
-
-        button {
-            display: block;
-            width: 100%;
-            padding: 15px;
-            font-size: 20px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            margin: 20px auto;
-            transition: background-color 0.3s;
-        }
-
-        button:hover, button:focus {
-            background-color: #45a049;
-        }
-
-        .created-by, footer {
-            text-align: center;
-            margin-top: 20px;
-            font-size: 14px;
-        }
-
-        a {
-            color: #0066cc;
-            text-decoration: none;
-        }
-
-        a:hover {
-            text-decoration: underline;
-        }
-
-        /* タップターゲットを大きく */
-        input, button, label {
-            min-height: 44px;
-        }
-
-        /* スマホ向け調整 */
-        @media (max-width: 480px) {
-            body {
-                padding: 10px;
-                font-size: 16px;
-            }
-            
-            h2 {
-                font-size: 20px;
-            }
-            
-            .form-group {
-                padding: 10px;
-            }
-            
-            label {
-                font-size: 16px;
-            }
-            
-            input[type="number"] {
-                padding: 8px;
-                font-size: 16px;
-            }
-            
-            .input-group {
-                flex-direction: column;
-                gap: 5px;
-            }
-            
-            .total, .estimate {
-                font-size: 18px;
-                padding: 10px;
-            }
-            
-            button {
-                font-size: 18px;
-                padding: 12px;
-            }
-        }
-    </style>
-</head>
-
-<body>
-    <h2>簡易見積もりフォーム</h2>
-
-    <p class="created-by">
-        <a href="https://atsu3sh1n1.github.io/yumikou/" target="_blank">Created by YUMIKOU Inc.</a>
-    </p>
-
-    <form id="estimateForm">
-        <div class="form-group">
-            <label for="scaffold">足場（スパン数）:</label>
-            <input type="number" id="scaffold" value="0" min="0">
-        </div>
-        
-        <div class="form-group">
-            <label>配管取替:</label>
-            <div class="input-group">
-                <div>
-                    <label for="pipe_person">人数:</label>
-                    <input type="number" id="pipe_person" value="0" min="0">
-                </div>
-                <div>
-                    <label for="pipe_days">日数:</label>
-                    <input type="number" id="pipe_days" value="0" min="0">
-                </div>
-            </div>
-        </div>
-        
-        <div class="form-group">
-            <label>塗装:</label>
-            <div class="input-group">
-                <div>
-                    <label for="paint_person">人数:</label>
-                    <input type="number" id="paint_person" value="0" min="0">
-                </div>
-                <div>
-                    <label for="paint_days">日数:</label>
-                    <input type="number" id="paint_days" value="0" min="0">
-                </div>
-            </div>
-        </div>
-        
-        <div class="form-group">
-            <label>保温:</label>
-            <div class="input-group">
-                <div>
-                    <label for="insul_person">人数:</label>
-                    <input type="number" id="insul_person" value="0" min="0">
-                </div>
-                <div>
-                    <label for="insul_days">日数:</label>
-                    <input type="number" id="insul_days" value="0" min="0">
-                </div>
-            </div>
-        </div>
-
-        <div class="total" id="subtotal">小計: ¥0</div>
-        <div class="estimate" id="estimate">概算見積（0.6掛け）: ¥0</div>
-
-        <button type="submit">見積もり依頼する</button>
-    </form>
-
-    <footer>
-        <a href="https://atsu3sh1n1.github.io/yumikou/" style="display: block; color: rgb(0, 0, 0); text-decoration: none;">
-            <p style="margin: 0;">2025 有限会社弓工 All rights reserved.</p>
-        </a>
-    </footer>
-
-    <script>
-        const form = document.getElementById("estimateForm");
-
-        // 単価設定（編集可能）
-        const scaffold_unit = 5000;      // 足場（1スパン）
-        const work_unit = 27000;         // その他工数
-        const rate = 0.6;                // 掛け率
-
-        function calculate() {
-            const s = Number(document.getElementById("scaffold").value);
-            const pp = Number(document.getElementById("pipe_person").value);
-            const pd = Number(document.getElementById("pipe_days").value);
-            const tp = Number(document.getElementById("paint_person").value);
-            const td = Number(document.getElementById("paint_days").value);
-            const ip = Number(document.getElementById("insul_person").value);
-            const id = Number(document.getElementById("insul_days").value);
-
-            const scaffold_total = s * scaffold_unit;
-            const pipe_total = pp * pd * work_unit;
-            const paint_total = tp * td * work_unit;
-            const insul_total = ip * id * work_unit;
-
-            const subtotal = scaffold_total + pipe_total + paint_total + insul_total;
-            const estimate = subtotal * rate;
-
-            document.getElementById("subtotal").textContent = `小計: ¥${subtotal.toLocaleString()}`;
-            document.getElementById("estimate").textContent = `概算見積（0.6掛け）: ¥${estimate.toLocaleString()}`;
-        }
-
-        form.addEventListener("input", calculate);
-
-        form.addEventListener("submit", function (e) {
-            e.preventDefault();
-            alert("このままNotionに送信する処理を追加できます（Make等と連携）");
-        });
-
-        calculate();
-    </script>
-</body>
-</html>
+<script>
+  const f = document.getElementById("form");
+  const u = { s:5000, w:27000, r:0.6 };
+  function calc(){
+    const g = id => Number(document.getElementById(id).value);
+    const st = g("s")*u.s;
+    const pt = g("pp")*g("pd")*u.w;
+    const tt = g("tp")*g("td")*u.w;
+    const it = g("ip")*g("id")*u.w;
+    const sub = st+pt+tt+it, est = sub*u.r;
+    subEl.textContent = `小計: ¥${sub.toLocaleString()}`;
+    estEl.textContent = `概算（0.6掛け）: ¥${est.toLocaleString()}`;
+  }
+  const subEl = document.getElementById("sub");
+  const estEl = document.getElementById("est");
+  f.addEventListener("input", calc);
+  f.addEventListener("submit", e => {
+    e.preventDefault();
+    alert("このままNotion等に送信可能です");
+  });
+  calc();
+</script>
