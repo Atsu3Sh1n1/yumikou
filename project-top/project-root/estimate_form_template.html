@@ -5,77 +5,77 @@
     <meta charset="UTF-8" />
     <title>工事見積もりフォーム</title>
     <style>
-        /* html, bodyを画面全体に */
         html, body {
             height: 100%;
             margin: 0;
             font-family: sans-serif;
             background-color: #f9f9f9;
+            font-size: 18px; /* 基本フォントサイズアップ */
         }
 
-        /* 画面全体で中央寄せ */
         body {
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 20px;
+            padding: 30px;
         }
 
-        /* フォーム全体の最大幅とスタイル */
         #estimateForm {
             background-color: #fff;
-            padding: 30px 40px;
+            padding: 40px 50px;
             border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            box-shadow: 0 0 15px rgba(0,0,0,0.15);
             width: 100%;
-            max-width: 600px;
+            max-width: 700px; /* 幅を広げた */
             box-sizing: border-box;
         }
 
         h2 {
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
+            font-size: 2.2rem;
         }
 
         .form-group {
-            margin-bottom: 15px;
+            margin-bottom: 20px;
             width: 100%;
-            text-align: center;  /* ラベルはブロックのまま中央寄せ */
+            text-align: center;
         }
 
         label {
             display: block;
-            margin-bottom: 6px;
+            margin-bottom: 8px;
             font-weight: 600;
+            font-size: 1.1rem;
         }
 
-        /* 横並び入力 */
         .inline-inputs {
             display: flex;
             align-items: center;
-            gap: 10px;
-            flex-wrap: nowrap; /* 改行しない */
-            justify-content: center; /* 全体中央揃え */
+            gap: 15px;
+            flex-wrap: nowrap;
+            justify-content: center;
         }
 
         .inline-inputs label {
-            width: 50px; /* ラベルの幅を固定 */
+            width: 60px;
             margin: 0;
             white-space: nowrap;
             font-weight: normal;
-            text-align: right; /* 右寄せで入力欄とラベルの隙間を確保 */
-            padding-right: 5px;
+            text-align: right;
+            padding-right: 8px;
+            font-size: 1rem;
         }
 
         input[type="number"] {
-            width: 80px;
-            min-width: 60px;
-            padding: 8px 10px;
-            font-size: 1em;
+            width: 100px; /* 幅アップ */
+            min-width: 80px;
+            padding: 10px 12px;
+            font-size: 1.1rem; /* フォント大きめ */
             box-sizing: border-box;
             border: 1px solid #ccc;
-            border-radius: 4px;
-            text-align: center; 
+            border-radius: 6px;
+            text-align: center;
             transition: border-color 0.2s ease;
         }
 
@@ -86,8 +86,8 @@
 
         .total, .estimate {
             font-weight: bold;
-            font-size: 1.2em;
-            margin-top: 20px;
+            font-size: 1.5rem;
+            margin-top: 30px;
             text-align: center;
         }
 
@@ -97,15 +97,15 @@
 
         button {
             display: block;
-            padding: 12px 24px;
-            font-size: 1em;
+            padding: 16px 32px;
+            font-size: 1.3rem;
             cursor: pointer;
-            margin: 30px auto 0;
-            width: 200px;
+            margin: 40px auto 0;
+            width: 250px;
             background-color: #4caf50;
             border: none;
             color: white;
-            border-radius: 6px;
+            border-radius: 8px;
             transition: background-color 0.3s ease;
         }
 
@@ -115,18 +115,19 @@
 
         .created-by {
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
+            font-size: 1rem;
         }
 
         footer {
             text-align: center;
-            padding: 15px 0;
-            font-size: 0.9em;
+            padding: 18px 0;
+            font-size: 1rem;
             color: #666;
             background-color: #fff;
-            margin-top: 40px;
+            margin-top: 50px;
             width: 100%;
-            max-width: 600px;
+            max-width: 700px;
             box-sizing: border-box;
             border-radius: 0 0 8px 8px;
         }
@@ -142,23 +143,49 @@
 
         /* スマホ対応 */
         @media (max-width: 600px) {
-            body {
-                padding: 15px;
+            html, body {
+                font-size: 16px;
             }
 
-            #estimateForm {
+            body {
                 padding: 20px;
             }
 
+            #estimateForm {
+                padding: 30px 25px;
+                max-width: 100%;
+            }
+
+            h2 {
+                font-size: 1.8rem;
+            }
+
+            .inline-inputs label {
+                width: 55px;
+                padding-right: 6px;
+                font-size: 0.95rem;
+            }
+
             input[type="number"] {
-                width: 70px;
-                font-size: 1.1em;
+                width: 80px;
+                min-width: 70px;
+                font-size: 1rem;
+                padding: 8px 10px;
+            }
+
+            .total, .estimate {
+                font-size: 1.3rem;
             }
 
             button {
                 width: 100%;
-                font-size: 1.2em;
-                padding: 14px 0;
+                font-size: 1.2rem;
+                padding: 16px 0;
+            }
+
+            footer {
+                font-size: 0.9rem;
+                max-width: 100%;
             }
         }
     </style>
