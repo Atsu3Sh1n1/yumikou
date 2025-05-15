@@ -1,203 +1,75 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>配管溶接見積もり計算機</title>
-    <style>
-        body { font-family: Arial, sans-serif; margin: 20px; }
-        .container { max-width: 1000px; margin: 0 auto; }
-        table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
-        th, td { border: 1px solid #ddd; padding: 8px; text-align: center; }
-        th { background-color: #f2f2f2; }
-        input { width: 60px; text-align: center; }
-        .total-box { background-color: #f8f9fa; padding: 15px; border-radius: 5px; margin-top: 20px; }
-        .note { font-size: 0.9em; color: #666; margin-top: 10px; }
-    </style>
+  <meta charset="UTF-8">
+  <title>溶接簡易見積もり計算機</title>
+  <style>
+    body { font-family: sans-serif; padding: 20px; }
+    label, select, input { margin: 5px 0; display: block; }
+    .result { margin-top: 20px; font-size: 1.5em; font-weight: bold; }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <h1>配管溶接見積もり計算機</h1>
-        
-        <h2>基本単価設定</h2>
-        <div>
-            <label>基本単価（円）: </label>
-            <input type="number" id="basePrice" value="5000" min="0">
-        </div>
-        <div>
-            <label>径ごとの増加額（円）: </label>
-            <input type="number" id="sizeIncrement" value="200" min="0">
-        </div>
-        
-        <h2>管種別数量入力</h2>
-        <table id="inputTable">
-            <thead>
-                <tr>
-                    <th>径 (A)</th>
-                    <th>肉厚</th>
-                    <th>直管数</th>
-                    <th>エルボ数</th>
-                    <th>チーズ数</th>
-                    <th>単価（円）</th>
-                    <th>金額（円）</th>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- 行はJavaScriptで動的に生成 -->
-            </tbody>
-        </table>
-        
-        <button onclick="addRow()">行を追加</button>
-        <button onclick="calculate()">再計算</button>
-        
-        <div class="total-box">
-            <h3>合計金額</h3>
-            <div>総溶接数: <span id="totalCount">0</span> DB</div>
-            <div>総金額: <span id="totalPrice">0</span> 円</div>
-        </div>
-        
-        <div class="note">
-            <p>※肉厚係数: SCH40=1.0, SCH80=1.15, SCH160=1.25, XXS=1.35</p>
-            <p>※径は15Aを基準とし、1サイズアップごとに設定額増加</p>
-        </div>
-    </div>
+  <h2>溶接 簡易見積もり計算機</h2>
 
-    <script>
-        // 初期データ
-        const sizes = [];
-        for (let i = 15; i <= 300; i += 5) {
-            if (i <= 50 || i % 10 === 0) sizes.push(i);
-        }
-        
-        const thicknessOptions = [
-            { value: "SCH40", factor: 1.0 },
-            { value: "SCH80", factor: 1.15 },
-            { value: "SCH160", factor: 1.25 },
-            { value: "XXS", factor: 1.35 }
-        ];
-        
-        let rows = [];
-        
-        // 初期行を追加
-        function initialize() {
-            addRow();
-            addRow();
-            addRow();
-            calculate();
-        }
-        
-        // 行を追加
-        function addRow() {
-            const tbody = document.querySelector("#inputTable tbody");
-            const row = document.createElement("tr");
-            
-            // 径選択
-            const sizeCell = document.createElement("td");
-            const sizeSelect = document.createElement("select");
-            sizes.forEach(size => {
-                const option = document.createElement("option");
-                option.value = size;
-                option.textContent = `${size}A`;
-                sizeSelect.appendChild(option);
-            });
-            sizeCell.appendChild(sizeSelect);
-            
-            // 肉厚選択
-            const thicknessCell = document.createElement("td");
-            const thicknessSelect = document.createElement("select");
-            thicknessOptions.forEach(opt => {
-                const option = document.createElement("option");
-                option.value = opt.value;
-                option.textContent = opt.value;
-                thicknessSelect.appendChild(option);
-            });
-            thicknessCell.appendChild(thicknessSelect);
-            
-            // 数量入力
-            const straightCell = document.createElement("td");
-            straightCell.innerHTML = `<input type="number" min="0" value="0">`;
-            
-            const elbowCell = document.createElement("td");
-            elbowCell.innerHTML = `<input type="number" min="0" value="0">`;
-            
-            const teeCell = document.createElement("td");
-            teeCell.innerHTML = `<input type="number" min="0" value="0">`;
-            
-            // 単価と金額
-            const unitPriceCell = document.createElement("td");
-            unitPriceCell.textContent = "0";
-            
-            const priceCell = document.createElement("td");
-            priceCell.textContent = "0";
-            
-            // 行を組み立て
-            row.appendChild(sizeCell);
-            row.appendChild(thicknessCell);
-            row.appendChild(straightCell);
-            row.appendChild(elbowCell);
-            row.appendChild(teeCell);
-            row.appendChild(unitPriceCell);
-            row.appendChild(priceCell);
-            
-            tbody.appendChild(row);
-            rows.push({
-                row,
-                sizeSelect,
-                thicknessSelect,
-                straightInput: straightCell.querySelector("input"),
-                elbowInput: elbowCell.querySelector("input"),
-                teeInput: teeCell.querySelector("input"),
-                unitPriceCell,
-                priceCell
-            });
-            
-            // 変更イベントを設定
-            [sizeSelect, thicknessSelect, straightInput, elbowInput, teeInput].forEach(el => {
-                if (el) el.addEventListener("change", calculate);
-                if (el) el.addEventListener("input", calculate);
-            });
-        }
-        
-        // 計算処理
-        function calculate() {
-            const basePrice = parseInt(document.getElementById("basePrice").value) || 5000;
-            const sizeIncrement = parseInt(document.getElementById("sizeIncrement").value) || 200;
-            
-            let totalCount = 0;
-            let totalPrice = 0;
-            
-            rows.forEach(row => {
-                const size = parseInt(row.sizeSelect.value);
-                const thickness = row.thicknessSelect.value;
-                const straight = parseInt(row.straightInput.value) || 0;
-                const elbow = parseInt(row.elbowInput.value) || 0;
-                const tee = parseInt(row.teeInput.value) || 0;
-                
-                // 単価計算
-                const thicknessFactor = thicknessOptions.find(opt => opt.value === thickness)?.factor || 1;
-                const sizeSteps = (size - 15) / 5; // 15Aを基準とした増分ステップ数
-                const sizeAdditional = sizeSteps * sizeIncrement;
-                const unitPrice = Math.floor((basePrice + sizeAdditional) * thicknessFactor);
-                
-                // 金額計算 (エルボとチーズは2DBとして計算)
-                const count = straight + (elbow * 2) + (tee * 2);
-                const price = unitPrice * count;
-                
-                // 表示更新
-                row.unitPriceCell.textContent = unitPrice.toLocaleString();
-                row.priceCell.textContent = price.toLocaleString();
-                
-                totalCount += count;
-                totalPrice += price;
-            });
-            
-            // 合計表示
-            document.getElementById("totalCount").textContent = totalCount;
-            document.getElementById("totalPrice").textContent = totalPrice.toLocaleString();
-        }
-        
-        // 初期化
-        window.onload = initialize;
-    </script>
+  <label for="size">配管サイズ:</label>
+  <select id="size">
+    <option value="25">25A</option>
+    <option value="32">32A</option>
+    <option value="40">40A</option>
+    <option value="50">50A</option>
+    <option value="65">65A</option>
+    <option value="80">80A</option>
+    <option value="100">100A</option>
+    <option value="125">125A</option>
+    <option value="150">150A</option>
+    <option value="200">200A</option>
+  </select>
+
+  <label for="jointType">継手の種類:</label>
+  <select id="jointType">
+    <option value="straight">直管（1リング）</option>
+    <option value="elbow">エルボ（90°/45°・2リング）</option>
+    <option value="tee">チーズ（3リング）</option>
+  </select>
+
+  <label for="quantity">数量:</label>
+  <input type="number" id="quantity" value="1" min="1">
+
+  <label for="unitPrice">1DBあたりの単価（円）:</label>
+  <input type="number" id="unitPrice" value="2500" min="0">
+
+  <div class="result" id="totalCost">合計金額: ¥0</div>
+
+  <script>
+    const dbTable = {
+      straight: { 25: 1, 32: 1.25, 40: 1.5, 50: 2, 65: 2.5, 80: 3, 100: 4, 125: 5, 150: 6, 200: 8 },
+      elbow:    { 25: 2, 32: 2.5, 40: 3, 50: 4, 65: 5, 80: 6, 100: 8, 125: 10, 150: 12, 200: 16 },
+      tee:      { 25: 3, 32: 3.75, 40: 4.5, 50: 6, 65: 7.5, 80: 9, 100: 12, 125: 15, 150: 18, 200: 24 },
+    };
+
+    const sizeInput = document.getElementById('size');
+    const typeInput = document.getElementById('jointType');
+    const qtyInput = document.getElementById('quantity');
+    const unitInput = document.getElementById('unitPrice');
+    const result = document.getElementById('totalCost');
+
+    function updateTotal() {
+      const size = sizeInput.value;
+      const type = typeInput.value;
+      const qty = Number(qtyInput.value);
+      const unitPrice = Number(unitInput.value);
+      const dbValue = dbTable[type][size];
+      const total = dbValue * qty * unitPrice;
+      result.textContent = `合計金額: ¥${total.toLocaleString()}`;
+    }
+
+    sizeInput.onchange = updateTotal;
+    typeInput.onchange = updateTotal;
+    qtyInput.oninput = updateTotal;
+    unitInput.oninput = updateTotal;
+
+    updateTotal(); // 初回表示
+  </script>
 </body>
 </html>
