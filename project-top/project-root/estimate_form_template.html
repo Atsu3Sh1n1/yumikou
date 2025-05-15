@@ -159,7 +159,7 @@
 
 <body>
     <div class="container">
-        <h3>簡易見積計算機</h3>
+        <h3>簡易見積計算機 Ver.0.6</h3>
         <form id="form">
 
             <div class="footer">
@@ -172,8 +172,8 @@
                     <span>必要足場数(仮)</span>
                 </div>
                 <div class="input-group">
-                    <input type="number" id="s" placeholder="1スパン" min="0" />
-                    <input type="number" id="sc" placeholder="単価" min="0" />
+                    <input type="number" inputmode="numeric" pattern="[0-9]*" id="s" placeholder="1スパン" min="0" />
+                    <input type="number" inputmode="numeric" pattern="[0-9]*" id="sc" placeholder="単価" min="0" />
                 </div>
             </div>
 
@@ -183,8 +183,8 @@
                     <span>配管</span>
                 </div>
                 <div class="input-group">
-                    <input type="number" id="pp" placeholder="人数" min="0" />
-                    <input type="number" id="pd" placeholder="日数" min="0" />
+                    <input type="number" inputmode="numeric" pattern="[0-9]*" id="pp" placeholder="人" min="0" />
+                    <input type="number" inputmode="numeric" pattern="[0-9]*" id="pd" placeholder="日" min="0" />
                 </div>
             </div>
 
@@ -194,8 +194,8 @@
                     <span>塗装(仮)</span>
                 </div>
                 <div class="input-group">
-                    <input type="number" id="tp" placeholder="人" min="0" />
-                    <input type="number" id="td" placeholder="日" min="0" />
+                    <input type="number" inputmode="numeric" pattern="[0-9]*" id="tp" placeholder="人" min="0" />
+                    <input type="number" inputmode="numeric" pattern="[0-9]*" id="td" placeholder="日" min="0" />
                 </div>
             </div>
 
@@ -205,8 +205,8 @@
                     <span>保温(仮)</span>
                 </div>
                 <div class="input-group">
-                    <input type="number" id="ip" placeholder="人" min="0" />
-                    <input type="number" id="id" placeholder="日" min="0" />
+                    <input type="number" inputmode="numeric" pattern="[0-9]*" id="ip" placeholder="人" min="0" />
+                    <input type="number" inputmode="numeric" pattern="[0-9]*" id="id" placeholder="日" min="0" />
                 </div>
             </div>
 
@@ -241,7 +241,7 @@
         f.addEventListener("input", calc);
         f.addEventListener("submit", e => {
             e.preventDefault();
-            alert("このままNotion等に送信可能です");
+            alert("袖の下は振れませんが、信用なら回せます。有限会社弓工");
         });
 
         calc();

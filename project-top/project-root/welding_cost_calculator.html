@@ -7,8 +7,9 @@
 <body>
   <h3>溶接費用計算機（リアルタイム計算）</h3>
 
-  <label>単価（円／DB）: <input type="number" id="unitPrice" value="5500" /></label><br/>
-  <label>配管径（インチ）: <input type="number" id="pipeDiameter" value="4" min="1" /></label><br/>
+  <label>基準単価（20A時、円／DB）: <input type="number" id="baseUnitPrice" value="5500" /></label><br/>
+  <label>大口径単価（200A時、円／DB）: <input type="number" id="largeUnitPrice" value="40000" /></label><br/>
+  <label>配管径（A）: <input type="number" id="pipeDiameter" value="20" min="1" /></label><br/>
   <label>直管の数: <input type="number" id="straightCount" value="0" min="0" /></label><br/>
   <label>エルボの数: <input type="number" id="elbowCount" value="0" min="0" /></label><br/>
   <label>チーズの数: <input type="number" id="teeCount" value="0" min="0" /></label><br/><br/>
@@ -16,28 +17,42 @@
   <div id="result"></div>
 
   <script>
+    function calculate() {
+      const baseUnitPrice = Number(document.getElementById('baseUnitPrice').value); // 20A単価
+      const largeUnitPrice = Number(document.getElementById('largeUnitPrice').value); // 200A単価
+      const pipeDiameter = Number(document.getElementById('pipeDiameter').value);
+      const straightCount = Number(document.getElementById('straightCount').value);
+      const elbowCount = Number(document.getElementById('elbowCount').value);
+      const teeCount = Number(document.getElementById('teeCount').value);
+
+      // 20A以下は20A扱い
+      const diameter = pipeDiameter < 20 ? 20 : pipeDiameter;
+
+      // 1Aあたり単価増加分
+      const incrementPerA = (largeUnitPrice - baseUnitPrice) / (200 - 20);
+
+      // 調整後単価計算
+      const adjustedUnitPrice = baseUnitPrice + incrementPerA * (diameter - 20);
+
+      // 合計数量
+      const totalCount = straightCount + elbowCount + teeCount;
+
+      // 合計費用
+      const totalCost = adjustedUnitPrice * totalCount;
+
+      // 結果表示
+      document.getElementById('result').innerText = 
+        `呼び径: ${pipeDiameter}A\n` +
+        `調整後単価: ${adjustedUnitPrice.toFixed(2)} 円/DB\n` +
+        `合計費用: ${totalCost.toFixed(0)} 円`;
+    }
+
+    // 入力に対してリアルタイム計算
     const inputs = document.querySelectorAll('input');
     inputs.forEach(input => input.addEventListener('input', calculate));
 
-    function calculate() {
-      const unitPrice = Number(document.getElementById('unitPrice').value);
-      const diameter = Number(document.getElementById('pipeDiameter').value);
-      const straight = Number(document.getElementById('straightCount').value);
-      const elbow = Number(document.getElementById('elbowCount').value);
-      const tee = Number(document.getElementById('teeCount').value);
-
-      const dbStraight = straight * 1 * diameter;
-      const dbElbow = elbow * 2 * diameter;
-      const dbTee = tee * 3 * diameter;
-
-      const totalDB = dbStraight + dbElbow + dbTee;
-      const totalCost = totalDB * unitPrice;
-
-      document.getElementById('result').textContent =
-        `合計DB: ${totalDB} DB\n合計費用: ${totalCost.toLocaleString()} 円`;
-    }
-
-    calculate(); // 初回実行
+    // 初期計算
+    calculate();
   </script>
 </body>
 </html>
