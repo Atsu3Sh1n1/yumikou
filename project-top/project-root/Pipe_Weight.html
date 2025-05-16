@@ -3,7 +3,9 @@
 
 <head>
     <meta charset="UTF-8" />
-    <title>配管重量・金額計算ツール</title>
+    <title>配管メーター重量見積もり金額計算機｜有限会社弓工</title>
+    <link rel="icon" href="images/icon.webp" type="image/x-icon" />
+
     <style>
         body {
             font-family: sans-serif;
@@ -152,6 +154,8 @@
                 <option value="125">125A</option>
                 <option value="150">150A</option>
                 <option value="200">200A</option>
+                <option value="250">250A</option>
+                <option value="300">300A</option>
 
             </select>
         </div>
@@ -177,7 +181,7 @@
         </div>
 
         <div class="schedule-buttons" role="group" aria-label="スケジュール選択">
-          
+
             <button id="btnSCH20" onclick="setSchedule('SCH80')">SGP</button>
             <button id="btnSCH40" class="active" onclick="setSchedule('SCH20')">SCH40</button>
             <button id="btnSCH80" onclick="setSchedule('SCH80')">SCH80</button>
