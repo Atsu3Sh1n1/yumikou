@@ -1,21 +1,24 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-   <meta name="robots" content="index, follow" />
+  <meta name="robots" content="index, follow" />
   <title>簡易現場見積もり計算機｜有限会社弓工</title>
   <link rel="icon" href="images/icon.webp" type="image/x-icon" />
   <style>
-   body {
-  font-family: sans-serif;
-  background-color: #f9f9f9;
-  margin: 0;
-  
-  display: flex;
-  justify-content: center;
-  align-items: flex-start; /* 上に寄せる */
-}
+    body {
+      font-family: sans-serif;
+      background-color: #f9f9f9;
+      margin: 0;
+      padding: 0;
+      /* 適宜調整 */
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      /* 上に寄せる */
+    }
 
 
     .container {
@@ -23,7 +26,7 @@
       padding: 25px 40px;
       border: 1px solid #ccc;
       border-radius: 8px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
       width: 300px;
     }
 
@@ -87,6 +90,7 @@
     }
   </style>
 </head>
+
 <body>
   <div class="container">
     <h2>現場見積計算機</h2>
@@ -159,10 +163,11 @@
     f.addEventListener("input", calc);
     f.addEventListener("submit", e => {
       e.preventDefault();
-      alert("袖の下は振れませんが、信用なら回します。有限会社弓工");
+      alert("ベータ版は200Aまで。有限会社弓工");
     });
 
     calc();
   </script>
 </body>
+
 </html>
