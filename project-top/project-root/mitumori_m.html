@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>配管見積簡易計算</title>
+</head>
+<body>
+  <h2>配管工事 簡易見積</h2>
+
+  <label>単価（円/m）：
+    <input type="number" id="unitPrice" value="12000" oninput="calculate()">
+  </label><br>
+
+  <label>メーター数（m）：
+    <input type="number" id="meterInput" value="10" oninput="calculate()">
+  </label>
+
+  <p id="result">見積金額：¥120,000</p>
+
+  <script>
+    function calculate() {
+      const unit = parseFloat(document.getElementById("unitPrice").value) || 0;
+      const meter = parseFloat(document.getElementById("meterInput").value) || 0;
+      const total = unit * meter;
+      document.getElementById("result").innerText = `見積金額：¥${total.toLocaleString()}`;
+    }
+    calculate(); // 初期表示
+  </script>
+</body>
+</html>

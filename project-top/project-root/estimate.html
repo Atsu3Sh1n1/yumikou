@@ -94,15 +94,15 @@
 
     <form id="form">
       <div class="form-group">
-        <div class="form-row">必要足場数 (仮)</div>
+        <div class="form-row">足場数/基本単価</div>
         <div class="input-group">
-          <input type="number" inputmode="numeric" pattern="[0-9]*" id="s" placeholder="1スパン180" min="0" />
-          <input type="number" inputmode="numeric" pattern="[0-9]*" id="sc" placeholder="単価" min="0" />
+          <input type="number" inputmode="numeric" pattern="[0-9]*" id="s" placeholder="1スパン/5,000" min="0" />
+          <input type="number" inputmode="numeric" pattern="[0-9]*" id="sc" placeholder="単価/27,000" min="0" />
         </div>
       </div>
 
       <div class="form-group">
-        <div class="form-row">配管</div>
+        <div class="form-row">人数/日数</div>
         <div class="input-group">
           <input type="number" inputmode="numeric" pattern="[0-9]*" id="pp" placeholder="人" min="0" />
           <input type="number" inputmode="numeric" pattern="[0-9]*" id="pd" placeholder="日" min="0" />
@@ -126,7 +126,7 @@
       </div>
 
       <div class="result" id="manhour">総工数: 0人日</div>
-      <div class="result" id="sub">原価小計: ¥0</div>
+      <div class="result" id="sub">小計: ¥0</div>
 
       <button type="submit">計算</button>
     </form>

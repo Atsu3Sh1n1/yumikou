@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>見積書PDF</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+  <h1>工事一式 見積書 発行</h1>
+
+  <label>宛名：<input type="text" id="clientName" value="御中"></label><br>
+  <label>見積金額（税込）：<input type="number" id="totalAmount" value="385000"></label><br>
+  <button onclick="generatePDF()">PDFを出力</button>
+
+  <script>
+    async function generatePDF() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+
+      // 日本語フォント（Noto Sans JP Regular）のBase64フォントデータ（短縮例）
+      const fontUrl = "https://unpkg.com/@fontsource/noto-sans-jp/files/noto-sans-jp-japanese-400-normal.woff2";
+
+      // フォントを取得・追加（Base64に変換して追加）
+      const fontBuffer = await fetch(fontUrl).then(res => res.arrayBuffer());
+      const fontBase64 = btoa(String.fromCharCode(...new Uint8Array(fontBuffer)));
+
+      doc.addFileToVFS("NotoSansJP-Regular.ttf", fontBase64);
+      doc.addFont("NotoSansJP-Regular.ttf", "NotoSansJP", "normal");
+      doc.setFont("NotoSansJP"); // フォントを指定
+
+      const client = document.getElementById("clientName").value || "御中";
+      const amount = Number(document.getElementById("totalAmount").value || 0);
+      const tax = Math.round(amount / 1.1 * 0.1);
+      const amountExclTax = amount - tax;
+
+      doc.setFontSize(16);
+      doc.text("見積書", 105, 20, null, null, "center");
+
+      doc.setFontSize(12);
+      doc.text(`宛名：${client}`, 20, 35);
+      doc.text(`見積日：${new Date().toLocaleDateString()}`, 20, 45);
+
+      doc.text("【見積内容】", 20, 60);
+      doc.text("工事名：足場工事一式", 20, 70);
+      doc.text(`金額（税抜）：¥${amountExclTax.toLocaleString()}`, 20, 80);
+      doc.text(`消費税：¥${tax.toLocaleString()}`, 20, 90);
+      doc.text(`合計金額（税込）：¥${amount.toLocaleString()}`, 20, 100);
+
+      doc.text("※上記は組立・解体・運搬費を含みます。", 20, 115);
+      doc.text("※正式なご発注の際はご連絡ください。", 20, 125);
+
+      doc.text("株式会社サンプル足場", 20, 145);
+      doc.text("〒123-4567 東京都中央区1-2-3", 20, 153);
+      doc.text("TEL: 03-1234-5678", 20, 161);
+
+      doc.save("見積書_工事一式.pdf");
+    }
+  </script>
+</body>
+</html>
