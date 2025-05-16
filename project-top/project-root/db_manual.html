@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>使用説明書｜配管溶接DB見積計算機</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #121212;
+      color: #e0e0e0;
+      line-height: 1.8;
+      padding: 40px 20px;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: auto;
+      background-color: #1e1e1e;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.6);
+    }
+
+    h1, h2, h3 {
+      color: #90caf9;
+      margin-top: 0;
+    }
+
+    a {
+      color: #64b5f6;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    ul {
+      padding-left: 1.5em;
+    }
+
+    .section {
+      margin-bottom: 40px;
+    }
+
+    code {
+      background: #2c2c2c;
+      padding: 3px 6px;
+      border-radius: 4px;
+      font-size: 0.95em;
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>配管溶接DB見積金額計算機 使用説明書</h1>
+
+    <div class="section">
+      <h2>概要</h2>
+      <p>
+        このツールは、配管施工における<strong>溶接工数（DB値）と見積金額</strong>を自動で算出する見積支援ツールです。
+        配管サイズごとの施工要素（ストレート・エルボ・チーズ/フランジ）を入力し、補正係数や単価に基づいて見積を行えます。
+      </p>
+    </div>
+
+    <div class="section">
+      <h2>基本機能</h2>
+      <ul>
+        <li><strong>サイズ選択：</strong> 呼び径25A〜200A</li>
+        <li><strong>部材数量入力：</strong> ストレート、エルボ、チーズ/FLの数量</li>
+        <li><strong>DB値換算：</strong> 各部材のDB値を配管サイズごとに設定</li>
+        <li><strong>スケジュール補正：</strong> SGP / SCH40 / SCH80 による倍率補正</li>
+        <li><strong>材質補正：</strong> ステンレスを選択するとさらに1.5倍補正</li>
+        <li><strong>金額自動計算：</strong> 合計DBと金額をリアルタイムに表示</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h2>操作方法</h2>
+      <ol>
+        <li>配管サイズを選択（例：50A）</li>
+        <li>各部材の個数（ストレート・エルボ・チーズ）を入力</li>
+        <li>単価（円/DB）を設定（初期値：2000円）</li>
+        <li>SCH補正ボタンを選択（SGP/SCH40/SCH80）</li>
+        <li>ステンレス使用時は「ステンレス」ボタンを押下</li>
+        <li>合計DBと金額が下部に表示</li>
+      </ol>
+    </div>
+
+    <div class="section">
+      <h2>計算ロジック</h2>
+      <ul>
+        <li>各部材のDB値はサイズごとに定義（例：50Aのストレート＝2DB）</li>
+        <li>ストレート 1DB + エルボ 2DB + チーズ・フランジ 3DB</li>
+        <li>合計DB × スケジュール倍率 × 材質倍率 = 補正後DB</li>
+        <li>見積金額 = 補正後DB × 単価（円/DB）</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h2>用途・対象</h2>
+      <ul>
+        <li>配管施工業者による積算見積</li>
+        <li>監督者・設計者による工数評価</li>
+        <li>現場でのDB計算と説明資料</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h2>注意事項</h2>
+      <ul>
+        <li>DB値は目安値であり、実際の施工条件により変動します。</li>
+        <li>フランジ溶接や現場状況による追加工は別途考慮してください。</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h2>制作者情報</h2>
+      <p><strong>有限会社 弓工（YUMIKOU Inc.）</strong><br>
+        <a href="https://atsu3sh1n1.github.io/yumikou/" target="_blank">https://atsu3sh1n1.github.io/yumikou/</a>
+      </p>
+    </div>
+  </div>
+</body>
+</html>
