@@ -3,7 +3,8 @@
 
 <head>
   <meta charset="UTF-8">
-  <title>溶接見積もり計算機</title>
+  <title>プラント配管溶接DB見積もり計算機/有限会社弓工</title>
+  <meta name="robots" content="index, follow" />
   <style>
     body {
       font-family: sans-serif;
@@ -11,8 +12,10 @@
       display: flex;
       justify-content: center;
       align-items: flex-start;
-      padding-top: 40px;
+      margin: 0;
+      padding-top: 0;
     }
+
 
     .container {
       background: #fff;
@@ -86,7 +89,7 @@
       color: white;
       border-color: #4CAF50;
     }
-    
+
     .additional-multiplier-btn {
       margin-top: 5px;
       padding: 5px 10px;
@@ -96,7 +99,7 @@
       border-radius: 4px;
       font-size: 0.9em;
     }
-    
+
     .additional-multiplier-btn.active {
       background: #2196F3;
       color: white;
@@ -187,7 +190,7 @@
       let baseUnitPrice = parseFloat(document.getElementById("unitPrice").value) || 0;
 
       // SCH40/80×1.5ボタンがアクティブで、かつSCH40かSCH80が選択されている場合
-      const isSch40or80 =  currentMultiplier === 1 || currentMultiplier === 1.25 || currentMultiplier === 1.5;
+      const isSch40or80 = currentMultiplier === 1 || currentMultiplier === 1.25 || currentMultiplier === 1.5;
       if (document.getElementById("additionalMultiplierBtn").classList.contains("active") && isSch40or80) {
         baseUnitPrice = baseUnitPrice * 1.5;
       }
@@ -213,15 +216,15 @@
       });
     });
 
-    document.getElementById("additionalMultiplierBtn").addEventListener("click", function() {
+    document.getElementById("additionalMultiplierBtn").addEventListener("click", function () {
       const isActive = this.classList.contains("active");
-      
+
       if (isActive) {
         this.classList.remove("active");
       } else {
         this.classList.add("active");
       }
-      
+
       calculate();
     });
 
