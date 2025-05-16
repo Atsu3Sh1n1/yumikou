@@ -176,10 +176,12 @@
         </div>
 
         <div class="schedule-buttons" role="group" aria-label="スケジュール選択">
+            <button id="btnSCH10" onclick="setSchedule('SCH10')">SCH10</button>
             <button id="btnSCH20" class="active" onclick="setSchedule('SCH20')">SCH20</button>
             <button id="btnSCH40" onclick="setSchedule('SCH40')">SCH40</button>
             <button id="btnSCH80" onclick="setSchedule('SCH80')">SCH80</button>
         </div>
+
 
         <div class="material-toggle">
             <button id="btnSteel" class="active" onclick="setMaterial('steel')">鉄</button>
@@ -190,115 +192,113 @@
         <div class="result" id="pipeCost">配管金額: ¥0</div>
     </div>
 
-<script>
-  const weightPerMeter = {
-    "25": { sch20: 2.13, sch40: 2.51, sch80: 3.23, sus20: 2.67, sus40: 2.51, sus80: 3.23 },
-    "32": { sch20: 2.82, sch40: 3.40, sch80: 4.62, sus20: 3.42, sus40: 3.40, sus80: 4.62 },
-    "40": { sch20: 3.38, sch40: 4.07, sch80: 5.50, sus20: 3.93, sus40: 4.07, sus80: 5.50 },
-    "50": { sch20: 4.52, sch40: 5.41, sch80: 7.47, sus20: 5.32, sus40: 5.41, sus80: 7.47 },
-    "65": { sch20: 6.62, sch40: 9.06, sch80: 12.1, sus20: 7.53, sus40: 9.06, sus80: 12.1 },
-    "80": { sch20: 8.19, sch40: 11.3, sch80: 15.8, sus20: 8.86, sus40: 11.3, sus80: 15.8 },
-    "100": { sch20: 11.6, sch40: 15.9, sch80: 22.1, sus20: 12.3, sus40: 15.9, sus80: 22.1 },
-    "125": { sch20: 16.2, sch40: 21.7, sch80: 30.5, sus20: 15.1, sus40: 21.7, sus80: 30.5 },
-    "150": { sch20: 21.6, sch40: 27.7, sch80: 41.9, sus20: 19.6, sus40: 27.7, sus80: 41.9 },
-    "200": { sch20: 32.9, sch40: 41.5, sch80: 62.7, sus20: 30.2, sus40: 41.5, sus80: 62.7 }
-  };
+    <script>
+        const weightPerMeter = {
+            "25": { sch10: 2.13, sch20: 2.13, sch40: 2.51, sch80: 3.23, sus10: 2.13, sus20: 2.67, sus40: 2.51, sus80: 3.23 },
+            "32": { sch10: 2.82, sch20: 2.82, sch40: 3.40, sch80: 4.62, sus10: 2.82, sus20: 3.42, sus40: 3.40, sus80: 4.62 },
+            "40": { sch10: 3.24, sch20: 3.38, sch40: 4.07, sch80: 5.50, sus10: 3.24, sus20: 3.93, sus40: 4.07, sus80: 5.50 },
+            "50": { sch10: 4.32, sch20: 4.52, sch40: 5.41, sch80: 7.47, sus10: 4.32, sus20: 5.32, sus40: 5.41, sus80: 7.47 },
+            "65": { sch10: 5.51, sch20: 6.62, sch40: 9.06, sch80: 12.1, sus10: 5.51, sus20: 7.53, sus40: 9.06, sus80: 12.1 },
+            "80": { sch10: 6.47, sch20: 8.19, sch40: 11.3, sch80: 15.8, sus10: 6.47, sus20: 8.86, sus40: 11.3, sus80: 15.8 },
+            "100": { sch10: 9.30, sch20: 11.6, sch40: 15.9, sch80: 22.1, sus10: 9.30, sus20: 12.3, sus40: 15.9, sus80: 22.1 },
+            "125": { sch10: 11.96, sch20: 16.2, sch40: 21.7, sch80: 30.5, sus10: 11.96, sus20: 15.1, sus40: 21.7, sus80: 30.5 },
+            "150": { sch10: 18.91, sch20: 21.6, sch40: 27.7, sch80: 41.9, sus10: 18.91, sus20: 19.6, sus40: 27.7, sus80: 41.9 },
+            "200": { sch10: 28.80, sch20: 32.9, sch40: 41.5, sch80: 62.7, sus10: 28.80, sus20: 30.2, sus40: 41.5, sus80: 62.7 }
+        };
 
-  // メーター単価用倍率（25A〜200A：1.0〜8.0）
-  const sizeMultiplier = {
-    "25": 1.0,
-    "32": 1.2,
-    "40": 1.4,
-    "50": 1.7,
-    "65": 2.6,
-    "80": 2.8,
-    "100": 3.6,
-    "125": 4.5,
-    "150": 5.5,
-    "200": 8.0
-  };
+        const sizeMultiplier = {
+            "25": 1.0,
+            "32": 1.2,
+            "40": 1.4,
+            "50": 1.7,
+            "65": 2.6,
+            "80": 2.8,
+            "100": 3.6,
+            "125": 4.5,
+            "150": 5.5,
+            "200": 8.0
+        };
 
-  // 重量単価用倍率（25A〜200A：1.0〜4.0 など任意調整可）
-  const sizeMultiplierWeight = {
-    "25": 1.0,
-    "32": 1.2,
-    "40": 1.4,
-    "50": 1.7,
-    "65": 2.0,
-    "80": 2.3,
-    "100": 2.7,
-    "125": 3.2,
-    "150": 3.6,
-    "200": 4.0
-  };
+        const sizeMultiplierWeight = {
+            "25": 1.0,
+            "32": 1,
+            "40": 1,
+            "50": 1,
+            "65": 1,
+            "80": 1,
+            "100": 1,
+            "125": 1,
+            "150": 1,
+            "200": 1.0
+        };
 
-  let currentSchedule = 'SCH20';
-  let currentUnitType = 'meter';
-  let currentMaterial = 'steel';
+        let currentSchedule = 'SCH20';
+        let currentUnitType = 'meter';
+        let currentMaterial = 'steel';
 
-  function setSchedule(schedule) {
-    currentSchedule = schedule;
-    document.querySelectorAll(".schedule-buttons button").forEach(btn => btn.classList.remove("active"));
-    document.getElementById("btn" + schedule).classList.add("active");
-    calculate();
-  }
+        function setSchedule(schedule) {
+            currentSchedule = schedule;
+            document.querySelectorAll(".schedule-buttons button").forEach(btn => btn.classList.remove("active"));
+            document.getElementById("btn" + schedule).classList.add("active");
+            calculate();
+        }
 
-  function setMaterial(type) {
-    currentMaterial = type;
-    document.querySelectorAll(".material-toggle button").forEach(btn => btn.classList.remove("active"));
-    document.getElementById("btn" + (type === 'steel' ? 'Steel' : 'Stainless')).classList.add("active");
-    calculate();
-  }
+        function setMaterial(type) {
+            currentMaterial = type;
+            document.querySelectorAll(".material-toggle button").forEach(btn => btn.classList.remove("active"));
+            document.getElementById("btn" + (type === 'steel' ? 'Steel' : 'Stainless')).classList.add("active");
+            calculate();
+        }
 
-  document.querySelectorAll("input, select").forEach(el => {
-    el.addEventListener("input", () => {
-      if (el.name === 'unitType') {
-        currentUnitType = document.querySelector('input[name="unitType"]:checked').value;
-        document.getElementById('unitPriceLabel').textContent =
-          currentUnitType === 'meter' ? 'メーター単価 (円/m):' : '重量単価 (円/kg):';
-      }
-      calculate();
-    });
-  });
+        document.querySelectorAll("input, select").forEach(el => {
+            el.addEventListener("input", () => {
+                if (el.name === 'unitType') {
+                    currentUnitType = document.querySelector('input[name="unitType"]:checked').value;
+                    document.getElementById('unitPriceLabel').textContent =
+                        currentUnitType === 'meter' ? 'メーター単価 (円/m):' : '重量単価 (円/kg):';
+                }
+                calculate();
+            });
+        });
 
-  function calculate() {
-    const size = document.getElementById("size").value;
-    const length = parseFloat(document.getElementById("pipeLength").value) || 0;
-    const price = parseFloat(document.getElementById("unitPrice").value) || 0;
+        function calculate() {
+            const size = document.getElementById("size").value;
+            const length = parseFloat(document.getElementById("pipeLength").value) || 0;
+            const price = parseFloat(document.getElementById("unitPrice").value) || 0;
 
-    const schKey = currentSchedule.toLowerCase(); // e.g., "sch20"
-    const baseWeight = weightPerMeter["25"].sch20; 
+            const schKey = currentSchedule.toLowerCase(); // e.g., "sch20"
+            const baseWeight = weightPerMeter[size].sch20; // 固定基準
 
-    let materialKey;
-    if (currentMaterial === 'steel') {
-      materialKey = schKey;
-    } else {
-      materialKey = 'sus' + schKey.slice(3);
-    }
+            let materialKey;
+            if (currentMaterial === 'steel') {
+                materialKey = schKey;
+            } else {
+                materialKey = 'sus' + schKey.slice(3);
+            }
 
-    const actualWeight = weightPerMeter[size][materialKey];
-    const weightRatio = actualWeight / baseWeight;
-    const weight = length * actualWeight;
+            const actualWeight = weightPerMeter[size][materialKey];
+            const weight = length * actualWeight;
 
-    let cost;
-    if (currentUnitType === 'meter') {
-      cost = length * price * weightRatio;
-      cost *= sizeMultiplier[size]; // メーター単価：施工倍率あり
-    } else {
-      cost = weight * price;
-      cost *= sizeMultiplierWeight[size]; // 重量単価：別倍率で施工補正
-    }
+            let cost;
+            if (currentUnitType === 'meter') {
+                const weightRatio = actualWeight / baseWeight;
+                cost = length * price * weightRatio;
+                cost *= sizeMultiplier[size]; // メーター単価：施工倍率あり
+            } else {
+                cost = weight * price;
+                cost *= sizeMultiplierWeight[size]; // 重量単価：別倍率で施工補正
+            }
 
-    if (currentMaterial === 'stainless') {
-      cost *= 1.5; // ステンレス補正
-    }
+            if (currentMaterial === 'stainless') {
+                cost *= 1.5; // ステンレス補正
+            }
 
-    document.getElementById("pipeWeight").textContent = `配管重量: ${weight.toFixed(2)} kg`;
-    document.getElementById("pipeCost").textContent = `金額: ¥${Math.round(cost).toLocaleString()}`;
-  }
+            document.getElementById("pipeWeight").textContent = `配管重量: ${weight.toFixed(2)} kg`;
+            document.getElementById("pipeCost").textContent = `金額: ¥${Math.round(cost).toLocaleString()}`;
+        }
 
-  calculate();
-</script>
+        calculate();
+    </script>
 </body>
 
 </html>
