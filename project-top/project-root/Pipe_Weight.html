@@ -204,8 +204,9 @@
     "200": { sch20: 32.9, sch40: 41.5, sch80: 62.7, sus20: 30.2, sus40: 41.5, sus80: 62.7 }
   };
 
+  // メーター単価用倍率（25A〜200A：1.0〜8.0）
   const sizeMultiplier = {
-    "25": 1.00,
+    "25": 1.0,
     "32": 1.2,
     "40": 1.4,
     "50": 1.7,
@@ -214,7 +215,21 @@
     "100": 3.6,
     "125": 4.5,
     "150": 5.5,
-    "200": 8
+    "200": 8.0
+  };
+
+  // 重量単価用倍率（25A〜200A：1.0〜4.0 など任意調整可）
+  const sizeMultiplierWeight = {
+    "25": 1.0,
+    "32": 1.2,
+    "40": 1.4,
+    "50": 1.7,
+    "65": 2.0,
+    "80": 2.3,
+    "100": 2.7,
+    "125": 3.2,
+    "150": 3.6,
+    "200": 4.0
   };
 
   let currentSchedule = 'SCH20';
@@ -252,7 +267,7 @@
     const price = parseFloat(document.getElementById("unitPrice").value) || 0;
 
     const schKey = currentSchedule.toLowerCase(); // e.g., "sch20"
-    const baseWeight = weightPerMeter[size].sch20; // 固定基準
+    const baseWeight = weightPerMeter["25"].sch20; 
 
     let materialKey;
     if (currentMaterial === 'steel') {
@@ -268,15 +283,15 @@
     let cost;
     if (currentUnitType === 'meter') {
       cost = length * price * weightRatio;
+      cost *= sizeMultiplier[size]; // メーター単価：施工倍率あり
     } else {
       cost = weight * price;
+      cost *= sizeMultiplierWeight[size]; // 重量単価：別倍率で施工補正
     }
 
     if (currentMaterial === 'stainless') {
-      cost *= 1.5; // ステンレスは価格1.5倍
+      cost *= 1.5; // ステンレス補正
     }
-
-    cost *= sizeMultiplier[size];
 
     document.getElementById("pipeWeight").textContent = `配管重量: ${weight.toFixed(2)} kg`;
     document.getElementById("pipeCost").textContent = `金額: ¥${Math.round(cost).toLocaleString()}`;
