@@ -1,207 +1,209 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
-  <meta charset="UTF-8" />
-  <title>配管重量・金額計算ツール</title>
-  <style>
-    body {
-      font-family: sans-serif;
-      background-color: #f9f9f9;
-      margin: 0;
-      min-height: auto;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 0px;
-    }
+    <meta charset="UTF-8" />
+    <title>配管重量・金額計算ツール</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            min-height: auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 0px;
+        }
 
-    .container {
-      background: white;
-      padding: 25px 30px;
-      border-radius: 8px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-      max-width: 400px;
-      width: 100%;
-      box-sizing: border-box;
-      text-align: center;
-    }
+        .container {
+            background: white;
+            padding: 25px 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            width: 100%;
+            box-sizing: border-box;
+            text-align: center;
+        }
 
-    h1 {
-      color: #333;
-      margin-bottom: 0px;
-      font-weight: 600;
-      font-size: 1.6em;
-    }
+        h1 {
+            color: #333;
+            margin-bottom: 0px;
+            font-weight: 600;
+            font-size: 1.6em;
+        }
 
-    .form-group {
-      margin-bottom: 15px;
-      text-align: left;
-    }
+        .form-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
 
-    label {
-      display: block;
-      margin-bottom: 6px;
-      font-weight: 500;
-      color: #444;
-      font-size: 0.95em;
-    }
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 500;
+            color: #444;
+            font-size: 0.95em;
+        }
 
-    select,
-    input[type="number"] {
-      width: 100%;
-      padding: 7px 10px;
-      font-size: 1em;
-      border: 1.5px solid #ccc;
-      border-radius: 4px;
-      box-sizing: border-box;
-      transition: border-color 0.2s;
-    }
+        select,
+        input[type="number"] {
+            width: 100%;
+            padding: 7px 10px;
+            font-size: 1em;
+            border: 1.5px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            transition: border-color 0.2s;
+        }
 
-    select:focus,
-    input[type="number"]:focus {
-      border-color: #007bff;
-      outline: none;
-    }
+        select:focus,
+        input[type="number"]:focus {
+            border-color: #007bff;
+            outline: none;
+        }
 
-    .schedule-buttons,
-    .material-toggle {
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-      margin: 18px 0 15px;
-    }
+        .schedule-buttons,
+        .material-toggle {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 18px 0 15px;
+        }
 
-    .schedule-buttons button,
-    .material-toggle button {
-      flex: 1;
-      max-width: 90px;
-      padding: 8px 0;
-      background: #003d80;
-      border: none;
-      border-radius: 5px;
-      color: white;
-      font-size: 0.9em;
-      cursor: pointer;
-      transition: background-color 0.2s;
-      user-select: none;
-    }
+        .schedule-buttons button,
+        .material-toggle button {
+            flex: 1;
+            max-width: 90px;
+            padding: 8px 0;
+            background: #003d80;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            font-size: 0.9em;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            user-select: none;
+        }
 
-    .schedule-buttons button.active,
-    .material-toggle button.active {
-      background: #007bff;
-      font-weight: 600;
-      cursor: default;
-    }
+        .schedule-buttons button.active,
+        .material-toggle button.active {
+            background: #007bff;
+            font-weight: 600;
+            cursor: default;
+        }
 
-    .unit-toggle {
-      display: flex;
-      justify-content: center;
-      gap: 15px;
-      margin-bottom: 15px;
-    }
+        .unit-toggle {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
 
-    .unit-toggle label {
-      font-weight: 500;
-      cursor: pointer;
-      user-select: none;
-      font-size: 0.95em;
-      color: #444;
-    }
+        .unit-toggle label {
+            font-weight: 500;
+            cursor: pointer;
+            user-select: none;
+            font-size: 0.95em;
+            color: #444;
+        }
 
-    .unit-toggle input[type="radio"] {
-      margin-right: 6px;
-      cursor: pointer;
-    }
+        .unit-toggle input[type="radio"] {
+            margin-right: 6px;
+            cursor: pointer;
+        }
 
-    .db-display,
-    .result {
-      font-size: 1.15em;
-      color: #222;
-      margin-top: 10px;
-      font-weight: 600;
-    }
-     .footer {
-      text-align: center;
-      font-size: 11px;
-      margin-top: 0;
-      padding: 0.5rem;
-    }
+        .db-display,
+        .result {
+            font-size: 1.15em;
+            color: #222;
+            margin-top: 10px;
+            font-weight: 600;
+        }
 
-  </style>
+        .footer {
+            text-align: center;
+            font-size: 11px;
+            margin-top: 0;
+            padding: 0.5rem;
+        }
+    </style>
 </head>
+
 <body>
-  <div class="container">
-    <h1>メーター・重量見積計算機</h1>
+    <div class="container">
+        <h1>メーター・重量見積計算機</h1>
 
-     <div class="footer">
-      <a href="https://atsu3sh1n1.github.io/yumikou/" target="_blank">Created by YUMIKOU Inc.</a>
+        <div class="footer">
+            <a href="https://atsu3sh1n1.github.io/yumikou/" target="_blank">Created by YUMIKOU Inc.</a>
+        </div>
+
+        <div class="form-group">
+            <label for="size">サイズ（呼び径 A）:</label>
+            <select id="size" name="size">
+                <option value="25">25A</option>
+                <option value="32">32A</option>
+                <option value="40">40A</option>
+                <option value="50">50A</option>
+                <option value="65">65A</option>
+                <option value="80">80A</option>
+                <option value="100">100A</option>
+                <option value="125">125A</option>
+                <option value="150">150A</option>
+                <option value="200">200A</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="pipeLength">配管メーター数:</label>
+            <input type="number" inputmode="numeric" id="pipeLength" name="pipeLength" placeholder="0" min="0" />
+        </div>
+
+        <div class="unit-toggle" aria-label="単価タイプ選択">
+            <label>
+                <input type="radio" name="unitType" value="meter" checked /> メーター単価 (円/m)
+            </label>
+            <label>
+                <input type="radio" name="unitType" value="weight" /> 重量単価 (円/kg)
+            </label>
+        </div>
+
+        <div class="form-group">
+            <label for="unitPrice" id="unitPriceLabel">メーター単価 (円/m):</label>
+            <input type="number" inputmode="numeric" pattern="[0-9]*" id="unitPrice" name="unitPrice" value="3000"
+                min="0" />
+        </div>
+
+        <div class="schedule-buttons" role="group" aria-label="スケジュール選択">
+            <button id="btnSCH20" class="active" onclick="setSchedule('SCH20')">SCH20</button>
+            <button id="btnSCH40" onclick="setSchedule('SCH40')">SCH40</button>
+            <button id="btnSCH80" onclick="setSchedule('SCH80')">SCH80</button>
+        </div>
+
+        <div class="material-toggle">
+            <button id="btnSteel" class="active" onclick="setMaterial('steel')">鉄</button>
+            <button id="btnStainless" onclick="setMaterial('stainless')">ステンレス</button>
+        </div>
+
+        <div class="db-display" id="pipeWeight">配管重量: 0 kg</div>
+        <div class="result" id="pipeCost">配管金額: ¥0</div>
     </div>
-
-    <div class="form-group">
-      <label for="size">サイズ（呼び径 A）:</label>
-      <select id="size" name="size">
-        <option value="25">25A</option>
-        <option value="32">32A</option>
-        <option value="40">40A</option>
-        <option value="50">50A</option>
-        <option value="65">65A</option>
-        <option value="80">80A</option>
-        <option value="100">100A</option>
-        <option value="125">125A</option>
-        <option value="150">150A</option>
-        <option value="200">200A</option>
-      </select>
-    </div>
-
-    <div class="form-group">
-      <label for="pipeLength">配管メーター数:</label>
-      <input type="number" inputmode="numeric" id="pipeLength" name="pipeLength" placeholder="0" min="0" />
-    </div>
-
-    <div class="unit-toggle" aria-label="単価タイプ選択">
-      <label>
-        <input type="radio" name="unitType" value="meter" checked /> メーター単価 (円/m)
-      </label>
-      <label>
-        <input type="radio" name="unitType" value="weight" /> 重量単価 (円/kg)
-      </label>
-    </div>
-
-    <div class="form-group">
-      <label for="unitPrice" id="unitPriceLabel">メーター単価 (円/m):</label>
-      <input type="number" inputmode="numeric" pattern="[0-9]*" id="unitPrice" name="unitPrice" value="3000" min="0" />
-    </div>
-
-    <div class="schedule-buttons" role="group" aria-label="スケジュール選択">
-      <button id="btnSCH10" class="active" onclick="setSchedule('SCH10')">SCH10</button>
-      <button id="btnSCH40" onclick="setSchedule('SCH40')">SCH40</button>
-      <button id="btnSCH80" onclick="setSchedule('SCH80')">SCH80</button>
-    </div>
-
-<div class="material-toggle">
-  <button id="btnSteel" class="active" onclick="setMaterial('steel')">鉄</button>
-  <button id="btnStainless" onclick="setMaterial('stainless')">ステンレス</button>
-</div>
-
-<div class="db-display" id="pipeWeight">配管重量: 0 kg</div>
-<div class="result" id="pipeCost">配管金額: ¥0</div>
-</div>
 
 <script>
   const weightPerMeter = {
-    "25": { sch10: 2.72, sch40: 3.3, sch80: 4.3, sus10: 2.59, sus40: 3.1, sus80: 4.0 },
-    "32": { sch10: 4.08, sch40: 5.1, sch80: 7.0, sus10: 3.9, sus40: 4.7, sus80: 6.4 },
-    "40": { sch10: 5.42, sch40: 6.8, sch80: 8.9, sus10: 5.1, sus40: 5.8, sus80: 7.9 },
-    "50": { sch10: 7.94, sch40: 10.1, sch80: 13.2, sus10: 7.3, sus40: 7.7, sus80: 10.4 },
-    "65": { sch10: 11.6, sch40: 14.5, sch80: 19.0, sus10: 11.0, sus40: 12.2, sus80: 16.2 },
-    "80": { sch10: 13.7, sch40: 17.2, sch80: 22.4, sus10: 13.3, sus40: 15.0, sus80: 19.4 },
-    "100": { sch10: 19.8, sch40: 24.3, sch80: 31.7, sus10: 18.1, sus40: 21.1, sus80: 27.3 },
-    "125": { sch10: 24.3, sch40: 29.8, sch80: 38.8, sus10: 23.2, sus40: 27.8, sus80: 35.8 },
-    "150": { sch10: 29.0, sch40: 35.5, sch80: 45.8, sus10: 27.8, sus40: 35.1, sus80: 42.7 },
-    "200": { sch10: 38.9, sch40: 48.6, sch80: 62.5, sus10: 37.2, sus40: 51.8, sus80: 60.9 }
+    "25": { sch20: 2.72, sch40: 3.3, sch80: 4.3, sus20: 2.67, sus40: 2.51, sus80: 3.23 },
+    "32": { sch20: 4.08, sch40: 5.1, sch80: 7.0, sus20: 3.42, sus40: 3.40, sus80: 4.62 },
+    "40": { sch20: 5.42, sch40: 6.8, sch80: 8.9, sus20: 3.93, sus40: 4.07, sus80: 5.50 },
+    "50": { sch20: 7.94, sch40: 10.1, sch80: 13.2, sus20: 5.32, sus40: 5.41, sus80: 7.47 },
+    "65": { sch20: 11.6, sch40: 14.5, sch80: 19.0, sus20: 7.53, sus40: 9.06, sus80: 12.1 },
+    "80": { sch20: 13.7, sch40: 17.2, sch80: 22.4, sus20: 8.86, sus40: 11.3, sus80: 15.8 },
+    "100": { sch20: 19.8, sch40: 24.3, sch80: 31.7, sus20: 12.3, sus40: 15.9, sus80: 22.1 },
+    "125": { sch20: 24.3, sch40: 29.8, sch80: 38.8, sus20: 15.1, sus40: 21.7, sus80: 30.5 },
+    "150": { sch20: 29.0, sch40: 35.5, sch80: 45.8, sus20: 19.6, sus40: 27.7, sus80: 41.9 },
+    "200": { sch20: 38.9, sch40: 48.6, sch80: 62.5, sus20: 30.2, sus40: 41.5, sus80: 62.7 }
   };
 
-  // 呼び径ごとの倍率（例。サイズに応じて1倍〜4.6倍など）
   const sizeMultiplier = {
     "25": 1.00,
     "32": 1.12,
@@ -215,7 +217,7 @@
     "200": 4.60
   };
 
-  let currentSchedule = 'SCH10';
+  let currentSchedule = 'SCH20';
   let currentUnitType = 'meter';
   let currentMaterial = 'steel';
 
@@ -249,19 +251,18 @@
     const length = parseFloat(document.getElementById("pipeLength").value) || 0;
     const price = parseFloat(document.getElementById("unitPrice").value) || 0;
 
-    const schKey = currentSchedule.toLowerCase(); // ex: "sch10"
-    const baseWeight = weightPerMeter[size].sch10;
+    const schKey = currentSchedule.toLowerCase(); // e.g., "sch20"
+    const baseWeight = weightPerMeter[size].sch20; // 固定基準
 
     let materialKey;
     if (currentMaterial === 'steel') {
-      materialKey = schKey; // "sch10", "sch40", "sch80"
+      materialKey = schKey;
     } else {
-      materialKey = 'sus' + schKey.slice(3); // "sus10", "sus40", "sus80"
+      materialKey = 'sus' + schKey.slice(3);
     }
 
     const actualWeight = weightPerMeter[size][materialKey];
     const weightRatio = actualWeight / baseWeight;
-
     const weight = length * actualWeight;
 
     let cost;
@@ -275,7 +276,6 @@
       cost *= 1.5; // ステンレスは価格1.5倍
     }
 
-    // 呼び径の倍率を最後に乗算（ここが追加部分）
     cost *= sizeMultiplier[size];
 
     document.getElementById("pipeWeight").textContent = `配管重量: ${weight.toFixed(2)} kg`;
@@ -285,4 +285,5 @@
   calculate();
 </script>
 </body>
+
 </html>
