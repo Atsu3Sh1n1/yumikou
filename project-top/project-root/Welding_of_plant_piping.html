@@ -1,22 +1,15 @@
 <!DOCTYPE html>
 <html lang="ja">
-
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-  <meta name="robots" content="index, follow" />
   <title>プラント工事配管溶接現場DB重量見積計算機｜有限会社弓工</title>
-  <link rel="apple-touch-icon" href="images/icon.webp">
-  <link rel="apple-touch-icon" sizes="180x180" href="images/icon.webp">
-  <link rel="apple-touch-icon" sizes="152x152" href="images/icon.webp">
-  <link rel="apple-touch-icon" sizes="120x120" href="images/icon.webp">
-  <link rel="apple-touch-icon" sizes="76x76" href="images/icon.webp">
-  <link rel="icon" href="images/icon.webp" type="image/x-icon">
-  <link rel="icon" href="images/icon.webp" />
+  <link rel="icon" href="images/icon.webp" type="image/x-icon" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <style>
     body {
-      margin: 0 0 0 0;
+      margin: 0;
       padding: 20px 0;
       background: #f9f9f9;
       font-family: sans-serif;
@@ -27,29 +20,82 @@
       width: 100%;
       max-width: 800px;
       height: 800px;
-      margin: 0 auto 0;
+      margin: 0 auto 30px;
       border: none;
+    }
+
+    .pdf-button {
+      display: block;
+      margin: 20px auto;
+      padding: 10px 20px;
+      background-color: #4CAF50;
+      color: white;
+      font-size: 16px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .pdf-button:hover {
+      background-color: #45a049;
     }
   </style>
 </head>
 
 <body>
 
-  <iframe src="estimate.html" loading="lazy"></iframe>
+  <!-- 各 iframe にIDをつける -->
+  <iframe id="app1" src="estimate.html" loading="lazy"></iframe>
   <div style="text-align: center;">
     <a href="pipe.html">説明書</a>
   </div>
-  <iframe src="Pipe_Weight.html" loading="lazy"></iframe>
+
+  <iframe id="app2" src="Pipe_Weight.html" loading="lazy"></iframe>
   <div style="text-align: center;">
     <a href="db_manual.html">説明書</a>
   </div>
-  <iframe src="welding_cost_calculator.html" loading="lazy"></iframe>
+
+  <iframe id="app3" src="welding_cost_calculator.html" loading="lazy"></iframe>
+
+  <!-- PDF出力ボタン -->
+  <button class="pdf-button" onclick="generatePDF()">試作PDF出力、調整中</button>
 
   <footer style="text-align:center; padding:0.5rem;">
     <a href="https://atsu3sh1n1.github.io/yumikou/" style="color:#000; text-decoration:none;">
       有限会社弓工 All rights reserved.
     </a>
   </footer>
-</body>
 
+  <script>
+    async function generatePDF() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+      const iframes = [
+        { id: "app1", label: "足場見積" },
+        { id: "app2", label: "重量見積" },
+        { id: "app3", label: "溶接見積" }
+      ];
+
+      let y = 10;
+
+      for (const frame of iframes) {
+        try {
+          const data = document.getElementById(frame.id).contentWindow.getEstimateData();
+          doc.setFontSize(14);
+          doc.text(`${frame.label}`, 10, y);
+          doc.setFontSize(12);
+          doc.text(`小計: ¥${data.subtotal.toLocaleString()}`, 10, y + 10);
+          doc.text(`総工数: ${data.manhour}人日`, 10, y + 20);
+          y += 35;
+        } catch (e) {
+          doc.setFontSize(12);
+          doc.text(`${frame.label} のデータ取得に失敗しました。`, 10, y);
+          y += 20;
+        }
+      }
+
+      doc.save("まとめ見積もり.pdf");
+    }
+  </script>
+</body>
 </html>
