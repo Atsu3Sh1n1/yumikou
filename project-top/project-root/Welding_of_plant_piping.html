@@ -232,9 +232,40 @@
         }
       });
 
+       // 有効なフレームだけスクリーンショット
+      for (const frame of validFrames) {
+        try {
+          const iframe = document.getElementById(frame.id);
+          const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+
+          const canvas = await html2canvas(iframeDoc.body, { scale: 2, useCORS: true });
+          const imgData = canvas.toDataURL('image/png');
+          const imgProps = doc.getImageProperties(imgData);
+          const pdfWidth = PAGE_WIDTH - MARGIN * 2;
+          const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+
+          doc.addPage();
+          doc.setFontSize(14);
+          doc.text(frame.label, MARGIN, 40);
+          doc.addImage(
+            imgData,
+            'PNG',
+            MARGIN,
+            60,
+            pdfWidth,
+            pdfHeight > (PAGE_HEIGHT - 100) ? PAGE_HEIGHT - 100 : pdfHeight
+          );
+          addFooter(doc.internal.getCurrentPageInfo().pageNumber, doc.internal.getNumberOfPages());
+        } catch (err) {
+          doc.addPage();
+          doc.text(`${frame.label} - スクリーンショット取得失敗`, MARGIN, 50);
+        }
+      }
+
       doc.save("YUMIKOU Inc.pdf");
     }
   </script>
+
 
 </body>
 
