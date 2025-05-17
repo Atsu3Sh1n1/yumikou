@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>プラント配管見積もりマニュアル</title>
+    <style>
+        :root {
+            --bg-color: #1e1e1e;
+            --card-color: #2c2c2c;
+            --text-color: #f0f0f0;
+            --accent: #4db8ff;
+            --font: 'Segoe UI', sans-serif;
+        }
+
+        body {
+            margin: 0;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: var(--font);
+            line-height: 1.6;
+            padding: 2rem;
+        }
+
+        h1,
+        h2,
+        h3 {
+            color: var(--accent);
+        }
+
+        .container {
+            max-width: 900px;
+            margin: auto;
+        }
+
+        .card {
+            background-color: var(--card-color);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        }
+
+        code {
+            background: #333;
+            padding: 0.2rem 0.4rem;
+            border-radius: 5px;
+            font-size: 0.9rem;
+        }
+
+        ul,
+        ol {
+            padding-left: 1.5rem;
+        }
+
+        a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>プラント配管見積もりマニュアル</h1>
+
+        <div class="card">
+            <h2>ステップ1：前提情報の整理</h2>
+            <ul>
+                <li><strong>配管図の有無：</strong> P&ID、ISO配管図</li>
+                <li><strong>流体の種類：</strong> 蒸気、水、薬品など</li>
+                <li><strong>使用材質：</strong> SGP、STPG、SUS304 等</li>
+                <li><strong>スケジュール：</strong> Sch.10 / 40 / 80</li>
+                <li><strong>圧力・温度条件：</strong> 耐圧材料が必要か判断</li>
+                <li><strong>施工条件：</strong> 屋外・屋内、高所作業の有無</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h2>ステップ2：数量の拾い出し</h2>
+            <ol>
+                <li><strong>配管延長：</strong> 口径別にメートル単位で算出</li>
+                <li><strong>継手の種類と数：</strong> エルボ、ティー、ユニオンなど</li>
+                <li><strong>バルブ類：</strong> 呼び径・種類ごとに分類</li>
+                <li><strong>溶接点数：</strong> 口径・材質・スケジュールに応じて係数設定</li>
+                <li><strong>支持金具：</strong> サポート点数と取付方法</li>
+                <li><strong>非破壊検査範囲：</strong> PT/RT範囲を確認</li>
+            </ol>
+        </div>
+
+        <div class="card">
+            <h2>ステップ3：単価・工数設定と見積集計</h2>
+            <ul>
+                <li><strong>材料費：</strong> 鋼管・継手・バルブなどの単価を反映</li>
+                <li><strong>溶接DB数設定：</strong> 材質・スケジュールごとに倍率</li>
+                <li><strong>工数換算：</strong> DB数 × 単位作業時間（人分）</li>
+                <li><strong>現場施工費：</strong> 高所・屋外は係数で加算</li>
+                <li><strong>管理・利益：</strong> 安全費・間接費・利益を15〜30％加算</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>制作者情報</h2>
+            <p><strong>有限会社 弓工（YUMIKOU Inc.）</strong><br>
+                <a href="https://atsu3sh1n1.github.io/yumikou/"
+                    target="_blank">https://atsu3sh1n1.github.io/yumikou/</a>
+            </p>
+        </div>
+</body>
+
+</html>

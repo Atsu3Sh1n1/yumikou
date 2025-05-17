@@ -43,6 +43,9 @@
 </head>
 
 <body>
+  <div style="text-align: center;">
+    <a href="manual.html">見積もりマニュアル</a>
+  </div>
 
   <!-- 各 iframe にIDをつける -->
   <iframe id="app1" src="estimate.html" loading="lazy"></iframe>
@@ -66,36 +69,40 @@
     </a>
   </footer>
 
-  <script>
-    async function generatePDF() {
-      const { jsPDF } = window.jspdf;
-      const doc = new jsPDF();
-      const iframes = [
-        { id: "app1", label: "足場見積" },
-        { id: "app2", label: "重量見積" },
-        { id: "app3", label: "溶接見積" }
-      ];
+<script>
+  async function generatePDF() {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
 
-      let y = 10;
+    const iframes = [
+      { id: "app1", label: "Scaffold Estimate" },
+      { id: "app2", label: "Weight Estimate" },
+      { id: "app3", label: "Welding Estimate" }
+    ];
 
-      for (const frame of iframes) {
-        try {
-          const data = document.getElementById(frame.id).contentWindow.getEstimateData();
-          doc.setFontSize(14);
-          doc.text(`${frame.label}`, 10, y);
-          doc.setFontSize(12);
-          doc.text(`小計: ¥${data.subtotal.toLocaleString()}`, 10, y + 10);
-          doc.text(`総工数: ${data.manhour}人日`, 10, y + 20);
-          y += 35;
-        } catch (e) {
-          doc.setFontSize(12);
-          doc.text(`${frame.label} のデータ取得に失敗しました。`, 10, y);
-          y += 20;
-        }
+    let y = 10;
+
+    for (const frame of iframes) {
+      try {
+        const data = document.getElementById(frame.id).contentWindow.getEstimateData();
+
+        doc.setFontSize(14);
+        doc.text(`${frame.label}`, 10, y);
+
+        doc.setFontSize(12);
+        doc.text(`Subtotal: ¥${data.subtotal.toLocaleString()}`, 10, y + 10);
+        doc.text(`Manhour: ${data.manhour} days`, 10, y + 20);
+
+        y += 35;
+      } catch (e) {
+        doc.setFontSize(12);
+        doc.text(`${frame.label} data unavailable.`, 10, y);
+        y += 20;
       }
-
-      doc.save("まとめ見積もり.pdf");
     }
-  </script>
+
+    doc.save("estimate_summary.pdf");
+  }
+</script>
 </body>
 </html>

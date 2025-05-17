@@ -7,20 +7,19 @@
   <meta name="robots" content="index, follow" />
   <title>簡易現場工事見積金額計算機｜有限会社弓工</title>
   <link rel="icon" href="images/icon.webp" type="image/x-icon" />
-  <style>
-    body {
-      font-family: sans-serif;
-      background-color: #f9f9f9;
+<style>
+    /* iframe内の空白を消すため */
+    html, body {
       margin: 0;
       padding: 0;
-      /* 適宜調整 */
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
-      /* 上に寄せる */
+      height: 100%;
+      overflow: hidden; /* 余計なスクロールバー防止 */
+      font-family: sans-serif;
+      background-color: #f9f9f9;
     }
-
-
+    body {
+      display: block; /* flexを解除 */
+    }
     .container {
       background: #fff;
       padding: 25px 40px;
@@ -28,6 +27,7 @@
       border-radius: 8px;
       box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
       width: 300px;
+      margin: 0 auto; /* 中央寄せ */
     }
 
     h2 {
@@ -88,8 +88,7 @@
     button[type="submit"]:hover {
       background-color: #45a049;
     }
-  </style>
-</head>
+  </style></head>
 
 <body>
   <div class="container">
