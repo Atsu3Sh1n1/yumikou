@@ -155,7 +155,20 @@
     <div class="result" id="totalPrice">合計金額: ¥0</div>
     <div class="db-display" id="totalDB">合計DB: 0</div>
   </div>
+
   <script>
+    window.getEstimateData = getEstimateData;
+  </script>
+
+  <script>
+
+    function getEstimateData() {
+      return {
+        subtotal: 1500000, // 数値
+        manhour: 20        // 数値
+      };
+    }
+
     // DB換算テーブル
     const dbTable = {
       "25": { straight: 1, elbow: 2, tee: 3 },
