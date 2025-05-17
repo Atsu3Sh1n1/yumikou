@@ -120,8 +120,8 @@
           const data = iframe.contentWindow.getEstimateData();
 
           const manhourOrDB = frame.id === 'app3'
-            ? `${data.totalDB?.toFixed(1) ?? 'N/A'} DB` // Welding Estimate だけDB表示
-            : `${data.manhour ?? 'N/A'} days`;          // それ以外は通常表示
+            ? `${data.totalDB?.toFixed(1) ?? 'N/A'} DB`
+            : `${data.manhour ?? 'N/A'} days`;
 
           rows.push([
             frame.label,
@@ -135,6 +135,20 @@
         }
       }
 
+      // --- トータル金額の繰り上げ処理 ---
+      const roundDownTotal = (amount) => {
+        if (amount < 1_000_000) {
+          return Math.floor(amount / 10_000) * 10_000;
+        } else if (amount < 10_000_000) {
+          return Math.floor(amount / 100_000) * 100_000;
+        } else {
+          return Math.floor(amount / 1_000_000) * 1_000_000;
+        }
+      };
+
+      const roundedTotal = roundDownTotal(grandTotal);
+
+
       // トータル金額表示
       const totalBoxY = HEADER_HEIGHT + 10;
       doc.setFillColor(255, 255, 200);
@@ -144,7 +158,7 @@
       doc.setFont("helvetica", "bold");
       doc.text("Total Cost", MARGIN + 10, totalBoxY + 20);
       doc.setFont("helvetica", "normal");
-      doc.text(`¥${grandTotal.toLocaleString()}`, PAGE_WIDTH - MARGIN - 10, totalBoxY + 20, { align: 'right' });
+      doc.text(`¥${roundedTotal.toLocaleString()}`, PAGE_WIDTH - MARGIN - 10, totalBoxY + 20, { align: 'right' });
 
       // テーブル出力
       doc.autoTable({
