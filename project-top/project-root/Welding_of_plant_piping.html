@@ -138,8 +138,8 @@
             frame.id === 'app3'
               ? `${data.totalDB?.toFixed(1) ?? 'N/A'} DB`
               : frame.id === 'app1'
-                ? `Total Person-Days:${data.manhour ?? 'N/A'} `  // app1だけ「人日」
-                : `${data.manhour ?? 'N/A'} days`; // その他は「days」
+                ? `${data.manhour ?? 'N/A'} Total Person-Days`  // app1だけ「人日」
+                : `${data.manhour ?? 'N/A'} `; // その他は「days」
 
 
           rows.push([
