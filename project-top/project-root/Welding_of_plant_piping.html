@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
@@ -7,6 +8,10 @@
   <link rel="icon" href="images/icon.webp" type="image/x-icon" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+
   <style>
     body {
       margin: 0;
@@ -69,40 +74,92 @@
     </a>
   </footer>
 
+<button onclick="generatePDF()">PDFをダウンロード</button>
+
 <script>
   async function generatePDF() {
     const { jsPDF } = window.jspdf;
-    const doc = new jsPDF();
+    const doc = new jsPDF({ unit: 'pt', format: 'a4' });
 
+    // --- 定数定義 ---
+    const PAGE_WIDTH = doc.internal.pageSize.getWidth();
+    const MARGIN = 40;
+    const HEADER_HEIGHT = 60;
+    const FOOTER_HEIGHT = 30;
+    const ACCENT_COLOR = '#003366';  // ダークブルー
+
+    // --- ヘッダー描画 ---
+    // 背景
+    doc.setFillColor(ACCENT_COLOR);
+    doc.rect(0, 0, PAGE_WIDTH, HEADER_HEIGHT, 'F');
+    // ロゴ（Base64 or URL）
+    // doc.addImage(logoData, 'PNG', MARGIN, 10, 100, 40);
+    // タイトル
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(18);
+    doc.setTextColor(255, 255, 255);
+    doc.text('INTERNATIONAL TECH CORP.', MARGIN + 110, 38);
+
+    // --- フッター描画関数 ---
+    const addFooter = (pageNum, totalPages) => {
+      const y = doc.internal.pageSize.getHeight() - FOOTER_HEIGHT + 10;
+      doc.setFontSize(10);
+      doc.setTextColor(150);
+      doc.text(`Page ${pageNum} / ${totalPages}`, PAGE_WIDTH - MARGIN, y, { align: 'right' });
+    };
+
+    // --- メインコンテンツ（テーブル） ---
+    // iframe からデータ取得
     const iframes = [
       { id: "app1", label: "Scaffold Estimate" },
       { id: "app2", label: "Weight Estimate" },
       { id: "app3", label: "Welding Estimate" }
     ];
-
-    let y = 10;
+    const rows = [];
 
     for (const frame of iframes) {
       try {
         const data = document.getElementById(frame.id).contentWindow.getEstimateData();
-
-        doc.setFontSize(14);
-        doc.text(`${frame.label}`, 10, y);
-
-        doc.setFontSize(12);
-        doc.text(`Subtotal: ¥${data.subtotal.toLocaleString()}`, 10, y + 10);
-        doc.text(`Manhour: ${data.manhour} days`, 10, y + 20);
-
-        y += 35;
+        rows.push([
+          frame.label,
+          `¥${data.subtotal.toLocaleString()}`,
+          `${data.manhour} days`
+        ]);
       } catch (e) {
-        doc.setFontSize(12);
-        doc.text(`${frame.label} data unavailable.`, 10, y);
-        y += 20;
+        rows.push([frame.label, "Unavailable", "N/A"]);
       }
     }
 
-    doc.save("estimate_summary.pdf");
+    // テーブル描画
+    doc.autoTable({
+      startY: HEADER_HEIGHT + 20,
+      margin: { left: MARGIN, right: MARGIN },
+      head: [['Estimate Type', 'Subtotal', 'Manhour']],
+      body: rows,
+      theme: 'grid',
+      headStyles: {
+        fillColor: ACCENT_COLOR,
+        textColor: 255,
+        fontStyle: 'bold',
+      },
+      styles: {
+        font: 'helvetica',
+        fontSize: 11,
+        cellPadding: 8,
+      },
+      alternateRowStyles: { fillColor: [245, 245, 245] },
+      didDrawPage: function (data) {
+        // フッターを各ページに追加
+        const pageCount = doc.internal.getNumberOfPages();
+        const currentPage = doc.internal.getCurrentPageInfo().pageNumber;
+        addFooter(currentPage, pageCount);
+      }
+    });
+
+    // --- ファイル出力 ---
+    doc.save("ITC_Estimate_Summary.pdf");
   }
 </script>
 </body>
+
 </html>
