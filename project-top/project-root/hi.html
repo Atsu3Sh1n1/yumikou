@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>レッカー・高所作業車 入力</title>
+    <style>
+        :root {
+            --bg-color: #f8f9fa;
+            --card-color: #ffffff;
+            --text-color: #333;
+            --accent: #2c7be5;
+            --font: 'Noto Sans JP', sans-serif;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            font-family: var(--font);
+            color: var(--text-color);
+        }
+
+        .center-box {
+            max-width: 400px;
+            margin: 2rem auto;
+            background-color: var(--card-color);
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            padding: 1rem;
+        }
+
+        h2 {
+            text-align: center;
+            color: var(--accent);
+            margin-bottom: 1rem;
+        }
+
+        .row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.8rem;
+            font-size: 14px;
+        }
+
+        input[type="number"] {
+            width: 60px;
+            padding: 0.3rem;
+            text-align: right;
+        }
+
+        .total {
+            text-align: center;
+            margin-top: 1.5rem;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #e53935;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="center-box">
+        <h2>重機 日数入力</h2>
+        <div class="row"><label>10t</label><input type="number" min="0" value="0" data-unit="65000" onchange="calc()">
+        </div>
+        <div class="row"><label>25t</label><input type="number" min="0" value="0" data-unit="90000" onchange="calc()">
+        </div>
+        <div class="row"><label>50t</label><input type="number" min="0" value="0" data-unit="130000" onchange="calc()">
+        </div>
+        <div class="row"><label>100t</label><input type="number" min="0" value="0" data-unit="250000" onchange="calc()">
+        </div>
+        <div class="row"><label>回送</label><input type="number" min="0" value="0" data-unit="40000" onchange="calc()">
+        </div>
+        <div class="row"><label>高車8</label><input type="number" min="0" value="0" data-unit="15000" onchange="calc()">
+        </div>
+        <div class="row"><label>高車17</label><input type="number" min="0" value="0" data-unit="35000" onchange="calc()">
+        </div>
+        <div class="row"><label>高車20</label><input type="number" min="0" value="0" data-unit="30000" onchange="calc()">
+        </div>
+        <div class="row"><label>高車27</label><input type="number" min="0" value="0" data-unit="50000" onchange="calc()">
+        </div>
+        <div class="row"><label>オペ</label><input type="number" min="0" value="0" data-unit="15000" onchange="calc()">
+        </div>
+
+        <div class="total">合計: <span id="total">0</span> 円</div>
+    </div>
+
+    <script>
+        function calc() {
+            let total = 0;
+            const inputs = document.querySelectorAll('input[type="number"]');
+            inputs.forEach(input => {
+                const unit = parseInt(input.dataset.unit);
+                const val = parseInt(input.value) || 0;
+                total += unit * val;
+            });
+            document.getElementById('total').textContent = total.toLocaleString();
+
+            // 親ウィンドウに送信（埋め込み用）
+            if (window.parent && window.parent !== window) {
+                window.parent.postMessage({ type: 'reckerTotal', total: total }, '*');
+            }
+        }
+
+        // ✅ 追加：親ページが呼び出すための関数
+        function getEstimateData() {
+            let subtotal = 0;
+            const inputs = document.querySelectorAll('input[type="number"]');
+            inputs.forEach(input => {
+                const unit = parseInt(input.dataset.unit);
+                const val = parseInt(input.value) || 0;
+                subtotal += unit * val;
+            });
+
+            return {
+                subtotal: subtotal,
+                manhour: null  // 特になければ null でOK
+            };
+        }
+
+        // 初回計算
+        calc();
+
+        // ✅ グローバルに公開（iframe.parent からアクセスできるように）
+        window.getEstimateData = getEstimateData;
+    </script>
+    </script>
+</body>
+
+</html>
