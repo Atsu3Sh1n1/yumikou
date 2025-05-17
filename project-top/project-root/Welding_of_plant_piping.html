@@ -79,120 +79,126 @@
 
 
   <script>
-async function generatePDF() {
-  const { jsPDF } = window.jspdf;
-  const doc = new jsPDF({ unit: 'pt', format: 'a4' });
+    async function generatePDF() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF({ unit: 'pt', format: 'a4' });
 
-  const PAGE_WIDTH = doc.internal.pageSize.getWidth();
-  const PAGE_HEIGHT = doc.internal.pageSize.getHeight();
-  const MARGIN = 40;
-  const HEADER_HEIGHT = 60;
-  const FOOTER_HEIGHT = 30;
-  const ACCENT_COLOR = '#003366';
+      const PAGE_WIDTH = doc.internal.pageSize.getWidth();
+      const PAGE_HEIGHT = doc.internal.pageSize.getHeight();
+      const MARGIN = 40;
+      const HEADER_HEIGHT = 60;
+      const FOOTER_HEIGHT = 30;
+      const ACCENT_COLOR = '#003366';
 
-  const logoBase64 = ""; // 必要ならロゴ画像のBase64
-  doc.setFillColor(ACCENT_COLOR);
-  doc.rect(0, 0, PAGE_WIDTH, HEADER_HEIGHT, 'F');
-  if (logoBase64) doc.addImage(logoBase64, 'PNG', 170, 22.5, 20, 20);
-  doc.setFontSize(20);
-  doc.setTextColor(255, 255, 255);
-  doc.text('YUMIKOU CO.,LTD.', MARGIN + 160, 40);
+      const logoBase64 = ""; // 必要ならロゴ画像のBase64
+      doc.setFillColor(ACCENT_COLOR);
+      doc.rect(0, 0, PAGE_WIDTH, HEADER_HEIGHT, 'F');
+      if (logoBase64) doc.addImage(logoBase64, 'PNG', 170, 22.5, 20, 20);
+      doc.setFontSize(20);
+      doc.setTextColor(255, 255, 255);
+      doc.text('YUMIKOU CO.,LTD.', MARGIN + 160, 40);
 
-  const addFooter = (pageNum, totalPages) => {
-    const y = doc.internal.pageSize.getHeight() - FOOTER_HEIGHT + 10;
-    doc.setFontSize(10);
-    doc.setTextColor(150);
-    doc.text(`Page ${pageNum} / ${totalPages}`, PAGE_WIDTH - MARGIN, y, { align: 'right' });
-  };
+      const addFooter = (pageNum, totalPages) => {
+        const y = doc.internal.pageSize.getHeight() - FOOTER_HEIGHT + 10;
+        doc.setFontSize(10);
+        doc.setTextColor(150);
+        doc.text(`Page ${pageNum} / ${totalPages}`, PAGE_WIDTH - MARGIN, y, { align: 'right' });
+      };
 
-  const iframes = [
-    { id: "app1", label: "Scaffold Estimate" },
-    { id: "app2", label: "Weight Estimate" },
-    { id: "app3", label: "Welding Estimate" }
-  ];
+      const iframes = [
+        { id: "app1", label: "Scaffold Estimate" },
+        { id: "app2", label: "Weight Estimate" },
+        { id: "app3", label: "Welding Estimate" }
+      ];
 
-  const rows = [];
-  let grandTotal = 0;
+      const rows = [];
+      let grandTotal = 0;
 
-  for (const frame of iframes) {
-    try {
-      const iframe = document.getElementById(frame.id);
-      const data = iframe.contentWindow.getEstimateData();
-      rows.push([
-        frame.label,
-        `¥${data.subtotal.toLocaleString()}`,
-        `${data.manhour} days`
-      ]);
-      grandTotal += data.subtotal;
-    } catch (e) {
-      rows.push([frame.label, "Unavailable", "N/A"]);
-    }
-  }
+      for (const frame of iframes) {
+        try {
+          const iframe = document.getElementById(frame.id);
+          const data = iframe.contentWindow.getEstimateData();
 
-  // トータル金額表示
-  const totalBoxY = HEADER_HEIGHT + 10;
-  doc.setFillColor(255, 255, 200);
-  doc.roundedRect(MARGIN, totalBoxY, PAGE_WIDTH - MARGIN * 2, 30, 4, 4, 'F');
-  doc.setTextColor(0);
-  doc.setFontSize(12);
-  doc.setFont("helvetica", "bold");
-  doc.text("Total Cost", MARGIN + 10, totalBoxY + 20);
-  doc.setFont("helvetica", "normal");
-  doc.text(`¥${grandTotal.toLocaleString()}`, PAGE_WIDTH - MARGIN - 10, totalBoxY + 20, { align: 'right' });
+          const manhourOrDB = frame.id === 'app3'
+            ? `${data.totalDB?.toFixed(1) ?? 'N/A'} DB` // Welding Estimate だけDB表示
+            : `${data.manhour ?? 'N/A'} days`;          // それ以外は通常表示
 
-  // テーブル出力
-  doc.autoTable({
-    startY: totalBoxY + 40,
-    margin: { left: MARGIN, right: MARGIN },
-    head: [['Estimate Type', 'Subtotal', 'Manhour']],
-    body: rows,
-    theme: 'grid',
-    headStyles: {
-      fillColor: ACCENT_COLOR,
-      textColor: 255,
-      fontStyle: 'bold',
-    },
-    styles: {
-      font: 'helvetica',
-      fontSize: 11,
-      cellPadding: 8,
-    },
-    alternateRowStyles: { fillColor: [245, 245, 245] },
-    didDrawPage: function (data) {
-      const pageCount = doc.internal.getNumberOfPages();
-      const currentPage = doc.internal.getCurrentPageInfo().pageNumber;
-      addFooter(currentPage, pageCount);
-    }
-  });
+          rows.push([
+            frame.label,
+            `¥${data.subtotal.toLocaleString()}`,
+            manhourOrDB
+          ]);
 
-  // iframeのスクリーンショットを追加
-  for (const frame of iframes) {
-    const iframe = document.getElementById(frame.id);
-    const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+          grandTotal += data.subtotal;
+        } catch (e) {
+          rows.push([frame.label, "Unavailable", "N/A"]);
+        }
+      }
 
-    try {
-      const canvas = await html2canvas(iframeDoc.body, {
-        scale: 2,
-        useCORS: true
+      // トータル金額表示
+      const totalBoxY = HEADER_HEIGHT + 10;
+      doc.setFillColor(255, 255, 200);
+      doc.roundedRect(MARGIN, totalBoxY, PAGE_WIDTH - MARGIN * 2, 30, 4, 4, 'F');
+      doc.setTextColor(0);
+      doc.setFontSize(12);
+      doc.setFont("helvetica", "bold");
+      doc.text("Total Cost", MARGIN + 10, totalBoxY + 20);
+      doc.setFont("helvetica", "normal");
+      doc.text(`¥${grandTotal.toLocaleString()}`, PAGE_WIDTH - MARGIN - 10, totalBoxY + 20, { align: 'right' });
+
+      // テーブル出力
+      doc.autoTable({
+        startY: totalBoxY + 40,
+        margin: { left: MARGIN, right: MARGIN },
+        head: [['Estimate Type', 'Subtotal', 'Manhour']],
+        body: rows,
+        theme: 'grid',
+        headStyles: {
+          fillColor: ACCENT_COLOR,
+          textColor: 255,
+          fontStyle: 'bold',
+        },
+        styles: {
+          font: 'helvetica',
+          fontSize: 11,
+          cellPadding: 8,
+        },
+        alternateRowStyles: { fillColor: [245, 245, 245] },
+        didDrawPage: function (data) {
+          const pageCount = doc.internal.getNumberOfPages();
+          const currentPage = doc.internal.getCurrentPageInfo().pageNumber;
+          addFooter(currentPage, pageCount);
+        }
       });
-      const imgData = canvas.toDataURL('image/png');
-      const imgProps = doc.getImageProperties(imgData);
-      const pdfWidth = PAGE_WIDTH - MARGIN * 2;
-      const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
 
-      doc.addPage();
-      doc.setFontSize(14);
-      doc.text(frame.label, MARGIN, 40);
-      doc.addImage(imgData, 'PNG', MARGIN, 60, pdfWidth, pdfHeight > (PAGE_HEIGHT - 100) ? PAGE_HEIGHT - 100 : pdfHeight);
-      addFooter(doc.internal.getCurrentPageInfo().pageNumber, doc.internal.getNumberOfPages());
-    } catch (err) {
-      doc.addPage();
-      doc.text(`${frame.label} - スクリーンショット取得失敗`, MARGIN, 50);
+      // iframeのスクリーンショットを追加
+      for (const frame of iframes) {
+        const iframe = document.getElementById(frame.id);
+        const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+
+        try {
+          const canvas = await html2canvas(iframeDoc.body, {
+            scale: 2,
+            useCORS: true
+          });
+          const imgData = canvas.toDataURL('image/png');
+          const imgProps = doc.getImageProperties(imgData);
+          const pdfWidth = PAGE_WIDTH - MARGIN * 2;
+          const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+
+          doc.addPage();
+          doc.setFontSize(14);
+          doc.text(frame.label, MARGIN, 40);
+          doc.addImage(imgData, 'PNG', MARGIN, 60, pdfWidth, pdfHeight > (PAGE_HEIGHT - 100) ? PAGE_HEIGHT - 100 : pdfHeight);
+          addFooter(doc.internal.getCurrentPageInfo().pageNumber, doc.internal.getNumberOfPages());
+        } catch (err) {
+          doc.addPage();
+          doc.text(`${frame.label} - スクリーンショット取得失敗`, MARGIN, 50);
+        }
+      }
+
+      doc.save("YUMIKOU Inc.pdf");
     }
-  }
-
-  doc.save("YUMIKOU Inc.pdf");
-}
   </script>
 
 </body>
