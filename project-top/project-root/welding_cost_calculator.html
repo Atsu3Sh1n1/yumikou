@@ -1,5 +1,6 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="ja">
+
 <head>
   <meta charset="UTF-8">
   <title>配管溶接DB見積金額計算機｜有限会社弓工</title>
@@ -14,6 +15,7 @@
       margin: 0;
       padding-top: 0px;
     }
+
     .container {
       background: #fff;
       padding: 20px 40px;
@@ -22,14 +24,17 @@
       box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
       width: 300px;
     }
+
     h2 {
       text-align: center;
       margin-bottom: 2px;
     }
+
     label {
       margin-top: 10px;
       font-weight: bold;
     }
+
     select,
     input[type="number"] {
       width: 100px;
@@ -37,12 +42,14 @@
       margin: 5px 0 10px;
       font-size: 1em;
     }
+
     .form-group {
       display: flex;
       justify-content: space-between;
       align-items: center;
       font-size: 1.2rem;
     }
+
     .result {
       margin-top: 25px;
       font-size: 1.4em;
@@ -50,18 +57,21 @@
       color: green;
       text-align: center;
     }
+
     .db-display {
       font-size: 1em;
       text-align: center;
       margin-top: 10px;
       color: #555;
     }
+
     .footer {
       text-align: center;
       font-size: 11px;
       margin-top: 0;
       padding: 0.5rem;
     }
+
     /* ボタンのスタイル追加 */
     .schedule-btn {
       margin-right: 5px;
@@ -72,11 +82,13 @@
       border-radius: 4px;
       font-size: 0.9em;
     }
+
     .schedule-btn.active {
       background: #4CAF50;
       color: white;
       border-color: #4CAF50;
     }
+
     .additional-multiplier-btn {
       margin-top: 5px;
       padding: 5px 10px;
@@ -86,6 +98,7 @@
       border-radius: 4px;
       font-size: 0.9em;
     }
+
     .additional-multiplier-btn.active {
       background: #2196F3;
       color: white;
@@ -93,6 +106,7 @@
     }
   </style>
 </head>
+
 <body>
   <div class="container">
     <h2>配管溶接DB見積計算機</h2>
@@ -166,24 +180,24 @@
       const elbow = parseInt(document.getElementById("elbowCount").value) || 0;
       const tee = parseInt(document.getElementById("teeCount").value) || 0;
       let baseUnitPrice = parseFloat(document.getElementById("unitPrice").value) || 0;
-      
+
       // 追加補正ボタンが active なら 1.5 倍（SCH系ボタンが該当の場合）
       const isSch40or80 = (currentMultiplier === 1.0 || currentMultiplier === 1.25 || currentMultiplier === 1.5);
-      if(document.getElementById("additionalMultiplierBtn").classList.contains("active") && isSch40or80) {
-          baseUnitPrice *= 1.5;
+      if (document.getElementById("additionalMultiplierBtn").classList.contains("active") && isSch40or80) {
+        baseUnitPrice *= 1.5;
       }
-      
+
       const totalDB =
         (straight * dbTable[size].straight +
-         elbow * dbTable[size].elbow +
-         tee * dbTable[size].tee) * currentMultiplier;
-      
+          elbow * dbTable[size].elbow +
+          tee * dbTable[size].tee) * currentMultiplier;
+
       const totalCost = Math.round(totalDB * baseUnitPrice);
-      
+
       document.getElementById("totalPrice").textContent = `合計金額: ¥${totalCost.toLocaleString()}`;
       document.getElementById("totalDB").textContent = `合計DB: ${totalDB.toFixed(1)}`;
     }
-    
+
     // スケジュールボタンのイベント
     document.querySelectorAll(".schedule-btn").forEach(btn => {
       btn.addEventListener("click", () => {
@@ -193,20 +207,20 @@
         calculate();
       });
     });
-    
+
     // 追加乗数（ステンレス）ボタンのイベント
-    document.getElementById("additionalMultiplierBtn").addEventListener("click", function() {
+    document.getElementById("additionalMultiplierBtn").addEventListener("click", function () {
       this.classList.toggle("active");
       calculate();
     });
-    
+
     // 各 input, select の入力時に再計算
     document.querySelectorAll("select, input").forEach(el => {
       el.addEventListener("input", calculate);
     });
-    
+
     calculate();
-    
+
     // 親ページ用 PDF 出力からも参照できるよう、グローバル関数として定義
     window.getEstimateData = function () {
       const size = document.getElementById("pipeSize").value;
@@ -214,19 +228,19 @@
       const elbow = parseInt(document.getElementById("elbowCount").value) || 0;
       const tee = parseInt(document.getElementById("teeCount").value) || 0;
       let baseUnitPrice = parseFloat(document.getElementById("unitPrice").value) || 0;
-      
+
       const isSch40or80 = (currentMultiplier === 1.0 || currentMultiplier === 1.25 || currentMultiplier === 1.5);
-      if(document.getElementById("additionalMultiplierBtn").classList.contains("active") && isSch40or80) {
-          baseUnitPrice *= 1.5;
+      if (document.getElementById("additionalMultiplierBtn").classList.contains("active") && isSch40or80) {
+        baseUnitPrice *= 1.5;
       }
-      
+
       const totalDB =
         (straight * dbTable[size].straight +
-         elbow * dbTable[size].elbow +
-         tee * dbTable[size].tee) * currentMultiplier;
-      
+          elbow * dbTable[size].elbow +
+          tee * dbTable[size].tee) * currentMultiplier;
+
       const totalCost = Math.round(totalDB * baseUnitPrice);
-      
+
       return {
         appId: 'welding-db',
         subtotal: totalCost,
@@ -235,4 +249,5 @@
     };
   </script>
 </body>
+
 </html>
