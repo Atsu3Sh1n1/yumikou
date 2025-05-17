@@ -240,6 +240,18 @@
     });
   });
 
+  // 施工延長による最大20%割引（100mで20%割引）
+  function getLengthDiscount(length, size, schedule) {
+    if (size === "25" && schedule.toLowerCase() === "sch40" && length === 1) {
+      // 25Aスケ40で長さ1mだけは割引なし
+      return 1;
+    }
+    const maxDiscountRate = 0.20;
+    const discountLengthThreshold = 100;
+    const discountRate = Math.min((length / discountLengthThreshold) * maxDiscountRate, maxDiscountRate);
+    return 1 - discountRate;
+  }
+
   function calculate() {
     const size = document.getElementById("size").value;
     const length = parseFloat(document.getElementById("pipeLength").value) || 0;
@@ -254,14 +266,16 @@
     const baseIndex = pipeSizes.indexOf("25");
     const sizeIndex = pipeSizes.indexOf(size);
     const sizeStep = Math.max(0, sizeIndex - baseIndex);
-    const discountFactor = Math.pow(1 / 1.05, sizeStep);  // サイズが上がるごとに1.1倍割引
+    const discountFactor = Math.pow(1 / 1.05, sizeStep);
+
+    const lengthDiscount = getLengthDiscount(length, size, currentSchedule);
 
     let cost;
     if (currentUnitType === 'meter') {
       const weightRatio = actualWeight / baseWeightSCH40_25;
-      cost = length * price * weightRatio * discountFactor;
+      cost = length * price * weightRatio * discountFactor * lengthDiscount;
     } else {
-      cost = weight * price * discountFactor;
+      cost = weight * price * discountFactor * lengthDiscount;
     }
 
     if (currentMaterial === 'stainless') cost *= 1.5;
@@ -289,17 +303,17 @@
     const sizeStep = Math.max(0, sizeIndex - baseIndex);
     const discountFactor = Math.pow(1 / 1.1, sizeStep);
 
+    const lengthDiscount = getLengthDiscount(length, size, currentSchedule);
+
     let cost;
     if (currentUnitType === 'meter') {
       const weightRatio = actualWeight / baseWeightSCH40_25;
-      cost = length * unitPrice * weightRatio * discountFactor;
+      cost = length * unitPrice * weightRatio * discountFactor * lengthDiscount;
     } else {
-      cost = weight * unitPrice * discountFactor;
+      cost = weight * unitPrice * discountFactor * lengthDiscount;
     }
 
-    if (currentMaterial === 'stainless') {
-      cost *= 1.5;
-    }
+    if (currentMaterial === 'stainless') cost *= 1.5;
 
     return {
       appId: 'pipe-weight',
