@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>PDF Generator</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <style>
+    textarea {
+      width: 100%;
+      height: 400px;
+      margin-bottom: 10px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+  <h1>PDF生成コードエディタ</h1>
+  <textarea id="code"></textarea>
+  <br>
+  <button onclick="runCode()">PDF生成</button>
+
+  <script>
+    const defaultCode = `async function generatePDF() {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ unit: 'pt', format: 'a4' });
+
+  const PAGE_WIDTH = doc.internal.pageSize.getWidth();
+  const MARGIN = 40;
+  const HEADER_HEIGHT = 60;
+  const FOOTER_HEIGHT = 30;
+  const ACCENT_COLOR = '#003366';
+
+  doc.setFontSize(20);
+  doc.setTextColor(ACCENT_COLOR);
+  doc.text('サンプルPDF', MARGIN, HEADER_HEIGHT);
+
+  doc.save('sample.pdf');
+}`;
+
+    document.getElementById('code').value = defaultCode;
+
+    function runCode() {
+      try {
+        const userCode = document.getElementById('code').value;
+        const script = new Function(userCode + '; generatePDF();');
+        script();
+      } catch (err) {
+        alert('エラーが発生しました:\n' + err);
+      }
+    }
+  </script>
+</body>
+</html>
