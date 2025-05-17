@@ -121,9 +121,9 @@
       };
 
       const iframes = [
-        { id: "app1", label: "Scaffold Estimate" },
-        { id: "app2", label: "Weight Estimate" },
-        { id: "app3", label: "Welding Estimate" }
+        { id: "app1", label: "Total Person-Days" },
+        { id: "app2", label: "Pipe Length/ Weight " },
+        { id: "app3", label: "Complete Welding" }
       ];
 
       const rows = [];
@@ -138,8 +138,8 @@
             frame.id === 'app3'
               ? `${data.totalDB?.toFixed(1) ?? 'N/A'} DB`
               : frame.id === 'app1'
-                ? `${data.manhour ?? 'N/A'} Total Person-Days`  // app1だけ「人日」
-                : `${data.manhour ?? 'N/A'} `; // その他は「days」
+                ? `${data.manhour ?? 'N/A'} Days`  // app1だけ「人日」
+                : `${data.manhour ?? 'N/A'} m`; // その他は「days」
 
 
           rows.push([
