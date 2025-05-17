@@ -155,30 +155,29 @@
           const iframe = document.getElementById(frame.id);
           const data = iframe.contentWindow.getEstimateData();
 
-          if (!data || data.subtotal === 0) continue; // 👈 合計ゼロならスキップ
+          if (!data || data.subtotal === 0) continue;
 
-          const manhourOrDB =
+          const workLoad =
             frame.id === 'app3'
               ? `${data.totalDB?.toFixed(1) ?? 'N/A'} DB`
               : frame.id === 'app1'
                 ? `${data.manhour ?? 'N/A'} Days`
                 : frame.id === 'app2'
-                  ? `${data.manhour ?? 'N/A'} m/kg`
+                  ? `${data.pipeLength ?? 'N/A'} m / ${data.pipeWeight ?? 'N/A'} kg`
                   : "N/A";
 
           rows.push([
             frame.label,
             `¥${data.subtotal.toLocaleString()}`,
-            manhourOrDB
+            workLoad
           ]);
 
           grandTotal += data.subtotal;
-          validFrames.push({ ...frame, data }); // PDF出力対象に追加
+          validFrames.push({ ...frame, data });
         } catch (e) {
-          // 無視、未定義なら表示しない
+          // iframeが未読み込みなどの例外は無視
         }
       }
-
       const roundDownTotal = (amount) => {
         if (amount < 1_000_000) {
           return Math.floor(amount / 10_000) * 10_000;
@@ -215,58 +214,23 @@
 
       // テーブル
       doc.autoTable({
-        startY: totalBoxY + totalBoxHeight + 10,
+        startY: HEADER_HEIGHT + 90,
         margin: { left: MARGIN, right: MARGIN },
         head: [['Type', 'Sub Total', 'Work Load']],
         body: rows,
         theme: 'grid',
-        headStyles: {
-          fillColor: ACCENT_COLOR,
-          textColor: 255,
-          fontStyle: 'bold',
-        },
-        styles: {
-          font: 'helvetica',
-          fontSize: 11,
-          cellPadding: 8,
-        },
+        headStyles: { fillColor: ACCENT_COLOR, textColor: 255, fontStyle: 'bold' },
+        styles: { font: 'helvetica', fontSize: 11, cellPadding: 8 },
         alternateRowStyles: { fillColor: [245, 245, 245] },
         didDrawPage: function () {
           const pageCount = doc.internal.getNumberOfPages();
           const currentPage = doc.internal.getCurrentPageInfo().pageNumber;
-          addFooter(currentPage, pageCount);
+          const y = PAGE_HEIGHT - FOOTER_HEIGHT + 10;
+          doc.setFontSize(10);
+          doc.setTextColor(150);
+          doc.text(`Page ${currentPage} / ${pageCount}`, PAGE_WIDTH - MARGIN, y, { align: 'right' });
         }
       });
-
-      // 有効なフレームだけスクリーンショット
-      for (const frame of validFrames) {
-        try {
-          const iframe = document.getElementById(frame.id);
-          const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
-
-          const canvas = await html2canvas(iframeDoc.body, { scale: 2, useCORS: true });
-          const imgData = canvas.toDataURL('image/png');
-          const imgProps = doc.getImageProperties(imgData);
-          const pdfWidth = PAGE_WIDTH - MARGIN * 2;
-          const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-
-          doc.addPage();
-          doc.setFontSize(14);
-          doc.text(frame.label, MARGIN, 40);
-          doc.addImage(
-            imgData,
-            'PNG',
-            MARGIN,
-            60,
-            pdfWidth,
-            pdfHeight > (PAGE_HEIGHT - 100) ? PAGE_HEIGHT - 100 : pdfHeight
-          );
-          addFooter(doc.internal.getCurrentPageInfo().pageNumber, doc.internal.getNumberOfPages());
-        } catch (err) {
-          doc.addPage();
-          doc.text(`${frame.label} - スクリーンショット取得失敗`, MARGIN, 50);
-        }
-      }
 
       doc.save("YUMIKOU Inc.pdf");
     }

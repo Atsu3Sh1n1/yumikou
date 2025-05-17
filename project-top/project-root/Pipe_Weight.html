@@ -2,136 +2,137 @@
 <html lang="ja">
 
 <head>
-    <meta charset="UTF-8" />
-    <title>配管メーター重量見積もり金額計算機｜有限会社弓工</title>
-    <link rel="icon" href="images/icon.webp" type="image/x-icon" />
+  <meta charset="UTF-8" />
+  <title>配管メーター重量見積もり金額計算機｜有限会社弓工</title>
+  <link rel="icon" href="images/icon.webp" type="image/x-icon" />
 
-    <style>
-        body {
-            font-family: sans-serif;
-            background-color: #f9f9f9;
-            margin: 0;
-            min-height: auto;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 0px;
-        }
+  <style>
+    body {
+      font-family: sans-serif;
+      background-color: #f9f9f9;
+      margin: 0;
+      min-height: auto;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 0px;
+    }
 
-        .container {
-            background: white;
-            padding: 25px 30px;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            max-width: 400px;
-            width: 100%;
-            box-sizing: border-box;
-            text-align: center;
-        }
+    .container {
+      background: white;
+      padding: 25px 30px;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      max-width: 400px;
+      width: 100%;
+      box-sizing: border-box;
+      text-align: center;
+    }
 
-        h1 {
-            color: #333;
-            margin-bottom: 0px;
-            font-weight: 600;
-            font-size: 1.6em;
-        }
+    h1 {
+      color: #333;
+      margin-bottom: 0px;
+      font-weight: 600;
+      font-size: 1.6em;
+    }
 
-        .form-group {
-            margin-bottom: 15px;
-            text-align: left;
-        }
+    .form-group {
+      margin-bottom: 15px;
+      text-align: left;
+    }
 
-        label {
-            display: block;
-            margin-bottom: 6px;
-            font-weight: 500;
-            color: #444;
-            font-size: 0.95em;
-        }
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 500;
+      color: #444;
+      font-size: 0.95em;
+    }
 
-        select,
-        input[type="number"] {
-            width: 100%;
-            padding: 7px 10px;
-            font-size: 1em;
-            border: 1.5px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box;
-            transition: border-color 0.2s;
-        }
+    select,
+    input[type="number"] {
+      width: 100%;
+      padding: 7px 10px;
+      font-size: 1em;
+      border: 1.5px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+      transition: border-color 0.2s;
+    }
 
-        select:focus,
-        input[type="number"]:focus {
-            border-color: #007bff;
-            outline: none;
-        }
+    select:focus,
+    input[type="number"]:focus {
+      border-color: #007bff;
+      outline: none;
+    }
 
-        .schedule-buttons,
-        .material-toggle {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin: 18px 0 15px;
-        }
+    .schedule-buttons,
+    .material-toggle {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin: 18px 0 15px;
+    }
 
-        .schedule-buttons button,
-        .material-toggle button {
-            flex: 1;
-            max-width: 90px;
-            padding: 8px 0;
-            background: #003d80;
-            border: none;
-            border-radius: 5px;
-            color: white;
-            font-size: 0.9em;
-            cursor: pointer;
-            transition: background-color 0.2s;
-            user-select: none;
-        }
+    .schedule-buttons button,
+    .material-toggle button {
+      flex: 1;
+      max-width: 90px;
+      padding: 8px 0;
+      background: #003d80;
+      border: none;
+      border-radius: 5px;
+      color: white;
+      font-size: 0.9em;
+      cursor: pointer;
+      transition: background-color 0.2s;
+      user-select: none;
+    }
 
-        .schedule-buttons button.active,
-        .material-toggle button.active {
-            background: #007bff;
-            font-weight: 600;
-            cursor: default;
-        }
+    .schedule-buttons button.active,
+    .material-toggle button.active {
+      background: #007bff;
+      font-weight: 600;
+      cursor: default;
+    }
 
-        .unit-toggle {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin-bottom: 15px;
-        }
+    .unit-toggle {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-bottom: 15px;
+    }
 
-        .unit-toggle label {
-            font-weight: 500;
-            cursor: pointer;
-            user-select: none;
-            font-size: 0.95em;
-            color: #444;
-        }
+    .unit-toggle label {
+      font-weight: 500;
+      cursor: pointer;
+      user-select: none;
+      font-size: 0.95em;
+      color: #444;
+    }
 
-        .unit-toggle input[type="radio"] {
-            margin-right: 6px;
-            cursor: pointer;
-        }
+    .unit-toggle input[type="radio"] {
+      margin-right: 6px;
+      cursor: pointer;
+    }
 
-        .db-display,
-        .result {
-            font-size: 1.15em;
-            color: #222;
-            margin-top: 10px;
-            font-weight: 600;
-        }
+    .db-display,
+    .result {
+      font-size: 1.15em;
+      color: #222;
+      margin-top: 10px;
+      font-weight: 600;
+    }
 
-        .footer {
-            text-align: center;
-            font-size: 11px;
-            margin-top: 0;
-            padding: 0.5rem;
-        }
-    </style>
+    .footer {
+      text-align: center;
+      font-size: 11px;
+      margin-top: 0;
+      padding: 0.5rem;
+    }
+  </style>
 </head>
+
 <body>
   <div class="container">
     <h1>メーター・重量</h1>
@@ -273,36 +274,40 @@
 
     calculate();
 
-window.getEstimateData = function () {
-    const size = document.getElementById("size").value;
-    const length = parseFloat(document.getElementById("pipeLength").value) || 0;
-    const unitPrice = parseFloat(document.getElementById("unitPrice").value) || 0;
+    window.getEstimateData = function () {
+      const size = document.getElementById("size").value;
+      const length = parseFloat(document.getElementById("pipeLength").value) || 0;
+      const unitPrice = parseFloat(document.getElementById("unitPrice").value) || 0;
 
-    const schKey = currentSchedule.toLowerCase(); // SCH20 → sch20
-    const materialKey = currentMaterial === 'steel' ? schKey : 'sus' + schKey.slice(3);
-    const baseWeight = weightPerMeter[size].sch20;
-    const actualWeight = weightPerMeter[size][materialKey];
-    const weight = length * actualWeight;
+      const schKey = currentSchedule.toLowerCase();
+      const materialKey = currentMaterial === 'steel' ? schKey : 'sus' + schKey.slice(3);
+      const baseWeight = weightPerMeter[size].sch20;
+      const actualWeight = weightPerMeter[size][materialKey];
+      const weight = length * actualWeight;
 
-    let cost;
-    if (currentUnitType === 'meter') {
-      const weightRatio = actualWeight / baseWeight;
-      cost = length * unitPrice * weightRatio;
-      cost *= sizeMultiplier[size];
-    } else {
-      cost = weight * unitPrice;
-      cost *= sizeMultiplierWeight[size];
-    }
+      let cost;
+      if (currentUnitType === 'meter') {
+        const weightRatio = actualWeight / baseWeight;
+        cost = length * unitPrice * weightRatio;
+        cost *= sizeMultiplier[size];
+      } else {
+        cost = weight * unitPrice;
+        cost *= sizeMultiplierWeight[size];
+      }
 
-    if (currentMaterial === 'stainless') {
-      cost *= 1.5;
-    }
+      if (currentMaterial === 'stainless') {
+        cost *= 1.5;
+      }
 
-    return {
-      appId: 'pipe-weight',
-      subtotal: Math.round(cost),
-      manhour: 0
+      return {
+        appId: 'pipe-weight',
+        subtotal: Math.round(cost),
+        manhour: 0,
+        pipeLength: length,
+        pipeWeight: weight.toFixed(2)
+      };
     };
-  };  </script>
+  </script>
 </body>
+
 </html>
