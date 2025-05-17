@@ -155,9 +155,9 @@
     <div class="result" id="totalPrice">合計金額: ¥0</div>
     <div class="db-display" id="totalDB">合計DB: 0</div>
   </div>
-  
+
   <script>
-    
+
     // DB換算テーブル
     const dbTable = {
       "25": { straight: 1, elbow: 2, tee: 3 },
@@ -183,7 +183,6 @@
       const tee = parseInt(document.getElementById("teeCount").value) || 0;
       let baseUnitPrice = parseFloat(document.getElementById("unitPrice").value) || 0;
 
-      // 追加補正ボタンが active なら 1.5 倍（SCH系ボタンが該当の場合）
       const isSch40or80 = (currentMultiplier === 1.0 || currentMultiplier === 1.25 || currentMultiplier === 1.5);
       if (document.getElementById("additionalMultiplierBtn").classList.contains("active") && isSch40or80) {
         baseUnitPrice *= 1.5;
@@ -194,9 +193,19 @@
           elbow * dbTable[size].elbow +
           tee * dbTable[size].tee) * currentMultiplier;
 
-      const totalCost = Math.round(totalDB * baseUnitPrice);
+      const rawCost = totalDB * baseUnitPrice;
 
-      document.getElementById("totalPrice").textContent = `合計金額: ¥${totalCost.toLocaleString()}`;
+      // ▼ 繰り上げ処理の追加 ▼
+      let roundingUnit = 1000; // 初期値（～10万円）
+      if (rawCost > 1000000) {
+        roundingUnit = 50000;
+      } else if (rawCost > 100000) {
+        roundingUnit = 10000;
+      }
+
+      const roundedCost = Math.ceil(rawCost / roundingUnit) * roundingUnit;
+
+      document.getElementById("totalPrice").textContent = `合計金額: ¥${roundedCost.toLocaleString()}`;
       document.getElementById("totalDB").textContent = `合計DB: ${totalDB.toFixed(1)}`;
     }
 
