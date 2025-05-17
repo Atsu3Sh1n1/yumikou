@@ -2,115 +2,350 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>プラント配管見積もりマニュアル</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>プラント配管見積もりマニュアル | 弓工</title>
   <style>
     :root {
-      --bg-color: #1e1e1e;
-      --card-color: #2c2c2c;
-      --text-color: #f0f0f0;
-      --accent: #4db8ff;
-      --font: 'Segoe UI', sans-serif;
+      --bg-color: #f8f9fa;
+      --card-color: #ffffff;
+      --text-color: #333333;
+      --accent: #2c7be5;
+      --accent-light: #e6f0ff;
+      --font: 'Noto Sans JP', 'Segoe UI', sans-serif;
+      --border-radius: 8px;
+      --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
     }
 
     body {
       margin: 0;
+      padding: 0;
       background-color: var(--bg-color);
       color: var(--text-color);
       font-family: var(--font);
       line-height: 1.6;
-      padding: 2rem;
-    }
-
-    h1, h2, h3 {
-      color: var(--accent);
     }
 
     .container {
-      max-width: 900px;
-      margin: auto;
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 2rem 1rem;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 2rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    h1 {
+      color: var(--accent);
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+    }
+
+    .subtitle {
+      color: #666;
+      font-size: 1.1rem;
     }
 
     .card {
       background-color: var(--card-color);
-      border-radius: 10px;
-      padding: 1.5rem;
-      margin-bottom: 2rem;
-      box-shadow: 0 0 10px rgba(0,0,0,0.3);
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow);
+      margin-bottom: 1.5rem;
+      overflow: hidden;
+      transition: transform 0.2s;
     }
 
-    code {
-      background: #333;
-      padding: 0.2rem 0.4rem;
-      border-radius: 5px;
+    .card:hover {
+      transform: translateY(-2px);
+    }
+
+    .card-header {
+      background-color: var(--accent);
+      color: white;
+      padding: 1rem 1.5rem;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: 500;
+    }
+
+    .card-header:hover {
+      background-color: #2566c7;
+    }
+
+    .card-header::after {
+      content: "+";
+      font-size: 1.2rem;
+      transition: transform 0.3s;
+    }
+
+    .card-header.active::after {
+      content: "-";
+    }
+
+    .card-content {
+      padding: 0;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease-out, padding 0.3s ease;
+    }
+
+    .card-content.show {
+      padding: 1.5rem;
+      max-height: 2000px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0;
+    }
+
+    th, td {
+      padding: 0.75rem;
+      text-align: left;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    th {
+      background-color: var(--accent-light);
+      color: var(--accent);
+    }
+
+    tr:hover {
+      background-color: #f5f5f5;
+    }
+
+    .note {
+      background-color: #fff8e6;
+      border-left: 4px solid #ffc107;
+      padding: 1rem;
+      margin: 1rem 0;
       font-size: 0.9rem;
     }
 
-    ul, ol {
-      padding-left: 1.5rem;
+    .steps {
+      counter-reset: step-counter;
+      list-style-type: none;
+      padding-left: 0;
     }
 
-    a {
-      color: var(--accent);
-      text-decoration: none;
+    .steps li {
+      counter-increment: step-counter;
+      margin-bottom: 1rem;
+      position: relative;
+      padding-left: 2.5rem;
     }
 
-    a:hover {
-      text-decoration: underline;
+    .steps li::before {
+      content: counter(step-counter);
+      background-color: var(--accent);
+      color: white;
+      font-weight: bold;
+      border-radius: 50%;
+      width: 1.8rem;
+      height: 1.8rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      position: absolute;
+      left: 0;
+      top: 0;
     }
 
-    @media (max-width: 600px) {
-      body {
+    footer {
+      text-align: center;
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid #e0e0e0;
+      color: #666;
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 768px) {
+      .container {
         padding: 1rem;
+      }
+      
+      th, td {
+        padding: 0.5rem;
+        font-size: 0.9rem;
       }
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>見積もりマニュアル</h1>
+    <header>
+      <h1>見積もりマニュアル</h1>
+      <div class="subtitle">初心者でも安心のステップガイド</div>
+    </header>
 
     <div class="card">
-      <h2>ステップ1：前提情報の整理</h2>
-      <ul>
-        <li><strong>配管図の有無：</strong> P&ID、ISO配管図(アイソメ)、手書きスケッチなど</li>
-        <li><strong>流体の種類：</strong> 蒸気、水、薬品など</li>
-        <li><strong>使用材質：</strong> SGP、STPG、SUS304等</li>
-        <li><strong>スケジュール：</strong> Sch.10 / 40 / 80</li>
-        <li><strong>圧力・温度条件：</strong> 耐圧材料が必要か判断</li>
-        <li><strong>施工条件：</strong> 屋外・屋内、高所作業の有無(保温材や高所作業車、レッカーや足場の必要性を確認)</li>
-      </ul>
+      <div class="card-header">
+        ステップ1：前提情報の収集
+      </div>
+      <div class="card-content">
+        <table>
+          <thead>
+            <tr>
+              <th>項目</th>
+              <th>説明</th>
+              <th>備考</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>配管図の有無</strong></td>
+              <td>P&ID、ISO配管図（アイソメ）、手書きスケッチなど</td>
+              <td>図面がない場合でも見積もり可能</td>
+            </tr>
+            <tr>
+              <td><strong>流体の種類</strong></td>
+              <td>蒸気、水、薬品など</td>
+              <td>流体に応じた材質・仕様を選定</td>
+            </tr>
+            <tr>
+              <td><strong>使用材質</strong></td>
+              <td>SGP、STPG、SUS304など（「鉄」「ステンレス」でも可）</td>
+              <td>材質により単価が異なる</td>
+            </tr>
+            <tr>
+              <td><strong>配管径の確認</strong></td>
+              <td>呼び径（A）または外径（mm）</td>
+              <td>外周寸法から呼び径を計算可能（外周÷3.14）</td>
+            </tr>
+            <tr>
+              <td><strong>配管肉厚（スケジュール）</strong></td>
+              <td>Sch10、40、80など（mm表記も可）</td>
+              <td>耐圧条件に応じて選定</td>
+            </tr>
+            <tr>
+              <td><strong>圧力・温度条件</strong></td>
+              <td>設計圧力・温度</td>
+              <td>耐圧材料の必要性を判断</td>
+            </tr>
+            <tr>
+              <td><strong>施工条件</strong></td>
+              <td>屋外/屋内、高所作業の有無、保温材、足場・重機の必要性</td>
+              <td>「びけ足場○個分」など具体例でも可</td>
+            </tr>
+          </tbody>
+        </table>
+        
+        <div class="note">
+          <strong>💡 新人さんへ</strong><br>
+          最初は「材質がわからない」「図面がない」という状況も多いです。その場合は「鉄製」「ステンレス製」の大まかな区分で構いませんので、先輩に確認しながら進めましょう。
+        </div>
+      </div>
     </div>
 
     <div class="card">
-      <h2>ステップ2：数量の拾い出し</h2>
-      <ol>
-        <li><strong>配管延長：</strong> 口径別にメートル単位で算出</li>
-        <li><strong>継手の種類と数：</strong> エルボ、ティー、ユニオンなど</li>
-        <li><strong>バルブ類：</strong> 呼び径・種類ごとに分類</li>
-        <li><strong>溶接点数：</strong> 口径・材質・スケジュールに応じて係数設定</li>
-        <li><strong>支持金具：</strong> サポート点数と取付方法</li>
-        <li><strong>非破壊検査範囲：</strong> PT/RT範囲を確認</li>
-      </ol>
+      <div class="card-header">
+        ステップ2：数量の拾い出し
+      </div>
+      <div class="card-content">
+        <ol class="steps">
+          <li>
+            <strong>配管延長</strong><br>
+            メートル単位で口径別に集計。配管図がある場合はスケールで測定、ない場合は現地調査が必要です。
+          </li>
+          <li>
+            <strong>継手の種類と数量</strong><br>
+            エルボ（90°、45°）、ティー（ストレート、レデューシング）、ユニオンなど、種類ごとに分類します。
+          </li>
+          <li>
+            <strong>バルブ類</strong><br>
+            呼び径・種類（ゲートバルブ、ボールバルブ、チェックバルブなど）ごとに集計。仕様書で型式を確認。
+          </li>
+          <li>
+            <strong>溶接点数</strong><br>
+            口径・材質・スケジュールに応じた係数を設定。当社標準の「溶接DB換算表」を参照。
+          </li>
+          <li>
+            <strong>支持金具</strong><br>
+            サポート点数と取付方法（固定サポート、可動サポート、スプリングサポートなど）。
+          </li>
+          <li>
+            <strong>非破壊検査範囲</strong><br>
+            PT（浸透探傷試験）やRT（放射線透過試験）の実施範囲を仕様書で確認。
+          </li>
+        </ol>
+      </div>
     </div>
 
     <div class="card">
-      <h2>ステップ3：単価・工数設定と見積集計</h2>
-      <ul>
-        <li><strong>材料費：</strong> 鋼管・継手・バルブなどの単価を反映</li>
-        <li><strong>溶接DB数設定：</strong> 材質・スケジュールごとに倍率</li>
-        <li><strong>工数換算：</strong> DB数 × 単位作業時間（人分）</li>
-        <li><strong>現場施工費：</strong> 高所・屋外は係数で加算</li>
-        <li><strong>管理・利益：</strong> 安全費・間接費・利益を15〜30％加算</li>
-      </ul>
+      <div class="card-header">
+        ステップ3：単価・工数設定と見積集計
+      </div>
+      <div class="card-content">
+        <h3>材料費の算出</h3>
+        <p>鋼管・継手・バルブなどの単価を市場価格または社内単価表に基づき反映。</p>
+        
+        <h3>工数換算</h3>
+        <ul>
+          <li><strong>溶接DB数設定</strong>：材質・スケジュールごとに所定の倍率を適用</li>
+          <li><strong>作業時間</strong>：DB数 × 単位作業時間（人分）</li>
+        </ul>
+        
+        <h3>現場施工費</h3>
+        <p>高所作業や屋外作業は係数を乗じて加算（例：高所+20％）。</p>
+        
+        <h3>管理費・利益</h3>
+        <p>安全費・間接費・利益を15〜30％加算（案件リスクに応じて調整）。</p>
+        
+        <div class="note">
+          <strong>📊 見積もりチェックリスト</strong><br>
+          1. 数量に抜け漏れはないか？<br>
+          2. 特殊材質の単価は最新か？<br>
+          3. 高所作業の安全対策費は含まれているか？<br>
+          4. 消費税の計算は正しいか？
+        </div>
+      </div>
     </div>
 
-    <div class="section">
-      <h2>制作者情報</h2>
-      <p><strong>有限会社 弓工（YUMIKOU Inc.）</strong><br>
-        <a href="https://atsu3sh1n1.github.io/yumikou/" target="_blank">https://atsu3sh1n1.github.io/yumikou/</a>
-      </p>
+    <div class="card">
+      <div class="card-header">
+        よくある質問（FAQ）
+      </div>
+      <div class="card-content">
+        <h3>Q. 図面がない場合はどうすれば？</h3>
+        <p>A. 現地調査が必要です。スマートフォンで配管ルートを写真撮影し、主要寸法をスケッチに記録しましょう。</p>
+        
+        <h3>Q. 材質がわからない配管は？</h3>
+        <p>A. 磁石で確認（ステンレスは非磁性）、または表面の色（SGPは黒、SUSは銀色）で判断。どうしてもわからない場合は「材質要確認」と明記。</p>
+        
+        <h3>Q. 急ぎの見積もりはどうする？</h3>
+        <p>A. 正確な数量がわからない部分は「仮数量」と明記し、後日調整可能な旨を記載しましょう。</p>
+      </div>
     </div>
+
+    <footer>
+      <p><strong>有限会社 弓工（YUMIKOU Inc.）</strong></p>
+      <p>© 2024 弓工 - 本マニュアルの無断複製・転載を禁じます</p>
+    </footer>
   </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const cardHeaders = document.querySelectorAll('.card-header');
+      
+      cardHeaders.forEach(header => {
+        header.addEventListener('click', function() {
+          this.classList.toggle('active');
+          const content = this.nextElementSibling;
+          content.classList.toggle('show');
+        });
+      });
+      
+      // 最初のカードを開いた状態にする
+      cardHeaders[0].classList.add('active');
+      cardHeaders[0].nextElementSibling.classList.add('show');
+    });
+  </script>
 </body>
 </html>
