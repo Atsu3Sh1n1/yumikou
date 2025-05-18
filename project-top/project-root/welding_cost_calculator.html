@@ -131,16 +131,18 @@
       <input type="number" inputmode="numeric" pattern="[0-9]*" id="unitPrice" value="2000" min="0">
     </div>
     <div class="form-group">
-      <div id="scheduleButtons">
-        <button type="button" data-multiplier="1.0" class="schedule-btn active">SGP/20</button>
-        <button type="button" data-multiplier="1.6" class="schedule-btn">SCH40</button>
-        <button type="button" data-multiplier="2.2" class="schedule-btn">SCH80</button><br>
-        <button type="button" id="additionalMultiplierBtn" class="additional-multiplier-btn">ステンレス</button>
-      </div>
+     <div id="scheduleButtons"> 
+  <button type="button" data-multiplier="0.65" class="schedule-btn">SGP/20</button>
+  <button type="button" data-multiplier="1" class="schedule-btn active">SCH40</button>
+  <button type="button" data-multiplier="1.55" class="schedule-btn">SCH80</button><br>
+  <button type="button" id="additionalMultiplierBtn" class="additional-multiplier-btn">ステンレス</button>
+</div>
+
     </div>
     <div class="result" id="totalPrice">合計金額: ¥0</div>
     <div class="db-display" id="totalDB">合計DB: 0</div>
   </div>
+
   <script>
     // DB換算テーブル
     const dbTable = {
@@ -181,7 +183,7 @@
       const totalCost = Math.round(totalDB * baseUnitPrice);
       
       document.getElementById("totalPrice").textContent = `合計金額: ¥${totalCost.toLocaleString()}`;
-      document.getElementById("totalDB").textContent = `合計DB: ${totalDB.toFixed(1)}`;
+      document.getElementById("totalDB").textContent = `合計DB: ${totalDB.toFixed(2)}`;
     }
     
     // スケジュールボタンのイベント
