@@ -96,7 +96,7 @@
       background: #eee;
       cursor: pointer;
       border-radius: 4px;
-      font-size: 0.9em;
+      font-size: 0.65em;
     }
 
     .additional-multiplier-btn.active {
@@ -153,6 +153,8 @@
         <button type="button" data-multiplier="1" class="schedule-btn active">SCH40</button>
         <button type="button" data-multiplier="1.55" class="schedule-btn">SCH80</button><br />
         <button type="button" id="additionalMultiplierBtn" class="additional-multiplier-btn">ステンレス</button>
+        <button type="button" id="swMultiplierBtn" class="additional-multiplier-btn">SW</button>
+
       </div>
     </div>
     <div class="result" id="totalPrice">合計金額: ¥0</div>
@@ -188,6 +190,8 @@
 
     // ステンレス補正乗数（単価補正用）
     const stainlessMultiplier = 1.5;
+    const swMultiplier = 0.6;
+
 
     function calculate() {
       const size = document.getElementById("pipeSize").value;
@@ -209,11 +213,22 @@
         effectiveUnitPrice *= stainlessMultiplier;
       }
 
+      if (document.getElementById("swMultiplierBtn").classList.contains("active")) {
+        effectiveUnitPrice *= swMultiplier;
+      }
+
+
       const totalCost = Math.round(totalDB * effectiveUnitPrice);
 
       document.getElementById("totalPrice").textContent = `合計金額: ¥${totalCost.toLocaleString()}`;
       document.getElementById("totalDB").textContent = `合計DB: ${totalDB.toFixed(1)}`;
     }
+
+    document.getElementById("swMultiplierBtn").addEventListener("click", function () {
+      this.classList.toggle("active");
+      calculate();
+    });
+
 
     // スケジュールボタンのイベント
     document.querySelectorAll(".schedule-btn").forEach(btn => {
@@ -242,6 +257,7 @@
     document.querySelectorAll("select, input").forEach(el => {
       el.addEventListener("input", calculate);
     });
+
 
     // ページ読み込み時に初期計算＋スケジュール倍率設定
     window.addEventListener('DOMContentLoaded', () => {
