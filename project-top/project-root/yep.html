@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>材料発注書 入力フォーム</title>
+  <style>
+    body { font-family: "Noto Sans JP", sans-serif; max-width: 700px; margin: 20px auto; padding: 10px; }
+    label { display: block; margin-top: 12px; font-weight: bold; }
+    input, textarea, button { width: 100%; padding: 8px; margin-top: 4px; font-size: 14px; }
+    button { margin-top: 20px; }
+    #pdf-output { display: none; }
+  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP&display=swap" rel="stylesheet">
+</head>
+<body>
+  <h2>材料発注書 入力フォーム</h2>
+
+  <form id="orderForm">
+    <label>発注書番号</label>
+    <input type="text" id="orderNo">
+
+    <label>発注日</label>
+    <input type="date" id="orderDate">
+
+    <label>仕入先会社名</label>
+    <input type="text" id="supplier">
+
+    <label>仕入先 担当者連絡先</label>
+    <input type="text" id="contact">
+
+    <label>納入先（現場名・住所）</label>
+    <textarea id="deliveryPlace" rows="2"></textarea>
+
+    <label>納入希望日</label>
+    <input type="date" id="deliveryDate">
+
+    <label>支払条件</label>
+    <input type="text" id="payment">
+
+    <label>備考（搬入条件など）</label>
+    <textarea id="remarks" rows="3"></textarea>
+
+    <label>※ 材料表は別紙添付（Excel/PDF）</label>
+
+    <button type="button" onclick="generatePDF()">PDF作成</button>
+  </form>
+
+  <div id="pdf-output">
+    <h3>材料発注書（情報のみ）</h3>
+    <p><strong>発注書番号：</strong><span id="out_orderNo"></span></p>
+    <p><strong>発注日：</strong><span id="out_orderDate"></span></p>
+    <p><strong>仕入先会社名：</strong><span id="out_supplier"></span></p>
+    <p><strong>担当者連絡先：</strong><span id="out_contact"></span></p>
+    <p><strong>納入先：</strong><span id="out_deliveryPlace"></span></p>
+    <p><strong>納入希望日：</strong><span id="out_deliveryDate"></span></p>
+    <p><strong>支払条件：</strong><span id="out_payment"></span></p>
+    <p><strong>備考：</strong><span id="out_remarks"></span></p>
+    <p><strong>※ 材料表は別紙添付</strong></p>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <script>
+    function generatePDF() {
+      // 値を取得
+      document.getElementById('out_orderNo').textContent = document.getElementById('orderNo').value;
+      document.getElementById('out_orderDate').textContent = document.getElementById('orderDate').value;
+      document.getElementById('out_supplier').textContent = document.getElementById('supplier').value;
+      document.getElementById('out_contact').textContent = document.getElementById('contact').value;
+      document.getElementById('out_deliveryPlace').textContent = document.getElementById('deliveryPlace').value;
+      document.getElementById('out_deliveryDate').textContent = document.getElementById('deliveryDate').value;
+      document.getElementById('out_payment').textContent = document.getElementById('payment').value;
+      document.getElementById('out_remarks').textContent = document.getElementById('remarks').value;
+
+      const element = document.getElementById('pdf-output');
+      element.style.display = 'block'; // 表示してからPDF化
+
+      const opt = {
+        margin: 10,
+        filename: '材料発注書.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2 },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+      };
+
+      html2pdf().set(opt).from(element).save().then(() => {
+        element.style.display = 'none'; // 生成後は非表示に戻す
+      });
+    }
+  </script>
+</body>
+</html>

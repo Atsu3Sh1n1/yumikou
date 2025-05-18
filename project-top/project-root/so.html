@@ -205,7 +205,7 @@
                     <label>単位</label>
                     <select name="unit[]" onchange="updateTotalPrice()">
                         <option value="">選択</option>
-                        <option value="本">本</option>
+                        <option value="Standard size(5.5m)">本</option>
                         <option value="個">個</option>
                         <option value="枚">枚</option>
                         <option value="セット">セット</option>
@@ -331,7 +331,7 @@
                         cutLengthGroup.style.display = 'block';
 
                     } else if (shape === 'バルブ' && quantity > 0) {
-                        cutLengthDisplay.textContent = `${quantity} 本`;
+                        cutLengthDisplay.textContent = `${quantity} Standard size(5.5m)`;
                         cutLengthGroup.style.display = 'block';
                     } else {
                         cutLengthDisplay.textContent = '';
@@ -437,7 +437,7 @@
                 // PDF用のunit変換（画面ではなくデータ上だけ）
                 if (unit === 'メーター' && shape === 'pipe' && quantity > 0) {
                     cutLength = Math.ceil(quantity / 5.5);
-                    finalUnit = 'Standard size';  // ← PDF出力時にだけ変換
+                    finalUnit = 'Standard size(5.5m)';  // ← PDF出力時にだけ変換
                 }
 
                 rows.push({
