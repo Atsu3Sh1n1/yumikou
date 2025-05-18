@@ -170,7 +170,7 @@
       let baseUnitPrice = parseFloat(document.getElementById("unitPrice").value) || 0;
       
       // 追加補正ボタンが active なら 1.5 倍（SCH系ボタンが該当の場合）
-      const isSch40or80 = (currentMultiplier === 1.0 || currentMultiplier === 1.6 || currentMultiplier === 2.2);
+      const isSch40or80 = (currentMultiplier === 1.0 || currentMultiplier === 0.65 || currentMultiplier === 1.55);
       if(document.getElementById("additionalMultiplierBtn").classList.contains("active") && isSch40or80) {
           baseUnitPrice *= 1.5;
       }
