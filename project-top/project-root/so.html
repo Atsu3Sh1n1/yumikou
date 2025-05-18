@@ -163,7 +163,7 @@
                     <label>形状</label>
                     <select name="shape[]" onchange="handleShapeChange(this); updateTotalPrice();">
                         <option value="">選択</option>
-                        <option value="パイプ">パイプ</option>
+                        <option value="pipe">パイプ</option>
                         <option value="エルボ">エルボ</option>
                         <option value="チーズ">チーズ</option>
                         <option value="フランジ">フランジ</option>
@@ -254,7 +254,7 @@
         };
 
         const shapeMultiplier = {
-            'パイプ': 1.0,
+            'pipe': 1.0,
             'エルボ': 1.5,
             'チーズ': 1.8,
             'フランジ': 2.0,
@@ -313,7 +313,7 @@
 
                 // 定尺表示ロジック
                 if (cutLengthGroup && cutLengthDisplay) {
-                    if (unit === 'メーター' && shape === 'パイプ' && quantity > 0) {
+                    if (unit === 'メーター' && shape === 'pipe' && quantity > 0) {
                         const count = Math.ceil(quantity / 5.5);
                         cutLengthDisplay.textContent = `${count} 本`;
                         cutLengthGroup.style.display = 'block';
@@ -348,6 +348,10 @@
                 else el.value = '';
             });
 
+            // ここで quantityを強制的に空にしてみる
+            const quantityInput = newCard.querySelector('input[name="quantity[]"]');
+            if (quantityInput) quantityInput.value = '';
+
             const cutLengthDisplay = newCard.querySelector('.cut-length-display');
             if (cutLengthDisplay) {
                 cutLengthDisplay.textContent = '';
@@ -356,6 +360,7 @@
 
             newCard.querySelector('.valve-type-group').style.display = 'none';
 
+            // イベントハンドラを再セット
             newCard.querySelector('select[name="material[]"]').onchange = function () {
                 updateScheduleOptions(this);
                 updateTotalPrice();
@@ -374,6 +379,8 @@
             };
 
             formContainer.appendChild(newCard);
+
+            updateTotalPrice();  // 行追加直後に合計を更新
         }
 
         function deleteRow(btn) {
@@ -412,7 +419,7 @@
                 const quantity = getQuantity(quantityInput);
                 let cutLength = '';
 
-                if (unit === 'メーター' && shape === 'パイプ' && quantity > 0) {
+                if (unit === 'メーター' && shape === 'pipe' && quantity > 0) {
                     cutLength = Math.ceil(quantity / 5.5);
                 }
 
