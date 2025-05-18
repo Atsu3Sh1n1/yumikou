@@ -1,0 +1,262 @@
+<!DOCTYPE html> 
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>配管部品入力フォーム</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #f2f2f2;
+      padding: 20px;
+    }
+
+    h2 {
+      margin-bottom: 20px;
+      font-size: 20px;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 8px;
+      padding: 12px;
+      margin-bottom: 15px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      position: relative;
+    }
+
+    .row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .form-group {
+      flex: 0 0 auto;
+      width: 90px;
+      min-width: 70px;
+      margin-right: 8px;
+    }
+
+    label {
+      display: block;
+      font-size: 14px;
+      margin-bottom: 4px;
+    }
+
+    select, input {
+      width: 100%;
+      padding: 6px;
+      font-size: 14px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      box-sizing: border-box;
+    }
+
+    .add-button {
+      padding: 10px 16px;
+      background-color: #28a745;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      font-size: 15px;
+      cursor: pointer;
+    }
+
+    .add-button:hover {
+      background-color: #218838;
+    }
+
+    .delete-button {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background-color: #dc3545;
+      color: #fff;
+      border: none;
+      padding: 6px 10px;
+      border-radius: 4px;
+      font-size: 13px;
+      cursor: pointer;
+    }
+
+    .delete-button:hover {
+      background-color: #c82333;
+    }
+
+    @media (max-width: 600px) {
+      .row {
+        flex-direction: column;
+      }
+      .form-group {
+        width: 100%;
+        min-width: auto;
+        margin-right: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<h2>配管部品入力フォーム</h2>
+
+<div id="formContainer">
+  <div class="card">
+    <button type="button" class="delete-button" onclick="deleteRow(this)">削除</button>
+    <div class="row">
+
+      <div class="form-group">
+        <label>口径</label>
+        <select name="size[]">
+          <option value="">選択</option>
+          <option>25A</option><option>32A</option><option>40A</option>
+          <option>50A</option><option>65A</option><option>80A</option>
+          <option>100A</option><option>125A</option><option>150A</option>
+          <option>200A</option><option>250A</option><option>300A</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>材質</label>
+        <select name="material[]" onchange="updateScheduleOptions(this)">
+          <option value="">選択</option>
+          <option value="SGP">SGP</option>
+          <option value="STPG">STPG</option>
+          <option value="SUS304">SUS304</option>
+          <option value="SUS316">SUS316</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>SCH</label>
+        <select name="schedule[]">
+          <option value="">先に材質</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>形状</label>
+        <select name="shape[]" onchange="handleShapeChange(this)">
+          <option value="">選択</option>
+          <option value="パイプ">パイプ</option>
+          <option value="エルボ">エルボ</option>
+          <option value="チーズ">チーズ</option>
+          <option value="フランジ">フランジ</option>
+          <option value="バルブ">バルブ</option>
+        </select>
+      </div>
+
+      <div class="form-group valve-type-group" style="display: none;">
+        <label>バルブ種</label>
+        <select name="valveType[]">
+          <option value="">選択</option>
+          <option value="ゲート">ゲート</option>
+          <option value="グローブ">グローブ</option>
+          <option value="ボール">ボール</option>
+          <option value="バタフライ">バタフライ</option>
+          <option value="チャッキ">チャッキ</option>
+          <option value="ストレーナー">ストレーナー</option>
+          <option value="ニードル">ニードル</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>数</label>
+        <input type="number" name="quantity[]" min="1">
+      </div>
+
+      <div class="form-group">
+        <label>単</label>
+        <select name="unit[]">
+          <option value="本">本</option>
+          <option value="個">個</option>
+          <option value="枚">枚</option>
+          <option value="セット">セット</option>
+          <option value="式">式</option>
+        </select>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<button type="button" class="add-button" onclick="addRow()">＋ 行を追加</button>
+
+<script>
+  const scheduleOptions = {
+    SGP: ['SGP', '10K', '20K'],
+    STPG: ['SCH40', 'SCH80', '10K', '20K'],
+    SUS304: ['SCH10S', 'SCH20S', 'SCH40S', 'SCH80S'],
+    SUS316: ['SCH10S', 'SCH20S', 'SCH40S', 'SCH80S']
+  };
+
+  function updateScheduleOptions(materialSelect) {
+    const card = materialSelect.closest('.card');
+    const scheduleSelect = card.querySelector('select[name="schedule[]"]');
+    const material = materialSelect.value;
+
+    scheduleSelect.innerHTML = '';
+    if (!material || !scheduleOptions[material]) {
+      scheduleSelect.innerHTML = '<option value="">先に材質</option>';
+      return;
+    }
+
+    scheduleOptions[material].forEach(opt => {
+      const option = document.createElement("option");
+      option.value = opt;
+      option.textContent = opt;
+      scheduleSelect.appendChild(option);
+    });
+  }
+
+  function handleShapeChange(shapeSelect) {
+    const card = shapeSelect.closest('.card');
+    const valveGroup = card.querySelector('.valve-type-group');
+
+    if (shapeSelect.value === 'バルブ') {
+      valveGroup.style.display = 'block';
+    } else {
+      valveGroup.style.display = 'none';
+      valveGroup.querySelector('select').value = '';
+    }
+  }
+
+  function addRow() {
+    const formContainer = document.getElementById('formContainer');
+    const firstCard = formContainer.querySelector('.card');
+    const newCard = firstCard.cloneNode(true);
+
+    newCard.querySelectorAll('select, input').forEach(el => {
+      if (el.tagName === 'SELECT') el.selectedIndex = 0;
+      else el.value = '';
+    });
+
+    newCard.querySelector('.valve-type-group').style.display = 'none';
+
+    newCard.querySelector('select[name="material[]"]').onchange = function () {
+      updateScheduleOptions(this);
+    };
+    newCard.querySelector('select[name="shape[]"]').onchange = function () {
+      handleShapeChange(this);
+    };
+
+    const delBtn = newCard.querySelector('.delete-button');
+    delBtn.onclick = function () {
+      deleteRow(this);
+    };
+
+    formContainer.appendChild(newCard);
+  }
+
+  function deleteRow(btn) {
+    const card = btn.closest('.card');
+    const container = document.getElementById('formContainer');
+    if (container.children.length > 1) {
+      container.removeChild(card);
+    } else {
+      alert('少なくとも1行は必要です');
+    }
+  }
+</script>
+
+</body>
+</html>

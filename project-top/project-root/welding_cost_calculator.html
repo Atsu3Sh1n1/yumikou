@@ -133,8 +133,8 @@
     <div class="form-group">
       <div id="scheduleButtons">
         <button type="button" data-multiplier="1.0" class="schedule-btn active">SGP/20</button>
-        <button type="button" data-multiplier="1.25" class="schedule-btn">SCH40</button>
-        <button type="button" data-multiplier="1.5" class="schedule-btn">SCH80</button><br>
+        <button type="button" data-multiplier="1.6" class="schedule-btn">SCH40</button>
+        <button type="button" data-multiplier="2.2" class="schedule-btn">SCH80</button><br>
         <button type="button" id="additionalMultiplierBtn" class="additional-multiplier-btn">ステンレス</button>
       </div>
     </div>
@@ -168,7 +168,7 @@
       let baseUnitPrice = parseFloat(document.getElementById("unitPrice").value) || 0;
       
       // 追加補正ボタンが active なら 1.5 倍（SCH系ボタンが該当の場合）
-      const isSch40or80 = (currentMultiplier === 1.0 || currentMultiplier === 1.25 || currentMultiplier === 1.5);
+      const isSch40or80 = (currentMultiplier === 1.0 || currentMultiplier === 1.6 || currentMultiplier === 2.2);
       if(document.getElementById("additionalMultiplierBtn").classList.contains("active") && isSch40or80) {
           baseUnitPrice *= 1.5;
       }

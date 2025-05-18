@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>配管溶接DB見積計算ツール（精密版）</title>
+  <style>
+    body { font-family: sans-serif; }
+    input, select { margin: 5px; width: 80px; }
+    label { display: block; margin: 5px 0; }
+  </style>
+</head>
+<body>
+  <h2>配管溶接DB見積計算ツール（物理寸法基準）</h2>
+
+  <label>配管サイズ（呼び径）:
+    <select id="size" onchange="updateCalc()">
+      <option value="25">25A</option>
+      <option value="50">50A</option>
+      <option value="100">100A</option>
+      <option value="200">200A</option>
+      <option value="300">300A</option>
+    </select>
+  </label>
+
+  <label>付き合わせ本数: <input type="number" id="butt" value="0" onchange="updateCalc()"></label>
+  <label>エルボ数（×2）: <input type="number" id="elbow" value="0" onchange="updateCalc()"></label>
+  <label>チーズ・フランジ数（×3）: <input type="number" id="tee" value="0" onchange="updateCalc()"></label>
+  <label>1DB単価（円）: <input type="number" id="dbUnit" value="6000" onchange="updateCalc()"></label>
+
+  <h3>計算結果</h3>
+  <div id="result"></div>
+
+  <script>
+    // JIS寸法（代表値）と想定開先幅W
+    const pipeData = {
+      "25":  { od: 34.0,  t: 3.38, w: 4.0 },
+      "50":  { od: 60.5,  t: 3.91, w: 5.0 },
+      "100": { od: 114.3, t: 6.02, w: 7.0 },
+      "200": { od: 216.3, t: 8.18, w: 10.0 },
+      "300": { od: 318.5, t: 9.53, w: 12.0 }
+    };
+
+    function updateCalc() {
+      const size = document.getElementById("size").value;
+      const butt = parseInt(document.getElementById("butt").value) || 0;
+      const elbow = parseInt(document.getElementById("elbow").value) || 0;
+      const tee = parseInt(document.getElementById("tee").value) || 0;
+      const dbUnit = parseInt(document.getElementById("dbUnit").value) || 0;
+
+      const target = pipeData[size];
+      const base = pipeData["25"]; // 25A基準
+
+      // DB係数 = (t × W × OD) ÷ (t₀ × W₀ × OD₀)
+      const dbRatio = (target.t * target.w * target.od) / (base.t * base.w * base.od);
+
+      const dbButt = butt * dbRatio;
+      const dbElbow = elbow * 2 * dbRatio;
+      const dbTee = tee * 3 * dbRatio;
+
+      const totalDB = dbButt + dbElbow + dbTee;
+      const totalPrice = totalDB * dbUnit;
+
+      document.getElementById("result").innerHTML = `
+        <ul>
+          <li>選択サイズ: ${size}A</li>
+          <li>外径: ${target.od} mm / 肉厚: ${target.t} mm / 開先: ${target.w} mm</li>
+          <li>DB係数（25A比）: <strong>${dbRatio.toFixed(2)} 倍</strong></li>
+          <li>付き合わせ: ${dbButt.toFixed(1)} DB</li>
+          <li>エルボ（×2）: ${dbElbow.toFixed(1)} DB</li>
+          <li>チーズ・フランジ（×3）: ${dbTee.toFixed(1)} DB</li>
+          <li><strong>合計DB数: ${totalDB.toFixed(1)} DB</strong></li>
+          <li><strong>合計金額: ¥${totalPrice.toLocaleString()}（税抜）</strong></li>
+        </ul>
+      `;
+    }
+
+    window.onload = updateCalc;
+  </script>
+</body>
+</html>
