@@ -160,13 +160,14 @@
                 </div>
 
                 <div class="form-group">
-                    <label>数</label>
-                    <input type="number" name="quantity[]" min="1" value="1" oninput="updateTotalPrice()">
+                    <label>数量</label>
+                    <input type="number" pattern="[0-9]*" name="quantity[]" min="0" placeholder="0" oninput="updateTotalPrice()">
                 </div>
 
                 <div class="form-group">
-                    <label>単</label>
+                    <label>単位</label>
                     <select name="unit[]">
+                         <option value="">選択</option>
                         <option value="本">本</option>
                         <option value="個">個</option>
                         <option value="枚">枚</option>
@@ -257,7 +258,7 @@
 
     function getQuantity(input) {
         const val = parseInt(input.value, 10);
-        return isNaN(val) || val < 1 ? 1 : val;
+        return isNaN(val) || val < 1 ? 0 : val;
     }
 
     // 合計金額計算
