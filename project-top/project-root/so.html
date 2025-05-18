@@ -324,9 +324,11 @@
                 // 定尺表示ロジック
                 if (cutLengthGroup && cutLengthDisplay) {
                     const unitSelect = card.querySelector('select[name="unit[]"]');
+                    const material = card.querySelector('select[name="material[]"]').value;  // ← 追加
 
                     if (unit === 'メーター' && shape === 'pipe' && quantity > 0) {
-                        const count = Math.ceil(quantity / 5.5);
+                        const divisor = (material === 'SUS304' || material === 'SUS316') ? 5 : 5.5;  // ← 条件で分岐
+                        const count = Math.ceil(quantity / divisor);  // ← 動的に割る
                         cutLengthDisplay.textContent = `${count} 本`;
                         cutLengthGroup.style.display = 'block';
 
@@ -428,31 +430,37 @@
             const rows = [];
             document.querySelectorAll('#formContainer .card').forEach(card => {
                 const unit = card.querySelector('select[name="unit[]"]').value;
+                const material = card.querySelector('select[name="material[]"]').value;
                 const shape = card.querySelector('select[name="shape[]"]').value;
                 const quantityInput = card.querySelector('input[name="quantity[]"]');
                 const quantity = getQuantity(quantityInput);
                 let cutLength = '';
-                let finalUnit = unit;  // ← 初期はそのまま
+                let finalUnit = unit;  // ← デフォルトではそのまま
 
-                // PDF用のunit変換（画面ではなくデータ上だけ）
                 if (unit === 'メーター' && shape === 'pipe' && quantity > 0) {
-                    cutLength = Math.ceil(quantity / 5.5);
-                    finalUnit = 'Standard size(5.5m)';  // ← PDF出力時にだけ変換
+                    const divisor = (material === 'SUS304' || material === 'SUS316') ? 5 : 5.5;
+                    cutLength = Math.ceil(quantity / divisor);
+
+                    // ★ unit を見た目用に変換
+                    finalUnit = (material === 'SUS304' || material === 'SUS316')
+                        ? 'Standard size (5m)'
+                        : 'Standard size (5.5m)';
                 }
 
                 rows.push({
                     size: card.querySelector('select[name="size[]"]').value,
-                    material: card.querySelector('select[name="material[]"]').value,
+                    material: material,
                     schedule: card.querySelector('select[name="schedule[]"]').value,
                     shape: shape,
                     valveType: card.querySelector('select[name="valveType[]"]').value,
                     quantity: quantityInput.value,
-                    unit: finalUnit,  // ← 最終的な unit をここに出力
+                    unit: finalUnit,  // ← ここにPDF用の表示名を出力
                     cutLength: cutLength
                 });
             });
             return rows;
         };
+
     </script>
 
 </body>
