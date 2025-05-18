@@ -205,7 +205,7 @@
                     <label>単位</label>
                     <select name="unit[]" onchange="updateTotalPrice()">
                         <option value="">選択</option>
-                        <option value="本">本</option>
+                        <option value="Standard size(5.5m)">本</option>
                         <option value="個">個</option>
                         <option value="枚">枚</option>
                         <option value="セット">セット</option>
@@ -323,10 +323,17 @@
 
                 // 定尺表示ロジック
                 if (cutLengthGroup && cutLengthDisplay) {
+                    const unitSelect = card.querySelector('select[name="unit[]"]');
+
                     if (unit === 'メーター' && shape === 'pipe' && quantity > 0) {
                         const count = Math.ceil(quantity / 5.5);
                         cutLengthDisplay.textContent = `${count} 本`;
                         cutLengthGroup.style.display = 'block';
+
+                        // ★Unit を "Standard size" に変更
+                        if (unitSelect) {
+                            unitSelect.value = 'Standard size(5.5m)';
+                        }
                     } else if (shape === 'バルブ' && quantity > 0) {
                         cutLengthDisplay.textContent = `${quantity} 本`;
                         cutLengthGroup.style.display = 'block';
@@ -335,6 +342,7 @@
                         cutLengthGroup.style.display = 'none';
                     }
                 }
+
 
                 // 金額計算
                 if (size && material && shape && priceTable[material] && priceTable[material][size]) {
