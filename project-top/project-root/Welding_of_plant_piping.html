@@ -11,7 +11,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-  
+
 
   <style>
     body {
@@ -25,11 +25,26 @@
       display: block;
       width: 100%;
       max-width: 800px;
-      height: 800px;
-      margin: 0 auto 0px;
+      margin: 20px auto;
       border: none;
-    
+      min-height: 600px;
     }
+
+    #app4 {
+      width: 100%;
+      height: 650px;
+    }
+
+    #app5 {
+      width: 100%;
+      height: 1200px;
+    }
+
+     #pipeForm {
+      width: 100%;
+      height: 600px;
+    }
+
 
     .pdf-button {
       display: block;
@@ -66,34 +81,28 @@
   ">
       🛠️ 見積りガイド 🧑‍🔧
     </a>
-     
+
 
   </div>
- <div style="text-align: center;">
-   *見積もりシステム開発中:弓工
-  </div>
-
-  <!-- 各 iframe にIDをつける -->
-  <iframe id="app1" src="estimate.html" loading="lazy"></iframe>
-  
   <div style="text-align: center;">
-    <a href="pipe.html">説明書</a>
+    *見積もりシステム開発中:弓工
   </div>
+
+  <iframe id="app1" src="estimate.html" loading="lazy"></iframe>
 
   <iframe id="app2" src="Pipe_Weight.html" loading="lazy"></iframe>
-  <div style="text-align: center;">
-    <a href="db_manual.html">説明書</a>
-  </div>
 
   <iframe id="app3" src="welding_cost_calculator.html" loading="lazy"></iframe>
 
   <iframe id="app4" src="hi.html" loading="lazy"></iframe>
 
-  <iframe id="pipeForm" src="so.html" loading="lazy"></iframe>
-  
+  <iframe id="app5" src="yo.html" loading="lazy"></iframe>
 
-  <!-- PDF出力ボタン -->
-  <button class="pdf-button" onclick="generatePDF()">試作PDF出力、調整中</button>
+  <iframe id="pipeForm" src="so.html" loading="lazy"></iframe>
+
+
+
+  <button class="pdf-button" onclick="generatePDF()">PDFを出す</button>
 
   <footer style="text-align:center; padding:0.5rem;">
     <a href="https://atsu3sh1n1.github.io/yumikou/" style="color:#000; text-decoration:none;">

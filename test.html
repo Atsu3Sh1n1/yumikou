@@ -2,68 +2,113 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>配管重量あたりの工事単価表</title>
+  <title>配管・溶接工事 経費チェックリスト</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-    }
-    table {
-      border-collapse: collapse;
-      width: 60%;
-      margin: 30px auto;
-    }
-    th, td {
-      border: 1px solid #aaa;
-      padding: 10px;
-      text-align: center;
-    }
-    th {
-      background-color: #f2f2f2;
-    }
-    caption {
-      font-size: 1.2em;
-      margin-bottom: 10px;
-      font-weight: bold;
-    }
+    body { font-family: sans-serif; margin: 20px; }
+    h2 { color: #2c3e50; }
+    table { border-collapse: collapse; width: 100%; max-width: 900px; }
+    th, td { border: 1px solid #999; padding: 8px; }
+    th { background-color: #f4f4f4; }
+    input[type="checkbox"] { transform: scale(1.2); }
   </style>
 </head>
 <body>
+
+  <h2>📋 配管・溶接工事 経費チェックリスト</h2>
+   <p style="margin-top: 20px;"><strong>✔ 必要なものにチェックを入れて、漏れのない見積・実行予算に</strong></p>
+
+
   <table>
-    <caption>配管重量あたりの純粋工事単価（参考）</caption>
     <thead>
       <tr>
-        <th>工種</th>
-        <th>単価（円/kg）</th>
-        <th>単価（円/0.01kg）</th>
+        <th>分類</th>
+        <th>項目</th>
+        <th>チェック</th>
       </tr>
     </thead>
     <tbody>
+      <!-- 工具・機材類 -->
       <tr>
-        <td>加工・組立</td>
-        <td>100～150</td>
-        <td>1.0～1.5</td>
+        <td rowspan="5">🛠 工具・機材</td>
+        <td>TIG溶接機・トーチ・ケーブルセット</td>
+        <td><input type="checkbox"></td>
       </tr>
       <tr>
-        <td>溶接（手溶接）</td>
-        <td>150～250</td>
-        <td>1.5～2.5</td>
+        <td>アーク溶接機・手棒用ホルダー</td>
+        <td><input type="checkbox"></td>
       </tr>
       <tr>
-        <td>支持金具施工</td>
-        <td>20～40</td>
-        <td>0.2～0.4</td>
+        <td>ディスクグラインダー（100mm/125mm）</td>
+        <td><input type="checkbox"></td>
       </tr>
       <tr>
-        <td>簡易防錆塗装</td>
-        <td>10～20</td>
-        <td>0.1～0.2</td>
+        <td>自動遮光面・手持ち面・安全面</td>
+        <td><input type="checkbox"></td>
       </tr>
       <tr>
-        <th>合計（目安）</th>
-        <th>280～460</th>
-        <th>2.8～4.6</th>
+        <td>ベベル加工用機器（開先加工機・やすり）</td>
+        <td><input type="checkbox"></td>
+      </tr>
+
+      <!-- 消耗品 -->
+      <tr>
+        <td rowspan="6">🔧 消耗品</td>
+        <td>溶接棒（SG2, SUS用等）</td>
+        <td><input type="checkbox"></td>
+      </tr>
+      <tr>
+        <td>アルゴンガス（TIG用）</td>
+        <td><input type="checkbox"></td>
+      </tr>
+      <tr>
+        <td>アセチレン・酸素（切断・ガウジング）</td>
+        <td><input type="checkbox"></td>
+      </tr>
+      <tr>
+        <td>ディスク砥石・フラップ・切断砥石</td>
+        <td><input type="checkbox"></td>
+      </tr>
+      <tr>
+        <td>ステンレス用ブラシ・ペーパー・耐水ペーパー</td>
+        <td><input type="checkbox"></td>
+      </tr>
+      <tr>
+        <td>パージシート・アルミテープ（裏波処理用）</td>
+        <td><input type="checkbox"></td>
+      </tr>
+
+      <!-- 仮設・搬入 -->
+      <tr>
+        <td rowspan="3">🚚 搬入・仮設</td>
+        <td>足場・可搬ステージ・踏み板</td>
+        <td><input type="checkbox"></td>
+      </tr>
+      <tr>
+        <td>工具・材料の運搬車（軽トラなど）</td>
+        <td><input type="checkbox"></td>
+      </tr>
+      <tr>
+        <td>ブルーシート・養生・墨出し機材</td>
+        <td><input type="checkbox"></td>
+      </tr>
+
+      <!-- 管理系 -->
+      <tr>
+        <td rowspan="3">📂 管理費・その他</td>
+        <td>通勤・交通費（ガソリン代、高速など）</td>
+        <td><input type="checkbox"></td>
+      </tr>
+      <tr>
+        <td>現場管理費・報告書・安全書類作成</td>
+        <td><input type="checkbox"></td>
+      </tr>
+      <tr>
+        <td>労災保険・対人賠償・作業員保険料</td>
+        <td><input type="checkbox"></td>
       </tr>
     </tbody>
   </table>
+
+
 </body>
 </html>

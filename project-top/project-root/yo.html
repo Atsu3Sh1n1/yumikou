@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>経費チェックリスト</title>
+  <style>
+    html,
+    body {
+      margin: 2px;
+      padding: 2px;
+      height: 100vh;
+      overflow: hidden;
+      font-family: sans-serif;
+    }
+
+    h2 {
+      color: #2c3e50;
+      margin: 6px;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      padding: 6px;
+      
+    }
+
+    .table-wrapper {
+      flex: 1;
+      overflow-y: auto;
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      max-width: 800px;
+    }
+
+    th,
+    td {
+      border: 1px solid #999;
+      padding: 6px;
+    }
+
+    th {
+      background-color: #f4f4f4;
+    }
+
+    input[type="checkbox"] {
+      transform: scale(1.2);
+    }
+  </style>
+  </head>
+
+<body>
+
+    <h2>📋経費チェックリスト</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>分類</th>
+                <th>項目</th>
+                <th>チェック</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- 工具・機材類 -->
+            <tr>
+                <td rowspan="5">🛠 工具・機材</td>
+                <td>TIG溶接機・トーチ・ケーブルセット</td>
+                <td><input type="checkbox"></td>
+            </tr>
+            <tr>
+                <td>アーク溶接機・手棒用ホルダー</td>
+                <td><input type="checkbox"></td>
+            </tr>
+            <tr>
+                <td>ディスクグラインダー（100mm/125mm）</td>
+                <td><input type="checkbox"></td>
+            </tr>
+            <tr>
+                <td>自動遮光面・手持ち面・安全面</td>
+                <td><input type="checkbox"></td>
+            </tr>
+            <tr>
+                <td>ベベル加工用機器（開先加工機・やすり）</td>
+                <td><input type="checkbox"></td>
+            </tr>
+
+            <!-- 消耗品 -->
+            <tr>
+                <td rowspan="6">🔧 消耗品</td>
+                <td>溶接棒（SG2, SUS用等）</td>
+                <td><input type="checkbox"></td>
+            </tr>
+            <tr>
+                <td>アルゴンガス（TIG用）</td>
+                <td><input type="checkbox"></td>
+            </tr>
+            <tr>
+                <td>アセチレン・酸素（切断・ガウジング）</td>
+                <td><input type="checkbox"></td>
+            </tr>
+            <tr>
+                <td>ディスク砥石・フラップ・切断砥石</td>
+                <td><input type="checkbox"></td>
+            </tr>
+            <tr>
+                <td>ステンレス用ブラシ・ペーパー・耐水ペーパー</td>
+                <td><input type="checkbox"></td>
+            </tr>
+            <tr>
+                <td>パージシート・アルミテープ（裏波処理用）</td>
+                <td><input type="checkbox"></td>
+            </tr>
+
+            <!-- 仮設・搬入 -->
+            <tr>
+                <td rowspan="3">🚚 搬入・仮設</td>
+                <td>脚立・足場・可搬ステージ・踏み板</td>
+                <td><input type="checkbox"></td>
+            </tr>
+            <tr>
+                <td>工具・材料の運搬車（軽トラなど）</td>
+                <td><input type="checkbox"></td>
+            </tr>
+            <tr>
+                <td>ブルーシート・養生・墨出し機材</td>
+                <td><input type="checkbox"></td>
+            </tr>
+
+            <!-- 管理系 -->
+            <tr>
+                <td rowspan="3">📂 管理費・その他</td>
+                <td>通勤・交通費（ガソリン代、高速など）</td>
+                <td><input type="checkbox"></td>
+            </tr>
+            <tr>
+                <td>現場管理費・報告書・安全書類作成</td>
+                <td><input type="checkbox"></td>
+            </tr>
+            <tr>
+                <td>労災保険・対人賠償・作業員保険料</td>
+                <td><input type="checkbox"></td>
+            </tr>
+        </tbody>
+    </table>
+
+
+</body>
+
+</html>
