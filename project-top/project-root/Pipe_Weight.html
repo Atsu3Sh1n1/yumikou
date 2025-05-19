@@ -127,15 +127,20 @@
     .footer {
       text-align: center;
       font-size: 11px;
-      margin-top: 0;
-      padding: 0.5rem;
+      margin-bottom: -20px;
+      padding: 1.2rem ;
     }
   </style>
 </head>
 
 <body>
   <div class="container">
-    <h1>配管施工費算出機<br>(藤田君2号)</h1>
+
+    <h1 style="line-height: 0.9;">
+      配管施工費算出機<br>
+      <span style="font-size: 0.6em;">(フジタ君2号)</span>
+    </h1>
+
     <div class="footer">
       <a href="https://atsu3sh1n1.github.io/yumikou/" target="_blank">Created by YUMIKOU Inc.</a>
     </div>
@@ -145,7 +150,7 @@
       <select id="size" name="size">
         <option value="15">15A</option>
         <option value="20">20A</option>
-         <option value="25" selected>25A</option> 
+        <option value="25" selected>25A</option>
         <option value="32">32A</option>
         <option value="40">40A</option>
         <option value="50">50A</option>
@@ -219,10 +224,10 @@
       "250": { sch20: 42.4, sch40: 59.18, sch80: 93.9, sus10s: 26.2, sus20: 42.2, sus40: 59.8, sus80: 94.9, sus160: 170 },
       "300": { sch20: 53, sch40: 78.45, sch80: 129, sus10s: 35.2, sus20: 50.5, sus40: 79.1, sus80: 131, sus160: 237 },
 
-      "350": { sch20: 67.7, sch40: 94.3, sch80: 158,  sus40: 95.3, sus80: 159, sus160: 284 },
-      "400": { sch20: 77.6, sch40: 123, sch80: 203,   sus40: 125, sus80: 205, sus160: 369 },
-      "450": { sch20: 87.5, sch40: 158, sch80: 254,   sus40: 158, sus80: 257, sus160: 468 },
-      "500": { sch20: 97.4, sch40: 185, sch80: 311,   sus40: 185, sus80: 314, sus160: 570 }
+      "350": { sch20: 67.7, sch40: 94.3, sch80: 158, sus40: 95.3, sus80: 159, sus160: 284 },
+      "400": { sch20: 77.6, sch40: 123, sch80: 203, sus40: 125, sus80: 205, sus160: 369 },
+      "450": { sch20: 87.5, sch40: 158, sch80: 254, sus40: 158, sus80: 257, sus160: 468 },
+      "500": { sch20: 97.4, sch40: 185, sch80: 311, sus40: 185, sus80: 314, sus160: 570 }
 
 
     };
