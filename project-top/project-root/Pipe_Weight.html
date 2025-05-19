@@ -173,7 +173,7 @@
     </div>
 
     <div class="form-group">
-      <label for="unitPrice" id="unitPriceLabel">インチ基準メーター単価 (円/m):</label>
+      <label for="unitPrice" id="unitPriceLabel">メーター単価 (円/m):</label>
       <input type="number" inputmode="numeric" id="unitPrice" name="unitPrice" value="3000" min="0" />
     </div>
 
@@ -193,138 +193,148 @@
     <div class="result" id="pipeCost">配管金額: ¥0</div>
   </div>
 
-<script>
-  const weightPerMeter = {
-    "25": { sch10: 2.56, sch20: 2.43, sch40: 2.56, sch80: 3.27, sus10s: 2.15, sus20: 2.29, sus40: 2.57, sus80: 3.27 },
-    "32": { sch10: 3.4, sch20: 3.38, sch40: 3.4, sch80: 4.57, sus10s: 2.76, sus20: 2.94, sus40: 3.47, sus80: 4.57 },
-    "40": { sch10: 4.09, sch20: 3.89, sch40: 4.1, sch80: 5.47, sus10s: 3.16, sus20: 3.37, sus40: 4.1, sus80: 5.47 },
-    "50": { sch10: 4.92, sch20: 5.31, sch40: 5.58, sch80: 7.47, sus10s: 3.98, sus20: 4.92, sus40: 5.44, sus80: 7.46 },
-    "65": { sch10: 6.63, sch20: 7.47, sch40: 9.12, sch80: 12.14, sus10s: 5.42, sus20: 6.28, sus40: 9.12, sus80: 12 },
-    "80": { sch10: 8.39, sch20: 8.79, sch40: 11.36, sch80: 15.29, sus10s: 6.37, sus20: 8.39, sus40: 11.3, sus80: 15.3 },
-    "90": { sch10: 8.39, sch20: 10.1, sch40: 11.36, sch80: 15.29, sus10s: 7.29, sus20: 9.63, sus40: 13.5, sus80: 18.7 },
-    "100": { sch10: 12.18, sch20: 12.2, sch40: 16.04, sch80: 22.96, sus10s: 8.23, sus20: 10.9, sus40: 16, sus80: 22.4 },
-    "125": { sch10: 16.63, sch20: 15, sch40: 22.96, sch80: 32.89, sus10s: 11.4, sus20: 16.6, sus40: 21.7, sus80: 30.5 },
-    "150": { sch10: 21.67, sch20: 19.8, sch40: 27.73, sch80: 41.85, sus10s: 13.6, sus20: 19.8, sus40: 27.7, sus80: 41.8 },
-    "200": { sch10: 32.67, sch20: 30.1, sch40: 42.11, sch80: 63.81, sus10s: 20.9, sus20: 33.6, sus40: 42.1, sus80: 63.80 },
-    "250": { sch10: 42.55, sch20: 42.4, sch40: 59.18, sch80: 79.78, sus10s: 26, sus20: 41.8, sus40: 59.2, sus80: 93.9 },
-    "300": { sch10: 54.57, sch20: 53, sch40: 78.45, sch80: 95.76, sus10s: 34.8, sus20: 50, sus40: 78.3, sus80: 129 }
-  };
+  <script>
+    const weightPerMeter = {
+      "15": { sch20: 1.31, sch40: 1.31, sch80: 1.64, sus10s: 2.18, sus20: 2.29, sus40: 1.31, sus80: 3.27 },
+      "20": { sch20: 1.68, sch40: 1.74, sch80: 2.24, sus10s: 2.18, sus20: 2.29, sus40: 1.74, sus80: 3.27 },
 
-  const pipeSizes = ["25", "32", "40", "50", "65", "80", "90", "100", "125", "150", "200", "250", "300"];
+      "25": { sch20: 2.43, sch40: 2.56, sch80: 3.27, sus10s: 2.18, sus20: 2.29, sus40: 2.57, sus80: 3.27 },
+      "32": { sch20: 3.38, sch40: 3.4, sch80: 4.57, sus10s: 2.78, sus20: 2.94, sus40: 3.47, sus80: 4.57 },
+      "40": { sch20: 3.89, sch40: 4.1, sch80: 5.47, sus10s: 3.19, sus20: 3.37, sus40: 4.1, sus80: 5.47 },
+      "50": { sch20: 5.31, sch40: 5.58, sch80: 7.46, sus10s: 4.02, sus20: 4.92, sus40: 5.44, sus80: 7.46 },
+      "65": { sch20: 7.47, sch40: 9.12, sch80: 12, sus10s: 5.48, sus20: 6.28, sus40: 9.12, sus80: 12 },
+      "80": { sch20: 8.79, sch40: 11.36, sch80: 15.3, sus10s: 6.43, sus20: 8.39, sus40: 11.3, sus80: 15.3 },
+      "90": { sch20: 10.1, sch40: 11.36, sch80: 18.7, sus10s: 7.37, sus20: 9.63, sus40: 13.5, sus80: 18.7 },
+      "100": { sch20: 12.2, sch40: 16.04, sch80: 22.4, sus10s: 8.32, sus20: 10.9, sus40: 16, sus80: 22.4 },
+      "125": { sch20: 15, sch40: 22.96, sch80: 30.5, sus10s: 11.6, sus20: 16.6, sus40: 21.7, sus80: 30.5 },
+      "150": { sch20: 19.8, sch40: 27.73, sch80: 41.8, sus10s: 13.7, sus20: 19.8, sus40: 27.7, sus80: 41.8 },
+      "200": { sch20: 30.1, sch40: 42.11, sch80: 63.8, sus10s: 21.2, sus20: 33.6, sus40: 42.1, sus80: 63.80 },
+      "250": { sch20: 42.4, sch40: 59.18, sch80: 93.9, sus10s: 26.2, sus20: 41.8, sus40: 59.2, sus80: 93.9 },
+      "300": { sch20: 53, sch40: 78.45, sch80: 129, sus10s: 35.2, sus20: 50, sus40: 78.3, sus80: 129 },
 
-  let currentSchedule = 'SCH40';
-  let currentUnitType = 'meter';
-  let currentMaterial = 'steel';
+      "350": { sch20: 67.7, sch40: 94.3, sch80: 158, sus10s: 26, sus20: 41.8, sus40: 94.3, sus80: 93.9 },
+      "400": { sch20: 77.6, sch40: 123, sch80: 203, sus10s: 26, sus20: 41.8, sus40: 123, sus80: 93.9 },
+      "450": { sch20: 87.5, sch40: 156, sch80: 254, sus10s: 26, sus20: 41.8, sus40: 156, sus80: 93.9 },
+      "500": { sch20: 97.4, sch40: 184, sch80: 311, sus10s: 26, sus20: 41.8, sus40: 184, sus80: 93.9 }
 
-  function setSchedule(schedule) {
-    currentSchedule = schedule;
-    document.querySelectorAll(".schedule-buttons button").forEach(btn => btn.classList.remove("active"));
-    document.getElementById("btn" + schedule).classList.add("active");
-    calculate();
-  }
 
-  function setMaterial(type) {
-    currentMaterial = type;
-    document.querySelectorAll(".material-toggle button").forEach(btn => btn.classList.remove("active"));
-    document.getElementById("btn" + (type === 'steel' ? 'Steel' : 'Stainless')).classList.add("active");
-    calculate();
-  }
-
-  document.querySelectorAll("input, select").forEach(el => {
-    el.addEventListener("input", () => {
-      if (el.name === 'unitType') {
-        currentUnitType = document.querySelector('input[name="unitType"]:checked').value;
-        document.getElementById('unitPriceLabel').textContent =
-          currentUnitType === 'meter' ? 'メーター単価 (円/m):' : '重量単価 (円/kg):';
-      }
-      calculate();
-    });
-  });
-
-  // 施工延長による最大20%割引（100mで20%割引）
-  function getLengthDiscount(length, size, schedule) {
-    if (size === "25" && schedule.toLowerCase() === "sch40" && length === 1) {
-      // 25Aスケ40で長さ1mだけは割引なし
-      return 1;
-    }
-    const maxDiscountRate = 0.20;
-    const discountLengthThreshold = 100;
-    const discountRate = Math.min((length / discountLengthThreshold) * maxDiscountRate, maxDiscountRate);
-    return 1 - discountRate;
-  }
-
-  function calculate() {
-    const size = document.getElementById("size").value;
-    const length = parseFloat(document.getElementById("pipeLength").value) || 0;
-    const price = parseFloat(document.getElementById("unitPrice").value) || 0;
-    const schKey = currentSchedule.toLowerCase();
-    const materialKey = currentMaterial === 'steel' ? schKey : 'sus' + schKey.slice(3);
-
-    const baseWeightSCH40_25 = weightPerMeter["25"]["sch40"];
-    const actualWeight = weightPerMeter[size][materialKey];
-    const weight = length * actualWeight;
-
-    const baseIndex = pipeSizes.indexOf("25");
-    const sizeIndex = pipeSizes.indexOf(size);
-    const sizeStep = Math.max(0, sizeIndex - baseIndex);
-    const discountFactor = Math.pow(1 / 1.05, sizeStep);
-
-    const lengthDiscount = getLengthDiscount(length, size, currentSchedule);
-
-    let cost;
-    if (currentUnitType === 'meter') {
-      const weightRatio = actualWeight / baseWeightSCH40_25;
-      cost = length * price * weightRatio * discountFactor * lengthDiscount;
-    } else {
-      cost = weight * price * discountFactor * lengthDiscount;
-    }
-
-    if (currentMaterial === 'stainless') cost *= 1.5;
-
-    document.getElementById("pipeWeight").textContent = `配管重量: ${weight.toFixed(2)} kg`;
-    document.getElementById("pipeCost").textContent = `金額: ¥${Math.round(cost).toLocaleString()}`;
-  }
-
-  calculate();
-
-  window.getEstimateData = function () {
-    const size = document.getElementById("size").value;
-    const length = parseFloat(document.getElementById("pipeLength").value) || 0;
-    const unitPrice = parseFloat(document.getElementById("unitPrice").value) || 0;
-
-    const schKey = currentSchedule.toLowerCase();
-    const materialKey = currentMaterial === 'steel' ? schKey : 'sus' + schKey.slice(3);
-
-    const baseWeightSCH40_25 = weightPerMeter["25"]["sch40"];
-    const actualWeight = weightPerMeter[size][materialKey];
-    const weight = length * actualWeight;
-
-    const baseIndex = pipeSizes.indexOf("25");
-    const sizeIndex = pipeSizes.indexOf(size);
-    const sizeStep = Math.max(0, sizeIndex - baseIndex);
-    const discountFactor = Math.pow(1 / 1.1, sizeStep);
-
-    const lengthDiscount = getLengthDiscount(length, size, currentSchedule);
-
-    let cost;
-    if (currentUnitType === 'meter') {
-      const weightRatio = actualWeight / baseWeightSCH40_25;
-      cost = length * unitPrice * weightRatio * discountFactor * lengthDiscount;
-    } else {
-      cost = weight * unitPrice * discountFactor * lengthDiscount;
-    }
-
-    if (currentMaterial === 'stainless') cost *= 1.5;
-
-    return {
-      appId: 'pipe-weight',
-      subtotal: Math.round(cost),
-      manhour: 0,
-      pipeLength: length,
-      pipeWeight: weight.toFixed(2)
     };
-  };
-</script>
+
+    const pipeSizes = ["25", "32", "40", "50", "65", "80", "90", "100", "125", "150", "200", "250", "300"];
+
+    let currentSchedule = 'SCH40';
+    let currentUnitType = 'meter';
+    let currentMaterial = 'steel';
+
+    function setSchedule(schedule) {
+      currentSchedule = schedule;
+      document.querySelectorAll(".schedule-buttons button").forEach(btn => btn.classList.remove("active"));
+      document.getElementById("btn" + schedule).classList.add("active");
+      calculate();
+    }
+
+    function setMaterial(type) {
+      currentMaterial = type;
+      document.querySelectorAll(".material-toggle button").forEach(btn => btn.classList.remove("active"));
+      document.getElementById("btn" + (type === 'steel' ? 'Steel' : 'Stainless')).classList.add("active");
+      calculate();
+    }
+
+    document.querySelectorAll("input, select").forEach(el => {
+      el.addEventListener("input", () => {
+        if (el.name === 'unitType') {
+          currentUnitType = document.querySelector('input[name="unitType"]:checked').value;
+          document.getElementById('unitPriceLabel').textContent =
+            currentUnitType === 'meter' ? 'メーター単価 (円/m):' : '重量単価 (円/kg):';
+        }
+        calculate();
+      });
+    });
+
+    // 施工延長による最大20%割引（100mで20%割引）
+    function getLengthDiscount(length, size, schedule) {
+      if (size === "25" && schedule.toLowerCase() === "sch40" && length === 1) {
+        // 25Aスケ40で長さ1mだけは割引なし
+        return 1;
+      }
+      const maxDiscountRate = 0.20;
+      const discountLengthThreshold = 100;
+      const discountRate = Math.min((length / discountLengthThreshold) * maxDiscountRate, maxDiscountRate);
+      return 1 - discountRate;
+    }
+
+    function calculate() {
+      const size = document.getElementById("size").value;
+      const length = parseFloat(document.getElementById("pipeLength").value) || 0;
+      const price = parseFloat(document.getElementById("unitPrice").value) || 0;
+      const schKey = currentSchedule.toLowerCase();
+      const materialKey = currentMaterial === 'steel' ? schKey : 'sus' + schKey.slice(3);
+
+      const baseWeightSCH40_25 = weightPerMeter["25"]["sch40"];
+      const actualWeight = weightPerMeter[size][materialKey];
+      const weight = length * actualWeight;
+
+      const baseIndex = pipeSizes.indexOf("25");
+      const sizeIndex = pipeSizes.indexOf(size);
+      const sizeStep = Math.max(0, sizeIndex - baseIndex);
+      const discountFactor = Math.pow(1 / 1.05, sizeStep);
+
+      const lengthDiscount = getLengthDiscount(length, size, currentSchedule);
+
+      let cost;
+      if (currentUnitType === 'meter') {
+        const weightRatio = actualWeight / baseWeightSCH40_25;
+        cost = length * price * weightRatio * discountFactor * lengthDiscount;
+      } else {
+        cost = weight * price * discountFactor * lengthDiscount;
+      }
+
+      if (currentMaterial === 'stainless') cost *= 1.5;
+
+      document.getElementById("pipeWeight").textContent = `配管重量: ${weight.toFixed(2)} kg`;
+      document.getElementById("pipeCost").textContent = `金額: ¥${Math.round(cost).toLocaleString()}`;
+    }
+
+    calculate();
+
+    window.getEstimateData = function () {
+      const size = document.getElementById("size").value;
+      const length = parseFloat(document.getElementById("pipeLength").value) || 0;
+      const unitPrice = parseFloat(document.getElementById("unitPrice").value) || 0;
+
+      const schKey = currentSchedule.toLowerCase();
+      const materialKey = currentMaterial === 'steel' ? schKey : 'sus' + schKey.slice(3);
+
+      const baseWeightSCH40_25 = weightPerMeter["25"]["sch40"];
+      const actualWeight = weightPerMeter[size][materialKey];
+      const weight = length * actualWeight;
+
+      const baseIndex = pipeSizes.indexOf("25");
+      const sizeIndex = pipeSizes.indexOf(size);
+      const sizeStep = Math.max(0, sizeIndex - baseIndex);
+      const discountFactor = Math.pow(1 / 1.1, sizeStep);
+
+      const lengthDiscount = getLengthDiscount(length, size, currentSchedule);
+
+      let cost;
+      if (currentUnitType === 'meter') {
+        const weightRatio = actualWeight / baseWeightSCH40_25;
+        cost = length * unitPrice * weightRatio * discountFactor * lengthDiscount;
+      } else {
+        cost = weight * unitPrice * discountFactor * lengthDiscount;
+      }
+
+      if (currentMaterial === 'stainless') cost *= 1.5;
+
+      return {
+        appId: 'pipe-weight',
+        subtotal: Math.round(cost),
+        manhour: 0,
+        pipeLength: length,
+        pipeWeight: weight.toFixed(2)
+      };
+    };
+  </script>
 </body>
 
 </html>
