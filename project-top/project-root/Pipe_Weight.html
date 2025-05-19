@@ -163,7 +163,7 @@
       <input type="number" inputmode="numeric" id="pipeLength" name="pipeLength" placeholder="0" min="0" />
     </div>
 
-    
+
 
     <div class="form-group">
       <label for="unitPrice" id="unitPriceLabel">単価 (円/kg):</label>
@@ -184,7 +184,7 @@
 
     <div id="pipeWeight"></div>
     <div id="pipeCost"></div>
-   
+
 
   </div>
 
@@ -286,7 +286,7 @@
       const actualWeight = weightPerMeter[size]?.[materialKey];
 
       if (actualWeight === undefined) {
-        document.getElementById("pipeWeight").textContent = `選択されたサイズ/材質の重量データがありません`;
+        document.getElementById("pipeWeight").textContent = `データがありません`;
         document.getElementById("pipeCost").textContent = `金額: -`;
         document.getElementById("perMeterUnitPrice").textContent = `-`;
         return;
@@ -296,11 +296,12 @@
       const baseIndex = pipeSizes.indexOf("25");
       const sizeIndex = pipeSizes.indexOf(size);
       const sizeStep = Math.max(0, sizeIndex - baseIndex);
-      const discountFactor = Math.pow(1 / 1.05, sizeStep);
+
       const lengthDiscount = getLengthDiscount(length, size, currentSchedule);
       const diameterCorrection = diameterCorrectionFactors[size] || 1.0;
 
-      let cost = weight * price * discountFactor * lengthDiscount * diameterCorrection;
+      let cost = weight * price * lengthDiscount * diameterCorrection;
+
 
       if (currentMaterial === 'stainless') cost *= 1.5;
 
@@ -337,7 +338,7 @@
       const baseIndex = pipeSizes.indexOf("25");
       const sizeIndex = pipeSizes.indexOf(size);
       const sizeStep = Math.max(0, sizeIndex - baseIndex);
-      const discountFactor = Math.pow(1 / 1.1, sizeStep);
+     
 
       const lengthDiscount = getLengthDiscount(length, size, currentSchedule);
 
@@ -348,7 +349,7 @@
         const weightRatio = actualWeight / baseWeightSCH40_25;
         cost = length * unitPrice * weightRatio * discountFactor * lengthDiscount * diameterCorrection;
       } else {
-        cost = weight * unitPrice * discountFactor * lengthDiscount * diameterCorrection;
+        cost = weight * unitPrice * lengthDiscount * diameterCorrection;
       }
 
       if (currentMaterial === 'stainless') cost *= 1.5;
