@@ -2,178 +2,152 @@
 <html lang="ja">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>経費数量入力リスト</title>
+  <meta charset="UTF-8" />
+  <title>経費チェックリスト</title>
   <style>
-    html, body {
+    html,
+    body {
       margin: 0;
       padding: 0;
-      height: 100%;
-      width: 100%;
+      height: 100vh;
       font-family: sans-serif;
-      box-sizing: border-box;
     }
 
     h2 {
-      margin: 8px;
       color: #2c3e50;
-      font-size: clamp(1.2rem, 4vw, 1.5rem);
+      margin: 6px;
     }
 
     .container {
-      height: 100%;
-      width: 100%;
       display: flex;
       flex-direction: column;
-      padding: 8px;
+      height: 100vh;
+      padding: 6px;
       box-sizing: border-box;
     }
 
     .table-wrapper {
       flex: 1;
-      overflow: auto;
-      width: 100%;
-      -webkit-overflow-scrolling: touch;
+      overflow-y: auto;
     }
 
     table {
       border-collapse: collapse;
       width: 100%;
-      min-width: 600px;
+      max-width: 800px;
     }
 
-    th, td {
+    th,
+    td {
       border: 1px solid #999;
-      padding: 8px;
-      vertical-align: middle;
-      font-size: clamp(0.8rem, 3vw, 1rem);
+      padding: 6px;
     }
 
     th {
-      background-color: #f0f0f0;
-      text-align: left;
-      position: sticky;
-      top: 0;
+      background-color: #f4f4f4;
     }
 
-    input[type="number"] {
-      width: 100%;
-      max-width: 120px;
-      padding: 8px;
-      font-size: 1em;
-      box-sizing: border-box;
-    }
-
-    @media (max-width: 768px) {
-      th, td {
-        padding: 6px 4px;
-      }
-      
-      input[type="number"] {
-        padding: 6px;
-      }
+    input[type="checkbox"] {
+      transform: scale(1.2);
     }
   </style>
 </head>
 
 <body>
-
   <div class="container">
-    <h2>📋 工具・消耗品・経費リスト</h2>
+    <h2>📋工具/消耗品/経費リスト</h2>
     <div class="table-wrapper">
       <table>
         <thead>
           <tr>
             <th>分類</th>
             <th>項目</th>
-            <th>数量</th>
+            <th>チェック</th>
           </tr>
         </thead>
         <tbody>
-          <!-- 工具・機材 -->
+          <!-- 工具・機材類 -->
           <tr>
             <td rowspan="5">🛠 工具・機材</td>
             <td>TIG溶接機・トーチ・ケーブルセット</td>
-            <td><input type="number" inputmode="numeric" pattern="\d*" min="0"></td>
+            <td><input type="checkbox"></td>
           </tr>
           <tr>
             <td>アーク溶接機・手棒用ホルダー</td>
-            <td><input type="number" inputmode="numeric" pattern="\d*" min="0"></td>
+            <td><input type="checkbox"></td>
           </tr>
           <tr>
             <td>ディスクグラインダー（100mm/125mm）</td>
-            <td><input type="number" inputmode="numeric" pattern="\d*" min="0"></td>
+            <td><input type="checkbox"></td>
           </tr>
           <tr>
             <td>自動遮光面・手持ち面・安全面</td>
-            <td><input type="number" inputmode="numeric" pattern="\d*" min="0"></td>
+            <td><input type="checkbox"></td>
           </tr>
           <tr>
             <td>ベベル加工用機器（開先加工機・やすり）</td>
-            <td><input type="number" inputmode="numeric" pattern="\d*" min="0"></td>
+            <td><input type="checkbox"></td>
           </tr>
 
           <!-- 消耗品 -->
           <tr>
             <td rowspan="6">🔧 消耗品</td>
             <td>溶接棒（SG2, SUS用等）</td>
-            <td><input type="number" inputmode="numeric" pattern="\d*" min="0"></td>
+            <td><input type="checkbox"></td>
           </tr>
           <tr>
             <td>アルゴンガス（TIG用）</td>
-            <td><input type="number" inputmode="numeric" pattern="\d*" min="0"></td>
+            <td><input type="checkbox"></td>
           </tr>
           <tr>
             <td>アセチレン・酸素（切断・ガウジング）</td>
-            <td><input type="number" inputmode="numeric" pattern="\d*" min="0"></td>
+            <td><input type="checkbox"></td>
           </tr>
           <tr>
             <td>ディスク砥石・フラップ・切断砥石</td>
-            <td><input type="number" inputmode="numeric" pattern="\d*" min="0"></td>
+            <td><input type="checkbox"></td>
           </tr>
           <tr>
             <td>ステンレス用ブラシ・ペーパー・耐水ペーパー</td>
-            <td><input type="number" inputmode="numeric" pattern="\d*" min="0"></td>
+            <td><input type="checkbox"></td>
           </tr>
           <tr>
             <td>パージシート・アルミテープ（裏波処理用）</td>
-            <td><input type="number" inputmode="numeric" pattern="\d*" min="0"></td>
+            <td><input type="checkbox"></td>
           </tr>
 
           <!-- 仮設・搬入 -->
           <tr>
             <td rowspan="3">🚚 搬入・仮設</td>
             <td>脚立・足場・可搬ステージ・踏み板</td>
-            <td><input type="number" inputmode="numeric" pattern="\d*" min="0"></td>
+            <td><input type="checkbox"></td>
           </tr>
           <tr>
             <td>工具・材料の運搬車（軽トラなど）</td>
-            <td><input type="number" inputmode="numeric" pattern="\d*" min="0"></td>
+            <td><input type="checkbox"></td>
           </tr>
           <tr>
             <td>ブルーシート・養生・墨出し機材</td>
-            <td><input type="number" inputmode="numeric" pattern="\d*" min="0"></td>
+            <td><input type="checkbox"></td>
           </tr>
 
-          <!-- 管理費 -->
+          <!-- 管理系 -->
           <tr>
             <td rowspan="3">📂 管理費・その他</td>
             <td>通勤・交通費（ガソリン代、高速など）</td>
-            <td><input type="number" inputmode="numeric" pattern="\d*" min="0"></td>
+            <td><input type="checkbox"></td>
           </tr>
           <tr>
             <td>現場管理費・報告書・安全書類作成</td>
-            <td><input type="number" inputmode="numeric" pattern="\d*" min="0"></td>
+            <td><input type="checkbox"></td>
           </tr>
           <tr>
             <td>労災保険・対人賠償・作業員保険料</td>
-            <td><input type="number" inputmode="numeric" pattern="\d*" min="0"></td>
+            <td><input type="checkbox"></td>
           </tr>
         </tbody>
       </table>
-    </div>
-  </div>
+
 
 </body>
 
