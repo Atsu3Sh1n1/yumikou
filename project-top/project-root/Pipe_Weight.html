@@ -308,7 +308,7 @@
 
       let discountFactor = 1.0;
       if (parseInt(size) >= 350) {
-        discountFactor = Math.pow(1 / 1.02, sizeStep);
+        discountFactor = Math.pow(1 / 1.01, sizeStep);
       }
 
       const lengthDiscount = getLengthDiscount(length, size, currentSchedule);
@@ -316,11 +316,9 @@
 
       let cost = weight * price * lengthDiscount * diameterCorrection * discountFactor;
 
-
       if (currentMaterial === 'stainless') cost *= 1.5;
 
-      const unitPricePerMeter = cost / length;
-
+      const unitPricePerMeter = length > 0 ? cost / length : 0;
       document.getElementById("pipeWeight").textContent = `配管重量: ${weight.toFixed(2)} kg`;
       document.getElementById("pipeCost").textContent = `金額: ¥${Math.round(cost).toLocaleString()}`;
       document.getElementById("perMeterUnitPrice").textContent = `換算メーター単価: ¥${Math.round(unitPricePerMeter).toLocaleString()} /m`;
