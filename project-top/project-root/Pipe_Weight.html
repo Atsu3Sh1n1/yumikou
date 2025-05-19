@@ -329,7 +329,7 @@
       const unitPricePerMeter = length > 0 ? cost / length : 0;
       document.getElementById("pipeWeight").textContent = `配管重量: ${weight.toFixed(2)} kg`;
       document.getElementById("pipeCost").textContent = `金額: ¥${Math.round(cost).toLocaleString()}`;
-      document.getElementById("perMeterUnitPrice").textContent = `換算メーター単価: ¥${Math.round(unitPricePerMeter).toLocaleString()} /m`;
+      document.getElementById("perMeterUnitPrice").textContent = `メートル単価: ¥${Math.round(unitPricePerMeter).toLocaleString()} /m`;
     }
 
     calculate();
