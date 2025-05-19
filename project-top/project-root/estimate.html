@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
@@ -7,7 +8,8 @@
   <title>簡易現場工事見積金額計算機｜有限会社弓工</title>
   <link rel="icon" href="images/icon.webp" type="image/x-icon" />
   <style>
-    html, body {
+    html,
+    body {
       margin: 0;
       padding: 0;
       height: 100%;
@@ -15,9 +17,11 @@
       font-family: sans-serif;
       background-color: #f9f9f9;
     }
+
     body {
       display: block;
     }
+
     .container {
       background: #fff;
       padding: 25px 40px;
@@ -27,29 +31,35 @@
       width: 300px;
       margin: 0 auto;
     }
+
     h2 {
       text-align: center;
       margin-bottom: 10px;
       font-size: 1.4rem;
     }
+
     .form-group {
       margin-bottom: 12px;
     }
+
     .form-row {
       margin-bottom: 5px;
       font-weight: bold;
       font-size: 1.2rem;
     }
+
     .input-group {
       display: flex;
       justify-content: space-between;
       gap: 10px;
     }
+
     input[type="number"] {
       padding: 5px;
       font-size: 1em;
       width: 45%;
     }
+
     .result {
       text-align: center;
       margin-top: 20px;
@@ -57,12 +67,14 @@
       font-weight: bold;
       color: green;
     }
+
     .footer {
       text-align: center;
       font-size: 11px;
       margin-top: 0;
       padding: 0.5rem;
     }
+
     button[type="submit"] {
       display: block;
       margin: 10px auto 0;
@@ -74,11 +86,13 @@
       color: white;
       cursor: pointer;
     }
+
     button[type="submit"]:hover {
       background-color: #45a049;
     }
   </style>
 </head>
+
 <body>
   <div class="container">
     <h2>工数計算機</h2>
@@ -106,7 +120,7 @@
       </div>
 
       <div class="form-group">
-        <div class="form-row">溶接工 / 1.07</div>
+        <div class="form-row">溶接工 / 1.2</div>
         <div class="input-group">
           <input type="number" pattern="[0-9]*" id="tp" placeholder="人" min="0" />
           <input type="number" pattern="[0-9]*" id="td" placeholder="日" min="0" />
@@ -121,11 +135,9 @@
         </div>
       </div>
 
-      <div style="text-align: center; margin: 10px 0;">
-        <label>
-          <input type="checkbox" id="discountToggle" />
-          1.6倍にする (足場除く)
-        </label>
+ <div class="checkbox-group">
+        <label><input type="checkbox" id="applyMultiplier" /> 1.6倍にする</label>
+        <label><input type="checkbox" id="excludeScaffold" /> 足場を除く</label>
       </div>
 
       <div class="result" id="manhour">総工数: 0人日</div>
@@ -133,92 +145,57 @@
     </form>
   </div>
 
-<script>
-  const f = document.getElementById("form");
-  const u = { s: 5000 };
+  <script>
+    const f = document.getElementById("form");
+    const u = { s: 5000 };
 
-  const subEl = document.getElementById("sub");
-  const manhourEl = document.getElementById("manhour");
+    const subEl = document.getElementById("sub");
+    const manhourEl = document.getElementById("manhour");
 
-  function calc() {
-    const g = id => Number(document.getElementById(id).value) || 0;
-    const unitPrice = g("sc") || 27000;
-    const scaffold = g("s") * u.s;
+    function calc() {
+      const g = id => Number(document.getElementById(id).value) || 0;
+      const unitPrice = g("sc") || 27000;
 
-    // 各職種の係数（配管工基準）
-    const factor = {
-      pipe: 1.0,
-      weld: 1.07,
-      helper: 0.75
-    };
+      let scaffold = g("s") * u.s;
 
-    // 人件費（係数反映済）
-    let pt = g("pp") * g("pd") * unitPrice * factor.pipe;
-    let tt = g("tp") * g("td") * unitPrice * factor.weld;
-    let it = g("ip") * g("id") * unitPrice * factor.helper;
+      const factor = {
+        pipe: 1.0,
+        weld: 1.2,
+        helper: 0.75
+      };
 
-    const discountOn = document.getElementById("discountToggle").checked;
-    if (discountOn) {
-      pt = Math.floor(pt * 1.6);
-      tt = Math.floor(tt * 1.6);
-      it = Math.floor(it * 1.6);
+      let pt = g("pp") * g("pd") * unitPrice * factor.pipe;
+      let tt = g("tp") * g("td") * unitPrice * factor.weld;
+      let it = g("ip") * g("id") * unitPrice * factor.helper;
+
+      const applyMultiplier = document.getElementById("applyMultiplier").checked;
+      const excludeScaffold = document.getElementById("excludeScaffold").checked;
+
+      if (applyMultiplier) {
+        pt = Math.floor(pt * 1.6);
+        tt = Math.floor(tt * 1.6);
+        it = Math.floor(it * 1.6);
+        if (!excludeScaffold) {
+          scaffold = Math.floor(scaffold * 1.6);
+        }
+      }
+
+      const manhour = (g("pp") * g("pd")) + (g("tp") * g("td")) + (g("ip") * g("id"));
+      const total = scaffold + pt + tt + it;
+
+      manhourEl.textContent = `総工数: ${manhour}人日`;
+      subEl.textContent = `小計: ¥${total.toLocaleString()}`;
     }
 
-    const totalManhour = (g("pp") * g("pd")) + (g("tp") * g("td")) + (g("ip") * g("id"));
-    const total = scaffold + pt + tt + it;
+    f.addEventListener("input", calc);
+    f.addEventListener("submit", e => {
+      e.preventDefault();
+      alert("中身で勝負。有限会社弓工");
+    });
 
-    // 表示
-    manhourEl.textContent = `総工数: ${totalManhour}人日`;
-    subEl.textContent = `小計: ¥${total.toLocaleString()}`;
-  }
-
-  f.addEventListener("input", calc);
-  f.addEventListener("submit", e => {
-    e.preventDefault();
-    alert("中身で勝負。有限会社弓工");
-  });
-
-  document.getElementById("discountToggle").addEventListener("change", calc);
-  calc();
-
-  // 外部から参照可能な見積データ関数
-  window.getEstimateData = function () {
-    const g = id => Number(document.getElementById(id).value) || 0;
-    const unitPrice = g("sc") || 27000;
-    const scaffold = g("s") * u.s;
-
-    const factor = {
-      pipe: 1.0,
-      weld: 1.07,
-      helper: 0.75
-    };
-
-    let pt = g("pp") * g("pd") * unitPrice * factor.pipe;
-    let tt = g("tp") * g("td") * unitPrice * factor.weld;
-    let it = g("ip") * g("id") * unitPrice * factor.helper;
-
-    const discountOn = document.getElementById("discountToggle").checked;
-    if (discountOn) {
-      pt = Math.floor(pt * 1.6);
-      tt = Math.floor(tt * 1.6);
-      it = Math.floor(it * 1.6);
-    }
-
-    const total = scaffold + pt + tt + it;
-    const manhour = (g("pp") * g("pd")) + (g("tp") * g("td")) + (g("ip") * g("id"));
-
-    return {
-      appId: 'simple-estimator',
-      subtotal: total,
-      manhour: manhour,
-      unitPrice: unitPrice,
-      scaffoldCost: scaffold,
-      pipingCost: pt,
-      weldingCost: tt,
-      helperCost: it,
-      multiplierApplied: discountOn
-    };
-  };
-</script>
+    document.getElementById("applyMultiplier").addEventListener("change", calc);
+    document.getElementById("excludeScaffold").addEventListener("change", calc);
+    calc();
+  </script>
 </body>
 </html>
