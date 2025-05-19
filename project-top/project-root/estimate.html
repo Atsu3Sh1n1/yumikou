@@ -7,19 +7,20 @@
   <meta name="robots" content="index, follow" />
   <title>簡易現場工事見積金額計算機｜有限会社弓工</title>
   <link rel="icon" href="images/icon.webp" type="image/x-icon" />
-<style>
-    /* iframe内の空白を消すため */
+  <style>
     html, body {
       margin: 0;
       padding: 0;
       height: 100%;
-      overflow: hidden; /* 余計なスクロールバー防止 */
+      overflow: hidden;
       font-family: sans-serif;
       background-color: #f9f9f9;
     }
+
     body {
-      display: block; /* flexを解除 */
+      display: block;
     }
+
     .container {
       background: #fff;
       padding: 25px 40px;
@@ -27,7 +28,7 @@
       border-radius: 8px;
       box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
       width: 300px;
-      margin: 0 auto; /* 中央寄せ */
+      margin: 0 auto;
     }
 
     h2 {
@@ -88,11 +89,12 @@
     button[type="submit"]:hover {
       background-color: #45a049;
     }
-  </style></head>
+  </style>
+</head>
 
 <body>
   <div class="container">
-    <h2>人数・日数・0.6</h2>
+    <h2>人数・日数</h2>
 
     <div class="footer">
       <a href="https://atsu3sh1n1.github.io/yumikou/" target="_blank">Created by YUMIKOU Inc.</a>
@@ -132,15 +134,21 @@
         </div>
       </div>
 
+      <!-- 割引チェックボックス -->
+      <div style="text-align: center; margin: 10px 0;">
+        <label>
+          <input type="checkbox" id="discountToggle" />
+          1.6倍にする（簡易見積）
+        </label>
+      </div>
+
       <div class="result" id="manhour">総工数: 0人日</div>
       <div class="result" id="sub">小計: ¥0</div>
 
-      <button type="submit">計算</button>
     </form>
   </div>
 
   <script>
-
     const f = document.getElementById("form");
     const u = { s: 5000 };
 
@@ -154,8 +162,13 @@
       const pt = g("pp") * g("pd") * unitPrice;
       const tt = g("tp") * g("td") * unitPrice;
       const it = g("ip") * g("id") * unitPrice;
-      const sub = st + pt + tt + it;
+      let sub = st + pt + tt + it;
       const manhour = (g("pp") * g("pd")) + (g("tp") * g("td")) + (g("ip") * g("id"));
+
+      const discountOn = document.getElementById("discountToggle").checked;
+      if (discountOn) {
+        sub = Math.floor(sub * 1.6);
+      }
 
       subEl.textContent = `小計: ¥${sub.toLocaleString()}`;
       manhourEl.textContent = `総工数: ${manhour}人日`;
@@ -167,8 +180,10 @@
       alert("中身で勝負。有限会社弓工");
     });
 
+    document.getElementById("discountToggle").addEventListener("change", calc);
+
     calc();
-    // グローバル関数として、見積もりデータを返す関数を定義
+
     window.getEstimateData = function () {
       const g = id => Number(document.getElementById(id).value) || 0;
       const unitPrice = g("sc") || 27000;
@@ -176,11 +191,16 @@
       const pt = g("pp") * g("pd") * unitPrice;
       const tt = g("tp") * g("td") * unitPrice;
       const it = g("ip") * g("id") * unitPrice;
-      const sub = st + pt + tt + it;
+      let sub = st + pt + tt + it;
       const manhour = (g("pp") * g("pd")) + (g("tp") * g("td")) + (g("ip") * g("id"));
 
+      const discountOn = document.getElementById("discountToggle").checked;
+      if (discountOn) {
+        sub = Math.floor(sub * 0.6);
+      }
+
       return {
-        appId: 'simple-estimator', // 任意のID（複数あるときの識別に便利）
+        appId: 'simple-estimator',
         subtotal: sub,
         manhour: manhour,
         unitPrice: unitPrice,
@@ -189,8 +209,6 @@
         insulationCost: it
       };
     };
-
-
   </script>
 </body>
 
