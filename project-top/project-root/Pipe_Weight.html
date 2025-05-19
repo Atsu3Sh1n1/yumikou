@@ -150,9 +150,9 @@
     <div class="form-group">
       <label for="size">サイズ</label>
       <select id="size" name="size">
-        <option value="6">15A</option>
-        <option value="8">15A</option>
-        <option value="10">15A</option>
+        <option value="6">6A</option>
+        <option value="8">5A</option>
+        <option value="10">10A</option>
         <option value="15">15A</option>
         <option value="20">20A</option>
         <option value="25" selected>25A</option>
@@ -246,6 +246,11 @@
 
     // ここに小口径補正係数を追加
     const diameterCorrectionFactors = {
+      "6": 15.59,
+      "8": 11.61,
+      "10": 9.23,
+      "15": 6.01,
+      "20": 4.41,
       "25": 3.5,
       "32": 3.0,
       "40": 2.8,
