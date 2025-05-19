@@ -135,7 +135,7 @@
 
 <body>
   <div class="container">
-    <h1>メーター・重量**調整中</h1>
+    <h1>配管施工費計算機</h1>
     <div class="footer">
       <a href="https://atsu3sh1n1.github.io/yumikou/" target="_blank">Created by YUMIKOU Inc.</a>
     </div>
@@ -163,18 +163,11 @@
       <input type="number" inputmode="numeric" id="pipeLength" name="pipeLength" placeholder="0" min="0" />
     </div>
 
-    <div class="unit-toggle" aria-label="単価タイプ選択">
-      <label>
-        <input type="radio" name="unitType" value="meter" checked /> メーター単価 (円/m)
-      </label>
-      <label>
-        <input type="radio" name="unitType" value="weight" /> 重量単価 (円/kg)
-      </label>
-    </div>
+    
 
     <div class="form-group">
-      <label for="unitPrice" id="unitPriceLabel">メーター単価 (円/m):</label>
-      <input type="number" inputmode="numeric" id="unitPrice" name="unitPrice" value="3000" min="0" />
+      <label for="unitPrice" id="unitPriceLabel">単価 (円/kg):</label>
+      <input type="number" inputmode="numeric" id="unitPrice" class="active" name="unitPrice" value="350" min="0" />
     </div>
 
     <div class="schedule-buttons" role="group" aria-label="スケジュール選択">
@@ -189,8 +182,10 @@
       <button id="btnStainless" onclick="setMaterial('stainless')">ステンレス</button>
     </div>
 
-    <div class="db-display" id="pipeWeight">配管重量: 0 kg</div>
-    <div class="result" id="pipeCost">配管金額: ¥0</div>
+    <div id="pipeWeight"></div>
+    <div id="pipeCost"></div>
+   
+
   </div>
 
   <script>
@@ -222,8 +217,25 @@
 
     const pipeSizes = ["25", "32", "40", "50", "65", "80", "90", "100", "125", "150", "200", "250", "300"];
 
+    // ここに小口径補正係数を追加
+    const diameterCorrectionFactors = {
+      "25": 3.5,
+      "32": 3.0,
+      "40": 2.8,
+      "50": 2.5,
+      "65": 2.2,
+      "80": 2.0,
+      "90": 1.9,
+      "100": 1.7,
+      "125": 1.5,
+      "150": 1.3,
+      "200": 1.2,
+      "250": 1.1,
+      "300": 1.0
+    };
+
     let currentSchedule = 'SCH40';
-    let currentUnitType = 'meter';
+    let currentUnitType = 'weight';
     let currentMaterial = 'steel';
 
     function setSchedule(schedule) {
@@ -270,30 +282,33 @@
       const schKey = currentSchedule.toLowerCase();
       const materialKey = currentMaterial === 'steel' ? schKey : 'sus' + schKey.slice(3);
 
-      // メーター単価使用時：25A SCH40を基準にした重さ比率で価格を補正
       const baseWeightSCH40_25 = weightPerMeter["25"]["sch40"];
-      const actualWeight = weightPerMeter[size][materialKey];
-      const weight = length * actualWeight;
+      const actualWeight = weightPerMeter[size]?.[materialKey];
 
+      if (actualWeight === undefined) {
+        document.getElementById("pipeWeight").textContent = `選択されたサイズ/材質の重量データがありません`;
+        document.getElementById("pipeCost").textContent = `金額: -`;
+        document.getElementById("perMeterUnitPrice").textContent = `-`;
+        return;
+      }
+
+      const weight = length * actualWeight;
       const baseIndex = pipeSizes.indexOf("25");
       const sizeIndex = pipeSizes.indexOf(size);
       const sizeStep = Math.max(0, sizeIndex - baseIndex);
       const discountFactor = Math.pow(1 / 1.05, sizeStep);
-
       const lengthDiscount = getLengthDiscount(length, size, currentSchedule);
+      const diameterCorrection = diameterCorrectionFactors[size] || 1.0;
 
-      let cost;
-      if (currentUnitType === 'meter') {
-        const weightRatio = actualWeight / baseWeightSCH40_25;
-        cost = length * price * weightRatio * discountFactor * lengthDiscount;
-      } else {
-        cost = weight * price * discountFactor * lengthDiscount;
-      }
+      let cost = weight * price * discountFactor * lengthDiscount * diameterCorrection;
 
       if (currentMaterial === 'stainless') cost *= 1.5;
 
+      const unitPricePerMeter = cost / length;
+
       document.getElementById("pipeWeight").textContent = `配管重量: ${weight.toFixed(2)} kg`;
       document.getElementById("pipeCost").textContent = `金額: ¥${Math.round(cost).toLocaleString()}`;
+      document.getElementById("perMeterUnitPrice").textContent = `換算メーター単価: ¥${Math.round(unitPricePerMeter).toLocaleString()} /m`;
     }
 
     calculate();
@@ -307,7 +322,16 @@
       const materialKey = currentMaterial === 'steel' ? schKey : 'sus' + schKey.slice(3);
 
       const baseWeightSCH40_25 = weightPerMeter["25"]["sch40"];
-      const actualWeight = weightPerMeter[size][materialKey];
+      const actualWeight = weightPerMeter[size]?.[materialKey];
+      if (actualWeight === undefined) {
+        return {
+          appId: 'pipe-weight',
+          subtotal: 0,
+          manhour: 0,
+          pipeLength: length,
+          pipeWeight: "0"
+        };
+      }
       const weight = length * actualWeight;
 
       const baseIndex = pipeSizes.indexOf("25");
@@ -317,12 +341,14 @@
 
       const lengthDiscount = getLengthDiscount(length, size, currentSchedule);
 
+      const diameterCorrection = diameterCorrectionFactors[size] || 1.0;
+
       let cost;
       if (currentUnitType === 'meter') {
         const weightRatio = actualWeight / baseWeightSCH40_25;
-        cost = length * unitPrice * weightRatio * discountFactor * lengthDiscount;
+        cost = length * unitPrice * weightRatio * discountFactor * lengthDiscount * diameterCorrection;
       } else {
-        cost = weight * unitPrice * discountFactor * lengthDiscount;
+        cost = weight * unitPrice * discountFactor * lengthDiscount * diameterCorrection;
       }
 
       if (currentMaterial === 'stainless') cost *= 1.5;
@@ -336,6 +362,7 @@
       };
     };
   </script>
+
 </body>
 
 </html>
