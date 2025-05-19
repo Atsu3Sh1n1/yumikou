@@ -135,7 +135,7 @@
 
 <body>
   <div class="container">
-    <h1>配管施工計算機</h1>
+    <h1>配管施工費算出機君2号</h1>
     <div class="footer">
       <a href="https://atsu3sh1n1.github.io/yumikou/" target="_blank">Created by YUMIKOU Inc.</a>
     </div>
@@ -143,7 +143,9 @@
     <div class="form-group">
       <label for="size">サイズ</label>
       <select id="size" name="size">
-        <option value="25">25A</option>
+        <option value="15">15A</option>
+        <option value="20">20A</option>
+         <option value="25" selected>25A</option> 
         <option value="32">32A</option>
         <option value="40">40A</option>
         <option value="50">50A</option>
@@ -297,7 +299,7 @@
 
       if (actualWeight === undefined) {
         document.getElementById("pipeWeight").textContent = `データがありません`;
-        document.getElementById("pipeCost").textContent = `金額: -`;
+        document.getElementById("pipeCost").textContent = `-`;
         document.getElementById("perMeterUnitPrice").textContent = `-`;
         return;
       }
