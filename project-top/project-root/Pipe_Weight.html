@@ -270,6 +270,7 @@
       const schKey = currentSchedule.toLowerCase();
       const materialKey = currentMaterial === 'steel' ? schKey : 'sus' + schKey.slice(3);
 
+      // メーター単価使用時：25A SCH40を基準にした重さ比率で価格を補正
       const baseWeightSCH40_25 = weightPerMeter["25"]["sch40"];
       const actualWeight = weightPerMeter[size][materialKey];
       const weight = length * actualWeight;
