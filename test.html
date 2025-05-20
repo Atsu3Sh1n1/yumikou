@@ -1,124 +1,52 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>配管溶接 作業時間とコスト表</title>
+  <meta charset="UTF-8">
+  <title>回転可能なキューブ</title>
   <style>
     body {
-      font-family: sans-serif;
-      background: #f5f5f5;
-      padding: 1em;
-      line-height: 1.6;
+      margin: 0;
+      overflow: hidden;
     }
-    h1, h2 {
-      color: #333;
-    }
-    .box {
-      background: #fff;
-      padding: 1em;
-      margin-bottom: 1em;
-      border-radius: 8px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 0.5em;
-    }
-    th, td {
-      padding: 0.5em;
-      border: 1px solid #ccc;
-      text-align: center;
-      font-size: 0.95em;
-    }
-    th {
-      background-color: #eee;
-    }
-    .note {
-      font-size: 0.9em;
-      color: #666;
+    #cube-container {
+      width: 100vw;
+      height: 300px; /* ページ上部に固定サイズ */
     }
   </style>
 </head>
 <body>
+  <div id="cube-container"></div>
 
-  <h1>🔧 配管エルボ溶接 作業時間とコスト表（25A〜200A）</h1>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r148/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.148.0/examples/js/controls/OrbitControls.js"></script>
+  <script>
+    const container = document.getElementById('cube-container');
 
-  <div class="box">
-    <h2>📊 サイズ別 作業時間とコスト目安</h2>
-    <table>
-      <thead>
-        <tr>
-          <th>配管サイズ</th>
-          <th>作業時間（1本）</th>
-          <th>1日最大施工本数</th>
-          <th>人件費（1本）</th>
-          <th>消耗品費</th>
-          <th>合計原価</th>
-          <th>見積単価の目安</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>25A</td>
-          <td>20分</td>
-          <td>24本</td>
-          <td>約 1,042円</td>
-          <td>800円</td>
-          <td>1,842円</td>
-          <td>2,200〜2,500円</td>
-        </tr>
-        <tr>
-          <td>50A</td>
-          <td>25分</td>
-          <td>19本</td>
-          <td>約 1,315円</td>
-          <td>900円</td>
-          <td>2,215円</td>
-          <td>2,500〜2,800円</td>
-        </tr>
-        <tr>
-          <td>100A</td>
-          <td>35分</td>
-          <td>13本</td>
-          <td>約 1,923円</td>
-          <td>1,100円</td>
-          <td>3,023円</td>
-          <td>3,500〜4,000円</td>
-        </tr>
-        <tr>
-          <td>150A</td>
-          <td>45分</td>
-          <td>10本</td>
-          <td>約 2,500円</td>
-          <td>1,300円</td>
-          <td>3,800円</td>
-          <td>4,200〜4,800円</td>
-        </tr>
-        <tr>
-          <td>200A</td>
-          <td>60分</td>
-          <td>8本</td>
-          <td>約 3,125円</td>
-          <td>1,500円</td>
-          <td>4,625円</td>
-          <td>5,000〜6,000円</td>
-        </tr>
-      </tbody>
-    </table>
-    <p class="note">※人件費は1日25,000円（8時間換算）として計算</p>
-  </div>
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(container.clientWidth, container.clientHeight);
+    container.appendChild(renderer.domElement);
 
-  <div class="box">
-    <h2>📘 使用上のポイント</h2>
-    <ul>
-      <li>時間はあくまで「仮付＋本溶接＋簡易仕上げ」込み</li>
-      <li>段取りや休憩、手待ち時間は別で管理するのが理想</li>
-      <li>サイズが大きくなると人件費の割合が上がる</li>
-      <li>不慣れな職人や特殊材質（SUSなど）の場合は+20〜30%</li>
-    </ul>
-  </div>
+    const geometry = new THREE.BoxGeometry();
+    const material = new THREE.MeshNormalMaterial();
+    const cube = new THREE.Mesh(geometry, material);
+    scene.add(cube);
 
+    camera.position.z = 3;
+
+    const controls = new THREE.OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true; // 回転の慣性
+    controls.enableZoom = false;   // ズーム無効
+    controls.enablePan = false;    // 平行移動無効
+
+    function animate() {
+      requestAnimationFrame(animate);
+      controls.update();
+      renderer.render(scene, camera);
+    }
+
+    animate();
+  </script>
 </body>
 </html>
