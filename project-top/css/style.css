@@ -14,6 +14,11 @@ body {
   overflow-y: scroll; /* 縦スクロールを許可 */
   overflow-x: hidden; /* 横スクロールは禁止 */
 }
+ h3 {
+      color: #ffa600;
+      
+    }
+
 
 /* Chrome/Safari/Edge用 */
 body::-webkit-scrollbar {

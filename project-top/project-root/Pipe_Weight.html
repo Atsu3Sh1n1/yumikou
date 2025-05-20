@@ -176,8 +176,6 @@
       <input type="number" inputmode="numeric" id="pipeLength" name="pipeLength" placeholder="0" min="0" />
     </div>
 
-
-
     <div class="form-group">
       <label for="unitPrice" id="unitPriceLabel">単価 (円/kg)</label>
       <input type="number" inputmode="numeric" id="unitPrice" class="active" name="unitPrice" value="175" min="0" />
@@ -203,8 +201,6 @@
     <div id="perMeterUnitPrice"></div>
     <div id="pipeWeight"></div>
     <div id="pipeCost"></div>
-
-
 
   </div>
 
@@ -235,7 +231,6 @@
       "400": { sgp: 77.6, sch20: 77.6, sch40: 123, sch60: 160, sch80: 203, sch160: 365, sus40: 125, sus80: 205, sus120: 289, sus160: 369 },
       "450": { sgp: 87.5, sch20: 87.5, sch40: 158, sch60: 205, sch80: 254, sch160: 459, sus40: 158, sus80: 257, sus120: 367, sus160: 468 },
       "500": { sgp: 97.4, sch20: 117, sch40: 185, sch60: 248., sch80: 311, sch160: 565, sus40: 185, sus80: 314, sus120: 446, sus160: 570 }
-
 
     };
 
@@ -395,7 +390,8 @@
         subtotal: Math.round(cost),
         manhour: 0,
         pipeLength: length,
-        pipeWeight: weight.toFixed(2)
+        pipeWeight: weight.toFixed(2),
+        size: size  // ここを追加
       };
     };
   </script>

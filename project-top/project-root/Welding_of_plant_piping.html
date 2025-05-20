@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-  <title>スマホで簡単プラント配管工事見積作成｜有限会社弓工</title>
+  <title>プラント配管工事見積概算機｜有限会社弓工</title>
   <link rel="icon" href="images/icon.webp" type="image/x-icon" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -32,13 +32,13 @@
 
     #app2 {
       width: 100%;
-      height: 800px;
+      height: 760px;
     }
 
 
     #app4 {
       width: 100%;
-      height: 600px;
+      height: 650px;
     }
 
     #app5 {
@@ -105,7 +105,7 @@
 
 
 
-  <button class="pdf-button" onclick="generatePDF()">PDFを出す*調整中</button>
+  <button class="pdf-button" onclick="generatePDF()">PDFを出す</button>
 
   <footer style="text-align:center; padding:0.5rem;">
     <a href="https://atsu3sh1n1.github.io/yumikou/" style="color:#000; text-decoration:none;">
@@ -128,7 +128,7 @@
         });
       };
 
-      const iframeIds = ["app1", "app2", "app3", "app4", "app5", "pipeForm"];
+      const iframeIds = ["app1", "app2", "app3", "app4", "pipeForm"];
       await Promise.all(
         iframeIds.map(id => waitForIframeLoad(document.getElementById(id)))
       );
@@ -192,8 +192,7 @@
         { id: "app2", label: "Pipe Length / Weight" },
         { id: "app3", label: "Complete Welding" },
         { id: "app4", label: "Wrecker / 高所作業車" },
-        { id: "app5", label: "Tools / Misc Costs" },
-        { id: "pipeForm", label: "Item Description" },
+        { id: "pipeForm", label: "Item Description" }  // 新規追加
       ];
 
 
@@ -214,7 +213,7 @@
               : frame.id === 'app1'
                 ? `${data.manhour ?? 'N/A'} Days`
                 : frame.id === 'app2'
-                  ? `${data.pipeLength ?? 'N/A'} m / ${data.pipeWeight ?? 'N/A'} kg`
+                  ? `${data.size ?? 'N/A'} A / ${data.pipeLength ?? 'N/A'} m / ${data.pipeWeight ?? 'N/A'} kg`
                   : "N/A";
 
           rows.push([
@@ -230,14 +229,9 @@
         }
       }
       const roundDownTotal = (amount) => {
-        if (amount < 1_000_000) {
-          return Math.floor(amount / 10_000) * 10_000;
-        } else if (amount < 10_000_000) {
-          return Math.floor(amount / 100_000) * 100_000;
-        } else {
-          return Math.floor(amount / 1_000_000) * 1_000_000;
-        }
+        return Math.floor(amount / 1000) * 1000;
       };
+
 
       const roundedTotal = roundDownTotal(grandTotal);
       const taxRate = 0.1;

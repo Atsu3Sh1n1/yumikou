@@ -1,114 +1,189 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <title>配管・溶接工事 経費チェックリスト</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>レッカー・高所作業車 入力</title>
   <style>
-    body { font-family: sans-serif; margin: 20px; }
-    h2 { color: #2c3e50; }
-    table { border-collapse: collapse; width: 100%; max-width: 900px; }
-    th, td { border: 1px solid #999; padding: 8px; }
-    th { background-color: #f4f4f4; }
-    input[type="checkbox"] { transform: scale(1.2); }
+    :root {
+      --text-color: #333;
+      --accent: #2c7be5;
+      --font: 'Noto Sans JP', sans-serif;
+    }
+
+    body {
+      margin: 0;
+      padding: 20px;
+      font-family: var(--font);
+      color: var(--text-color);
+    }
+
+    h2 {
+      text-align: center;
+      color: var(--accent);
+    }
+
+    #grid-container {
+      display: flex;
+      gap: 1rem;
+      overflow-x: auto;
+      padding-bottom: 1rem;
+    }
+
+    .form-wrapper {
+      flex: 0 0 auto;
+      border: 1px solid #ccc;
+      padding: 1rem;
+      position: relative;
+      min-width: 280px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 1rem;
+    }
+
+    .item label {
+      width: 60px;
+    }
+
+    .item input {
+      width: 80px;
+    }
+
+    .remove-btn {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      background-color: #e53935;
+      color: white;
+      border: none;
+      border-radius: 3px;
+      cursor: pointer;
+      padding: 2px 6px;
+      font-size: 12px;
+    }
+
+    .add-btn {
+      display: block;
+      margin: 1rem auto;
+      padding: 0.5rem 1rem;
+      font-size: 1rem;
+      background-color: var(--accent);
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .total {
+      text-align: center;
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #e53935;
+    }
+
+    .footer {
+      text-align: center;
+      font-size: 11px;
+      margin-top: 1rem;
+    }
   </style>
 </head>
+
 <body>
+  <h2>レッカー・高所作業車</h2>
 
-  <h2>📋 配管・溶接工事 経費チェックリスト</h2>
-   <p style="margin-top: 20px;"><strong>✔ 必要なものにチェックを入れて、漏れのない見積・実行予算に</strong></p>
+  <div id="grid-container">
+    <div class="form-wrapper">
+      <div class="form-grid">
+        <div class="item"><label>10t</label><input type="number" data-unit="65000" onchange="calc()" /></div>
+        <div class="item"><label>25t</label><input type="number" data-unit="90000" onchange="calc()" /></div>
+        <div class="item"><label>50t</label><input type="number" data-unit="130000" onchange="calc()" /></div>
+        <div class="item"><label>100t</label><input type="number" data-unit="250000" onchange="calc()" /></div>
+        <div class="item"><label>高車8</label><input type="number" data-unit="15000" onchange="calc()" /></div>
+        <div class="item"><label>高車17</label><input type="number" data-unit="35000" onchange="calc()" /></div>
+        <div class="item"><label>高車20</label><input type="number" data-unit="30000" onchange="calc()" /></div>
+        <div class="item"><label>高車27</label><input type="number" data-unit="50000" onchange="calc()" /></div>
+        <div class="item"><label>オペ</label><input type="number" data-unit="15000" onchange="calc()" /></div>
+        <div class="item"><label>回送</label><input type="number" data-unit="40000" onchange="calc()" /></div>
+      </div>
+    </div>
+  </div>
 
+  <button class="add-btn" onclick="addForm()">＋ 横に追加</button>
 
-  <table>
-    <thead>
-      <tr>
-        <th>分類</th>
-        <th>項目</th>
-        <th>チェック</th>
-      </tr>
-    </thead>
-    <tbody>
-      <!-- 工具・機材類 -->
-      <tr>
-        <td rowspan="5">🛠 工具・機材</td>
-        <td>TIG溶接機・トーチ・ケーブルセット</td>
-        <td><input type="checkbox"></td>
-      </tr>
-      <tr>
-        <td>アーク溶接機・手棒用ホルダー</td>
-        <td><input type="checkbox"></td>
-      </tr>
-      <tr>
-        <td>ディスクグラインダー（100mm/125mm）</td>
-        <td><input type="checkbox"></td>
-      </tr>
-      <tr>
-        <td>自動遮光面・手持ち面・安全面</td>
-        <td><input type="checkbox"></td>
-      </tr>
-      <tr>
-        <td>ベベル加工用機器（開先加工機・やすり）</td>
-        <td><input type="checkbox"></td>
-      </tr>
+  <div class="total">合計: <span id="total">0</span> 円</div>
 
-      <!-- 消耗品 -->
-      <tr>
-        <td rowspan="6">🔧 消耗品</td>
-        <td>溶接棒（SG2, SUS用等）</td>
-        <td><input type="checkbox"></td>
-      </tr>
-      <tr>
-        <td>アルゴンガス（TIG用）</td>
-        <td><input type="checkbox"></td>
-      </tr>
-      <tr>
-        <td>アセチレン・酸素（切断・ガウジング）</td>
-        <td><input type="checkbox"></td>
-      </tr>
-      <tr>
-        <td>ディスク砥石・フラップ・切断砥石</td>
-        <td><input type="checkbox"></td>
-      </tr>
-      <tr>
-        <td>ステンレス用ブラシ・ペーパー・耐水ペーパー</td>
-        <td><input type="checkbox"></td>
-      </tr>
-      <tr>
-        <td>パージシート・アルミテープ（裏波処理用）</td>
-        <td><input type="checkbox"></td>
-      </tr>
+  <div class="footer">
+    <a href="https://atsu3sh1n1.github.io/yumikou/" target="_blank">Created by YUMIKOU Inc.</a>
+  </div>
 
-      <!-- 仮設・搬入 -->
-      <tr>
-        <td rowspan="3">🚚 搬入・仮設</td>
-        <td>足場・可搬ステージ・踏み板</td>
-        <td><input type="checkbox"></td>
-      </tr>
-      <tr>
-        <td>工具・材料の運搬車（軽トラなど）</td>
-        <td><input type="checkbox"></td>
-      </tr>
-      <tr>
-        <td>ブルーシート・養生・墨出し機材</td>
-        <td><input type="checkbox"></td>
-      </tr>
+  <script>
+    function calc() {
+      let total = 0;
+      const wrappers = document.querySelectorAll('.form-wrapper');
+      wrappers.forEach(wrapper => {
+        const inputs = wrapper.querySelectorAll('input');
+        inputs.forEach(input => {
+          const unit = parseInt(input.dataset.unit);
+          const val = parseInt(input.value) || 0;
+          total += unit * val;
+        });
+      });
+      document.getElementById('total').textContent = total.toLocaleString();
 
-      <!-- 管理系 -->
-      <tr>
-        <td rowspan="3">📂 管理費・その他</td>
-        <td>通勤・交通費（ガソリン代、高速など）</td>
-        <td><input type="checkbox"></td>
-      </tr>
-      <tr>
-        <td>現場管理費・報告書・安全書類作成</td>
-        <td><input type="checkbox"></td>
-      </tr>
-      <tr>
-        <td>労災保険・対人賠償・作業員保険料</td>
-        <td><input type="checkbox"></td>
-      </tr>
-    </tbody>
-  </table>
+      if (window.parent && window.parent !== window) {
+        window.parent.postMessage({ type: 'reckerTotal', total: total }, '*');
+      }
+    }
 
+    function addForm() {
+      const container = document.getElementById('grid-container');
+      const base = container.querySelector('.form-wrapper');
+      const clone = base.cloneNode(true);
+      clone.querySelectorAll('input').forEach(input => input.value = '');
 
+      const btn = document.createElement('button');
+      btn.textContent = '削除';
+      btn.className = 'remove-btn';
+      btn.onclick = () => {
+        if (document.querySelectorAll('.form-wrapper').length > 1) {
+          clone.remove();
+          calc();
+        }
+      };
+
+      // 古い削除ボタン削除（再追加対策）
+      const old = clone.querySelector('.remove-btn');
+      if (old) old.remove();
+
+      clone.appendChild(btn);
+      container.appendChild(clone);
+    }
+
+    window.getEstimateData = function () {
+      let subtotal = 0;
+      const wrappers = document.querySelectorAll('.form-wrapper');
+      wrappers.forEach(wrapper => {
+        wrapper.querySelectorAll('input').forEach(input => {
+          const unit = parseInt(input.dataset.unit);
+          const val = parseInt(input.value) || 0;
+          subtotal += unit * val;
+        });
+      });
+      return { subtotal: subtotal, manhour: null };
+    };
+
+    calc();
+  </script>
 </body>
 </html>
