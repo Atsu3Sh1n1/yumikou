@@ -2,111 +2,204 @@
 <html lang="ja">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>25A エルボ溶接 単価と作業時間の目安</title>
   <style>
     body {
-      font-family: sans-serif;
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
       line-height: 1.6;
-      padding: 1em;
+      padding: 1.5em;
       background-color: #f9f9f9;
+      color: #333;
     }
 
     h1 {
-      font-size: 1.4em;
-      color: #333;
+      font-size: 1.6em;
+      margin-bottom: 0.5em;
+    }
+
+    h2 {
+      font-size: 1.3em;
+      margin-bottom: 0.5em;
+      color: #005a9c;
     }
 
     .box {
       background: #fff;
       border-radius: 8px;
-      padding: 1em;
-      margin-bottom: 1em;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      padding: 1.2em 1.5em;
+      margin-bottom: 1.8em;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
     }
 
     table {
       width: 100%;
       border-collapse: collapse;
-      margin-top: 0.5em;
+      margin-top: 0.7em;
     }
 
     th,
     td {
-      padding: 0.5em;
+      padding: 0.6em;
       border: 1px solid #ccc;
       text-align: center;
+      font-size: 0.95em;
     }
 
     th {
-      background: #eee;
+      background: #e8f0fe;
+      font-weight: 600;
+    }
+
+    ul {
+      padding-left: 1.3em;
+      margin-top: 0.5em;
+      margin-bottom: 0;
+      font-size: 0.95em;
+    }
+
+    li {
+      margin-bottom: 0.4em;
     }
 
     .note {
-      font-size: 0.9em;
+      font-size: 0.85em;
       color: #666;
+      margin-top: 0.8em;
+      font-style: italic;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 40px;
+      font-size: 0.9rem;
+      color: #777;
+    }
+
+    a {
+      color: #777;
+      text-decoration: none;
+    }
+
+    @media (max-width: 600px) {
+      body {
+        padding: 1em;
+      }
+
+      h1 {
+        font-size: 1.3em;
+      }
+
+      h2 {
+        font-size: 1.1em;
+      }
+
+      table,
+      th,
+      td {
+        font-size: 0.85em;
+      }
     }
   </style>
 </head>
 
 <body>
-
-  <h1>🔧 25A エルボ溶接の作業時間とコスト</h1>
-
-  <div class="box">
-    <h2>📌 作業時間の目安</h2>
-    <p><strong>1個の溶接にかかる時間：</strong> 約20分</p>
-    <ul>
-      <li>仮付け ＋ 個溶接 ＋ 簡易仕上げを含む</li>
-      <li>1日8時間（480分）で <strong>最大 約24個(48DB)</strong> の施工が可能</li>
-    </ul>
-  </div>
+  <h1>🔧 25A エルボ溶接 作業時間とコストの詳細目安</h1>
 
   <div class="box">
-    <h2>💰 原価計算（目安）</h2>
+    <h2>📌 作業時間の目安（環境別）</h2>
+    <p>25Aエルボ溶接の1個あたりの平均作業時間（仮付け・溶接・仕上げ含む）および1日あたりの施工個数の目安です。</p>
     <table>
       <thead>
         <tr>
-          <th>項目</th>
-          <th>コスト</th>
-          <th>備考</th>
+          <th>作業環境</th>
+          <th>1個あたりの作業時間（分）</th>
+          <th>1日8時間作業での施工個数（目安）</th>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td>人件費（1個あたり）</td>
-          <td>約 1,042 円</td>
-          <td>1日 25,000円 ÷ 24個</td>
+          <td>工場製作（治具・専任スタッフあり）</td>
+          <td>8～12</td>
+          <td>40～60個</td>
         </tr>
         <tr>
-          <td>消耗品・工具費</td>
-          <td>約 800 円</td>
-          <td>溶接棒・ガス・砥石など</td>
+          <td>現場施工（段取り・仮付け含む）</td>
+          <td>15～20</td>
+          <td>24～32個</td>
         </tr>
         <tr>
-          <td><strong>合計原価</strong></td>
-          <td><strong>約 1,842 円</strong></td>
-          <td>最低ラインのコスト</td>
+          <td>難所・高所・狭所など特殊環境</td>
+          <td>25～40</td>
+          <td>10～19個</td>
         </tr>
       </tbody>
     </table>
-    <p><strong>見積単価の目安：</strong> 2,200〜2,500円が妥当</p>
+    <h3>作業時間の内訳例（現場施工の場合）</h3>
+    <ul>
+      <li>材料段取り・運搬：2～3分</li>
+      <li>仮付け・芯出し調整：4～5分</li>
+      <li>溶接（半自動・TIGなど）：8～10分</li>
+      <li>仕上げ（スパッタ取り・簡易検査）：3～4分</li>
+    </ul>
   </div>
 
   <div class="box">
-    <h2>📘 補足：注意点</h2>
-    <ul>
-      <li>人件費の見積りが甘いと赤字に直結</li>
-      <li>段取り・片付けの時間も考慮すること</li>
-      <li>口径が大きくなると作業時間も単価も増える</li>
-    </ul>
-    <p class="note">※このページは施工管理者向けの参考資料です。</p>
+    <h2>💰 原価計算（25Aエルボ1個あたりの目安）</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>コスト項目</th>
+          <th>単価（円）</th>
+          <th>説明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>人件費</td>
+          <td>約 1,042</td>
+          <td>作業時間20分 × 日給25,000円 ÷ 480分</td>
+        </tr>
+        <tr>
+          <td>材料費（エルボ本体）</td>
+          <td>約 1,000～1,500</td>
+          <td>メーカー・材質・ロットにより変動</td>
+        </tr>
+        <tr>
+          <td>消耗品・工具費</td>
+          <td>約 800</td>
+          <td>溶接棒、ガス、砥石などの平均費用</td>
+        </tr>
+        <tr>
+          <td>管理費・諸経費</td>
+          <td>約 300～500</td>
+          <td>現場管理、検査、交通費など</td>
+        </tr>
+        <tr>
+          <td><strong>合計原価目安</strong></td>
+          <td><strong>約 3,142 ～ 3,842</strong></td>
+          <td>最小～最大の想定レンジ</td>
+        </tr>
+      </tbody>
+    </table>
+    <p><strong>一般的な見積単価の目安：</strong>3,500円 ～ 4,200円（原価に適切な利益率を加算した価格）</p>
   </div>
 
-  <footer style="text-align: center; margin-top: 40px; font-size: 0.9rem; color: #777;">
-    &copy; 2025 <a href="https://atsu3sh1n1.github.io/yumikou/" style="color: #777; text-decoration: none;">有限会社 弓工</a>
-    All rights reserved.
+  <div class="box">
+    <h2>📘 補足・注意点</h2>
+    <ul>
+      <li>工場製作と現場施工で作業効率が大きく異なるため、見積もり時に環境を正確に把握することが重要です。</li>
+      <li>段取り、材料運搬、片付けの時間も必ず考慮してください。これらは溶接作業時間に含まれないことが多いです。</li>
+      <li>口径が大きくなるほど溶接時間・材料費ともに増加します。50A以上は別途検討が必要です。</li>
+      <li>公共工事の場合は積算基準や発注者の求める単価基準を確認し、必要に応じて係数の内訳提示も検討してください。</li>
+      <li>溶接品質管理（非破壊検査など）が入る場合は作業時間がさらに延長します。</li>
+    </ul>
+    <p class="note">※この資料は施工管理者や見積担当者向けの参考資料です。実際の現場状況に応じて適宜調整してください。</p>
+  </div>
+
+  <footer>
+    &copy; 2025 <a href="https://atsu3sh1n1.github.io/yumikou/">有限会社 弓工</a> All rights reserved.
   </footer>
 </body>
 
