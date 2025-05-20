@@ -15,16 +15,16 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      padding-top:  60px;
+      padding-top: 60px;
     }
 
     .container {
       background: white;
       padding: 10px 25px;
-      width: 100%; 
+      width: 100%;
       max-width: 300px;
       text-align: center;
-      
+
     }
 
     h1 {
@@ -188,8 +188,8 @@
     <div class="schedule-buttons" role="group" aria-label="スケジュール選択">
       <button id="btnSCH5s" onclick="setSchedule('SCH5s')">SCH5S</button>
       <button id="btnSCH10s" onclick="setSchedule('SCH10s')">SCH10S</button>
-      <button id="btnSCH20" onclick="setSchedule('SCH20')">SCH20/S</button>
       <button id="btnsgp" onclick="setSchedule('sgp')">SGP</button>
+      <button id="btnSCH20" onclick="setSchedule('SCH20')">SCH20/S</button>
       <button id="btnSCH40" class="active" onclick="setSchedule('SCH40')">SCH40/S</button>
       <button id="btnSCH60" onclick="setSchedule('SCH60')">SCH60/S</button>
       <button id="btnSCH80" onclick="setSchedule('SCH80')">SCH80/S</button>
@@ -241,7 +241,7 @@
 
     };
 
-    const pipeSizes = [ "6", "8", "10", "15", "20", "25", "32", "40", "50", "65", "80", "90", "100", "125", "150", "175", "200", "250", "300", "350", "400", "450", "500"];
+    const pipeSizes = ["6", "8", "10", "15", "20", "25", "32", "40", "50", "65", "80", "90", "100", "125", "150", "175", "200", "250", "300", "350", "400", "450", "500"];
 
     // ここに小口径補正係数を追加
     const diameterCorrectionFactors = {
