@@ -1,52 +1,169 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
-  <meta charset="UTF-8">
-  <title>回転可能なキューブ</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>配管エルボ溶接 作業時間とコスト・単価表</title>
   <style>
+    /* ベーススタイル */
     body {
-      margin: 0;
-      overflow: hidden;
+      font-family: "ヒラギノ角ゴ ProN", "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
+      background: #f5f5f5;
+      padding: 1em;
+      line-height: 1.6;
+      color: #333;
     }
-    #cube-container {
-      width: 100vw;
-      height: 300px; /* ページ上部に固定サイズ */
+
+    h1, h2 {
+      margin-bottom: 0.5em;
+      color: #222;
+    }
+
+    /* ボックスコンテナ */
+    .box {
+      background: #fff;
+      padding: 1em 1.2em;
+      margin-bottom: 1.5em;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+    }
+
+    /* テーブル共通 */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 0.5em;
+      font-size: 0.9rem;
+      table-layout: fixed;
+      word-wrap: break-word;
+    }
+
+    th, td {
+      padding: 0.4em 0.6em;
+      border: 1px solid #ccc;
+      text-align: center;
+    }
+
+    th {
+      background-color: #eee;
+      font-weight: 600;
+    }
+
+    /* 注意書き・注釈 */
+    .note {
+      font-size: 0.85rem;
+      color: #666;
+      margin-top: 0.5em;
+      line-height: 1.4;
+    }
+
+    ul {
+      padding-left: 1.2em;
+      margin-top: 0.5em;
+      color: #444;
+    }
+
+    /* スマホ対応 横スクロール対応 */
+    .table-wrapper {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    /* フッター */
+    footer {
+      text-align: center;
+      margin-top: 40px;
+      font-size: 0.85rem;
+      color: #777;
+    }
+
+    footer a {
+      color: #777;
+      text-decoration: none;
     }
   </style>
 </head>
+
 <body>
-  <div id="cube-container"></div>
+  <h1>🔧 配管エルボ溶接 作業時間とコスト・単価表（25A〜200A）</h1>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r148/three.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/three@0.148.0/examples/js/controls/OrbitControls.js"></script>
-  <script>
-    const container = document.getElementById('cube-container');
+  <div class="box">
+    <h2>📊 サイズ別 作業時間とコスト目安</h2>
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>配管サイズ</th>
+            <th>作業時間（1個）</th>
+            <th>1日最大施工個数</th>
+            <th>人件費（1個）</th>
+            <th>消耗品費（1個）</th>
+            <th>合計原価（1個）</th>
+            <th>見積単価の目安（1個）</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>25A</td><td>20分</td><td>24個</td><td>約1,042円</td><td>800円</td><td>1,842円</td><td>2,200〜2,500円</td></tr>
+          <tr><td>50A</td><td>25分</td><td>19個</td><td>約1,315円</td><td>900円</td><td>2,215円</td><td>2,500〜2,800円</td></tr>
+          <tr><td>100A</td><td>35分</td><td>13個</td><td>約1,923円</td><td>1,100円</td><td>3,023円</td><td>3,500〜4,000円</td></tr>
+          <tr><td>150A</td><td>45分</td><td>10個</td><td>約2,500円</td><td>1,300円</td><td>3,800円</td><td>4,200〜4,800円</td></tr>
+          <tr><td>200A</td><td>60分</td><td>8個</td><td>約3,125円</td><td>1,500円</td><td>4,625円</td><td>5,000〜6,000円</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note">※人件費は1日25,000円（8時間換算）として計算しています。</p>
+  </div>
 
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
-    const renderer = new THREE.WebGLRenderer({ antialias: true });
-    renderer.setSize(container.clientWidth, container.clientHeight);
-    container.appendChild(renderer.domElement);
+  <div class="box">
+    <h2>📊 サイズ別 作業時間・単価（m単価付き）</h2>
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>配管サイズ</th>
+            <th>作業時間（1個）</th>
+            <th>1日最大施工個数</th>
+            <th>人件費（1個）</th>
+            <th>消耗品費（1個）</th>
+            <th>合計原価（1個）</th>
+            <th>見積単価の目安（1個）</th>
+            <th>配管重量（kg/m）</th>
+            <th>配管単価（kg×180円）</th>
+            <th>配管長さ単価（mあたり）</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>25A</td><td>20分</td><td>24個</td><td>約1,042円</td><td>800円</td><td>1,842円</td><td>2,200〜2,500円</td><td>2.27</td><td>約410円</td><td>約410円</td></tr>
+          <tr><td>50A</td><td>25分</td><td>19個</td><td>約1,315円</td><td>900円</td><td>2,215円</td><td>2,500〜2,800円</td><td>5.79</td><td>約1,042円</td><td>約1,042円</td></tr>
+          <tr><td>100A</td><td>35分</td><td>13個</td><td>約1,923円</td><td>1,100円</td><td>3,023円</td><td>3,500〜4,000円</td><td>15.50</td><td>約2,790円</td><td>約2,790円</td></tr>
+          <tr><td>150A</td><td>45分</td><td>10個</td><td>約2,500円</td><td>1,300円</td><td>3,800円</td><td>4,200〜4,800円</td><td>26.68</td><td>約4,800円</td><td>約4,800円</td></tr>
+          <tr><td>200A</td><td>60分</td><td>8個</td><td>約3,125円</td><td>1,500円</td><td>4,625円</td><td>5,000〜6,000円</td><td>36.75</td><td>約6,615円</td><td>約6,615円</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note">
+      ・配管重量は標準鋼管のkg/mを使用しています。<br>
+      ・配管単価は配管重量×180円（消耗品・経費の目安）として計算。<br>
+      ・配管長さ単価はmあたりの施工単価イメージ（溶接＋配管材料費）です。
+    </p>
+  </div>
 
-    const geometry = new THREE.BoxGeometry();
-    const material = new THREE.MeshNormalMaterial();
-    const cube = new THREE.Mesh(geometry, material);
-    scene.add(cube);
+  <div class="box">
+    <h2>📘 使用上のポイント・説明</h2>
+    <ul>
+      <li>作業時間は「仮付＋本溶接＋簡易仕上げ」を含む標準的な目安です。</li>
+      <li>段取り、休憩、手待ち時間は含まれていません。現場により変動します。</li>
+      <li>配管サイズが大きくなるほど、人件費の割合が増加します。</li>
+      <li>特殊材質（例：ステンレスSUS）や不慣れな職人の場合、コストは20〜30%程度上乗せを推奨します。</li>
+      <li>配管重量単価は材料経費および消耗品費を含んでいます。配管単価は180円/kgを目安に設定しています。</li>
+      <li>「個」は溶接対象のエルボの単位を示しており、実際の配管工事では「個数」で数えます。</li>
+    </ul>
+  </div>
 
-    camera.position.z = 3;
-
-    const controls = new THREE.OrbitControls(camera, renderer.domElement);
-    controls.enableDamping = true; // 回転の慣性
-    controls.enableZoom = false;   // ズーム無効
-    controls.enablePan = false;    // 平行移動無効
-
-    function animate() {
-      requestAnimationFrame(animate);
-      controls.update();
-      renderer.render(scene, camera);
-    }
-
-    animate();
-  </script>
+  <footer>
+    &copy; 2025 <a href="https://atsu3sh1n1.github.io/yumikou/" target="_blank" rel="noopener noreferrer">有限会社 弓工</a> All rights reserved.
+  </footer>
 </body>
+
 </html>
