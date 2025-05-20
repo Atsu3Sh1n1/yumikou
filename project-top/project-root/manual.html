@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -105,7 +106,8 @@
       margin: 1rem 0;
     }
 
-    th, td {
+    th,
+    td {
       padding: 0.75rem;
       text-align: left;
       border-bottom: 1px solid #e0e0e0;
@@ -170,14 +172,16 @@
       .container {
         padding: 1rem;
       }
-      
-      th, td {
+
+      th,
+      td {
         padding: 0.5rem;
         font-size: 0.9rem;
       }
     }
   </style>
 </head>
+
 <body>
   <div class="container">
     <header>
@@ -236,7 +240,7 @@
             </tr>
           </tbody>
         </table>
-        
+
         <div class="note">
           <strong>💡 新人さんへ</strong><br>
           最初は「材質がわからない」「図面がない」という状況も多いです。その場合は「鉄製」「ステンレス製」の大まかな区分で構いませんので、先輩に確認しながら進めましょう。
@@ -285,19 +289,19 @@
       <div class="card-content">
         <h3>材料費の算出</h3>
         <p>鋼管・継手・バルブなどの単価を市場価格または社内単価表に基づき反映。</p>
-        
+
         <h3>工数換算</h3>
         <ul>
           <li><strong>溶接DB数設定</strong>：材質・スケジュールごとに所定の倍率を適用</li>
           <li><strong>作業時間</strong>：DB数 × 単位作業時間（人分）</li>
         </ul>
-        
+
         <h3>現場施工費</h3>
         <p>高所作業や屋外作業は係数を乗じて加算（例：高所+20％）。</p>
-        
+
         <h3>管理費・利益</h3>
         <p>安全費・間接費・利益を15〜30％加算（案件リスクに応じて調整）。</p>
-        
+
         <div class="note">
           <strong>📊 見積もりチェックリスト</strong><br>
           1. 数量に抜け漏れはないか？<br>
@@ -315,15 +319,18 @@
       <div class="card-content">
         <h3>Q. 図面がない場合はどうすれば？</h3>
         <p>A. 現地調査が必要です。スマートフォンで配管ルートを写真撮影し、主要寸法をスケッチに記録しましょう。</p>
-        
+
         <h3>Q. 材質がわからない配管は？</h3>
         <p>A. 磁石で確認（ステンレスは非磁性）、または表面の色（SGPは黒、SUSは銀色）で判断。どうしてもわからない場合は「材質要確認」と明記。</p>
-        
+
         <h3>Q. 急ぎの見積もりはどうする？</h3>
         <p>A. 正確な数量がわからない部分は「仮数量」と明記し、後日調整可能な旨を記載しましょう。</p>
       </div>
     </div>
- <a href="25.html">参考資料</a>
+    <a href="25.html">参考資料: 1・STPG 25A 配管作業別単価表</a><br>
+    <a href="25_w.html">参考資料: 2・25A エルボ溶接の作業時間とコスト</a><br>
+    <a href="25_w200.html.html">参考資料: 3・配管エルボ溶接 作業時間とコスト表（25A〜200A）</a><br>
+
     <footer>
       <p><strong>有限会社 弓工（YUMIKOU Inc.）</strong></p>
       <p>© 2025 弓工 - 本マニュアルの無断複製・転載を禁じます</p>
@@ -331,18 +338,19 @@
   </div>
 
   <script>
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
       const cardHeaders = document.querySelectorAll('.card-header');
-      
+
       cardHeaders.forEach(header => {
-        header.addEventListener('click', function() {
+        header.addEventListener('click', function () {
           this.classList.toggle('active');
           const content = this.nextElementSibling;
           content.classList.toggle('show');
         });
       });
-   
+
     });
   </script>
 </body>
+
 </html>
