@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>STPG S40 25A 配管作業別単価表</title>
   <style>
     body {
@@ -9,81 +10,114 @@
       background-color: #f9f9f9;
       padding: 20px;
       color: #333;
+      font-size: 16px;
+      line-height: 1.5;
     }
     h1 {
-      font-size: 20px;
+      font-size: 24px;
       border-bottom: 2px solid #ccc;
-      padding-bottom: 5px;
+      padding-bottom: 8px;
+      margin-bottom: 15px;
+    }
+    /* テーブルを包むラッパー */
+    .table-wrapper {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch; /* スムーズスクロール */
+      background-color: #fff;
+      border: 1px solid #ccc;
+      border-radius: 4px;
     }
     table {
       width: 100%;
       border-collapse: collapse;
-      background-color: #fff;
-      margin-top: 15px;
+      min-width: 600px; /* 横スクロールを発生させる最低幅 */
     }
     th, td {
       border: 1px solid #ccc;
-      padding: 8px 10px;
+      padding: 12px 15px;
       text-align: left;
+      vertical-align: middle;
+      font-size: 16px;
     }
     th {
       background-color: #eee;
+      font-weight: 600;
     }
     .note {
-      margin-top: 15px;
-      font-size: 13px;
+      margin-top: 20px;
+      font-size: 14px;
       color: #666;
+      line-height: 1.4;
+    }
+
+    /* 小さめ画面用の微調整 */
+    @media (max-width: 480px) {
+      body {
+        padding: 15px 10px;
+        font-size: 14px;
+      }
+      h1 {
+        font-size: 20px;
+        margin-bottom: 12px;
+      }
+      th, td {
+        padding: 10px 8px;
+        font-size: 14px;
+      }
     }
   </style>
 </head>
 <body>
   <h1>STPG 25A 配管作業別単価表（参考）</h1>
-  <table>
-    <thead>
-      <tr>
-        <th>作業項目</th>
-        <th>単価（税抜）</th>
-        <th>備考</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>配管支持金具取付</td>
-        <td>500〜800円/箇所</td>
-        <td>天井吊・壁面バンド等</td>
-      </tr>
-      <tr>
-        <td>鋼管切断</td>
-        <td>200〜400円/m</td>
-        <td>現場加工</td>
-      </tr>
-      <tr>
-        <td>面取り（バリ取り）</td>
-        <td>150〜300円/本</td>
-        <td>小口径向け</td>
-      </tr>
-      <tr>
-        <td>溶接（突合せ）</td>
-        <td>2,000〜3,000円/箇所</td>
-        <td>ソケット・突合せ溶接</td>
-      </tr>
-      <tr>
-        <td>ねじ切り加工</td>
-        <td>300〜600円/本</td>
-        <td>25A対応機械使用</td>
-      </tr>
-      <tr>
-        <td>塗装（防錆仕上）</td>
-        <td>500〜1,200円/m</td>
-        <td>タッチアップ等含む</td>
-      </tr>
-      <tr>
-        <td>耐圧・気密試験</td>
-        <td>500〜1,500円/m</td>
-        <td>方法により変動</td>
-      </tr>
-    </tbody>
-  </table>
+
+  <div class="table-wrapper">
+    <table>
+      <thead>
+        <tr>
+          <th>作業項目</th>
+          <th>単価（税抜）</th>
+          <th>備考</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>配管支持金具取付</td>
+          <td>500〜800円/箇所</td>
+          <td>天井吊・壁面バンド等</td>
+        </tr>
+        <tr>
+          <td>鋼管切断</td>
+          <td>200〜400円/m</td>
+          <td>現場加工</td>
+        </tr>
+        <tr>
+          <td>面取り（バリ取り）</td>
+          <td>150〜300円/本</td>
+          <td>小口径向け</td>
+        </tr>
+        <tr>
+          <td>溶接（突合せ）</td>
+          <td>2,000〜3,000円/箇所</td>
+          <td>ソケット・突合せ溶接</td>
+        </tr>
+        <tr>
+          <td>ねじ切り加工</td>
+          <td>300〜600円/本</td>
+          <td>25A対応機械使用</td>
+        </tr>
+        <tr>
+          <td>塗装（防錆仕上）</td>
+          <td>500〜1,200円/m</td>
+          <td>タッチアップ等含む</td>
+        </tr>
+        <tr>
+          <td>耐圧・気密試験</td>
+          <td>500〜1,500円/m</td>
+          <td>方法により変動</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 
   <p class="note">
     ※ 実際の価格は地域・施工条件・数量により異なりますので、都度お見積もりください。有限会社弓工
