@@ -220,6 +220,17 @@
     document.querySelectorAll('input[type="number"]').forEach(input => {
       input.addEventListener("input", calculateTotal);
     });
+
+
+    function getEstimateData() {
+      const totalText = document.getElementById('total').textContent;
+      const match = totalText.match(/合計:\s*([\d,]+)\s*円/);
+      const subtotal = match ? parseInt(match[1].replace(/,/g, ''), 10) : 0;
+      return { subtotal };
+    }
+
+
+
   </script>
 </body>
 

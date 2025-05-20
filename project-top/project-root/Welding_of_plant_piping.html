@@ -46,7 +46,7 @@
       height: 1200px;
     }
 
-     #pipeForm {
+    #pipeForm {
       width: 100%;
       height: 600px;
     }
@@ -88,7 +88,7 @@
   ">
       🛠️ 見積りガイド 🧑‍🔧
     </a>
-    
+
   </div>
 
   <iframe id="app1" src="estimate.html" loading="lazy"></iframe>
@@ -128,7 +128,7 @@
         });
       };
 
-      const iframeIds = ["app1", "app2", "app3", "app4", "pipeForm"];
+      const iframeIds = ["app1", "app2", "app3", "app4", "app5", "pipeForm"];
       await Promise.all(
         iframeIds.map(id => waitForIframeLoad(document.getElementById(id)))
       );
@@ -192,7 +192,8 @@
         { id: "app2", label: "Pipe Length / Weight" },
         { id: "app3", label: "Complete Welding" },
         { id: "app4", label: "Wrecker / 高所作業車" },
-        { id: "pipeForm", label: "Item Description" }  // 新規追加
+        { id: "app5", label: "Tools / Misc Costs" },
+        { id: "pipeForm", label: "Item Description" },
       ];
 
 
