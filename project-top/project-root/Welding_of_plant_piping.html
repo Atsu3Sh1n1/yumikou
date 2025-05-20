@@ -32,7 +32,7 @@
 
     #app2 {
       width: 100%;
-      height: 760px;
+      height: 850px;
     }
 
 
@@ -330,17 +330,19 @@
           iframeDoc.documentElement.style.padding = '0';
 
           // スクリーンショット
+          // スクリーンショット
           const canvas = await html2canvas(iframeDoc.body, {
-            scale: 2,
+            scale: 1,                     // ← ここを 2 から 1 に変更
             useCORS: true,
-            backgroundColor: null,
+            backgroundColor: '#ffffff',   // ← null から白背景に変更（JPEGは透明非対応のため）
             scrollX: 0,
             scrollY: 0,
             windowWidth: iframeDoc.documentElement.scrollWidth,
             windowHeight: iframeDoc.documentElement.scrollHeight
           });
 
-          const imgData = canvas.toDataURL('image/png');
+          const imgData = canvas.toDataURL('image/jpeg', 0.7);  // ← PNG → JPEG に変更＆圧縮率指定
+
           const imgProps = doc.getImageProperties(imgData);
           const pdfWidth = PAGE_WIDTH - MARGIN * 2;
           const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
