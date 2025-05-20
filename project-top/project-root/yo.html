@@ -3,38 +3,41 @@
 
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>経費チェックリスト</title>
   <style>
     html,
     body {
       margin: 0;
       padding: 0;
-      height: 100vh;
+      height: 100%;
       font-family: sans-serif;
     }
 
     h2 {
       color: #2c3e50;
       margin: 6px;
+      text-align: center;
     }
 
     .container {
       display: flex;
       flex-direction: column;
-      height: 100vh;
+      min-height: 100vh;
       padding: 6px;
       box-sizing: border-box;
+      max-width: 100%;
     }
 
     .table-wrapper {
       flex: 1;
-      overflow-y: auto;
+      overflow-x: auto;
     }
 
     table {
       border-collapse: collapse;
       width: 100%;
-      max-width: 800px;
+      min-width: 360px;
     }
 
     th,
@@ -42,6 +45,7 @@
       border: 1px solid #999;
       padding: 6px;
       text-align: left;
+      font-size: 0.95em;
     }
 
     th {
@@ -52,6 +56,25 @@
       width: 50px;
       padding: 2px;
       font-size: 1em;
+    }
+
+    .narrow-cell {
+      width: 1em;
+      min-width: 1em;
+      max-width: 1em;
+      white-space: normal;
+      word-break: break-all;
+      text-align: center;
+      vertical-align: middle;
+      font-weight: bold;
+    }
+
+    .total-display {
+      text-align: right;
+      font-size: 1.2em;
+      font-weight: bold;
+      padding: 10px;
+      border-top: 2px solid #ccc;
     }
   </style>
 </head>
@@ -72,104 +95,132 @@
         <tbody>
           <!-- 工具・機材類 -->
           <tr>
-            <td rowspan="5">🛠 工具・機材</td>
+            <td rowspan="5" class="narrow-cell">工<br>具<br>機<br>材</td>
             <td>TIG溶接機・トーチ・ケーブルセット</td>
             <td>150000</td>
-            <td><input type="number" min="0"></td>
+            <td><input type="number" pattern="[0-9]*" min="0"></td>
           </tr>
           <tr>
             <td>アーク溶接機・手棒用ホルダー</td>
             <td>80000</td>
-            <td><input type="number" min="0"></td>
+            <td><input type="number" pattern="[0-9]*" min="0"></td>
           </tr>
           <tr>
             <td>ディスクグラインダー（100mm/125mm）</td>
             <td>12000</td>
-            <td><input type="number" min="0"></td>
+            <td><input type="number" pattern="[0-9]*" min="0"></td>
           </tr>
           <tr>
             <td>自動遮光面・手持ち面・安全面</td>
             <td>10000</td>
-            <td><input type="number" min="0"></td>
+            <td><input type="number" pattern="[0-9]*" min="0"></td>
           </tr>
           <tr>
             <td>ベベル加工用機器（開先加工機・やすり）</td>
             <td>5000</td>
-            <td><input type="number" min="0"></td>
+            <td><input type="number" pattern="[0-9]*" min="0"></td>
           </tr>
 
           <!-- 消耗品 -->
           <tr>
-            <td rowspan="6">🔧 消耗品</td>
+            <td rowspan="6" class="narrow-cell">消<br>耗<br>品</td>
             <td>溶接棒（SG2, SUS用等）</td>
             <td>3000</td>
-            <td><input type="number" min="0"></td>
+            <td><input type="number" pattern="[0-9]*" min="0"></td>
           </tr>
           <tr>
             <td>アルゴンガス（TIG用）</td>
             <td>10000</td>
-            <td><input type="number" min="0"></td>
+            <td><input type="number" pattern="[0-9]*" min="0"></td>
           </tr>
           <tr>
             <td>アセチレン・酸素（切断・ガウジング）</td>
             <td>12000</td>
-            <td><input type="number" min="0"></td>
+            <td><input type="number" pattern="[0-9]*" min="0"></td>
           </tr>
           <tr>
             <td>ディスク砥石・フラップ・切断砥石</td>
             <td>2000</td>
-            <td><input type="number" min="0"></td>
+            <td><input type="number" pattern="[0-9]*" min="0"></td>
           </tr>
           <tr>
             <td>ステンレス用ブラシ・ペーパー・耐水ペーパー</td>
             <td>1500</td>
-            <td><input type="number" min="0"></td>
+            <td><input type="number" pattern="[0-9]*" min="0"></td>
           </tr>
           <tr>
             <td>パージシート・アルミテープ（裏波処理用）</td>
             <td>1800</td>
-            <td><input type="number" min="0"></td>
+            <td><input type="number" pattern="[0-9]*" min="0"></td>
           </tr>
 
           <!-- 仮設・搬入 -->
           <tr>
-            <td rowspan="3">🚚 搬入・仮設</td>
+            <td rowspan="3" class="narrow-cell">搬<br>入<br>・<br>仮<br>設</td>
             <td>脚立・足場・可搬ステージ・踏み板</td>
             <td>25000</td>
-            <td><input type="number" min="0"></td>
+            <td><input type="number" pattern="[0-9]*" min="0"></td>
           </tr>
           <tr>
             <td>工具・材料の運搬車（軽トラなど）</td>
             <td>30000</td>
-            <td><input type="number" min="0"></td>
+            <td><input type="number" pattern="[0-9]*" min="0"></td>
           </tr>
           <tr>
             <td>ブルーシート・養生・墨出し機材</td>
             <td>8000</td>
-            <td><input type="number" min="0"></td>
+            <td><input type="number" pattern="[0-9]*" min="0"></td>
           </tr>
 
           <!-- 管理系 -->
           <tr>
-            <td rowspan="3">📂 管理費・その他</td>
+            <td rowspan="3" class="narrow-cell">管<br>理<br>費<br>・<br>そ<br>の<br>他</td>
             <td>通勤・交通費（ガソリン代、高速など）</td>
             <td>5000</td>
-            <td><input type="number" min="0"></td>
+            <td><input type="number" pattern="[0-9]*" min="0"></td>
           </tr>
           <tr>
             <td>現場管理費・報告書・安全書類作成</td>
             <td>10000</td>
-            <td><input type="number" min="0"></td>
+            <td><input type="number" pattern="[0-9]*" min="0"></td>
           </tr>
           <tr>
             <td>労災保険・対人賠償・作業員保険料</td>
             <td>12000</td>
-            <td><input type="number" min="0"></td>
+            <td><input type="number" pattern="[0-9]*" min="0"></td>
           </tr>
         </tbody>
       </table>
     </div>
+    <div class="total-display" id="total">合計: 0 円</div>
   </div>
+
+  <script>
+    function calculateTotal() {
+      let total = 0;
+      const rows = document.querySelectorAll("tbody tr");
+      rows.forEach(row => {
+        const tds = row.querySelectorAll("td");
+        if (tds.length < 3) return;
+
+        const priceText = tds[tds.length - 2].textContent.trim();
+        const input = tds[tds.length - 1].querySelector("input");
+
+        const price = parseInt(priceText, 10);
+        const quantity = parseInt(input?.value || 0, 10);
+
+        if (!isNaN(price) && !isNaN(quantity)) {
+          total += price * quantity;
+        }
+      });
+
+      document.getElementById("total").textContent = `合計: ${total.toLocaleString()} 円`;
+    }
+
+    document.querySelectorAll('input[type="number"]').forEach(input => {
+      input.addEventListener("input", calculateTotal);
+    });
+  </script>
 </body>
 
 </html>
