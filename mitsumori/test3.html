@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>シンプル見積り（係数付き）</title>
+  <style>
+    html {
+      font-size: 4vw;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      font-family: sans-serif;
+      background: white;
+      color: black;
+      text-align: center;
+      overflow: hidden;
+      height: 100%;
+    }
+
+    body {
+      height: calc(var(--vh, 1vh) * 100);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    #main {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    #question {
+      font-weight: bold;
+      font-size: 1.5em;
+      opacity: 0;
+      animation: fadeIn 1s forwards;
+    }
+
+    #buttons {
+      margin-top: 1em;
+      opacity: 0;
+      animation: fadeIn 1s forwards;
+      animation-delay: 1s;
+      animation-fill-mode: forwards;
+    }
+
+    button {
+      background: white;
+      border: none;
+      padding: 0.75em 1.5em;
+      font-size: 1em;
+      margin: 0.5em;
+      cursor: pointer;
+      font-weight: normal;
+      border-radius: 999px;
+      box-shadow: 0 0.4em 1em rgba(0, 0, 0, 0.15);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    button:hover {
+      transform: translateY(-0.2em);
+      box-shadow: 0 0.6em 1.4em rgba(0, 0, 0, 0.2);
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(0.5em); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (min-width: 600px) {
+      html {
+        font-size: 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="main">
+    <p id="question">配管の種類を選んでください</p>
+    <div id="buttons"></div>
+  </div>
+
+  <script>
+    // ビューポートの高さを CSS 変数に設定
+    function setViewportHeight() {
+      const vh = window.innerHeight * 0.01;
+      document.documentElement.style.setProperty('--vh', `${vh}px`);
+    }
+
+    window.addEventListener('resize', setViewportHeight);
+    window.addEventListener('orientationchange', setViewportHeight);
+    setViewportHeight(); // 初期化
+
+    // 質問リスト
+    const questions = [
+      {
+        text: "配管の種類を選んでください",
+        options: ["鉄", "ステンレス", "塩ビ"]
+      },
+     
+    ];
+
+    
+    let currentQuestion = 0;
+    const answers = [];
+    let totalCoefficient = 0;
+
+    function showQuestion() {
+      const q = questions[currentQuestion];
+      document.getElementById("question").textContent = q.text;
+      const buttonsDiv = document.getElementById("buttons");
+      buttonsDiv.innerHTML = "";
+
+      q.options.forEach(option => {
+        const button = document.createElement("button");
+        button.textContent = option;
+        button.onclick = () => next(option);
+        buttonsDiv.appendChild(button);
+      });
+    }
+
+    function next(answer) {
+      answers.push(answer);
+      totalCoefficient += coefficientMap[answer] || 0;
+      currentQuestion++;
+
+      if (currentQuestion < questions.length) {
+        showQuestion();
+      } else {
+        document.getElementById("question").textContent = "*開発中";
+        const buttonsDiv = document.getElementById("buttons");
+        buttonsDiv.innerHTML = `
+          <p>${answers.join(" / ")}</p>
+          <p><strong>計：</strong> ${totalCoefficient.toFixed(2)}</p>
+        `;
+      }
+    }
+
+    showQuestion();
+  </script>
+
+</body>
+</html>

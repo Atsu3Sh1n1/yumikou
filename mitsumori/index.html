@@ -1,15 +1,18 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>配管見積り計算機</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>シンプル見積り（係数付き）</title>
   <style>
+    /* あなたのスタイルはそのまま */
     html {
       font-size: 4vw;
     }
 
-    html, body {
+    html,
+    body {
       margin: 0;
       padding: 0;
       font-family: sans-serif;
@@ -68,23 +71,16 @@
       box-shadow: 0 0.6em 1.4em rgba(0, 0, 0, 0.2);
     }
 
-    #result {
-      margin-top: 1em;
-      font-size: 1.2em;
-      opacity: 0;
-      animation: fadeIn 1s forwards;
-    }
-
-    #restart {
-      margin-top: 1em;
-      opacity: 0;
-      animation: fadeIn 1s forwards;
-      animation-delay: 0.5s;
-    }
-
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(0.5em); }
-      to { opacity: 1; transform: translateY(0); }
+      from {
+        opacity: 0;
+        transform: translateY(0.5em);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     @media (min-width: 600px) {
@@ -92,283 +88,174 @@
         font-size: 24px;
       }
     }
+
+    .result-card {
+      background: #f8f9fa;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      padding: 1.5em 2em;
+      max-width: 320px;
+      margin: 1em auto;
+      text-align: left;
+      font-size: 1rem;
+      color: #333;
+      font-weight: 600;
+    }
+
+    .result-card h2 {
+      margin-top: 0;
+      font-weight: 700;
+      color: #2c3e50;
+      text-align: center;
+    }
+
+    .result-item {
+      margin: 0.5em 0;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .result-label {
+      color: #555;
+    }
+
+    .result-value {
+      color: #222;
+      font-weight: 700;
+    }
   </style>
 </head>
-<body>
 
+<body>
   <div id="main">
     <p id="question">配管の種類を選んでください</p>
     <div id="buttons"></div>
-    <div id="result"></div>
-    <button id="restart" style="display:none;">最初からやり直す</button>
   </div>
 
-  <!-- 配管計算用のiframe (非表示) -->
-  <iframe id="calculator" src="about:blank" style="display:none;"></iframe>
+  <!-- 計算用iframeを非表示で読み込み -->
+  <iframe id="calcIframe" src="test2.html" style="display:none;"></iframe>
 
   <script>
-    // ビューポートの高さを CSS 変数に設定
     function setViewportHeight() {
       const vh = window.innerHeight * 0.01;
       document.documentElement.style.setProperty('--vh', `${vh}px`);
     }
-
     window.addEventListener('resize', setViewportHeight);
     window.addEventListener('orientationchange', setViewportHeight);
-    setViewportHeight(); // 初期化
+    setViewportHeight();
 
-    // 配管計算用iframeにスクリプトをロード
-    const calculator = document.getElementById('calculator');
-    calculator.onload = function() {
-      const script = document.createElement('script');
-      script.innerHTML = `
-        // 重量データ
-        const weightPerMeter = {
-          "6": { sgp: 0.419, sch40: 0.369, sch60: 0.450, sch80: 0.479, sus5s: 0.237, sus10s: 0.278, sus20: 0.336, sus40: 0.373, sus80: 0.484 },
-          "8": { sgp: 0.652, sch40: 0.629, sch60: 0.675, sch80: 0.799, sus5s: 0.377, sus10s: 0.499, sus20: 0.588, sus40: 0.636, sus80: 0.807 },
-          "10": { sgp: 0.851, sch40: 0.851, sch60: 1.00, sch80: 1.11, sus5s: 0.481, sus10s: 0.643, sus20: 0.762, sus40: 0.859, sus80: 1.12 },
-          "15": { sgp: 1.31, sch40: 1.31, sch60: 1.46, sch80: 1.64, sch160: 1.97, sus5s: 0.824, sus10s: 1.03, sus20: 1.2, sus40: 1.31, sus80: 1.66, sus160: 1.99 },
-          "20": { sgp: 1.68, sch40: 1.74, sch60: 2.00, sch80: 2.24, sch160: 2.94, sus5s: 1.05, sus10s: 1.31, sus20: 1.54, sus40: 1.74, sus80: 2.26, sus160: 2.97 },
-          "25": { sgp: 2.43, sch40: 2.56, sch60: 2.89, sch80: 3.27, sch160: 4.36, sus5s: 1.33, sus10s: 2.18, sus20: 2.32, sus40: 2.59, sus80: 3.31, sus160: 4.4 },
-          "32": { sgp: 3.38, sch40: 3.4, sch60: 4.24, sch80: 4.57, sch160: 5.73, sus5s: 1.69, sus10s: 2.78, sus20: 2.97, sus40: 3.51, sus80: 4.61, sus160: 5.79 },
-          "40": { sgp: 3.89, sch40: 4.1, sch60: 4.89, sch80: 5.47, sch160: 7.27, sus5s: 1.93, sus10s: 3.19, sus20: 3.41, sus40: 4.14, sus80: 5.53, sus160: 7.34 },
-          "50": { sgp: 5.31, sch20: 4.52, sch40: 5.58, sch60: 6.72, sch80: 7.46, sch160: 11.1, sus5s: 2.42, sus10s: 4.02, sus20: 4.97, sus40: 5.5, sus80: 7.54, sus160: 11.2 },
-          "65": { sgp: 7.47, sch20: 7.97, sch40: 9.12, sch60: 10.4, sch80: 12, sch160: 15.6, sus5s: 3.88, sus10s: 5.48, sus20: 6.35, sus40: 9.21, sus80: 12.1, sus160: 15.8 },
-          "80": { sgp: 8.79, sch20: 9.39, sch40: 11.36, sch60: 13.4, sch80: 15.3, sch160: 21.4, sus5s: 4.55, sus10s: 6.43, sus20: 8.48, sus40: 11.5, sus80: 15.4, sus160: 21.6 },
-          "90": { sgp: 10.1, sch20: 10.8, sch40: 13.5, sch60: 16.3, sch80: 18.7, sch160: 27.8, sus5s: 5.2, sus10s: 7.37, sus20: 9.72, sus40: 13.6, sus80: 18.9, sus160: 28.1 },
-          "100": { sgp: 12.2, sch20: 13.2, sch40: 16.04, sch60: 18.8, sch80: 22.4, sch160: 33.6, sus5s: 5.87, sus10s: 8.32, sus20: 11, sus40: 16.2, sus80: 22.6, sus120: 28.5, sus160: 33.9 },
-          "125": { sgp: 15, sch20: 16.9, sch40: 22.96, sch60: 26.3, sch80: 30.5, sch160: 48.6, sus5s: 9.56, sus10s: 11.6, sus20: 16.8, sus40: 21.9, sus80: 30.8, sus120: 40.2, sus160: 49.1 },
-          "150": { sgp: 19.8, sch20: 21.7, sch40: 27.73, sch60: 35.8, sch80: 41.8, sch160: 66.0, sus5s: 11.3, sus10s: 13.7, sus20: 20, sus40: 28, sus80: 42.3, sus120: 53.8, sus160: 66.6 },
-          "175": { sgp: 24.2 },
-          "200": { sgp: 30.1, sch20: 33.1, sch40: 42.11, sch60: 52.3, sch80: 63.8, sch160: 110, sus5s: 14.9, sus10s: 21.2, sus20: 34, sus40: 42.5, sus80: 64.4, sus120: 89.8, sus160: 111 },
-          "250": { sgp: 42.4, sch20: 41.2, sch40: 59.18, sch60: 79.8, sch80: 93.9, sch160: 168, sus5s: 22.4, sus10s: 26.2, sus20: 42.2, sus40: 59.8, sus80: 94.9, sus120: 131, sus160: 170 },
-          "300": { sgp: 53, sch20: 49.3, sch40: 78.45, sch60: 107, sch80: 129, sch160: 234, sus5s: 31.3, sus10s: 35.2, sus20: 50.5, sus40: 79.1, sus80: 131, sus120: 185, sus160: 237 },
-          "350": { sgp: 67.7, sch20: 67.7, sch40: 94.3, sch60: 127, sch80: 158, sch160: 282, sus40: 95.3, sus80: 159, sus120: 227, sus160: 284 },
-          "400": { sgp: 77.6, sch20: 77.6, sch40: 123, sch60: 160, sch80: 203, sch160: 365, sus40: 125, sus80: 205, sus120: 289, sus160: 369 },
-          "450": { sgp: 87.5, sch20: 87.5, sch40: 158, sch60: 205, sch80: 254, sch160: 459, sus40: 158, sus80: 257, sus120: 367, sus160: 468 },
-          "500": { sgp: 97.4, sch20: 117, sch40: 185, sch60: 248., sch80: 311, sch160: 565, sus40: 185, sus80: 314, sus120: 446, sus160: 570 }
-        };
-
-        // 小口径補正係数
-        const diameterCorrectionFactors = {
-          "6": 15.5, "8": 11.5, "10": 9.1, "15": 6, "20": 4.8, "25": 3.9, "32": 3.2, 
-          "40": 2.8, "50": 2.5, "65": 2.2, "80": 2.0, "90": 1.9, "100": 1.7, 
-          "125": 1.5, "150": 1.3, "200": 1.2, "250": 1.1, "300": 1.0
-        };
-
-        const pipeSizes = ["6", "8", "10", "15", "20", "25", "32", "40", "50", "65", "80", "90", "100", "125", "150", "175", "200", "250", "300", "350", "400", "450", "500"];
-
-        function calculatePipeCost(params) {
-          const { size, length, unitPrice, schedule, material } = params;
-          
-          // スケジュールキーを決定
-          const schKey = schedule.toLowerCase();
-          const materialKey = material === 'steel' ? schKey : 'sus' + schKey.slice(3);
-
-          // 重量を取得
-          const actualWeight = weightPerMeter[size]?.[materialKey];
-          if (actualWeight === undefined) {
-            return {
-              success: false,
-              message: "指定されたサイズとスケジュールの組み合わせはサポートされていません"
-            };
-          }
-
-          // 重量計算
-          const weight = length * actualWeight;
-
-          // サイズ補正
-          const baseIndex = pipeSizes.indexOf("25");
-          const sizeIndex = pipeSizes.indexOf(size);
-          const sizeStep = Math.max(0, sizeIndex - baseIndex);
-
-          let discountFactor = 1.0;
-          if (parseInt(size) >= 350) {
-            discountFactor = Math.pow(1 / 1.01, sizeStep);
-          }
-
-          // 長さによる割引 (100mで最大20%割引)
-          function getLengthDiscount(len, sz, sch) {
-            if (sz === "25" && sch.toLowerCase() === "sch40" && len === 1) {
-              return 1;
-            }
-            const maxDiscountRate = 0.20;
-            const discountLengthThreshold = 100;
-            const discountRate = Math.min((len / discountLengthThreshold) * maxDiscountRate, maxDiscountRate);
-            return 1 - discountRate;
-          }
-
-          const lengthDiscount = getLengthDiscount(length, size, schedule);
-          const diameterCorrection = diameterCorrectionFactors[size] || 1.0;
-
-          // 金額計算
-          let cost = weight * unitPrice * lengthDiscount * diameterCorrection * discountFactor;
-          if (material === 'stainless') cost *= 1.5;
-
-          // メートル単価
-          const unitPricePerMeter = length > 0 ? cost / length : 0;
-
-          return {
-            success: true,
-            pipeWeight: weight.toFixed(3),
-            pipeCost: Math.round(cost),
-            unitPricePerMeter: Math.round(unitPricePerMeter),
-            size: size,
-            length: length,
-            unitPrice: unitPrice,
-            schedule: schedule,
-            material: material
-          };
-        }
-
-        window.addEventListener('message', function(event) {
-          if (event.data.action === 'calculate') {
-            const result = calculatePipeCost(event.data.params);
-            event.source.postMessage({
-              action: 'calculationResult',
-              result: result
-            }, event.origin);
-          }
-        });
-      `;
-      document.head.appendChild(script);
-    };
-    calculator.src = "about:blank";
-
-    // 質問リスト
+    // 質問と選択肢
     const questions = [
-      {
-        text: "配管の種類を選んでください",
-        options: ["鉄", "ステンレス"]
-      },
-      {
-        text: "配管のサイズを選んでください",
-        options: ["6", "8", "10", "15", "20", "25", "32", "40", "50", "65", "80", "100", "125", "150", "200", "250", "300", "350", "400", "500"]
-      },
-      {
-        text: "配管のスケジュールを選んでください",
-        options: ["SGP", "SCH40", "SCH80", "SCH160"]
-      },
-      {
-        text: "配管の長さを入力してください (m)",
-        input: true,
-        placeholder: "例: 10"
-      }
+      { key: "material", text: "配管の種類を選んでください", options: ["鉄", "ステンレス",] },
+      { key: "size", text: "サイズを選んでください", options: ["6", "8", "10", "15", "20", "25", "32", "40", "50"] },
+      { key: "schedule", text: "スケジュールを選んでください", options: ["sch40", "sch60", "sch80"] },
+      { key: "length", text: "長さ（メーター）を入力してください", options: null } // 入力式
     ];
 
-    let currentQuestion = 0;
     const answers = {};
+    let currentQuestion = 0;
+
+    const questionEl = document.getElementById("question");
+    const buttonsDiv = document.getElementById("buttons");
+    const iframe = document.getElementById("calcIframe");
 
     function showQuestion() {
       const q = questions[currentQuestion];
-      document.getElementById("question").textContent = q.text;
-      const buttonsDiv = document.getElementById("buttons");
+      questionEl.textContent = q.text;
       buttonsDiv.innerHTML = "";
 
-      if (q.input) {
-        const input = document.createElement("input");
-        input.type = "text";
-        input.placeholder = q.placeholder;
-        input.style.padding = "0.75em";
-        input.style.fontSize = "1em";
-        input.style.borderRadius = "999px";
-        input.style.border = "1px solid #ccc";
-        input.style.textAlign = "center";
-        input.style.width = "80%";
-        input.style.maxWidth = "300px";
-        
-        const button = document.createElement("button");
-        button.textContent = "次へ";
-        button.onclick = () => {
-          if (input.value.trim() !== "") {
-            next(input.value.trim());
-          }
-        };
-        
-        buttonsDiv.appendChild(input);
-        buttonsDiv.appendChild(document.createElement("br"));
-        buttonsDiv.appendChild(button);
-      } else {
+      if (q.options) {
+        // ボタンで選択
         q.options.forEach(option => {
-          const button = document.createElement("button");
-          button.textContent = option;
-          button.onclick = () => next(option);
-          buttonsDiv.appendChild(button);
+          const btn = document.createElement("button");
+          btn.textContent = option;
+          btn.onclick = () => {
+            answers[q.key] = option;
+            nextQuestion();
+          };
+          buttonsDiv.appendChild(btn);
         });
+      } else {
+        // 入力フォーム（長さ）
+        const input = document.createElement("input");
+        input.type = "number";
+        input.min = "1";
+        input.placeholder = "数字を入力してください";
+        input.style.fontSize = "1em";
+        input.style.padding = "0.5em";
+        buttonsDiv.appendChild(input);
+
+        const btn = document.createElement("button");
+        btn.textContent = "次へ";
+        btn.onclick = () => {
+          const val = input.value.trim();
+          if (val === "" || isNaN(val) || Number(val) <= 0) {
+            alert("正しい長さを入力してください");
+            return;
+          }
+          answers[q.key] = val;
+          nextQuestion();
+        };
+        buttonsDiv.appendChild(btn);
       }
     }
 
-    function next(answer) {
-      switch(currentQuestion) {
-        case 0: answers.material = answer === "鉄" ? "steel" : "stainless"; break;
-        case 1: answers.size = answer; break;
-        case 2: answers.schedule = answer; break;
-        case 3: answers.length = parseFloat(answer); break;
-        case 4: answers.unitPrice = parseFloat(answer); break;
-      }
-      
+    function nextQuestion() {
       currentQuestion++;
-
       if (currentQuestion < questions.length) {
         showQuestion();
       } else {
-        calculateResult();
+        // すべての回答が揃ったら計算を依頼
+        questionEl.textContent = "計算中…";
+        buttonsDiv.innerHTML = "";
+
+        // 単価は固定で550円
+        const unitPrice = 550;
+
+        // material を英語に変換して iframeへ送る例
+        const materialMap = { "鉄": "steel", "ステンレス": "stainless", "塩ビ": "PVC" };
+
+        const postData = {
+          size: answers.size,
+          length: Number(answers.length),
+          unitPrice: unitPrice,
+          schedule: answers.schedule,
+          material: materialMap[answers.material] || answers.material
+        };
+
+        iframe.contentWindow.postMessage({
+          action: "calculate",
+          params: postData
+        }, "*");
       }
     }
 
-    function calculateResult() {
-      document.getElementById("question").textContent = "計算結果";
-      document.getElementById("buttons").innerHTML = "";
-      
-      // 計算用のパラメータを準備
-      const params = {
-        size: answers.size,
-        length: answers.length,
-        unitPrice: answers.unitPrice,
-        schedule: answers.schedule,
-        material: answers.material
-      };
-      
-      // iframeに計算を依頼
-      calculator.contentWindow.postMessage({
-        action: 'calculate',
-        params: params
-      }, '*');
-    }
-
-    // 計算結果を受け取る
-    window.addEventListener('message', function(event) {
-      if (event.data.action === 'calculationResult') {
-        const result = event.data.result;
-        
-        if (result.success) {
-          document.getElementById("result").innerHTML = `
-            <p>配管重量: ${result.pipeWeight} kg</p>
-            <p>総コスト: ${result.pipeCost.toLocaleString()} 円</p>
-            <p>メートル単価: ${result.unitPricePerMeter.toLocaleString()} 円/m</p>
-            <p>サイズ: ${result.size}A</p>
-            <p>長さ: ${result.length}m</p>
-            <p>材質: ${result.material === 'steel' ? '鉄' : 'ステンレス'}</p>
-            <p>スケジュール: ${result.schedule}</p>
-          `;
+    // 子ページ（iframe）からの計算結果受信
+    window.addEventListener("message", (e) => {
+      if (e.data.action === "calculationResult") {
+        if (e.data.result.success) {
+          const r = e.data.result;
+          questionEl.textContent = "";
+          buttonsDiv.innerHTML = `
+        <div class="result-card">
+          <div class="result-item"><span class="result-label">重量 (kg):</span><span class="result-value">${r.pipeWeight}</span></div>
+          <div class="result-item"><span class="result-label">合計金額 :</span><span class="result-value">${r.pipeCost}円</span></div>
+          <div class="result-item"><span class="result-label">単価（円/m）:</span><span class="result-value">${r.unitPricePerMeter}</span></div>
+          <div class="result-item"><span class="result-label">サイズ(A):</span><span class="result-value">${r.size}</span></div>
+          <div class="result-item"><span class="result-label">スケジュール:</span><span class="result-value">${r.schedule}</span></div>
+          <div class="result-item"><span class="result-label">材料:</span><span class="result-value">${r.material}</span></div>
+        </div>
+      `;
         } else {
-          document.getElementById("result").innerHTML = `<p>計算エラー: ${result.message}</p>`;
+          questionEl.textContent = "計算エラー";
+          buttonsDiv.textContent = e.data.result.message || "不明なエラー";
         }
-        
-        document.getElementById("restart").style.display = "block";
       }
     });
 
-    // リスタートボタン
-    document.getElementById("restart").onclick = function() {
-      currentQuestion = 0;
-      answers = {};
-      document.getElementById("result").innerHTML = "";
-      this.style.display = "none";
-      showQuestion();
-    };
 
     showQuestion();
   </script>
 </body>
+
 </html>
