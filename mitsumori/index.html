@@ -117,12 +117,15 @@
 
     .result-label {
       color: #555;
+      margin-right: 1.2em;
+      /* お好みの幅に調整してください */
     }
 
     .result-value {
       color: #222;
       font-weight: 700;
     }
+
   </style>
 </head>
 
@@ -147,8 +150,8 @@
     // 質問と選択肢
     const questions = [
       { key: "material", text: "配管の種類を選んでください", options: ["鉄", "ステンレス",] },
-      { key: "size", text: "サイズを選んでください", options: ["15", "20", "25", "32", "40", "50", "65", "80", "100","125", "150", "200", "250", "300", "350", "400","450", "500"  ] },
-      { key: "schedule", text: "スケジュールを選んでください", options: [ "sgp","sch20s", "sch40", "sch80"] },
+      { key: "size", text: "サイズを選んでください", options: ["15", "20", "25", "32", "40", "50", "65", "80", "100", "125", "150", "200", "250", "300", "350", "400", "450", "500"] },
+      { key: "schedule", text: "スケジュールを選んでください", options: ["sgp", "sch20s", "sch40", "sch80"] },
       { key: "length", text: "長さ（メーター）を入力してください", options: null } // 入力式
     ];
 
@@ -210,7 +213,7 @@
         buttonsDiv.innerHTML = "";
 
         // 単価は固定で550円
-        const unitPrice = 620;
+        const unitPrice = 650;
 
         // material を英語に変換して iframeへ送る例
         const materialMap = { "鉄": "steel", "ステンレス": "stainless", "塩ビ": "PVC" };
@@ -238,13 +241,14 @@
           questionEl.textContent = "有限会社 弓工";
           buttonsDiv.innerHTML = `
           <div class="result-card">
-          <div class="result-item"><span class="result-label">合計金額: </span><span class="result-value">¥${Number(r.pipeCost).toLocaleString()}円</span></div>
-          <div class="result-item"><span class="result-label">重量 (kg): </span><span class="result-value">${r.pipeWeight}</span></div>
-          <div class="result-item"><span class="result-label">単価: </span><span class="result-value">${r.unitPricePerMeter}(円/m)</span></div>
+          <div class="result-item"><span class="result-label">税別: </span><span class="result-value">¥${Number(r.pipeCost).toLocaleString()}円</span></div>
+          <div class="result-item"><span class="result-label">重量 : </span><span class="result-value">${r.pipeWeight}kg</span></div>
+          <div class="result-item"><span class="result-label">m/単価: </span><span class="result-value">${Number(r.unitPricePerMeter).toLocaleString()}円</span></div>
           <div class="result-item"><span class="result-label">サイズ: </span><span class="result-value">${r.size}A</span></div>
-          <div class="result-item"><span class="result-label">スケジュール: </span><span class="result-value">${r.schedule}</span></div>
           <div class="result-item"><span class="result-label">材料: </span><span class="result-value">${r.material}</span></div>
-        </div>
+
+          <div class="result-item"><span class="result-label">スケジュール: </span><span class="result-value">${r.schedule}</span></div>
+          </div>
       `;
         } else {
           questionEl.textContent = "計算エラー";
