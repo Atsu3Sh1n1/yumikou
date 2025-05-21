@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>シンプル見積り</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: white;
+      color: black;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      text-align: center;
+      padding: 1rem;
+    }
+
+    #question {
+      font-weight: bold;
+      font-size: 1.5rem;
+      opacity: 0;
+    }
+
+    #buttons {
+      margin-top: 1rem;
+      opacity: 0;
+    }
+
+    button {
+      background: none;
+      border: 1px solid black;
+      padding: 0.6rem 1.2rem;
+      font-size: 1rem;
+      margin: 0.5rem;
+      cursor: pointer;
+      font-weight: normal;
+      min-width: 120px;
+    }
+
+    .fadeIn {
+      animation: fadeInSoft 0.6s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
+    }
+
+    @keyframes fadeInSoft {
+      from {
+        opacity: 0;
+        transform: translateY(10px) scale(0.98);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    @media (max-width: 600px) {
+      #question {
+        font-size: 1.2rem;
+      }
+
+      button {
+        font-size: 0.95rem;
+        padding: 0.5rem 1rem;
+        min-width: 100px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div>
+    <p id="question">読み込み中...</p>
+    <div id="buttons"></div>
+  </div>
+
+  <script>
+    const questions = [
+      { text: "配管の種類を選んでください", options: ["SUS φ50", "SGP φ100"] },
+      { text: "配管の長さを選んでください", options: ["10m", "50m", "100m"] },
+      { text: "保温の有無を選んでください", options: ["あり", "なし"] },
+      { text: "塗装の有無を選んでください", options: ["あり", "なし"] },
+      { text: "現場は何階ですか？", options: ["1階", "2階", "3階以上"] }
+    ];
+
+    let currentStep = 0;
+    const answers = [];
+
+    window.onload = () => {
+      showQuestion(currentStep);
+    };
+
+    function showQuestion(step) {
+      const q = questions[step];
+      const qEl = document.getElementById("question");
+      const bEl = document.getElementById("buttons");
+
+      // Reset animation
+      qEl.classList.remove("fadeIn");
+      bEl.classList.remove("fadeIn");
+      qEl.style.opacity = 0;
+      bEl.style.opacity = 0;
+      qEl.offsetHeight; // force reflow
+
+      qEl.textContent = q.text;
+      bEl.innerHTML = "";
+
+      setTimeout(() => {
+        qEl.classList.add("fadeIn");
+      }, 100);
+
+      setTimeout(() => {
+        q.options.forEach(opt => {
+          const btn = document.createElement("button");
+          btn.textContent = opt;
+          btn.onclick = () => next(opt);
+          bEl.appendChild(btn);
+        });
+        bEl.classList.add("fadeIn");
+      }, 400);
+    }
+
+    function next(answer) {
+      answers.push(answer);
+      currentStep++;
+      if (currentStep < questions.length) {
+        showQuestion(currentStep);
+      } else {
+        showSummary();
+      }
+    }
+
+    function showSummary() {
+      const qEl = document.getElementById("question");
+      const bEl = document.getElementById("buttons");
+
+      qEl.textContent = "入力完了しました";
+      bEl.innerHTML = "";
+
+      const btn = document.createElement("button");
+      btn.textContent = "見積もりを表示";
+      btn.onclick = () => {
+        alert("仮見積もり内容:\n" + answers.join(" → "));
+        // ここで PDF生成 や 別ページ遷移 などが可能
+      };
+      bEl.appendChild(btn);
+
+      qEl.classList.add("fadeIn");
+      bEl.classList.add("fadeIn");
+    }
+  </script>
+
+</body>
+</html>
