@@ -110,7 +110,7 @@
       },
        {
         text: "圧力を選んでください",
-        options: ["0.2MPa以下/低圧", "~1.0MPa/中圧", "~4.0MPa/高圧", "4.0MPa/超特高圧・高圧ガス"]
+        options: ["低圧", "中圧", "高圧", "超特"]
       },
       {
         text: "距離を選んでください",
@@ -175,7 +175,7 @@
       if (currentQuestion < questions.length) {
         showQuestion();
       } else {
-        document.getElementById("question").textContent = "ありがとうございました。";
+        document.getElementById("question").textContent = "ありがとうございました。*開発中";
         const buttonsDiv = document.getElementById("buttons");
         buttonsDiv.innerHTML = `
           <p>${answers.join(" / ")}</p>

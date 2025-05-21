@@ -2,154 +2,108 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>シンプル見積り</title>
+  <title>親ページ（質問と結果）</title>
   <style>
     body {
       font-family: sans-serif;
-      background: white;
-      color: black;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      margin: 0;
-      text-align: center;
-      padding: 1rem;
+      background: #f5f5f5;
+      padding: 2em;
     }
-
-    #question {
-      font-weight: bold;
-      font-size: 1.5rem;
-      opacity: 0;
-    }
-
-    #buttons {
-      margin-top: 1rem;
-      opacity: 0;
-    }
-
     button {
-      background: none;
-      border: 1px solid black;
-      padding: 0.6rem 1.2rem;
-      font-size: 1rem;
-      margin: 0.5rem;
+      padding: 0.5em 1em;
+      margin: 0.5em;
+      font-size: 1em;
       cursor: pointer;
-      font-weight: normal;
-      min-width: 120px;
     }
-
-    .fadeIn {
-      animation: fadeInSoft 0.6s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
+    #result {
+      margin-top: 2em;
+      font-weight: bold;
+      font-size: 1.2em;
     }
-
-    @keyframes fadeInSoft {
-      from {
-        opacity: 0;
-        transform: translateY(10px) scale(0.98);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-      }
-    }
-
-    @media (max-width: 600px) {
-      #question {
-        font-size: 1.2rem;
-      }
-
-      button {
-        font-size: 0.95rem;
-        padding: 0.5rem 1rem;
-        min-width: 100px;
-      }
+    iframe {
+      display: none; /* ユーザーには子ページは表示しない */
     }
   </style>
 </head>
 <body>
 
-  <div>
-    <p id="question">読み込み中...</p>
-    <div id="buttons"></div>
-  </div>
+  <!-- 質問表示 -->
+  <div id="question"></div>
+
+  <!-- 選択肢ボタン -->
+  <div id="choices"></div>
+
+  <!-- 計算結果表示 -->
+  <div id="result"></div>
+
+  <!-- 子ページ（iframe）を非表示で読み込む -->
+  <iframe id="childFrame" src="child.html"></iframe>
 
   <script>
+    // 質問と選択肢の配列
     const questions = [
-      { text: "配管の種類を選んでください", options: ["SUS φ50", "SGP φ100"] },
-      { text: "配管の長さを選んでください", options: ["10m", "50m", "100m"] },
-      { text: "保温の有無を選んでください", options: ["あり", "なし"] },
-      { text: "塗装の有無を選んでください", options: ["あり", "なし"] },
-      { text: "現場は何階ですか？", options: ["1階", "2階", "3階以上"] }
+      {
+        text: "① 配管の種類を選んでください",
+        options: ["鉄", "ステンレス", "塩ビ"]
+      },
+      {
+        text: "② サイズを選んでください",
+        options: ["~25A", "~300A", "~500A", "それ以上"]
+      },
+      {
+        text: "③ 使用目的を選んでください",
+        options: ["給水", "排水", "空調"]
+      }
     ];
 
-    let currentStep = 0;
-    const answers = [];
+    const answers = []; // ユーザーが選んだ答えを格納
+    let index = 0;      // 現在の質問番号
 
-    window.onload = () => {
-      showQuestion(currentStep);
-    };
+    // 質問を画面に表示する
+    function showQuestion() {
+      const q = questions[index];
+      document.getElementById("question").textContent = q.text;
 
-    function showQuestion(step) {
-      const q = questions[step];
-      const qEl = document.getElementById("question");
-      const bEl = document.getElementById("buttons");
+      const choices = document.getElementById("choices");
+      choices.innerHTML = ""; // 前のボタンをクリア
 
-      // Reset animation
-      qEl.classList.remove("fadeIn");
-      bEl.classList.remove("fadeIn");
-      qEl.style.opacity = 0;
-      bEl.style.opacity = 0;
-      qEl.offsetHeight; // force reflow
+      // 各選択肢にボタンを生成
+      q.options.forEach(opt => {
+        const btn = document.createElement("button");
+        btn.textContent = opt;
+        btn.onclick = () => {
+          answers.push(opt); // 選択肢を記録
+          index++;           // 次の質問へ進む
 
-      qEl.textContent = q.text;
-      bEl.innerHTML = "";
-
-      setTimeout(() => {
-        qEl.classList.add("fadeIn");
-      }, 100);
-
-      setTimeout(() => {
-        q.options.forEach(opt => {
-          const btn = document.createElement("button");
-          btn.textContent = opt;
-          btn.onclick = () => next(opt);
-          bEl.appendChild(btn);
-        });
-        bEl.classList.add("fadeIn");
-      }, 400);
+          if (index < questions.length) {
+            showQuestion();  // 次の質問を表示
+          } else {
+            sendToChild();   // 全質問完了 → 子へ送信
+          }
+        };
+        choices.appendChild(btn);
+      });
     }
 
-    function next(answer) {
-      answers.push(answer);
-      currentStep++;
-      if (currentStep < questions.length) {
-        showQuestion(currentStep);
-      } else {
-        showSummary();
+    // 子ページへ選択結果を postMessage で送信する
+    function sendToChild() {
+      const iframe = document.getElementById("childFrame");
+      iframe.contentWindow.postMessage({
+        type: "calc",       // イベントタイプ
+        answers: answers    // 回答配列
+      }, "*");
+    }
+
+    // 子ページからメッセージ（結果）を受け取る
+    window.addEventListener("message", (event) => {
+      if (event.data.type === "result") {
+        const total = event.data.total;
+        document.getElementById("result").textContent = `合計係数: ${total}`;
       }
-    }
+    });
 
-    function showSummary() {
-      const qEl = document.getElementById("question");
-      const bEl = document.getElementById("buttons");
-
-      qEl.textContent = "入力完了しました";
-      bEl.innerHTML = "";
-
-      const btn = document.createElement("button");
-      btn.textContent = "見積もりを表示";
-      btn.onclick = () => {
-        alert("仮見積もり内容:\n" + answers.join(" → "));
-        // ここで PDF生成 や 別ページ遷移 などが可能
-      };
-      bEl.appendChild(btn);
-
-      qEl.classList.add("fadeIn");
-      bEl.classList.add("fadeIn");
-    }
+    // 最初の質問を表示
+    showQuestion();
   </script>
-
 </body>
 </html>
