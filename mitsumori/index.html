@@ -154,7 +154,7 @@
     const questions = [
       { key: "material", text: "配管の種類を選んでください", options: ["鉄", "ステンレス",] },
       { key: "size", text: "サイズを選んでください", options: ["15", "20", "25", "32", "40", "50", "65", "80", "100", "125", "150", "200", "250", "300", "350", "400", "450", "500"] },
-      { key: "schedule", text: "スケジュールを選んでください", options: ["sgp", "sch20", "sch40", "sch80"] },
+      { key: "schedule", text: "スケジュールを選んでください", options: ["sch5", "sch10", "sgp", "sch20", "sch40", "sch80", "sch120", "sch160",] },
       { key: "length", text: "長さを入力してください", options: null } // 入力式
     ];
 
@@ -245,7 +245,7 @@
       if (e.data.action === "calculationResult") {
         if (e.data.result.success) {
           const r = e.data.result;
-          questionEl.textContent = "有限会社 弓工";
+          questionEl.textContent = "工事費概算算出機マコトくん";
           buttonsDiv.innerHTML = `
           <div class="result-card">
           <div class="result-item"><span class="result-label">税別: </span><span class="result-value">¥${Number(r.pipeCost).toLocaleString()}円</span></div>
