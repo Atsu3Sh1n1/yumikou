@@ -245,7 +245,7 @@
       if (e.data.action === "calculationResult") {
         if (e.data.result.success) {
           const r = e.data.result;
-          questionEl.textContent = "工事費概算算出機マコトくん";
+          questionEl.textContent = "係数加算施工費算出機フジタくん二号";
           buttonsDiv.innerHTML = `
           <div class="result-card">
           <div class="result-item"><span class="result-label">税別: </span><span class="result-value">¥${Number(r.pipeCost).toLocaleString()}円</span></div>
