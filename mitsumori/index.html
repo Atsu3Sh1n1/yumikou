@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>シンプル見積り</title>
+  <title>概算見積もり・有限会社弓工</title>
   <style>
     /* あなたのスタイルはそのまま */
     html {
@@ -61,7 +61,7 @@
       background: white;
       border: none;
       padding: 0.75em 1.5em;
-      font-size: 1em;
+      font-size: 1.25em;
       margin: 0.5em;
       cursor: pointer;
       font-weight: normal;
@@ -134,7 +134,7 @@
 
 <body>
   <div id="main">
-    <p id="question">配管の種類を選んでください</p>
+    <p id="question">配管の種類を選んでください/A</p>
     <div id="buttons"></div>
   </div>
 
@@ -154,7 +154,7 @@
     const questions = [
       { key: "material", text: "配管の種類を選んでください", options: ["鉄", "ステンレス",] },
       { key: "size", text: "サイズを選んでください", options: ["15", "20", "25", "32", "40", "50", "65", "80", "100", "125", "150", "200", "250", "300", "350", "400", "450", "500"] },
-      { key: "schedule", text: "スケジュールを選んでください", options: ["sch5", "sch10", "sgp", "sch20", "sch40", "sch80", "sch120", "sch160",] },
+      { key: "schedule", text: "スケジュールを選んでください", options: ["sch5", "sch10",  "sch20", "sgp", "sch40", "sch80", "sch120", "sch160",] },
       { key: "length", text: "長さを入力してください", options: null } // 入力式
     ];
 
