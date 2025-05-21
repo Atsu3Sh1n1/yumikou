@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>背景テスト</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 1000%;
+      overflow-x: hidden;
+    }
+
+    .background {
+      position: fixed;
+      top: -50%;
+      left: -50%;
+      width: 200vw;
+      height: 200vh;
+      background-image: url('yumikou.png');
+      background-repeat: repeat;
+      background-size: 200px 200px;
+      opacity: 0.05;
+      transform: rotate(-30deg);
+      transform-origin: center;
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    /* 背景の上にコンテンツがあれば見やすくなる */
+    .content {
+      position: relative;
+      z-index: 1;
+      padding: 2rem;
+      font-size: 1.2rem;
+      background: rgba(255,255,255,0.8);
+      min-height: 200vh; /* スクロールを確認しやすく */
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 背景用の固定要素 -->
+  <div class="background"></div>
+
+  <!-- コンテンツ -->
+
+</body>
+</html>
