@@ -5,27 +5,45 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>シンプル見積り</title>
   <style>
-    body {
+    html {
+      font-size: 4vw;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
       font-family: sans-serif;
       background: white;
       color: black;
+      text-align: center;
+      overflow: hidden;
+      height: 100%;
+    }
+
+    body {
+      height: calc(var(--vh, 1vh) * 100);
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
-      margin: 0;
-      text-align: center;
+    }
+
+    #main {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
     }
 
     #question {
       font-weight: bold;
-      font-size: 1.5rem;
+      font-size: 1.5em;
       opacity: 0;
       animation: fadeIn 1s forwards;
     }
 
     #buttons {
-      margin-top: 1rem;
+      margin-top: 1em;
       opacity: 0;
       animation: fadeIn 1s forwards;
       animation-delay: 1s;
@@ -35,54 +53,60 @@
     button {
       background: white;
       border: none;
-      padding: 0.75rem 1.5rem;
-      font-size: 1rem;
-      margin: 0.5rem;
+      padding: 0.75em 1.5em;
+      font-size: 1em;
+      margin: 0.5em;
       cursor: pointer;
       font-weight: normal;
       border-radius: 999px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+      box-shadow: 0 0.4em 1em rgba(0, 0, 0, 0.15);
       transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
 
     button:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.2);
+      transform: translateY(-0.2em);
+      box-shadow: 0 0.6em 1.4em rgba(0, 0, 0, 0.2);
     }
 
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
+      from { opacity: 0; transform: translateY(0.5em); }
       to { opacity: 1; transform: translateY(0); }
     }
 
-    @media (max-width: 600px) {
-      #question {
-        font-size: 1.2rem;
-      }
-
-      button {
-        font-size: 0.9rem;
-        padding: 0.6rem 1.2rem;
+    @media (min-width: 600px) {
+      html {
+        font-size: 24px;
       }
     }
   </style>
 </head>
 <body>
 
-  <div>
+  <div id="main">
     <p id="question">配管の種類を選んでください</p>
     <div id="buttons"></div>
   </div>
 
   <script>
+    // ビューポートの高さを CSS 変数に設定
+    function setViewportHeight() {
+      const vh = window.innerHeight * 0.01;
+      document.documentElement.style.setProperty('--vh', `${vh}px`);
+    }
+
+    window.addEventListener('resize', setViewportHeight);
+    window.addEventListener('orientationchange', setViewportHeight);
+    setViewportHeight(); // 初期化
+
+    // 質問表示ロジック
     const questions = [
       {
         text: "配管の種類を選んでください",
         options: ["鉄", "ステンレス", "塩ビ"]
       },
       {
-        text: "長さを選んでください",
-        options: ["5m", "10m", "20m"]
+        text: "サイズを選んでください",
+        options: ["~25", "~300A", "~500A"]
       },
       {
         text: "使用目的を選んでください",
