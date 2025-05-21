@@ -235,17 +235,21 @@
       if (e.data.action === "calculationResult") {
         if (e.data.result.success) {
           const r = e.data.result;
-          questionEl.textContent = "";
-          buttonsDiv.innerHTML = `
-        <div class="result-card">
-          <div class="result-item"><span class="result-label">重量 (kg):</span><span class="result-value">${r.pipeWeight}</span></div>
-          <div class="result-item"><span class="result-label">合計金額 :</span><span class="result-value">${r.pipeCost}円</span></div>
-          <div class="result-item"><span class="result-label">単価（円/m）:</span><span class="result-value">${r.unitPricePerMeter}</span></div>
-          <div class="result-item"><span class="result-label">サイズ(A):</span><span class="result-value">${r.size}</span></div>
-          <div class="result-item"><span class="result-label">スケジュール:</span><span class="result-value">${r.schedule}</span></div>
-          <div class="result-item"><span class="result-label">材料:</span><span class="result-value">${r.material}</span></div>
-        </div>
-      `;
+          questionEl.textContent = "有限会社 弓工";
+          const res = e.data.result;
+
+          const formatted = `
+          <div style="font-size: 1.2em; line-height: 1.6;">
+          <p>税別: <strong style="font-size: 1.4em; color: #c00;">¥${Number(res.pipeCost).toLocaleString()}</strong></p>
+          <p>単価（m/円）: <strong>¥${Number(res.unitPricePerMeter).toLocaleString()}</strong></p>
+         <p>サイズ: <strong>${res.size}</strong></p>
+         <p>材質: <strong>${res.material}</strong></p>
+         <p>スケジュール: <strong>${res.schedule}</strong></p>
+         <p>重量: <strong>${Number(res.pipeWeight).toLocaleString()} kg</strong></p>
+         </div>
+`;
+          buttonsDiv.innerHTML = formatted;
+
         } else {
           questionEl.textContent = "計算エラー";
           buttonsDiv.textContent = e.data.result.message || "不明なエラー";
