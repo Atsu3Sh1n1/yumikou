@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>シンプル見積り</title>
+  <title>シンプル見積り（係数付き）</title>
   <style>
     html {
       font-size: 4vw;
@@ -98,7 +98,7 @@
     window.addEventListener('orientationchange', setViewportHeight);
     setViewportHeight(); // 初期化
 
-    // 質問表示ロジック
+    // 質問リスト
     const questions = [
       {
         text: "配管の種類を選んでください",
@@ -106,7 +106,27 @@
       },
       {
         text: "サイズを選んでください",
-        options: ["~25", "~300A", "~500A"]
+        options: ["~25A", "~300A", "~500A", "それ以上"]
+      },
+      {
+        text: "距離を選んでください",
+        options: ["~10ｍ", "~50m", "~100m", "それ以上"]
+      },
+      {
+        text: "サイズを選んでください",
+        options: ["~25A", "~300A", "~500A", "それ以上"]
+      },
+      {
+        text: "サイズを選んでください",
+        options: ["~25A", "~300A", "~500A", "それ以上"]
+      },
+      {
+        text: "サイズを選んでください",
+        options: ["~25A", "~300A", "~500A", "それ以上"]
+      },
+      {
+        text: "サイズを選んでください",
+        options: ["~25A", "~300A", "~500A", "それ以上"]
       },
       {
         text: "使用目的を選んでください",
@@ -114,8 +134,23 @@
       }
     ];
 
+    // 各選択肢に対する係数マップ
+    const coefficientMap = {
+      "鉄": 1.2,
+      "ステンレス": 1.5,
+      "塩ビ": 1.0,
+      "~25A": 0.8,
+      "~300A": 1.0,
+      "~500A": 1.2,
+      "それ以上": 1.5,
+      "給水": 1.0,
+      "排水": 1.3,
+      "空調": 1.4
+    };
+
     let currentQuestion = 0;
     const answers = [];
+    let totalCoefficient = 0;
 
     function showQuestion() {
       const q = questions[currentQuestion];
@@ -133,6 +168,7 @@
 
     function next(answer) {
       answers.push(answer);
+      totalCoefficient += coefficientMap[answer] || 0;
       currentQuestion++;
 
       if (currentQuestion < questions.length) {
@@ -140,7 +176,10 @@
       } else {
         document.getElementById("question").textContent = "ありがとうございました。選択内容：";
         const buttonsDiv = document.getElementById("buttons");
-        buttonsDiv.innerHTML = "<p>" + answers.join(" / ") + "</p>";
+        buttonsDiv.innerHTML = `
+          <p>${answers.join(" / ")}</p>
+          <p><strong>計：</strong> ${totalCoefficient.toFixed(2)}</p>
+        `;
       }
     }
 
