@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>親ページ</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    .container {
+      display: flex;
+      gap: 20px;
+    }
+    .input-section, .result-section {
+      flex: 1;
+      padding: 20px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+    }
+    .form-group {
+      margin-bottom: 15px;
+    }
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+    input, select {
+      width: 100%;
+      padding: 8px;
+      box-sizing: border-box;
+    }
+    button {
+      padding: 10px 15px;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .result-item {
+      margin: 10px 0;
+      padding: 10px;
+      background: #f5f5f5;
+      border-radius: 5px;
+    }
+    .label {
+      font-weight: bold;
+    }
+    iframe {
+      width: 100%;
+      height: 300px;
+      border: 1px solid #ddd;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1>配管計算機</h1>
+  
+  <div class="container">
+    <div class="input-section">
+      <h2>入力</h2>
+      <div class="form-group">
+        <label for="size">サイズ</label>
+        <select id="size">
+          <option value="6">6A</option>
+          <option value="8">8A</option>
+          <option value="10">10A</option>
+          <option value="15">15A</option>
+          <option value="20">20A</option>
+          <option value="25" selected>25A</option>
+          <option value="32">32A</option>
+          <option value="40">40A</option>
+          <option value="50">50A</option>
+          <option value="65">65A</option>
+          <option value="80">80A</option>
+          <option value="100">100A</option>
+          <option value="125">125A</option>
+          <option value="150">150A</option>
+          <option value="200">200A</option>
+          <option value="250">250A</option>
+          <option value="300">300A</option>
+          <option value="350">350A</option>
+          <option value="400">400A</option>
+          <option value="450">450A</option>
+          <option value="500">500A</option>
+        </select>
+      </div>
+      
+      <div class="form-group">
+        <label for="length">メーター数</label>
+        <input type="number" id="length" value="10" min="0">
+      </div>
+      
+      <div class="form-group">
+        <label for="unitPrice">単価 (円/kg)</label>
+        <input type="number" id="unitPrice" value="180" min="0">
+      </div>
+      
+      <div class="form-group">
+        <label for="schedule">スケジュール</label>
+        <select id="schedule">
+          <option value="SCH5s">SCH5S</option>
+          <option value="SCH10s">SCH10S</option>
+          <option value="SCH20">SCH20/S</option>
+          <option value="SCH40" selected>SCH40/S</option>
+          <option value="SCH60">SCH60/S</option>
+          <option value="SCH80">SCH80/S</option>
+          <option value="SCH120">SCH120/S</option>
+          <option value="SCH160">SCH160/S</option>
+          <option value="sgp">SGP</option>
+        </select>
+      </div>
+      
+      <div class="form-group">
+        <label>材質</label>
+        <div>
+          <input type="radio" id="steel" name="material" value="steel" checked>
+          <label for="steel" style="display: inline;">鉄</label>
+          <input type="radio" id="stainless" name="material" value="stainless">
+          <label for="stainless" style="display: inline;">ステンレス</label>
+        </div>
+      </div>
+      
+      <button id="calculateBtn">計算する</button>
+    </div>
+    
+    <div class="result-section">
+      <h2>計算結果 (親ページ)</h2>
+      <div class="result-item">
+        <span class="label">配管重量:</span> <span id="parentPipeWeight">-</span> kg
+      </div>
+      <div class="result-item">
+        <span class="label">金額:</span> ¥<span id="parentPipeCost">-</span>
+      </div>
+      <div class="result-item">
+        <span class="label">メートル単価:</span> ¥<span id="parentUnitPricePerMeter">-</span> /m
+      </div>
+    </div>
+  </div>
+  
+  <h2>iframe内の計算結果</h2>
+  <iframe id="pipeCalculator" src="pipe-calculator-iframe.html"></iframe>
+  
+  <script>
+    const iframe = document.getElementById('pipeCalculator');
+    const calculateBtn = document.getElementById('calculateBtn');
+    
+    // 計算ボタンのクリックイベント
+    calculateBtn.addEventListener('click', function() {
+      const params = {
+        size: document.getElementById('size').value,
+        length: parseFloat(document.getElementById('length').value) || 0,
+        unitPrice: parseFloat(document.getElementById('unitPrice').value) || 0,
+        schedule: document.getElementById('schedule').value,
+        material: document.querySelector('input[name="material"]:checked').value
+      };
+      
+      // iframeに計算をリクエスト
+      iframe.contentWindow.postMessage({
+        action: 'calculate',
+        params: params
+      }, '*');
+    });
+    
+    // iframeからの結果を受け取る
+    window.addEventListener('message', function(event) {
+      if (event.data.action === 'calculationResult') {
+        const result = event.data.result;
+        if (result.success) {
+          // 親ページに結果を表示
+          document.getElementById('parentPipeWeight').textContent = result.pipeWeight;
+          document.getElementById('parentPipeCost').textContent = result.pipeCost.toLocaleString();
+          document.getElementById('parentUnitPricePerMeter').textContent = result.unitPricePerMeter.toLocaleString();
+        } else {
+          console.error('計算エラー:', result.message);
+        }
+      }
+    });
+    
+    // 初期計算
+    calculateBtn.click();
+  </script>
+</body>
+</html>

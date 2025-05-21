@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>配管計算機</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      margin: 0;
+    }
+    .result-container {
+      background: #f5f5f5;
+      padding: 15px;
+      border-radius: 5px;
+      margin-top: 10px;
+    }
+    .result-item {
+      margin: 5px 0;
+    }
+    .label {
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div id="calculator">
+    <div class="result-container">
+      <div class="result-item">
+        <span class="label">配管重量:</span> <span id="pipeWeight">-</span> kg
+      </div>
+      <div class="result-item">
+        <span class="label">金額:</span> ¥<span id="pipeCost">-</span>
+      </div>
+      <div class="result-item">
+        <span class="label">メートル単価:</span> ¥<span id="unitPricePerMeter">-</span> /m
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // 計算関数
+    function calculatePipeCost(params) {
+      const weightPerMeter = {
+        // ... (前と同じ重量データをここに貼り付け) ...
+      };
+
+      const diameterCorrectionFactors = {
+        // ... (前と同じ小口径補正係数をここに貼り付け) ...
+      };
+
+      const pipeSizes = ["6", "8", "10", "15", "20", "25", "32", "40", "50", "65", "80", "90", "100", "125", "150", "175", "200", "250", "300", "350", "400", "450", "500"];
+
+      const { size, length, unitPrice, schedule, material } = params;
+      const schKey = schedule.toLowerCase();
+      const materialKey = material === 'steel' ? schKey : 'sus' + schKey.slice(3);
+
+      const actualWeight = weightPerMeter[size]?.[materialKey];
+      if (actualWeight === undefined) {
+        return {
+          success: false,
+          message: "指定されたサイズとスケジュールの組み合わせはサポートされていません"
+        };
+      }
+
+      const weight = length * actualWeight;
+
+      const baseIndex = pipeSizes.indexOf("25");
+      const sizeIndex = pipeSizes.indexOf(size);
+      const sizeStep = Math.max(0, sizeIndex - baseIndex);
+
+      let discountFactor = 1.0;
+      if (parseInt(size) >= 350) {
+        discountFactor = Math.pow(1 / 1.01, sizeStep);
+      }
+
+      function getLengthDiscount(len, sz, sch) {
+        if (sz === "25" && sch.toLowerCase() === "sch40" && len === 1) {
+          return 1;
+        }
+        const maxDiscountRate = 0.20;
+        const discountLengthThreshold = 100;
+        const discountRate = Math.min((len / discountLengthThreshold) * maxDiscountRate, maxDiscountRate);
+        return 1 - discountRate;
+      }
+
+      const lengthDiscount = getLengthDiscount(length, size, schedule);
+      const diameterCorrection = diameterCorrectionFactors[size] || 1.0;
+
+      let cost = weight * unitPrice * lengthDiscount * diameterCorrection * discountFactor;
+      if (material === 'stainless') cost *= 1.5;
+
+      const unitPricePerMeter = length > 0 ? cost / length : 0;
+
+      return {
+        success: true,
+        pipeWeight: weight.toFixed(3),
+        pipeCost: Math.round(cost),
+        unitPricePerMeter: Math.round(unitPricePerMeter),
+        size: size,
+        length: length,
+        unitPrice: unitPrice,
+        schedule: schedule,
+        material: material
+      };
+    }
+
+    // 結果を表示する関数
+    function displayResults(result) {
+      if (result.success) {
+        document.getElementById('pipeWeight').textContent = result.pipeWeight;
+        document.getElementById('pipeCost').textContent = result.pipeCost.toLocaleString();
+        document.getElementById('unitPricePerMeter').textContent = result.unitPricePerMeter.toLocaleString();
+      } else {
+        document.getElementById('pipeWeight').textContent = '-';
+        document.getElementById('pipeCost').textContent = '-';
+        document.getElementById('unitPricePerMeter').textContent = '-';
+        console.error(result.message);
+      }
+    }
+
+    // 親ウィンドウからのメッセージを受け取る
+    window.addEventListener('message', function(event) {
+      if (event.data.action === 'calculate') {
+        const result = calculatePipeCost(event.data.params);
+        displayResults(result);
+        
+        // 親ウィンドウに結果を返す
+        event.source.postMessage({
+          action: 'calculationResult',
+          result: result
+        }, event.origin);
+      }
+    });
+
+    // 初期計算（デフォルト値で）
+    const defaultParams = {
+      size: "25",
+      length: 10,
+      unitPrice: 180,
+      schedule: "SCH40",
+      material: "steel"
+    };
+    const initialResult = calculatePipeCost(defaultParams);
+    displayResults(initialResult);
+  </script>
+</body>
+</html>
