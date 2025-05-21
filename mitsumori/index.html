@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>シンプル見積り（係数付き）</title>
+  <title>シンプル見積り</title>
   <style>
     /* あなたのスタイルはそのまま */
     html {
@@ -24,16 +24,14 @@
     }
 
     body {
-      overflow-y: auto;
-      /* hiddenからautoに変更 */
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 1em;
-      /* 余白を追加 */
-      box-sizing: border-box;
-    }
+  overflow-y: auto; /* hiddenからautoに変更 */
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1em; /* 余白を追加 */
+  box-sizing: border-box;
+}
 
 
     #main {
@@ -156,7 +154,7 @@
     const questions = [
       { key: "material", text: "配管の種類を選んでください", options: ["鉄", "ステンレス",] },
       { key: "size", text: "サイズを選んでください", options: ["15", "20", "25", "32", "40", "50", "65", "80", "100", "125", "150", "200", "250", "300", "350", "400", "450", "500"] },
-      { key: "schedule", text: "スケジュールを選んでください", options: ["sgp", "sch20s", "sch40", "sch80"] },
+      { key: "schedule", text: "スケジュールを選んでください", options: ["sgp", "sch20", "sch40", "sch80"] },
       { key: "length", text: "長さを入力してください", options: null } // 入力式
     ];
 
