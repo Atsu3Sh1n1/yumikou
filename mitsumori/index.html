@@ -108,18 +108,19 @@
         text: "サイズを選んでください",
         options: ["6~20A", "25~80A", "100~250A", "250~500A"]
       },
+       {
+        text: "圧力を選んでください",
+        options: ["0.2MPa以下/低圧", "~1.0MPa/中圧", "~4.0MPa/高圧", "4.0MPa/超特高圧・高圧ガス"]
+      },
       {
         text: "距離を選んでください",
-        options: ["~10ｍ", "~50m", "~100m", "それ以上"]
+        options: ["~20ｍ", "~50m", "~100m", "100m~"]
       },
       {
         text: "サイズを選んでください",
         options: ["~25A", "~300A", "~500A", "それ以上"]
       },
-      {
-        text: "サイズを選んでください",
-        options: ["~25A", "~300A", "~500A", "それ以上"]
-      },
+     
       {
         text: "サイズを選んでください",
         options: ["~25A", "~300A", "~500A", "それ以上"]
@@ -174,7 +175,7 @@
       if (currentQuestion < questions.length) {
         showQuestion();
       } else {
-        document.getElementById("question").textContent = "ありがとうございました。選択内容：";
+        document.getElementById("question").textContent = "ありがとうございました。";
         const buttonsDiv = document.getElementById("buttons");
         buttonsDiv.innerHTML = `
           <p>${answers.join(" / ")}</p>
