@@ -16,7 +16,7 @@
       margin: 0;
       padding: 0;
       font-family: sans-serif;
-    
+
       color: black;
       text-align: center;
       overflow: hidden;
@@ -209,9 +209,9 @@
         input.min = "1";
         input.inputMode = "numeric";   // 追加
         input.pattern = "[0-9]*";      // 追加
-        input.placeholder = "数字を入力してください";
+        input.placeholder = "例: 10（メートル）";
         input.style.fontSize = "16px";
-        input.style.padding = "0.5em";
+        input.style.padding = "1em";
         buttonsDiv.appendChild(input);
 
         const btn = document.createElement("button");
@@ -276,7 +276,12 @@
           <div class="result-item"><span class="result-label">スケジュール: </span><span class="result-value">${r.schedule}</span></div>
         </div>
         
-        <br> <br> <br> <br>
+         
+         <div class="comment-section" style="margin-top:20px; font-size: 0.8rem;">
+    <label for="comment">*工場・現場・難所・室内・野外などの作業環境により、金額が変動します。詳しくはお問い合わせください</label><br>
+    
+  </div>
+ <br><br><br>
 
        <button onclick="window.location.href='https://atsu3sh1n1.github.io/yumikou/'" style="
   position: fixed;
