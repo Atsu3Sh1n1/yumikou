@@ -172,20 +172,7 @@
   <iframe id="app5" src="yo.html" loading="lazy"></iframe>
 
   <iframe id="pipeForm" src="so.html" loading="lazy"></iframe>
-
-  <div style="font-family: Arial, sans-serif; text-align: center; margin: 20px auto; max-width: 600px; padding: 15px; background: #f5f5f5; border-radius: 8px;">
-    <h3 style="margin-top: 0; color: #333;">税金計算設定</h3>
-    <div style="display: flex; justify-content: center; gap: 20px;">
-      <label style="display: flex; align-items: center;">
-        <input type="checkbox" id="exclude-app4" checked style="margin-right: 5px;">
-        app4（クレーン費用）を非課税
-      </label>
-      <label style="display: flex; align-items: center;">
-        <input type="checkbox" id="exclude-app5" checked style="margin-right: 5px;">
-        app5（工具費用）を非課税
-      </label>
-    </div>
-  </div>
+  
 
 
 
@@ -199,35 +186,9 @@
 
 
 
-<script>
-    // 設定を保存
-    function saveTaxSettings() {
-      const settings = {
-        excludeApp4: document.getElementById('exclude-app4').checked,
-        excludeApp5: document.getElementById('exclude-app5').checked
-      };
-      localStorage.setItem('taxSettings', JSON.stringify(settings));
-    }
-
-    // 設定を読み込み
-    function loadTaxSettings() {
-      const settings = JSON.parse(localStorage.getItem('taxSettings')) || {
-        excludeApp4: true,
-        excludeApp5: true
-      };
-      document.getElementById('exclude-app4').checked = settings.excludeApp4;
-      document.getElementById('exclude-app5').checked = settings.excludeApp5;
-    }
-
-    // ページ読み込み時に設定を読み込む
-    window.addEventListener('DOMContentLoaded', loadTaxSettings);
-
-    // チェックボックス変更時に保存
-    document.getElementById('exclude-app4').addEventListener('change', saveTaxSettings);
-    document.getElementById('exclude-app5').addEventListener('change', saveTaxSettings);
-
+  <script>
     async function generatePDF() {
-      // === iframe読み込み待ち ===
+      // === iframe読み込み待ちを最初に追加 ===
       const waitForIframeLoad = (iframe) => {
         return new Promise((resolve) => {
           if (iframe.contentDocument?.readyState === 'complete') {
@@ -253,7 +214,7 @@
       const FOOTER_HEIGHT = 30;
       const ACCENT_COLOR = '#003366';
 
-      const logoBase64 = "";
+      const logoBase64 = ""; // ロゴ画像があればここにBase64
 
       // ヘッダー背景
       doc.setFillColor(ACCENT_COLOR);
@@ -263,15 +224,15 @@
 
       // JST日付を生成
       const today = new Date();
-      const jstOffset = 9 * 60;
-      const localOffset = today.getTimezoneOffset();
+      const jstOffset = 9 * 60; // JST = UTC+9時間 → 分単位
+      const localOffset = today.getTimezoneOffset(); // 現地のUTCとの差（分）
       const jst = new Date(today.getTime() + (jstOffset + localOffset) * 60000);
 
       const issueDate = jst.toLocaleDateString('ja-JP', {
         year: 'numeric',
         month: '2-digit',
         day: '2-digit'
-      }).replace(/\//g, '-');
+      }).replace(/\//g, '-'); // YYYY-MM-DD形式に整形
 
       const validUntilDate = new Date(jst);
       validUntilDate.setMonth(validUntilDate.getMonth() + 1);
@@ -290,23 +251,20 @@
       doc.setFontSize(20);
       doc.text('YUMIKOU CO.,LTD.', PAGE_WIDTH - MARGIN, 40, { align: 'right' });
 
-      const validFrames = [];
+      const validFrames = []; // ここで初期化
+
       const iframes = [
         { id: "app1", label: "Total Person-Days" },
         { id: "app2", label: "Pipe Length / Weight" },
         { id: "app3", label: "Complete Welding" },
         { id: "app4", label: "Lift and Crane" },
         { id: "app5", label: "Tools cost" },
-        { id: "pipeForm", label: "Item Description" }
+        { id: "pipeForm", label: "Item Description" }  // 新規追加
       ];
 
       const rows = [];
       let grandTotal = 0;
-      let taxableTotal = 0;
-
-      // 現在の設定を取得
-      const excludeApp4 = document.getElementById('exclude-app4').checked;
-      const excludeApp5 = document.getElementById('exclude-app5').checked;
+      let taxableTotal = 0;  // 税計算用の合計金額（app5を除外）
 
       for (const frame of iframes) {
         try {
@@ -332,28 +290,27 @@
 
           grandTotal += data.subtotal;
 
-          // 設定に基づいて課税対象を決定
-          if (!(
-            (frame.id === 'app4' && excludeApp4) || 
-            (frame.id === 'app5' && excludeApp5)
-          )) {
+          // app5の場合は課税対象に含めない
+          if (frame.id !== 'app5' && frame.id !== 'app4') {
             taxableTotal += data.subtotal;
           }
 
           validFrames.push({ ...frame, data });
         } catch (e) {
-          console.warn(`${frame.id}のデータ取得に失敗:`, e);
+          // iframeが未読み込みなどの例外は無視
         }
       }
 
       const roundDownTotal = (amount) => {
-        if (amount < 1000) return amount;
-        return Math.floor(amount / 1000) * 1000;
+        if (amount < 1000) return amount; // 1000円未満はそのまま
+        return Math.floor(amount / 1000) * 1000; // 1000円以上は下3桁切り捨て
       };
 
       const roundedTaxableTotal = roundDownTotal(taxableTotal);
       const taxRate = 0.1;
       const taxAmount = Math.floor(roundedTaxableTotal * taxRate);
+
+      // 税込合計は、app5も含む合計に税額を足す形
       const totalWithTax = grandTotal + taxAmount;
 
       // 合計ボックス
@@ -396,6 +353,7 @@
         console.warn("pipeFormのデータ取得に失敗:", e);
       }
 
+      // pipeDataが空配列でなくても、全ての行が空の場合を除外
       const hasNonEmptyRow = pipeData.some(row => {
         return (row.size && row.size.trim() !== '') || (row.material && row.material.trim() !== '');
       });
@@ -406,6 +364,7 @@
         doc.text("Item Description", MARGIN, 40);
 
         const head = ['Size', 'Material', 'Schedule (SCH)', 'Fitting Typ', 'Valve Type', 'Quantity', 'Unit'];
+
         const body = pipeData
           .filter(row => (row.size && row.size.trim() !== '') || (row.material && row.material.trim() !== ''))
           .map(row => [
@@ -434,6 +393,7 @@
           const iframe = document.getElementById(frame.id);
           const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
 
+          // 余白除去
           iframeDoc.body.style.margin = '0';
           iframeDoc.body.style.padding = '0';
           iframeDoc.documentElement.style.margin = '0';
@@ -450,15 +410,22 @@
           });
 
           const imgData = canvas.toDataURL('image/jpeg', 0.7);
+
           const imgProps = doc.getImageProperties(imgData);
+          const pdfWidth = PAGE_WIDTH - MARGIN * 2;
+          const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+          const maxImgHeight = PAGE_HEIGHT - 40;
+          const pdfHeightClamped = Math.min(pdfHeight, maxImgHeight);
 
           doc.addPage();
           doc.setFontSize(14);
           doc.text(frame.label, MARGIN, 20);
 
           if (frame.id === 'app5') {
+            // app5だけアスペクト比を保って中央に表示
             const imgWidth = imgProps.width;
             const imgHeight = imgProps.height;
+
             const maxWidth = PAGE_WIDTH - MARGIN * 2;
             const maxHeight = PAGE_HEIGHT - 40;
 
@@ -472,14 +439,19 @@
 
             const x = (PAGE_WIDTH - renderWidth) / 2;
             const y = 30;
+
             doc.addImage(imgData, 'PNG', x, y, renderWidth, renderHeight);
           } else {
+            // 通常通り横幅固定・高さ縮小で描画
             const pdfWidth = PAGE_WIDTH - MARGIN * 2;
             const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
             const maxImgHeight = PAGE_HEIGHT - 40;
             const pdfHeightClamped = Math.min(pdfHeight, maxImgHeight);
+
             doc.addImage(imgData, 'PNG', MARGIN, 30, pdfWidth, pdfHeightClamped);
           }
+
+
         } catch (err) {
           doc.addPage();
           doc.text(`${frame.label} - スクリーンショット取得失敗`, MARGIN, 50);
@@ -488,6 +460,7 @@
 
       // フッター（ページ番号）
       const totalPages = doc.internal.getNumberOfPages();
+
       for (let i = 1; i <= totalPages; i++) {
         doc.setPage(i);
         const y = PAGE_HEIGHT - FOOTER_HEIGHT + 10;
@@ -499,5 +472,8 @@
       doc.save("YUMIKOU Inc.pdf");
     }
   </script>
+
+
 </body>
+
 </html>
