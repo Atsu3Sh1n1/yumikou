@@ -256,7 +256,7 @@
         { id: "app1", label: "Total Person-Days" },
         { id: "app2", label: "Pipe Length / Weight" },
         { id: "app3", label: "Complete Welding" },
-        { id: "app4", label: "Wrecker / 高所作業車" },
+        { id: "app4", label: "Lift and Crane" },
         { id: "app5", label: "Tools cost" },
         { id: "pipeForm", label: "Item Description" }  // 新規追加
       ];
@@ -419,7 +419,37 @@
           doc.addPage();
           doc.setFontSize(14);
           doc.text(frame.label, MARGIN, 20);
-          doc.addImage(imgData, 'PNG', MARGIN, 30, pdfWidth, pdfHeightClamped);
+
+          if (frame.id === 'app5') {
+            // app5だけアスペクト比を保って中央に表示
+            const imgWidth = imgProps.width;
+            const imgHeight = imgProps.height;
+
+            const maxWidth = PAGE_WIDTH - MARGIN * 2;
+            const maxHeight = PAGE_HEIGHT - 40;
+
+            let renderWidth = maxWidth;
+            let renderHeight = (imgHeight * maxWidth) / imgWidth;
+
+            if (renderHeight > maxHeight) {
+              renderHeight = maxHeight;
+              renderWidth = (imgWidth * maxHeight) / imgHeight;
+            }
+
+            const x = (PAGE_WIDTH - renderWidth) / 2;
+            const y = 30;
+
+            doc.addImage(imgData, 'PNG', x, y, renderWidth, renderHeight);
+          } else {
+            // 通常通り横幅固定・高さ縮小で描画
+            const pdfWidth = PAGE_WIDTH - MARGIN * 2;
+            const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+            const maxImgHeight = PAGE_HEIGHT - 40;
+            const pdfHeightClamped = Math.min(pdfHeight, maxImgHeight);
+
+            doc.addImage(imgData, 'PNG', MARGIN, 30, pdfWidth, pdfHeightClamped);
+          }
+
 
         } catch (err) {
           doc.addPage();
