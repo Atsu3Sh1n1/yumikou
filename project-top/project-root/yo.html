@@ -33,8 +33,13 @@
     }
 
     .table-wrapper {
-      flex: 1;
       overflow-x: auto;
+      margin: 0;
+      /* 以下を追加 */
+      flex-grow: 0;
+      /* スペースを占有しないように */
+      width: 100%;
+      /* コンテナ幅いっぱいに */
     }
 
     table {
