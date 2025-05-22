@@ -16,7 +16,7 @@
       margin: 0;
       padding: 0;
       font-family: sans-serif;
-      background: white;
+    
       color: black;
       text-align: center;
       overflow: hidden;
@@ -34,6 +34,24 @@
       /* 余白を追加 */
       box-sizing: border-box;
     }
+
+    body::before {
+      content: "";
+      position: fixed;
+      top: -4%;
+      left: -60%;
+      width: 180vw;
+      height: 180vh;
+      background-image: url('yumikou.png');
+      background-repeat: repeat;
+      background-size: 200px 100px;
+      opacity: 0.03;
+      transform: rotate(-10deg);
+      transform-origin: center;
+      z-index: -1;
+      pointer-events: none;
+    }
+
 
     #main {
       width: 100%;
@@ -221,7 +239,7 @@
         buttonsDiv.innerHTML = "";
 
         // 単価は固定で550円
-        const unitPrice = 670;
+        const unitPrice = 950;
 
         // material を英語に変換して iframeへ送る例
         const materialMap = { "鉄": "steel", "ステンレス": "stainless", "塩ビ": "PVC" };
