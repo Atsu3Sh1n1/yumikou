@@ -75,9 +75,9 @@
         .total {
             text-align: center;
             margin-top: 1.5rem;
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             font-weight: bold;
-            color: #e53935;
+            color: #2e7d32;
         }
 
         .footer {
@@ -138,37 +138,59 @@
             *数量＝日数/回数
         </div>
 
-        <div class="total">合計: <span id="total">0</span> 円</div>
-       
+        <div class="item" style="margin-top: 1rem; justify-content: center;">
+            管理費%
+            <input type="number" id="overheadRate" min="0" max="100" value="0" onchange="calc()" style="width: 45px;" />
+        </div>
+
+        <div class="total">
+            合計（管理費込）: <span id="total">0</span> 円
+        </div>
+
     </div>
-    
+
     <script>
         function calc() {
             let total = 0;
-            const inputs = document.querySelectorAll('input[type="number"]');
+            const inputs = document.querySelectorAll('input[type="number"][data-unit]');
             inputs.forEach(input => {
                 const unit = parseInt(input.dataset.unit);
                 const val = parseInt(input.value) || 0;
                 total += unit * val;
             });
-            document.getElementById('total').textContent = total.toLocaleString();
 
+            const overheadInput = document.getElementById('overheadRate');
+            const overheadRate = parseFloat(overheadInput?.value || 0);
+            const totalWithOverhead = Math.round(total * (1 + overheadRate / 100));
+
+            // 管理費込み合計を1つの合計表示に反映
+            document.getElementById('total').textContent = totalWithOverhead.toLocaleString();
+
+            // 親ページに管理費込み合計を送信
             if (window.parent && window.parent !== window) {
-                window.parent.postMessage({ type: 'reckerTotal', total: total }, '*');
+                window.parent.postMessage({ type: 'reckerTotal', total: totalWithOverhead }, '*');
             }
         }
 
         function getEstimateData() {
             let subtotal = 0;
-            const inputs = document.querySelectorAll('input[type="number"]');
+            const inputs = document.querySelectorAll('input[type="number"][data-unit]');
             inputs.forEach(input => {
                 const unit = parseInt(input.dataset.unit);
                 const val = parseInt(input.value) || 0;
                 subtotal += unit * val;
             });
 
+            const overheadRate = parseFloat(document.getElementById('overheadRate')?.value || 0);
+            const subtotalWithOverhead = Math.round(subtotal * (1 + overheadRate / 100));
+
+            const roundedSubtotal = subtotalWithOverhead < 1000 ? subtotalWithOverhead : Math.floor(subtotalWithOverhead / 1000) * 1000;
+            const tax = Math.floor(roundedSubtotal * 0.1);
+            const totalWithTax = subtotalWithOverhead + tax;
+
             return {
-                subtotal: subtotal,
+                subtotal: subtotalWithOverhead,
+                totalWithTax: totalWithTax,
                 manhour: null
             };
         }

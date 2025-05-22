@@ -290,9 +290,9 @@
           grandTotal += data.subtotal;
 
           // app5の場合は課税対象に含めない
-          if (frame.id !== 'app5' && frame.id !== '') {
-            taxableTotal += data.subtotal;
-          }
+        if (frame.id !== 'app5' && frame.id !== '') {
+  taxableTotal += data.subtotal;
+}
 
           validFrames.push({ ...frame, data });
         } catch (e) {
