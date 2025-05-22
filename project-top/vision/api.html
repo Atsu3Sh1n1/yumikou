@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>業界指標型 材料価格インデックスAPI事業 計画書</title>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #e74c3c;
+            --light: #ecf0f1;
+            --dark: #34495e;
+            --success: #27ae60;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0;
+            background-color: #f9f9f9;
+        }
+        
+        .container {
+            background: white;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            overflow: hidden;
+            margin: 20px 10px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--dark));
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+        
+        h1 {
+            margin: 0;
+            font-size: 2.2rem;
+            font-weight: 700;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-top: 0.5rem;
+        }
+        
+        section {
+            padding: 2rem;
+            border-bottom: 1px solid #eee;
+        }
+        
+        h2 {
+            color: var(--primary);
+            font-size: 1.8rem;
+            margin-top: 0;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--secondary);
+        }
+        
+        h3 {
+            color: var(--dark);
+            font-size: 1.4rem;
+            margin-top: 1.5rem;
+        }
+        
+        .highlight-box {
+            background-color: var(--light);
+            border-left: 4px solid var(--secondary);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 4px 4px 0;
+        }
+        
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .feature-card {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .feature-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: var(--secondary);
+        }
+        
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 2rem 0;
+        }
+        
+        .comparison-table th, .comparison-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .comparison-table th {
+            background-color: var(--primary);
+            color: white;
+            font-weight: 600;
+        }
+        
+        .comparison-table tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        
+        .comparison-table .highlight {
+            background-color: rgba(52, 152, 219, 0.1);
+            font-weight: 600;
+        }
+        
+        .timeline {
+            position: relative;
+            padding-left: 50px;
+            margin: 2rem 0;
+        }
+        
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 15px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--secondary);
+        }
+        
+        .timeline-item {
+            position: relative;
+            margin-bottom: 2rem;
+        }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -38px;
+            top: 5px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--secondary);
+            border: 3px solid white;
+            box-shadow: 0 0 0 2px var(--secondary);
+        }
+        
+        .timeline-date {
+            font-weight: 600;
+            color: var(--secondary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .timeline-content {
+            background: var(--light);
+            padding: 1.5rem;
+            border-radius: 6px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-right: 5px;
+        }
+        
+        .badge-primary {
+            background-color: var(--secondary);
+            color: white;
+        }
+        
+        .badge-success {
+            background-color: var(--success);
+            color: white;
+        }
+        
+        .badge-warning {
+            background-color: #f39c12;
+            color: white;
+        }
+        
+        .system-architecture {
+            text-align: center;
+            margin: 2rem 0;
+            padding: 2rem;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+        }
+        
+        .system-architecture img {
+            max-width: 100%;
+            height: auto;
+        }
+        
+        .architecture-arrow {
+            font-size: 1.5rem;
+            color: var(--secondary);
+            margin: 0 10px;
+            vertical-align: middle;
+        }
+        
+        .architecture-component {
+            display: inline-block;
+            padding: 15px;
+            margin: 10px;
+            background: var(--light);
+            border-radius: 6px;
+            min-width: 120px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        
+        .conclusion {
+            background: linear-gradient(135deg, var(--primary), var(--dark));
+            color: white;
+            padding: 3rem;
+            text-align: center;
+            border-radius: 0 0 8px 8px;
+        }
+        
+        .conclusion h2 {
+            color: white;
+            border-bottom: 2px solid var(--secondary);
+        }
+        
+        @media (max-width: 768px) {
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            section {
+                padding: 1.5rem;
+            }
+        }
+        footer {
+  text-align: center;
+  padding: 20px;
+}
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>業界指標型 材料価格インデックスAPI事業</h1>
+            <div class="subtitle">建設・製造業界向け 材料価格データプラットフォーム</div>
+        </header>
+        
+        <section id="overview">
+            <h2>1. 事業概要</h2>
+            <div class="highlight-box">
+                <h3>事業目的</h3>
+                <p>建設・製造・インフラ系企業が必要とする材料・鋼材・消耗品の相場価格を、統計的に処理し、API形式で提供することで、見積もり精度・調達判断・価格トレンド分析を可能にする「業界基盤情報インフラ」を構築します。</p>
+            </div>
+        </section>
+        
+        <section id="background">
+            <h2>2. 背景と課題</h2>
+            <h3>現在の市場課題</h3>
+            <ul>
+                <li>材料価格が業者や時期ごとに異なり、標準的な指標価格が存在しない</li>
+                <li>調達・見積作業に属人性が高く、時間とコストがかかっている</li>
+                <li>インフレ・需給変動に応じた価格トレンドの可視化ができない</li>
+            </ul>
+            
+            <h3>課題に対する解決策</h3>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h4>データ収集の自動化</h4>
+                    <p>ネット公開価格や実取引データを収集・正規化・統計処理</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⚙️</div>
+                    <h4>標準化API提供</h4>
+                    <p>各製品カテゴリごとの参考価格APIとして公開</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔗</div>
+                    <h4>システム連携</h4>
+                    <p>社内システム・見積ソフト・Webサービスに連携可能な形で提供</p>
+                </div>
+            </div>
+        </section>
+        
+        <section id="service">
+            <h2>3. サービス概要</h2>
+            <h3>提供する主機能</h3>
+            
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>機能</th>
+                        <th>説明</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>📊 材料指標価格API</strong></td>
+                        <td>配管・鋼材・消耗品カテゴリごとの参考価格をAPIで提供</td>
+                    </tr>
+                    <tr>
+                        <td><strong>⏱ 価格トレンド表示</strong></td>
+                        <td>過去30/90/180日の平均価格推移を出力</td>
+                    </tr>
+                    <tr>
+                        <td><strong>📦 類似品目クラスタAPI</strong></td>
+                        <td>同等スペック商品の参考価格リスト取得</td>
+                    </tr>
+                    <tr>
+                        <td><strong>📈 指標価格の自動見積補助機能</strong></td>
+                        <td>顧客システムと連携し、見積時に推定価格を補完</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <h3>対象カテゴリ（初期対応）</h3>
+            <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                <span class="badge badge-primary">配管材料（VP管、SGP管、継手）</span>
+                <span class="badge badge-primary">鋼材（H形鋼、アングル、チャンネル）</span>
+                <span class="badge badge-primary">消耗品（ビス、テープ、グリス等）</span>
+            </div>
+        </section>
+        
+        <section id="technology">
+            <h2>4. 技術構成（概要）</h2>
+            
+            <div class="system-architecture">
+                <div>
+                    <span class="architecture-component">[外部データ収集]<br>RSS/Scraper<br>公開API</span>
+                    <span class="architecture-arrow">→</span>
+                    <span class="architecture-component">[価格処理DB]<br>PostgreSQL<br>TimescaleDB</span>
+                    <span class="architecture-arrow">→</span>
+                    <span class="architecture-component">[指標生成]<br>加重平均<br>異常値除外</span>
+                    <span class="architecture-arrow">→</span>
+                    <span class="architecture-component">[API提供]<br>FastAPI<br>OAuth2+RateLimit</span>
+                </div>
+            </div>
+            
+            <h3>技術ポイント</h3>
+            <ul>
+                <li>指標価格は「加重平均」＋「IQR処理」による高信頼統計</li>
+                <li>データ収集元は公開EC＋信頼度スコアで自動評価</li>
+                <li>高速応答API（FastAPI + PostgreSQL）を業界向け提供</li>
+            </ul>
+        </section>
+        
+        <section id="business-model">
+            <h2>5. ビジネスモデル</h2>
+            <h3>収益モデル</h3>
+            
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>プラン</th>
+                        <th>内容</th>
+                        <th>月額費用（想定）</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>無料プラン</strong></td>
+                        <td>トライアル（カテゴリ限定）</td>
+                        <td>¥0</td>
+                    </tr>
+                    <tr class="highlight">
+                        <td><strong>業者向け基本</strong></td>
+                        <td>月1,000APIコールまで</td>
+                        <td>¥9,800</td>
+                    </tr>
+                    <tr>
+                        <td><strong>大口向けプロ</strong></td>
+                        <td>API無制限＋CSV連携</td>
+                        <td>¥39,800</td>
+                    </tr>
+                    <tr>
+                        <td><strong>商社向けOEM提供</strong></td>
+                        <td>独自ブランドAPI</td>
+                        <td>応相談（年間契約）</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+        
+        <section id="market">
+            <h2>6. 市場と競合優位性</h2>
+            <h3>市場規模（推定）</h3>
+            <ul>
+                <li>建設・製造・設備業界での資材調達規模：約20兆円</li>
+                <li>見積・調達における判断材料として、年間10万社以上のニーズあり</li>
+            </ul>
+            
+            <h3>競合優位性</h3>
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>項目</th>
+                        <th>本サービス</th>
+                        <th>他社比較</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>リアルタイム性</strong></td>
+                        <td>◎（毎日更新）</td>
+                        <td>△</td>
+                    </tr>
+                    <tr>
+                        <td><strong>中立性</strong></td>
+                        <td>◎（価格平均処理）</td>
+                        <td>✕（自社価格）</td>
+                    </tr>
+                    <tr>
+                        <td><strong>API対応</strong></td>
+                        <td>◎（標準JSON形式）</td>
+                        <td>✕（Excel/PDF）</td>
+                    </tr>
+                    <tr>
+                        <td><strong>品目数</strong></td>
+                        <td>◎（1,000超）</td>
+                        <td>△（限定カテゴリ）</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+        
+        <section id="financial">
+            <h2>7. 収支計画（初年度想定）</h2>
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>項目</th>
+                        <th>金額</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>初期開発費</strong></td>
+                        <td>¥3,000,000</td>
+                    </tr>
+                    <tr>
+                        <td><strong>サーバー・API運用費</strong></td>
+                        <td>¥500,000／年</td>
+                    </tr>
+                    <tr class="highlight">
+                        <td><strong>想定売上（月額契約500社）</strong></td>
+                        <td>約¥4,000万／年</td>
+                    </tr>
+                    <tr>
+                        <td><strong>粗利率</strong></td>
+                        <td>約80%</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+        
+        <section id="schedule">
+            <h2>8. 実施スケジュール</h2>
+            
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-date">～2025年7月</div>
+                    <div class="timeline-content">
+                        <h3>準備期間</h3>
+                        <p>データ調査、要件定義、クローラ設計</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-date">2025年8月～10月</div>
+                    <div class="timeline-content">
+                        <h3>開発期間</h3>
+                        <p>API開発、DB構築、PoC実装</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-date">2025年11月</div>
+                    <div class="timeline-content">
+                        <h3>営業開始</h3>
+                        <p>ベータ公開、業者向け営業</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-date">2026年1月～</div>
+                    <div class="timeline-content">
+                        <h3>商用展開</h3>
+                        <p>フルリリース、OEM販売開始</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="future">
+            <h2>9. 将来展望・拡張戦略</h2>
+            
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🤖</div>
+                    <h4>【拡張1】調達最適化AI連携</h4>
+                    <p>原価自動推定機能の実装</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🏗️</div>
+                    <h4>【拡張2】建設BIM・CAD連携</h4>
+                    <p>設計ツールとのAPI連携</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔮</div>
+                    <h4>【拡張3】先読みAIモデル</h4>
+                    <p>材料相場のトレンド分析予測</p>
+                </div>
+            </div>
+        </section>
+        
+        <section class="conclusion">
+            <h2>10. まとめ・提案</h2>
+            <p style="max-width: 800px; margin: 0 auto; font-size: 1.1rem;">
+                本プロジェクトは、業界の「価格の非透明性」という構造課題を、
+                IT・統計・APIという技術的アプローチで可視化・標準化し、
+                業界全体のコスト削減と判断スピード向上に貢献するものです。
+            </p>
+        </section>
+    </div>
+     <footer>
+    <a href="https://atsu3sh1n1.github.io/yumikou/">
+      <p>2025 有限会社弓工 All rights reserved.</p>
+    </a>
+  </footer>
+</body>
+</html>
