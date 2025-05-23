@@ -1,53 +1,117 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
-  <meta charset="UTF-8">
-  <title>減価償却費 計算ツール</title>
-  <style>
-    body { font-family: sans-serif; margin: 20px; }
-    label { display: block; margin-top: 10px; }
-    input[type="number"] { width: 100px; }
-    .result { margin-top: 20px; font-size: 18px; font-weight: bold; color: #007700; }
-  </style>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="index, follow" />
+    <meta name="description" content="弓工" />
+
+    <title>有限会社弓工｜関連事業のご案内</title>
+
+    <!-- Favicon & Apple Touch Icons -->
+    <link rel="icon" href="images/icon.webp" type="image/x-icon" />
+    <link rel="apple-touch-icon" sizes="180x180" href="images/icon.webp" />
+    <link rel="apple-touch-icon" sizes="152x152" href="images/icon.webp" />
+    <link rel="apple-touch-icon" sizes="120x120" href="images/icon.webp" />
+    <link rel="apple-touch-icon" sizes="76x76" href="images/icon.webp" />
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 </head>
+
+
 <body>
+    <canvas id="sparkCanvas"></canvas>
+    <div class="blur-overlay"></div>
+    <div class="wrapper">
+        <div class="container">
+            <div class="title">関連事業のご案内</span></div>
+            <div class="gallery">
 
-  <h2>📊 減価償却費（定額法）計算ツール</h2>
+                <!-- 建設部門 -->
+                <a href="https://yumikou.jp/" target="_blank" class="card">
+                    <img src="images/yumikou.png" alt="プラント関連工事事業社 姫路市" loading="eager" />
+                    <div class="info">
+                        <h3>有限会社弓工</h3>
+                        <p>公共・民間問わず、確かな技術で未来を築く<br>プラント工事関連事業</p>
+                    </div>
+                </a>
 
-  <label>
-    工具の購入価格（円）：
-    <input type="number" id="price" value="100000">
-  </label>
+                <!-- マリンスポーツ -->
+                <a href="https://all-good-marine-385.com/" target="_blank" class="card">
+                    <img src="images/all-good-marine-385.png" alt="マリンスポーツ All good marine385 沖縄 宮古島" loading="eager" />
+                    <div class="info">
+                        <h3>オールグッドマリン宮古</h3>
+                        <p>沖縄の海で最高の思い出を<br>マリンスポーツ体験事業</p>
+                    </div>
+                </a>
 
-  <label>
-    耐用年数（年）：
-    <input type="number" id="years" value="5">
-  </label>
+                <a href="https://www.carsensor.net/shop/hyogo/307415001/stocklist/" target="_blank" class="card">
+                    <img src="images/soullevel.webp" alt="自動車販売 整備 買取 姫路市">
+                    <div class="info">
+                        <h3>ソウルレベル</h3>
+                        <p>整備・販売・下取りを一貫してサポート<br>自動車関連事業</p>
+                    </div>
+                </a>
 
-  <div class="result" id="result">年間減価償却費：¥0</div>
+                <a href="https://brual-american-village.okinawa/" target="_blank" class="card">
+                    <img src="images/brual.png" alt="ブルアル アメリカンビレッジ 飲食店 レストラン カフェ 沖縄 宮古島">
+                    <div class="info">
+                        <h3>ブルアル アメリカンビレッジ</h3>
+                        <p>朝焼き上げるバンズ、ジューシーなパティ、そしてこだわり抜いたオリジナル泡盛BBQソースと、自家製マヨネーズを挟んだ本格バーガー</p>
+                    </div>
+                </a>
 
-  <script>
-    const priceInput = document.getElementById('price');
-    const yearsInput = document.getElementById('years');
-    const resultDiv = document.getElementById('result');
+                <a href="https://brual.okinawa/" target="_blank" class="card">
+                    <img src="images/brual2.png" alt="飲食店 レストラン カフェ 沖縄 宮古島">
+                    <div class="info">
+                        <h3>BRUAL 宮古島本店 </h3>
+                        <p>洗練された空間で特別なひとときを</p>
+                    </div>
+                </a>
 
-    function updateDepreciation() {
-      const price = parseFloat(priceInput.value);
-      const years = parseFloat(yearsInput.value);
+                <a href="https://www.instagram.com/explore/locations/885483315/papalagi-paparagi-officialpeji/"
+                    target="_blank" class="card">
+                    <img src="images/papalagi.webp" alt="幻の家 パパラギ KOBE Summer House 普段は存在しない伝説のシーハウス あなたは見つけることができるか">
+                    <div class="info">
+                        <h3>幻の家 パパラギ</h3>
+                        <p>普段は存在しない伝説のシーハウス</p>
+                    </div>
+                </a>
 
-      if (!isNaN(price) && !isNaN(years) && years > 0) {
-        const annual = Math.floor(price / years);
-        resultDiv.textContent = `年間減価償却費：¥${annual.toLocaleString()}`;
-      } else {
-        resultDiv.textContent = '正しい数値を入力してください。';
-      }
-    }
+                <a href="https://yumikou.jp/flow/" target="_blank" class="card">
+                    <div class="image-container">
+                        <img src="images/yyyuheiii2.webp" alt="デザイン事業 空間・グラフィック" class="fade-image">
+                        <img src="images/yyyuheiii.png" class="fade-image">
+                        <img src="images/yyyuheiii3.png" class="fade-image">
+                        <img src="images/yyyuheiii4.png" class="fade-image">
 
-    priceInput.addEventListener('input', updateDepreciation);
-    yearsInput.addEventListener('input', updateDepreciation);
+                    </div>
+                    <div class="info">
+                        <h3>デザイン事業</h3>
+                        <p>空間・グラフィックなど、<br>幅広い分野のデザインを提供</p>
+                    </div>
+                </a>
 
-    updateDepreciation(); // 初期表示
-  </script>
 
+                <footer style="
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  text-align: center;
+  background-color: #000;
+  color: white;
+  padding: 0.9rem;
+  font-size: 0.9rem;
+">
+                    <p style="margin: 0;">2025 有限会社弓工 All rights reserved.</p>
+                </footer>
+
+
+
+
+                <script src="js/fireworks.js"></script>
+                <script src="js/script.js"></script>
 </body>
+
 </html>
