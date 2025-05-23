@@ -459,64 +459,51 @@
       document.getElementById('totalCost').textContent = `合計金額: ¥${total.toLocaleString()}`;
     }
 
-    window.getEstimateData = function () {
-      // この関数は複数フォームに対応するように修正が必要ですが、
-      // 元の用途が不明なため、最初のフォームのデータを返すようにしています
-      const firstFormId = Object.keys(formsData)[0];
-      if (!firstFormId) return null;
-
-      const formData = formsData[firstFormId];
-      const size = document.getElementById(`size-${firstFormId}`).value;
-      const length = parseFloat(document.getElementById(`pipeLength-${firstFormId}`).value) || 0;
-      const unitPrice = parseFloat(document.getElementById(`unitPrice-${firstFormId}`).value) || 0;
-
-      const schKey = formData.schedule.toLowerCase();
-      const materialKey = formData.material === 'steel' ? schKey : 'sus' + schKey.slice(3);
-
-      const baseWeightSCH40_25 = weightPerMeter["25"]["sch40"];
-      const actualWeight = weightPerMeter[size]?.[materialKey];
-      if (actualWeight === undefined) {
-        return {
-          appId: 'pipe-weight',
-          subtotal: 0,
-          manhour: 0,
-          pipeLength: length,
-          pipeWeight: "0"
-        };
-      }
-      const weight = length * actualWeight;
-
-      const baseIndex = pipeSizes.indexOf("25");
-      const sizeIndex = pipeSizes.indexOf(size);
-      const sizeStep = Math.max(0, sizeIndex - baseIndex);
-
-      let discountFactor = 1.0;
-      if (parseInt(size) >= 350) {
-        discountFactor = Math.pow(1 / 1.01, sizeStep);
-      }
-
-      const lengthDiscount = getLengthDiscount(length, size, formData.schedule);
-      const diameterCorrection = diameterCorrectionFactors[size] || 1.0;
-
-      let cost;
-      if (formData.unitType === 'meter') {
-        const weightRatio = actualWeight / baseWeightSCH40_25;
-        cost = length * unitPrice * weightRatio * discountFactor * lengthDiscount * diameterCorrection;
-      } else {
-        cost = weight * unitPrice * lengthDiscount * diameterCorrection;
-      }
-
-      if (formData.material === 'stainless') cost *= 1.5;
-
-      return {
-        appId: 'pipe-weight',
-        subtotal: Math.round(cost),
-        manhour: 0,
-        pipeLength: length,
-        pipeWeight: weight.toFixed(2),
-        size: size
-      };
-    };
+   // Pipe_Weight.html の getEstimateData() を以下のように修正
+window.getEstimateData = function() {
+  const allFormData = [];
+  let totalSubtotal = 0;
+  
+  // すべてのフォームを処理
+  document.querySelectorAll('.container').forEach(container => {
+    const formId = container.id;
+    const size = document.getElementById(`size-${formId}`).value;
+    const length = parseFloat(document.getElementById(`pipeLength-${formId}`).value) || 0;
+    const price = parseFloat(document.getElementById(`unitPrice-${formId}`).value) || 0;
+    
+    // 重量計算（既存のロジック）
+    const schedule = formsData[formId].schedule.toLowerCase();
+    const material = formsData[formId].material;
+    const materialKey = material === 'steel' ? schedule : 'sus' + schedule.slice(3);
+    const actualWeight = weightPerMeter[size]?.[materialKey] || 0;
+    const weight = length * actualWeight;
+    
+    // 補正係数適用
+    const diameterCorrection = diameterCorrectionFactors[size] || 1.0;
+    let subtotal = weight * price * diameterCorrection;
+    if (material === 'stainless') subtotal *= 1.5;
+    subtotal = Math.round(subtotal);
+    
+    allFormData.push({
+      size,
+      pipeLength: length,
+      pipeWeight: weight.toFixed(2),
+      subtotal
+    });
+    
+    totalSubtotal += subtotal;
+  });
+  
+  return {
+    appId: 'pipe-weight',
+    subtotal: totalSubtotal,
+    manhour: 0,
+    pipeLength: allFormData[0]?.pipeLength || 0,
+    pipeWeight: allFormData[0]?.pipeWeight || "0",
+    size: allFormData[0]?.size || "0",
+    allData: allFormData  // 個別データを含める
+  };
+};
   </script>
 
 </body>
