@@ -107,9 +107,9 @@
         <div class="form-row">必要足場数｜人工単価</div>
         <div class="input-group">
           <input type="number" pattern="[0-9]*" id="s" placeholder="0" min="0" />
-          <input type="number" pattern="[0-9]*" id="sc" placeholder="単価/27,400" min="0" />
+          <input type="number" pattern="[0-9]*" id="sc" placeholder="単価/23,000" min="0" />
         </div>
-        <span style="font-size: 0.6em;">1スパン/5,000* 応用:高車5/大10/レッカー20</span>
+        <span style="font-size: 0.8em; color: #0059ff">1スパン/￥5,000* 応用:高車5/大10/レッカー20</span>
       </div>
 
 
@@ -157,7 +157,7 @@
         <input type="number" inputmode="numeric" id="${id}" placeholder="人" min="0" />
         <input type="number" inputmode="numeric" id="${id}d" placeholder="日" min="0" />
       </div>
-      ${note ? `<span style="font-size: 0.6em;">${note}</span>` : ""}
+      ${note ? `<span style="font-size: 0.8em; color: #0059ff">${note}</span>` : ""}
     `;
       f.insertBefore(group, insertBeforeEl);
     });
@@ -167,7 +167,7 @@
     }
 
     function calc() {
-      const unitPrice = g("sc") || 27400;
+      const unitPrice = g("sc") || 23000;
       let scaffold = g("s") * u.s;
 
       const applyMultiplier = document.getElementById("applyMultiplier").checked;
@@ -206,7 +206,7 @@
 
     // PDF用データ出力
     window.getEstimateData = function () {
-      const unitPrice = g("sc") || 27400;
+      const unitPrice = g("sc") || 23000;
       let scaffold = g("s") * u.s;
 
       const applyMultiplier = document.getElementById("applyMultiplier").checked;
