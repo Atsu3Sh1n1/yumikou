@@ -112,7 +112,7 @@
       height: 600px;
     }
 
-     #app6 {
+    #app6 {
       width: 100%;
       height: 300px;
       margin-bottom: -300px;
@@ -394,10 +394,12 @@
 
           grandTotal += data.subtotal;
 
-          // app5の場合は課税対象に含めない
-          if (frame.id !== 'app5' && frame.id !== '') {
+         
+          // app1 と app5 は課税対象に含めない
+          if (frame.id !== 'app1' && frame.id !== 'app5' && frame.id !== '') {
             taxableTotal += data.subtotal;
           }
+
 
           validFrames.push({ ...frame, data });
         } catch (e) {
