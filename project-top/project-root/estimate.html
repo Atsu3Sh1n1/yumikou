@@ -124,117 +124,115 @@
     </form>
   </div>
 
-  <script>
-    const f = document.getElementById("form");
-    const u = { s: 5000 };
-    const subEl = document.getElementById("sub");
-    const manhourEl = document.getElementById("manhour");
+<script>
+  const f = document.getElementById("form");
+  const u = { s: 5000 };
+  const subEl = document.getElementById("sub");
+  const manhourEl = document.getElementById("manhour");
 
-    // 作業項目一覧
-    const workItems = [
-      { id: "ep", label: "見習い・補助", factor: 0.75, note: "基本作業の補助・軽作業中心" },
-      { id: "pp", label: "配管工(中堅クラス)", factor: 1.0, note: "図面を見て一人で配管施工ができる" },
-      { id: "tp", label: "配管工(上級クラス)", factor: 1.3, note: "現場指示・品質管理・統括できる" },
-      { id: "ip", label: "配管工(職長クラス)", factor: 1.65, note: "現場調整、図面修正、他職との連携も可" },
-      { id: "fp", label: "溶接工(一般)", factor: 1.6, note: "アーク・半自動（CO2）、基本姿勢・鋼管対応" },
-      { id: "cp", label: "溶接工(Tig)", factor: 2, note: "ステンレス・アルミ、仰向け等の全姿勢可" },
-      { id: "dp", label: "溶接工(特殊)", factor: 2.7, note: "高圧・医薬・原子力、X線検査合格前提（RT100%合格など）" },
-    ];
+  // 作業項目一覧
+  const workItems = [
+    { id: "ep", label: "見習い・補助", factor: 0.75, note: "基本作業の補助・軽作業中心" },
+    { id: "pp", label: "配管工(中堅クラス)", factor: 1.0, note: "図面を見て一人で配管施工ができる" },
+    { id: "tp", label: "配管工(上級クラス)", factor: 1.3, note: "現場指示・品質管理・統括できる" },
+    { id: "ip", label: "配管工(職長クラス)", factor: 1.65, note: "現場調整、図面修正、他職との連携も可" },
+    { id: "fp", label: "溶接工(一般)", factor: 1.6, note: "アーク・半自動（CO2）、基本姿勢・鋼管対応" },
+    { id: "cp", label: "溶接工(Tig)", factor: 2, note: "ステンレス・アルミ、仰向け等の全姿勢可" },
+    { id: "dp", label: "溶接工(特殊)", factor: 2.7, note: "高圧・医薬・原子力、X線検査合格前提（RT100%合格など）" },
+  ];
 
+  // 入力欄を自動生成
+  const insertBeforeEl = document.querySelector(".checkbox-group");
+  workItems.forEach(({ id, label, factor, note }) => {
+    const group = document.createElement("div");
+    group.className = "form-group";
+    group.innerHTML = `
+      <div class="form-row">${label} / ${factor}</div>
+      <div class="input-group">
+        <input type="number" inputmode="numeric" id="${id}" placeholder="人" min="0" />
+        <input type="number" inputmode="numeric" id="${id}d" placeholder="日" min="0" />
+      </div>
+      ${note ? `<span style="font-size: 0.6em;">${note}</span>` : ""}
+    `;
+    f.insertBefore(group, insertBeforeEl);
+  });
 
-    // 入力欄を自動生成
-    const insertBeforeEl = document.querySelector(".checkbox-group");
-    workItems.forEach(({ id, label, factor, note }) => {
-      const group = document.createElement("div");
-      group.className = "form-group";
-      group.innerHTML = `
-    <div class="form-row">${label} / ${factor}</div>
-    <div class="input-group">
-      <input type="number" id="${id}" placeholder="人" min="0" />
-      <input type="number" id="${id}d" placeholder="日" min="0" />
-    </div>
-    ${note ? `<span style="font-size: 0.6em;">${note}</span>` : ""}
-  `;
-      f.insertBefore(group, insertBeforeEl);
+  function g(id) {
+    return Number(document.getElementById(id)?.value) || 0;
+  }
+
+  function calc() {
+    const unitPrice = g("sc") || 27000;
+    let scaffold = g("s") * u.s;
+
+    const applyMultiplier = document.getElementById("applyMultiplier").checked;
+    const excludeScaffold = document.getElementById("excludeScaffold").checked;
+
+    let total = 0;
+    let manhour = 0;
+
+    workItems.forEach(({ id, factor }) => {
+      const p = g(id);
+      const d = g(id + "d");
+      let cost = p * d * unitPrice * factor;
+      if (applyMultiplier) cost = Math.floor(cost * 1.6);
+      total += cost;
+      manhour += p * d;
     });
 
-
-    function g(id) {
-      return Number(document.getElementById(id)?.value) || 0;
+    if (applyMultiplier && !excludeScaffold) {
+      scaffold = Math.floor(scaffold * 1.6);
     }
 
-    function calc() {
-      const unitPrice = g("sc") || 27000;
-      let scaffold = g("s") * u.s;
+    total += scaffold;
 
-      const applyMultiplier = document.getElementById("applyMultiplier").checked;
-      const excludeScaffold = document.getElementById("excludeScaffold").checked;
+    manhourEl.textContent = `総工数: ${manhour}人日`;
+    subEl.textContent = `小計: ¥${total.toLocaleString()}`;
+  }
 
-      let total = 0;
-      let manhour = 0;
+  f.addEventListener("input", calc);
+  f.addEventListener("submit", e => {
+    e.preventDefault();
+    alert("中身で勝負。有限会社弓工");
+  });
 
-      workItems.forEach(({ id, factor }) => {
-        const p = g(id);
-        const d = g(id + "d");
-        let cost = p * d * unitPrice * factor;
-        if (applyMultiplier) cost = Math.floor(cost * 1.6);
-        total += cost;
-        manhour += p * d;
-      });
+  document.getElementById("applyMultiplier").addEventListener("change", calc);
+  document.getElementById("excludeScaffold").addEventListener("change", calc);
 
-      if (applyMultiplier && !excludeScaffold) {
-        scaffold = Math.floor(scaffold * 1.6);
-      }
+  // PDF用データ出力
+  window.getEstimateData = function () {
+    const unitPrice = g("sc") || 27000;
+    let scaffold = g("s") * u.s;
 
-      total += scaffold;
+    const applyMultiplier = document.getElementById("applyMultiplier").checked;
+    const excludeScaffold = document.getElementById("excludeScaffold").checked;
 
-      manhourEl.textContent = `総工数: ${manhour}人日`;
-      subEl.textContent = `小計: ¥${total.toLocaleString()}`;
-    }
+    let subtotal = 0;
+    let manhour = 0;
 
-    f.addEventListener("input", calc);
-    f.addEventListener("submit", e => {
-      e.preventDefault();
-      alert("中身で勝負。有限会社弓工");
+    workItems.forEach(({ id, factor }) => {
+      const p = g(id);
+      const d = g(id + "d");
+      let cost = p * d * unitPrice * factor;
+      if (applyMultiplier) cost = Math.floor(cost * 1.6);
+      subtotal += cost;
+      manhour += p * d;
     });
 
-    document.getElementById("applyMultiplier").addEventListener("change", calc);
-    document.getElementById("excludeScaffold").addEventListener("change", calc);
+    if (applyMultiplier && !excludeScaffold) {
+      scaffold = Math.floor(scaffold * 1.6);
+    }
 
-    // PDF用データ出力
-    window.getEstimateData = function () {
-      const unitPrice = g("sc") || 27000;
-      let scaffold = g("s") * u.s;
+    subtotal += scaffold;
 
-      const applyMultiplier = document.getElementById("applyMultiplier").checked;
-      const excludeScaffold = document.getElementById("excludeScaffold").checked;
-
-      let subtotal = 0;
-      let manhour = 0;
-
-      workItems.forEach(({ id, factor }) => {
-        const p = g(id);
-        const d = g(id + "d");
-        let cost = p * d * unitPrice * factor;
-        if (applyMultiplier) cost = Math.floor(cost * 1.6);
-        subtotal += cost;
-        manhour += p * d;
-      });
-
-      if (applyMultiplier && !excludeScaffold) {
-        scaffold = Math.floor(scaffold * 1.6);
-      }
-
-      subtotal += scaffold;
-
-      return {
-        subtotal,
-        manhour
-      };
+    return {
+      subtotal,
+      manhour
     };
+  };
 
-    calc();
-  </script>
+  calc();
+</script>
 </body>
 
 </html>
