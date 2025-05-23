@@ -12,18 +12,30 @@
       margin: 0px;
       min-height: auto;
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
       padding-top: 60px;
     }
     
+    .forms-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+      padding: 20px;
+      max-width: 1200px;
+    }
 
     .container {
       padding: 10px 25px;
       width: 100%;
       max-width: 300px;
       text-align: center;
-
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      position: relative;
     }
 
     h1 {
@@ -137,81 +149,62 @@
       color: green;
       text-align: center;
     }
+    
+    .add-form-btn {
+      padding: 10px 20px;
+      background: #28a745;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 1em;
+      cursor: pointer;
+      margin: 20px 0;
+      transition: background-color 0.2s;
+    }
+    
+    .add-form-btn:hover {
+      background: #218838;
+    }
+    
+    .remove-form-btn {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      background: #dc3545;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 25px;
+      height: 25px;
+      font-size: 12px;
+      cursor: pointer;
+    }
+    
+    .remove-form-btn:hover {
+      background: #c82333;
+    }
+    
+    .total-cost {
+      font-size: 1.5em;
+      font-weight: bold;
+      color: #0062cc;
+      margin: 20px 0;
+      text-align: center;
+    }
   </style>
 </head>
 
 <body>
-  <div class="container">
+  <div class="forms-container" id="formsContainer">
+    <!-- フォームはここに動的に追加されます -->
+  </div>
+  
+  <button class="add-form-btn" id="addFormBtn">フォームを追加</button>
+  
+  <div class="total-cost" id="totalCost">合計金額: ¥0</div>
 
-    <h1 style="line-height: 0.9;">
-      施工費概算算出機<br>
-      <span style="font-size: 0.6em;">(フジタ君2号)</span>
-    </h1>
-
-    <div class="footer">
-      <a href="https://atsu3sh1n1.github.io/yumikou/" target="_blank">Created by YUMIKOU Inc.</a>
-    </div>
-
-    <div class="form-group">
-      <label for="size">サイズ</label>
-      <select id="size" name="size">
-        <option value="6">6A</option>
-        <option value="8">8A</option>
-        <option value="10">10A</option>
-        <option value="15">15A</option>
-        <option value="20">20A</option>
-        <option value="25" selected>25A</option>
-        <option value="32">32A</option>
-        <option value="40">40A</option>
-        <option value="50">50A</option>
-        <option value="65">65A</option>
-        <option value="80">80A</option>
-        <option value="100">100A</option>
-        <option value="125">125A</option>
-        <option value="150">150A</option>
-        <option value="175">175A</option>
-        <option value="200">200A</option>
-        <option value="250">250A</option>
-        <option value="300">300A</option>
-        <option value="350">350A</option>
-        <option value="400">400A</option>
-        <option value="450">450A</option>
-        <option value="500">500A</option>
-      </select>
-    </div>
-
-    <div class="form-group">
-      <label for="pipeLength">メーター数</label>
-      <input type="number" inputmode="numeric" id="pipeLength" name="pipeLength" placeholder="0" min="0" />
-    </div>
-
-    <div class="form-group">
-      <label for="unitPrice" id="unitPriceLabel">単価 (円/kg)</label>
-      <input type="number" inputmode="numeric" id="unitPrice" class="active" name="unitPrice" placeholder="0" min="0" />
-    </div>
-
-    <div class="schedule-buttons" role="group" aria-label="スケジュール選択">
-      <button id="btnSCH5s" onclick="setSchedule('SCH5s')">SCH5S</button>
-      <button id="btnSCH10s" onclick="setSchedule('SCH10s')">SCH10S</button>
-      <button id="btnSCH20" onclick="setSchedule('SCH20')">SCH20/S</button>
-      <button id="btnSCH60" onclick="setSchedule('SCH60')">SCH60/S</button>
-      <button id="btnSCH40" class="active" onclick="setSchedule('SCH40')">SCH40/S</button>
-      <button id="btnsgp" onclick="setSchedule('sgp')">SGP</button>
-      <button id="btnSCH80" onclick="setSchedule('SCH80')">SCH80/S</button>
-      <button id="btnSCH120" onclick="setSchedule('SCH120')">SCH120/S</button>
-      <button id="btnSCH160" onclick="setSchedule('SCH160')">SCH160/S</button>
-    </div>
-
-    <div class="material-toggle">
-      <button id="btnSteel" class="active" onclick="setMaterial('steel')">鉄</button>
-      <button id="btnStainless" onclick="setMaterial('stainless')">ステンレス</button>
-    </div>
-
-    <div id="perMeterUnitPrice"></div>
-    <div id="pipeWeight"></div>
-    <div id="pipeCost" class="pipeCost"></div>
-    <br>
-    <span style="font-size: 0.6em, margin-top 30px;">溶接・施工・手間等を加味した実行的な施工費を、配管サイズや重さから係数で瞬時に算出できるツールです</span>
+  <div class="footer">
+    <a href="https://atsu3sh1n1.github.io/yumikou/" target="_blank">Created by YUMIKOU Inc.</a>
   </div>
 
   <script>
@@ -241,12 +234,10 @@
       "400": { sgp: 77.6, sch20: 77.6, sch40: 123, sch60: 160, sch80: 203, sch160: 365, sus40: 125, sus80: 205, sus120: 289, sus160: 369 },
       "450": { sgp: 87.5, sch20: 87.5, sch40: 158, sch60: 205, sch80: 254, sch160: 459, sus40: 158, sus80: 257, sus120: 367, sus160: 468 },
       "500": { sgp: 97.4, sch20: 117, sch40: 185, sch60: 248., sch80: 311, sch160: 565, sus40: 185, sus80: 314, sus120: 446, sus160: 570 }
-
     };
 
     const pipeSizes = ["6", "8", "10", "15", "20", "25", "32", "40", "50", "65", "80", "90", "100", "125", "150", "175", "200", "250", "300", "350", "400", "450", "500"];
 
-    // ここに小口径補正係数を追加
     const diameterCorrectionFactors = {
       "6": 15.5,
       "8": 11.5,
@@ -268,34 +259,133 @@
       "300": 1.0
     };
 
-    let currentSchedule = 'SCH40';
-    let currentUnitType = 'weight';
-    let currentMaterial = 'steel';
+    let formCount = 0;
+    const formsData = {};
 
-    function setSchedule(schedule) {
-      currentSchedule = schedule;
-      document.querySelectorAll(".schedule-buttons button").forEach(btn => btn.classList.remove("active"));
-      document.getElementById("btn" + schedule).classList.add("active");
-      calculate();
-    }
-
-    function setMaterial(type) {
-      currentMaterial = type;
-      document.querySelectorAll(".material-toggle button").forEach(btn => btn.classList.remove("active"));
-      document.getElementById("btn" + (type === 'steel' ? 'Steel' : 'Stainless')).classList.add("active");
-      calculate();
-    }
-
-    document.querySelectorAll("input, select").forEach(el => {
-      el.addEventListener("input", () => {
-        if (el.name === 'unitType') {
-          currentUnitType = document.querySelector('input[name="unitType"]:checked').value;
-          document.getElementById('unitPriceLabel').textContent =
-            currentUnitType === 'meter' ? 'メーター単価 (円/m):' : '重量単価 (円/kg):';
-        }
-        calculate();
-      });
+    document.addEventListener('DOMContentLoaded', function() {
+      // 初期フォームを追加
+      addNewForm();
+      
+      // フォーム追加ボタンのイベントリスナー
+      document.getElementById('addFormBtn').addEventListener('click', addNewForm);
     });
+
+    function addNewForm() {
+      formCount++;
+      const formId = `form-${formCount}`;
+      
+      const formHTML = `
+        <div class="container" id="${formId}">
+          <button class="remove-form-btn" onclick="removeForm('${formId}')">×</button>
+          <h1 style="line-height: 0.9;">
+            施工費概算算出機<br>
+            <span style="font-size: 0.6em;">(フジタ君2号)</span>
+          </h1>
+
+          <div class="form-group">
+            <label for="size-${formId}">サイズ</label>
+            <select id="size-${formId}" name="size">
+              <option value="6">6A</option>
+              <option value="8">8A</option>
+              <option value="10">10A</option>
+              <option value="15">15A</option>
+              <option value="20">20A</option>
+              <option value="25" selected>25A</option>
+              <option value="32">32A</option>
+              <option value="40">40A</option>
+              <option value="50">50A</option>
+              <option value="65">65A</option>
+              <option value="80">80A</option>
+              <option value="100">100A</option>
+              <option value="125">125A</option>
+              <option value="150">150A</option>
+              <option value="175">175A</option>
+              <option value="200">200A</option>
+              <option value="250">250A</option>
+              <option value="300">300A</option>
+              <option value="350">350A</option>
+              <option value="400">400A</option>
+              <option value="450">450A</option>
+              <option value="500">500A</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="pipeLength-${formId}">メーター数</label>
+            <input type="number" inputmode="numeric" id="pipeLength-${formId}" name="pipeLength" placeholder="0" min="0" />
+          </div>
+
+          <div class="form-group">
+            <label for="unitPrice-${formId}" id="unitPriceLabel-${formId}">単価 (円/kg)</label>
+            <input type="number" inputmode="numeric" id="unitPrice-${formId}" class="active" name="unitPrice" placeholder="0" min="0" />
+          </div>
+
+          <div class="schedule-buttons" role="group" aria-label="スケジュール選択">
+            <button id="btnSCH5s-${formId}" onclick="setSchedule('SCH5s', '${formId}')">SCH5S</button>
+            <button id="btnSCH10s-${formId}" onclick="setSchedule('SCH10s', '${formId}')">SCH10S</button>
+            <button id="btnSCH20-${formId}" onclick="setSchedule('SCH20', '${formId}')">SCH20/S</button>
+            <button id="btnSCH60-${formId}" onclick="setSchedule('SCH60', '${formId}')">SCH60/S</button>
+            <button id="btnSCH40-${formId}" class="active" onclick="setSchedule('SCH40', '${formId}')">SCH40/S</button>
+            <button id="btnsgp-${formId}" onclick="setSchedule('sgp', '${formId}')">SGP</button>
+            <button id="btnSCH80-${formId}" onclick="setSchedule('SCH80', '${formId}')">SCH80/S</button>
+            <button id="btnSCH120-${formId}" onclick="setSchedule('SCH120', '${formId}')">SCH120/S</button>
+            <button id="btnSCH160-${formId}" onclick="setSchedule('SCH160', '${formId}')">SCH160/S</button>
+          </div>
+
+          <div class="material-toggle">
+            <button id="btnSteel-${formId}" class="active" onclick="setMaterial('steel', '${formId}')">鉄</button>
+            <button id="btnStainless-${formId}" onclick="setMaterial('stainless', '${formId}')">ステンレス</button>
+          </div>
+
+          <div id="perMeterUnitPrice-${formId}"></div>
+          <div id="pipeWeight-${formId}"></div>
+          <div id="pipeCost-${formId}" class="pipeCost"></div>
+          <br>
+        </div>
+      `;
+      
+      document.getElementById('formsContainer').insertAdjacentHTML('beforeend', formHTML);
+      
+      // フォームデータを初期化
+      formsData[formId] = {
+        schedule: 'SCH40',
+        material: 'steel',
+        unitType: 'weight'
+      };
+      
+      // イベントリスナーを追加
+      document.getElementById(`size-${formId}`).addEventListener('change', () => calculateForm(formId));
+      document.getElementById(`pipeLength-${formId}`).addEventListener('input', () => calculateForm(formId));
+      document.getElementById(`unitPrice-${formId}`).addEventListener('input', () => calculateForm(formId));
+      
+      // 初期計算を実行
+      calculateForm(formId);
+    }
+    
+    function removeForm(formId) {
+      if (Object.keys(formsData).length <= 1) {
+        alert('少なくとも1つのフォームは残しておく必要があります');
+        return;
+      }
+      
+      document.getElementById(formId).remove();
+      delete formsData[formId];
+      updateTotalCost();
+    }
+    
+    function setSchedule(schedule, formId) {
+      formsData[formId].schedule = schedule;
+      document.querySelectorAll(`#${formId} .schedule-buttons button`).forEach(btn => btn.classList.remove("active"));
+      document.getElementById(`btn${schedule}-${formId}`).classList.add("active");
+      calculateForm(formId);
+    }
+
+    function setMaterial(type, formId) {
+      formsData[formId].material = type;
+      document.querySelectorAll(`#${formId} .material-toggle button`).forEach(btn => btn.classList.remove("active"));
+      document.getElementById(`btn${type === 'steel' ? 'Steel' : 'Stainless'}-${formId}`).classList.add("active");
+      calculateForm(formId);
+    }
 
     // 施工延長による最大20%割引（100mで20%割引）
     function getLengthDiscount(length, size, schedule) {
@@ -309,20 +399,21 @@
       return 1 - discountRate;
     }
 
-    function calculate() {
-      const size = document.getElementById("size").value;
-      const length = parseFloat(document.getElementById("pipeLength").value) || 0;
-      const price = parseFloat(document.getElementById("unitPrice").value) || 0;
-      const schKey = currentSchedule.toLowerCase();
-      const materialKey = currentMaterial === 'steel' ? schKey : 'sus' + schKey.slice(3);
+    function calculateForm(formId) {
+      const formData = formsData[formId];
+      const size = document.getElementById(`size-${formId}`).value;
+      const length = parseFloat(document.getElementById(`pipeLength-${formId}`).value) || 0;
+      const price = parseFloat(document.getElementById(`unitPrice-${formId}`).value) || 0;
+      const schKey = formData.schedule.toLowerCase();
+      const materialKey = formData.material === 'steel' ? schKey : 'sus' + schKey.slice(3);
 
       const baseWeightSCH40_25 = weightPerMeter["25"]["sch40"];
       const actualWeight = weightPerMeter[size]?.[materialKey];
 
       if (actualWeight === undefined) {
-        document.getElementById("pipeWeight").textContent = `データがありません`;
-        document.getElementById("pipeCost").textContent = `-`;
-        document.getElementById("perMeterUnitPrice").textContent = `-`;
+        document.getElementById(`pipeWeight-${formId}`).textContent = `データがありません`;
+        document.getElementById(`pipeCost-${formId}`).textContent = `-`;
+        document.getElementById(`perMeterUnitPrice-${formId}`).textContent = `-`;
         return;
       }
 
@@ -336,28 +427,50 @@
         discountFactor = Math.pow(1 / 1.01, sizeStep);
       }
 
-      const lengthDiscount = getLengthDiscount(length, size, currentSchedule);
+      const lengthDiscount = getLengthDiscount(length, size, formData.schedule);
       const diameterCorrection = diameterCorrectionFactors[size] || 1.0;
 
       let cost = weight * price * lengthDiscount * diameterCorrection * discountFactor;
 
-      if (currentMaterial === 'stainless') cost *= 1.5;
+      if (formData.material === 'stainless') cost *= 1.5;
 
       const unitPricePerMeter = length > 0 ? cost / length : 0;
-      document.getElementById("pipeWeight").textContent = `配管重量: ${weight.toFixed(3)} kg`;
-      document.getElementById("pipeCost").textContent = `金額: ¥${Math.round(cost).toLocaleString()}`;
-      document.getElementById("perMeterUnitPrice").textContent = `メートル単価: ¥${Math.round(unitPricePerMeter).toLocaleString()} /m`;
+      document.getElementById(`pipeWeight-${formId}`).textContent = `配管重量: ${weight.toFixed(3)} kg`;
+      document.getElementById(`pipeCost-${formId}`).textContent = `金額: ¥${Math.round(cost).toLocaleString()}`;
+      document.getElementById(`perMeterUnitPrice-${formId}`).textContent = `メートル単価: ¥${Math.round(unitPricePerMeter).toLocaleString()} /m`;
+      
+      // 合計金額を更新
+      updateTotalCost();
+    }
+    
+    function updateTotalCost() {
+      let total = 0;
+      
+      // すべてのフォームの金額を合計
+      Object.keys(formsData).forEach(formId => {
+        const costText = document.getElementById(`pipeCost-${formId}`).textContent;
+        if (costText && costText !== '-') {
+          const costValue = parseInt(costText.replace(/[^0-9]/g, '')) || 0;
+          total += costValue;
+        }
+      });
+      
+      document.getElementById('totalCost').textContent = `合計金額: ¥${total.toLocaleString()}`;
     }
 
-    calculate();
-
     window.getEstimateData = function () {
-      const size = document.getElementById("size").value;
-      const length = parseFloat(document.getElementById("pipeLength").value) || 0;
-      const unitPrice = parseFloat(document.getElementById("unitPrice").value) || 0;
+      // この関数は複数フォームに対応するように修正が必要ですが、
+      // 元の用途が不明なため、最初のフォームのデータを返すようにしています
+      const firstFormId = Object.keys(formsData)[0];
+      if (!firstFormId) return null;
+      
+      const formData = formsData[firstFormId];
+      const size = document.getElementById(`size-${firstFormId}`).value;
+      const length = parseFloat(document.getElementById(`pipeLength-${firstFormId}`).value) || 0;
+      const unitPrice = parseFloat(document.getElementById(`unitPrice-${firstFormId}`).value) || 0;
 
-      const schKey = currentSchedule.toLowerCase();
-      const materialKey = currentMaterial === 'steel' ? schKey : 'sus' + schKey.slice(3);
+      const schKey = formData.schedule.toLowerCase();
+      const materialKey = formData.material === 'steel' ? schKey : 'sus' + schKey.slice(3);
 
       const baseWeightSCH40_25 = weightPerMeter["25"]["sch40"];
       const actualWeight = weightPerMeter[size]?.[materialKey];
@@ -376,24 +489,23 @@
       const sizeIndex = pipeSizes.indexOf(size);
       const sizeStep = Math.max(0, sizeIndex - baseIndex);
 
-      // ✅ ここを追加
       let discountFactor = 1.0;
       if (parseInt(size) >= 350) {
         discountFactor = Math.pow(1 / 1.01, sizeStep);
       }
 
-      const lengthDiscount = getLengthDiscount(length, size, currentSchedule);
+      const lengthDiscount = getLengthDiscount(length, size, formData.schedule);
       const diameterCorrection = diameterCorrectionFactors[size] || 1.0;
 
       let cost;
-      if (currentUnitType === 'meter') {
+      if (formData.unitType === 'meter') {
         const weightRatio = actualWeight / baseWeightSCH40_25;
         cost = length * unitPrice * weightRatio * discountFactor * lengthDiscount * diameterCorrection;
       } else {
         cost = weight * unitPrice * lengthDiscount * diameterCorrection;
       }
 
-      if (currentMaterial === 'stainless') cost *= 1.5;
+      if (formData.material === 'stainless') cost *= 1.5;
 
       return {
         appId: 'pipe-weight',
@@ -401,7 +513,7 @@
         manhour: 0,
         pipeLength: length,
         pipeWeight: weight.toFixed(2),
-        size: size  // ここを追加
+        size: size
       };
     };
   </script>
