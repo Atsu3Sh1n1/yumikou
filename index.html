@@ -129,6 +129,8 @@
       }
     }
   </style>
+  <iframe src="project-top/index.html" style="display: none;" loading="eager"></iframe>
+
 </head>
 
 <body>
@@ -305,25 +307,25 @@
 
     // スキップボタンのクリック処理
 
-  // ページ読み込み後にプリフェッチを実行
-  window.addEventListener('load', () => {
-    const link = document.createElement('link');
-    link.rel = 'prefetch';
-    link.href = 'project-top/index.html';
-    document.head.appendChild(link);
-  });
+    // ページ読み込み後にプリフェッチを実行
+    window.addEventListener('load', () => {
+      const link = document.createElement('link');
+      link.rel = 'prefetch';
+      link.href = 'project-top/index.html';
+      document.head.appendChild(link);
+    });
 
-  // スキップボタンのクリック処理
-  document.getElementById('skipButton').addEventListener('click', () => {
-    const fadeOverlay = document.getElementById('fadeOverlay');
-    fadeOverlay.style.pointerEvents = 'auto';
-    fadeOverlay.style.opacity = 1;
+    // スキップボタンのクリック処理
+    document.getElementById('skipButton').addEventListener('click', () => {
+      const fadeOverlay = document.getElementById('fadeOverlay');
+      fadeOverlay.style.pointerEvents = 'auto';
+      fadeOverlay.style.opacity = 1;
 
-    // フェードアウト後に遷移
-    setTimeout(() => {
-      window.location.href = 'project-top/index.html';
-    }, 1000);
-  });
+      // フェードアウト後に遷移
+      setTimeout(() => {
+        window.location.href = 'project-top/index.html';
+      }, 1000);
+    });
 
 
   </script>
