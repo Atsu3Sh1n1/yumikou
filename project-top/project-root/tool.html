@@ -4,10 +4,11 @@
   <meta charset="UTF-8">
   <title>減価償却費 計算ツール</title>
   <style>
-    body { font-family: sans-serif; margin: 20px; }
+    body { font-family: sans-serif; margin: 20px;  font-size: 12px; }
     label { display: block; margin-top: 10px; }
     input[type="number"] { width: 100px; }
     .result { margin-top: 20px; font-size: 18px; font-weight: bold; color: #007700; }
+    
   </style>
 </head>
 <body>
@@ -16,12 +17,12 @@
 
   <label>
     工具の購入価格（円）：
-    <input type="number" id="price" value="100000">
+    <input type="number" id="price" pattern="[0-9]*" placeholder="100000">
   </label>
 
   <label>
     耐用年数（年）：
-    <input type="number" id="years" value="5">
+    <input type="number" id="years"pattern="[0-9]*" placeholder="5">
   </label>
 
   <div class="result" id="result">年間減価償却費：¥0</div>
@@ -38,8 +39,6 @@
       if (!isNaN(price) && !isNaN(years) && years > 0) {
         const annual = Math.floor(price / years);
         resultDiv.textContent = `年間減価償却費：¥${annual.toLocaleString()}`;
-      } else {
-        resultDiv.textContent = '正しい数値を入力してください。';
       }
     }
 
