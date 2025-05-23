@@ -181,7 +181,7 @@
       { key: "size", text: "サイズを選んでください", options: ["15", "20", "25", "32", "40", "50", "65", "80", "100", "125", "150", "200", "250", "300", "350", "400", "450", "500"] },
       { key: "schedule", text: "スケジュールを選んでください", options: ["sch5", "sch10", "sch20", "sgp", "sch40", "sch80", "sch120", "sch160",] },
       { key: "length", text: "長さを入力してください", options: null }, // 入力式
-      { key: "food", text: "好きな食べ物は？", options: ["焼肉", "お寿司", "カレー", "中華", "洋食", "和食", ] }
+      { key: "food", text: "好きな食べ物は？", options: ["焼肉", "お寿司", "カレー", "中華", "洋食", "和食",] }
     ];
 
     const answers = {};
@@ -279,7 +279,7 @@
           <div class="result-item"><span class="result-label">重量 : </span><span class="result-value">${r.pipeWeight}kg</span></div>
           <div class="result-item"><span class="result-label">m/単価: </span><span class="result-value">${Number(r.unitPricePerMeter).toLocaleString()}円</span></div>
           <div class="result-item"><span class="result-label">サイズ: </span><span class="result-value">${r.size}A</span></div>
-          <div class="result-item"><span class="result-label">材料: </span><span class="result-value">${r.material}</span></div>
+          <div class="result-item"><span class="result-label">材料: </span><span class="result-value">${answers.material}</span></div>
           <div class="result-item"><span class="result-label">スケジュール: </span><span class="result-value">${r.schedule}</span></div>
           <div class="result-item"><span class="result-label">長さ: </span><span class="result-value">${answers.length}m</span></div>
           <div class="result-item"><span class="result-label">打合せ時の食事: </span><span class="result-value">${answers.food}屋さん</span></div>
