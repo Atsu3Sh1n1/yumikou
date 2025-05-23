@@ -112,62 +112,7 @@
         <span style="font-size: 0.6em;">1スパン/5,000* 応用:高車5/大10/レッカー20</span>
       </div>
 
-      <div class="form-group">
-        <div class="form-row">配管工（中堅） / 1.0</div>
-        <div class="input-group">
-          <input type="number" pattern="[0-9]*" id="pp" placeholder="人" min="0" />
-          <input type="number" pattern="[0-9]*" id="pd" placeholder="日" min="0" />
-        </div>
-      </div>
-      
-<div class="form-group">
-        <div class="form-row">配管工（上級） / 1.2</div>
-        <div class="input-group">
-          <input type="number" pattern="[0-9]*" id="pp" placeholder="人" min="0" />
-          <input type="number" pattern="[0-9]*" id="pd" placeholder="日" min="0" />
-        </div>
-      </div>
 
-      <div class="form-group">
-        <div class="form-row">配管工（職長・ベテラン） / 1.5</div>
-        <div class="input-group">
-          <input type="number" pattern="[0-9]*" id="pp" placeholder="人" min="0" />
-          <input type="number" pattern="[0-9]*" id="pd" placeholder="日" min="0" />
-        </div>
-      </div>
-
-
-      <div class="form-group">
-        <div class="form-row">溶接工(一般) / 1.4</div>
-        <div class="input-group">
-          <input type="number" pattern="[0-9]*" id="tp" placeholder="人" min="0" />
-          <input type="number" pattern="[0-9]*" id="td" placeholder="日" min="0" />
-        </div>
-      </div>
-
-      <div class="form-group">
-        <div class="form-row">溶接工(Tig) / 1.8</div>
-        <div class="input-group">
-          <input type="number" pattern="[0-9]*" id="tp" placeholder="人" min="0" />
-          <input type="number" pattern="[0-9]*" id="td" placeholder="日" min="0" />
-        </div>
-      </div>
-
-       <div class="form-group">
-        <div class="form-row">溶接工(特殊) / 2.4</div>
-        <div class="input-group">
-          <input type="number" pattern="[0-9]*" id="tp" placeholder="人" min="0" />
-          <input type="number" pattern="[0-9]*" id="td" placeholder="日" min="0" />
-        </div>
-      </div>
-
-      <div class="form-group">
-        <div class="form-row">見習い・補助 / 0.7</div>
-        <div class="input-group">
-          <input type="number" pattern="[0-9]*" id="ip" placeholder="人" min="0" />
-          <input type="number" pattern="[0-9]*" id="id" placeholder="日" min="0" />
-        </div>
-      </div>
 
       <div class="checkbox-group">
         <label><input type="checkbox" id="applyMultiplier" /> 1.6倍にする(概算)　</label>
@@ -177,52 +122,71 @@
       <div class="result" id="manhour">総工数: 0人日</div>
       <div class="result" id="sub">小計: ¥0</div>
     </form>
-    <br>
-
-    <a href="https://www.jefma.or.jp/libs/public-information/examples/001464445.pdf" target="_blank"
-      rel="noopener noreferrer">
-      公共工事設計労務単価について(国土交通省)
-    </a>
-
   </div>
 
   <script>
     const f = document.getElementById("form");
     const u = { s: 5000 };
-
     const subEl = document.getElementById("sub");
     const manhourEl = document.getElementById("manhour");
 
+    // 作業項目一覧
+    const workItems = [
+      { id: "ep", label: "見習い・補助", factor: 0.75, note: "基本作業の補助・軽作業中心" },
+      { id: "pp", label: "配管工(中堅)", factor: 1.0, note: "図面を見て一人で配管施工ができる" },
+      { id: "tp", label: "配管工(上級)", factor: 1.2, note: "現場指示・品質管理・統括できる" },
+      { id: "ip", label: "配管工(職長・ベテラン)", factor: 1.5, note: "現場調整、図面修正、他職との連携も可" },
+      { id: "fp", label: "溶接工(一般)", factor: 1.2, note: "アーク・半自動（CO2）、基本姿勢・鋼管対応" },
+      { id: "cp", label: "溶接工(Tig)", factor: 1.4, note: "ステンレス・アルミ、仰向け等の全姿勢可" },
+      { id: "dp", label: "溶接工(特殊)", factor: 2.4, note: "高圧・医薬・原子力、X線検査合格前提（RT100%合格など）" },
+    ];
+
+
+    // 入力欄を自動生成
+    const insertBeforeEl = document.querySelector(".checkbox-group");
+    workItems.forEach(({ id, label, factor, note }) => {
+      const group = document.createElement("div");
+      group.className = "form-group";
+      group.innerHTML = `
+    <div class="form-row">${label} / ${factor}</div>
+    <div class="input-group">
+      <input type="number" id="${id}" placeholder="人" min="0" />
+      <input type="number" id="${id}d" placeholder="日" min="0" />
+    </div>
+    ${note ? `<span style="font-size: 0.6em;">${note}</span>` : ""}
+  `;
+      f.insertBefore(group, insertBeforeEl);
+    });
+
+
+    function g(id) {
+      return Number(document.getElementById(id)?.value) || 0;
+    }
+
     function calc() {
-      const g = id => Number(document.getElementById(id).value) || 0;
       const unitPrice = g("sc") || 27000;
-
       let scaffold = g("s") * u.s;
-
-      const factor = {
-        pipe: 1.0,
-        weld: 1.2,
-        helper: 0.8
-      };
-
-      let pt = g("pp") * g("pd") * unitPrice * factor.pipe;
-      let tt = g("tp") * g("td") * unitPrice * factor.weld;
-      let it = g("ip") * g("id") * unitPrice * factor.helper;
 
       const applyMultiplier = document.getElementById("applyMultiplier").checked;
       const excludeScaffold = document.getElementById("excludeScaffold").checked;
 
-      if (applyMultiplier) {
-        pt = Math.floor(pt * 1.6);
-        tt = Math.floor(tt * 1.6);
-        it = Math.floor(it * 1.6);
-        if (!excludeScaffold) {
-          scaffold = Math.floor(scaffold * 1.6);
-        }
+      let total = 0;
+      let manhour = 0;
+
+      workItems.forEach(({ id, factor }) => {
+        const p = g(id);
+        const d = g(id + "d");
+        let cost = p * d * unitPrice * factor;
+        if (applyMultiplier) cost = Math.floor(cost * 1.6);
+        total += cost;
+        manhour += p * d;
+      });
+
+      if (applyMultiplier && !excludeScaffold) {
+        scaffold = Math.floor(scaffold * 1.6);
       }
 
-      const manhour = (g("pp") * g("pd")) + (g("tp") * g("td")) + (g("ip") * g("id"));
-      const total = scaffold + pt + tt + it;
+      total += scaffold;
 
       manhourEl.textContent = `総工数: ${manhour}人日`;
       subEl.textContent = `小計: ¥${total.toLocaleString()}`;
@@ -237,28 +201,31 @@
     document.getElementById("applyMultiplier").addEventListener("change", calc);
     document.getElementById("excludeScaffold").addEventListener("change", calc);
 
-    // PDF生成用関数をiframe側に提供
+    // PDF用データ出力
     window.getEstimateData = function () {
-      const g = id => Number(document.getElementById(id).value) || 0;
       const unitPrice = g("sc") || 27000;
-
-      let scaffold = g("s") * 5000;
-      let pt = g("pp") * g("pd") * unitPrice * 1.0;
-      let tt = g("tp") * g("td") * unitPrice * 1.25;
-      let it = g("ip") * g("id") * unitPrice * 0.75;
+      let scaffold = g("s") * u.s;
 
       const applyMultiplier = document.getElementById("applyMultiplier").checked;
       const excludeScaffold = document.getElementById("excludeScaffold").checked;
 
-      if (applyMultiplier) {
-        pt = Math.floor(pt * 1.6);
-        tt = Math.floor(tt * 1.6);
-        it = Math.floor(it * 1.6);
-        if (!excludeScaffold) scaffold = Math.floor(scaffold * 1.6);
+      let subtotal = 0;
+      let manhour = 0;
+
+      workItems.forEach(({ id, factor }) => {
+        const p = g(id);
+        const d = g(id + "d");
+        let cost = p * d * unitPrice * factor;
+        if (applyMultiplier) cost = Math.floor(cost * 1.6);
+        subtotal += cost;
+        manhour += p * d;
+      });
+
+      if (applyMultiplier && !excludeScaffold) {
+        scaffold = Math.floor(scaffold * 1.6);
       }
 
-      const subtotal = scaffold + pt + tt + it;
-      const manhour = (g("pp") * g("pd")) + (g("tp") * g("td")) + (g("ip") * g("id"));
+      subtotal += scaffold;
 
       return {
         subtotal,
