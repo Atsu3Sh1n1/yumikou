@@ -17,7 +17,7 @@
       align-items: center;
       padding-top: 60px;
     }
-    
+
     .forms-container {
       display: flex;
       flex-wrap: wrap;
@@ -34,7 +34,7 @@
       text-align: center;
       border: 1px solid #ddd;
       border-radius: 8px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
       position: relative;
     }
 
@@ -142,14 +142,14 @@
       padding: 1.2rem;
     }
 
-     .pipeCost {
+    .pipeCost {
       margin-top: 20px;
       font-size: 1.4em;
       font-weight: bold;
       color: green;
       text-align: center;
     }
-    
+
     .add-form-btn {
       padding: 10px 20px;
       background: #28a745;
@@ -161,11 +161,11 @@
       margin: 20px 0;
       transition: background-color 0.2s;
     }
-    
+
     .add-form-btn:hover {
       background: #218838;
     }
-    
+
     .remove-form-btn {
       position: absolute;
       top: 5px;
@@ -179,11 +179,11 @@
       font-size: 12px;
       cursor: pointer;
     }
-    
+
     .remove-form-btn:hover {
       background: #c82333;
     }
-    
+
     .total-cost {
       font-size: 1.5em;
       font-weight: bold;
@@ -198,14 +198,12 @@
   <div class="forms-container" id="formsContainer">
     <!-- フォームはここに動的に追加されます -->
   </div>
-  
-  <button class="add-form-btn" id="addFormBtn">フォームを追加</button>
-  
+
+
+
   <div class="total-cost" id="totalCost">合計金額: ¥0</div>
 
-  <div class="footer">
-    <a href="https://atsu3sh1n1.github.io/yumikou/" target="_blank">Created by YUMIKOU Inc.</a>
-  </div>
+  <button class="add-form-btn" id="addFormBtn">フォームを追加</button>
 
   <script>
     const weightPerMeter = {
@@ -262,10 +260,10 @@
     let formCount = 0;
     const formsData = {};
 
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
       // 初期フォームを追加
       addNewForm();
-      
+
       // フォーム追加ボタンのイベントリスナー
       document.getElementById('addFormBtn').addEventListener('click', addNewForm);
     });
@@ -273,7 +271,7 @@
     function addNewForm() {
       formCount++;
       const formId = `form-${formCount}`;
-      
+
       const formHTML = `
         <div class="container" id="${formId}">
           <button class="remove-form-btn" onclick="removeForm('${formId}')">×</button>
@@ -281,6 +279,9 @@
             施工費概算算出機<br>
             <span style="font-size: 0.6em;">(フジタ君2号)</span>
           </h1>
+          <div class="footer">
+    <a href="https://atsu3sh1n1.github.io/yumikou/" target="_blank">Created by YUMIKOU Inc.</a>
+  </div>
 
           <div class="form-group">
             <label for="size-${formId}">サイズ</label>
@@ -343,36 +344,36 @@
           <br>
         </div>
       `;
-      
+
       document.getElementById('formsContainer').insertAdjacentHTML('beforeend', formHTML);
-      
+
       // フォームデータを初期化
       formsData[formId] = {
         schedule: 'SCH40',
         material: 'steel',
         unitType: 'weight'
       };
-      
+
       // イベントリスナーを追加
       document.getElementById(`size-${formId}`).addEventListener('change', () => calculateForm(formId));
       document.getElementById(`pipeLength-${formId}`).addEventListener('input', () => calculateForm(formId));
       document.getElementById(`unitPrice-${formId}`).addEventListener('input', () => calculateForm(formId));
-      
+
       // 初期計算を実行
       calculateForm(formId);
     }
-    
+
     function removeForm(formId) {
       if (Object.keys(formsData).length <= 1) {
         alert('少なくとも1つのフォームは残しておく必要があります');
         return;
       }
-      
+
       document.getElementById(formId).remove();
       delete formsData[formId];
       updateTotalCost();
     }
-    
+
     function setSchedule(schedule, formId) {
       formsData[formId].schedule = schedule;
       document.querySelectorAll(`#${formId} .schedule-buttons button`).forEach(btn => btn.classList.remove("active"));
@@ -438,14 +439,14 @@
       document.getElementById(`pipeWeight-${formId}`).textContent = `配管重量: ${weight.toFixed(3)} kg`;
       document.getElementById(`pipeCost-${formId}`).textContent = `金額: ¥${Math.round(cost).toLocaleString()}`;
       document.getElementById(`perMeterUnitPrice-${formId}`).textContent = `メートル単価: ¥${Math.round(unitPricePerMeter).toLocaleString()} /m`;
-      
+
       // 合計金額を更新
       updateTotalCost();
     }
-    
+
     function updateTotalCost() {
       let total = 0;
-      
+
       // すべてのフォームの金額を合計
       Object.keys(formsData).forEach(formId => {
         const costText = document.getElementById(`pipeCost-${formId}`).textContent;
@@ -454,7 +455,7 @@
           total += costValue;
         }
       });
-      
+
       document.getElementById('totalCost').textContent = `合計金額: ¥${total.toLocaleString()}`;
     }
 
@@ -463,7 +464,7 @@
       // 元の用途が不明なため、最初のフォームのデータを返すようにしています
       const firstFormId = Object.keys(formsData)[0];
       if (!firstFormId) return null;
-      
+
       const formData = formsData[firstFormId];
       const size = document.getElementById(`size-${firstFormId}`).value;
       const length = parseFloat(document.getElementById(`pipeLength-${firstFormId}`).value) || 0;
