@@ -18,8 +18,9 @@
 
   <style>
     body {
+
       margin: 0;
-      padding: 20px 0;
+      padding: 10px 0;
       background: #f9f9f9;
       font-family: sans-serif;
     }
@@ -43,24 +44,23 @@
 
 
 
-    h2 {
+    .cursor {
+      display: inline-block;
+      animation: blink 1s step-end infinite;
+      color: #333;
+    }
 
-      line-height: 3.2rem;
-      opacity: 0;
-      /* 最初は透明 */
-      transform: translateY(20px);
-      /* 少し下にずらす */
-      animation: fadeInUp 1s forwards;
-      /* 1秒かけてフェードイン＆上に移動 */
-      animation-delay: 0.3s;
-      /* 表示を少し遅らせる */
+    @keyframes blink {
+      50% {
+        opacity: 0;
+      }
     }
 
     p {
       opacity: 0;
       transform: translateY(20px);
-      animation: fadeInUp 1s forwards;
-      animation-delay: 1.6s;
+      animation: fadeInUp 5s forwards;
+      animation-delay: 5.2s;
       /* h2のアニメーション後に開始 */
     }
 
@@ -112,13 +112,21 @@
     }
 
     @media screen and (min-width: 768px) {
+      body {
+        font-family: 'Helvetica Neue', Arial, sans-serif;
+        font-size: 20px;
 
-      /* ここにPC用のスタイルを書く */
+        color: #333;
+        margin-bottom: 20px;
+        padding: 20px;
+      }
+
       #app5 {
         width: 100%;
         height: 1600px;
       }
     }
+
 
 
 
@@ -148,6 +156,11 @@
       color: white;
       text-decoration: none;
       border-radius: 4px;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeInUp 6.5s forwards;
+      animation-delay: 6.6s;
+      /* h2のアニメーション後に開始 */
     }
 
     .cta-button:hover {
@@ -158,10 +171,18 @@
 
 <body>
 
-  <div
-    style="font-family: Arial, sans-serif; text-align: center; line-height: 1.8rem; max-width: 600px; margin-top: 0px; padding: 20px;">
-    <h2 style="color: #333;">毎回の見積もり作業、<br>時間も、労力も、<br>かかっていませんか？</h2><br>
-    <p>弊社のシステムなら、<br>簡単な入力だけで即座に見積書を作成。</p>
+  <div style="
+  font-family: Arial, sans-serif;
+  line-height: 1.8rem;
+  max-width: 600px;
+  margin: 20px auto;
+  padding: 20px;
+  text-align: center;
+">
+    <h2 id="typing-text" style="color: #333; text-align: center; line-height: 3.6rem;"></h2>
+    <p style="text-align: center;">
+      弊社のシステムなら、<br>簡単な入力だけで即座に見積書を作成。
+    </p>
 
     <p>面倒なやりとりはナシ。</p>
 
@@ -169,10 +190,10 @@
     <a href="https://atsu3sh1n1.github.io/yumikou/mitsumori/index.html" class="cta-button">開発中/
       弓工</a><br><br><br><br><br><br><br><br><br><br><br><br>
 
-    *各所調整中<br><br><br><br>
-
-    <div class="manual-header" style="text-align: center; margin-top: 50px;">
-      <a href="manual.html" style="
+    *調整中*<br><br><br><br>
+  </div>
+  <div class="manual-header" style="text-align: center; margin-top: 50px;">
+    <a href="manual.html" style="
     display: inline-block;
     margin-bottom: 1rem;
     padding: 12px 24px;
@@ -186,11 +207,11 @@
     transition: all 0.3s ease;
     border: 2px solid #1a5cb0;
   ">
-        🛠️ 見積りガイド 🧑‍🔧
-      </a>
+      🛠️ 見積りガイド 🧑‍🔧
+    </a>
 
-    </div>
   </div>
+
 
   <iframe id="app1" src="estimate.html" loading="lazy"></iframe>
 
@@ -217,6 +238,37 @@
 
 
   <script>
+
+    const lines = [
+      "毎回の見積もり作業",
+      "時間も、労力も",
+      "かかっていませんか？"
+    ];
+
+    const h2 = document.getElementById('typing-text');
+
+    let lineIndex = 0;
+    let charIndex = 0;
+
+    function type() {
+      if (lineIndex >= lines.length) return; // 終了
+
+      const currentLine = lines[lineIndex];
+      h2.innerHTML = lines.slice(0, lineIndex).join('<br>') + (lineIndex > 0 ? '<br>' : '') + currentLine.slice(0, charIndex) + '<span class="cursor">|</span>';
+
+      if (charIndex < currentLine.length) {
+        charIndex++;
+        setTimeout(type, 100); // 文字を打つ速度（ミリ秒）
+      } else {
+        // 行が終わったら次の行へ1秒待ってから
+        lineIndex++;
+        charIndex = 0;
+        setTimeout(type, 1000);
+      }
+    }
+
+    type();
+
     /**
      * PDF生成メイン関数
      * 各iframeからデータを収集し、PDFを生成・保存する
