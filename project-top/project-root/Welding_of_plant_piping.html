@@ -42,6 +42,36 @@
     }
 
 
+
+    h2 {
+
+      line-height: 3.2rem;
+      opacity: 0;
+      /* 最初は透明 */
+      transform: translateY(20px);
+      /* 少し下にずらす */
+      animation: fadeInUp 1s forwards;
+      /* 1秒かけてフェードイン＆上に移動 */
+      animation-delay: 0.3s;
+      /* 表示を少し遅らせる */
+    }
+
+    p {
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeInUp 1s forwards;
+      animation-delay: 1.6s;
+      /* h2のアニメーション後に開始 */
+    }
+
+    @keyframes fadeInUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+
     iframe {
       display: block;
       width: 100%;
@@ -129,7 +159,7 @@
 <body>
 
   <div
-    style="font-family: Arial, sans-serif; text-align: center; line-height: 1.6; max-width: 600px; margin: 50px auto; padding: 20px;">
+    style="font-family: Arial, sans-serif; text-align: center; line-height: 1.8rem; max-width: 600px; margin-top: 0px; padding: 20px;">
     <h2 style="color: #333;">毎回の見積もり作業、<br>時間も、労力も、<br>かかっていませんか？</h2><br>
     <p>弊社のシステムなら、<br>簡単な入力だけで即座に見積書を作成。</p>
 
