@@ -186,231 +186,267 @@
 
 
 
-  <script>
-    async function generatePDF() {
-      // === iframe読み込み待ちを最初に追加 ===
-      const waitForIframeLoad = (iframe) => {
-        return new Promise((resolve) => {
-          if (iframe.contentDocument?.readyState === 'complete') {
-            resolve();
-          } else {
-            iframe.onload = () => resolve();
-          }
-        });
-      };
-
-      const iframeIds = ["app1", "app2", "app3", "app4", "pipeForm"];
-      await Promise.all(
-        iframeIds.map(id => waitForIframeLoad(document.getElementById(id)))
-      );
-
-      const { jsPDF } = window.jspdf;
-      const doc = new jsPDF({ unit: 'pt', format: 'a4' });
-
-      const PAGE_WIDTH = doc.internal.pageSize.getWidth();
-      const PAGE_HEIGHT = doc.internal.pageSize.getHeight();
-      const MARGIN = 40;
-      const HEADER_HEIGHT = 60;
-      const FOOTER_HEIGHT = 30;
-      const ACCENT_COLOR = '#003366';
-
-      const logoBase64 = ""; // ロゴ画像があればここにBase64
-
-      // ヘッダー背景
-      doc.setFillColor(ACCENT_COLOR);
-      doc.rect(0, 0, PAGE_WIDTH, HEADER_HEIGHT, 'F');
-
-      if (logoBase64) doc.addImage(logoBase64, 'PNG', 345, 22.5, 20, 20);
-
-      // JST日付を生成
-      const today = new Date();
-      const jstOffset = 9 * 60; // JST = UTC+9時間 → 分単位
-      const localOffset = today.getTimezoneOffset(); // 現地のUTCとの差（分）
-      const jst = new Date(today.getTime() + (jstOffset + localOffset) * 60000);
-
-      const issueDate = jst.toLocaleDateString('ja-JP', {
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit'
-      }).replace(/\//g, '-'); // YYYY-MM-DD形式に整形
-
-      const validUntilDate = new Date(jst);
-      validUntilDate.setMonth(validUntilDate.getMonth() + 1);
-
-      const validUntil = validUntilDate.toLocaleDateString('ja-JP', {
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit'
-      }).replace(/\//g, '-');
-
-      doc.setFontSize(10);
-      doc.setTextColor(255);
-      doc.text(`Issue Date: ${issueDate}`, MARGIN, 25);
-      doc.text(`Valid Until: ${validUntil}`, MARGIN, 40);
-
-      doc.setFontSize(20);
-      doc.text('YUMIKOU CO.,LTD.', PAGE_WIDTH - MARGIN, 40, { align: 'right' });
-
-      const validFrames = []; // ここで初期化
-
-      const iframes = [
-        { id: "app1", label: "Total Person-Days" },
-        { id: "app2", label: "Pipe Length / Weight" },
-        { id: "app3", label: "Complete Welding" },
-        { id: "app4", label: "Lift and Crane" },
-        { id: "app5", label: "Tools cost" },
-        { id: "pipeForm", label: "Item Description" }  // 新規追加
-      ];
-
-      const rows = [];
-      let grandTotal = 0;
-      let taxableTotal = 0;  // 税計算用の合計金額（app5を除外）
-
-      for (const frame of iframes) {
-        try {
-          const iframe = document.getElementById(frame.id);
-          const data = iframe.contentWindow.getEstimateData();
-
-          if (!data || data.subtotal === 0) continue;
-
-          const workLoad =
-            frame.id === 'app3'
-              ? `${data.totalDB?.toFixed(1) ?? 'N/A'} DB`
-              : frame.id === 'app1'
-                ? `${data.manhour ?? 'N/A'} Days`
-                : frame.id === 'app2'
-                  ? `${data.size ?? 'N/A'} A / ${data.pipeLength ?? 'N/A'} m / ${data.pipeWeight ?? 'N/A'} kg`
-                  : "N/A";
-
-          rows.push([
-            frame.label,
-            `¥${data.subtotal.toLocaleString()}`,
-            workLoad
-          ]);
-
-          grandTotal += data.subtotal;
-
-          // app5の場合は課税対象に含めない
-          if (frame.id !== 'app5' && frame.id !== '') {
-            taxableTotal += data.subtotal;
-          }
-
-          validFrames.push({ ...frame, data });
-        } catch (e) {
-          // iframeが未読み込みなどの例外は無視
+<script>
+  /**
+   * PDF生成メイン関数
+   * 各iframeからデータを収集し、PDFを生成・保存する
+   */
+  async function generatePDF() {
+    // === iframe読み込み待ち処理 ===
+    const waitForIframeLoad = (iframe) => {
+      return new Promise((resolve) => {
+        if (iframe.contentDocument?.readyState === 'complete') {
+          resolve();
+        } else {
+          iframe.onload = () => resolve();
         }
-      }
-
-      const roundDownTotal = (amount) => {
-        if (amount < 1000) return amount; // 1000円未満はそのまま
-        return Math.floor(amount / 1000) * 1000; // 1000円以上は下3桁切り捨て
-      };
-
-      const roundedTaxableTotal = roundDownTotal(taxableTotal);
-      const taxRate = 0.1;
-      const taxAmount = Math.floor(roundedTaxableTotal * taxRate);
-
-      // 税込合計は、app5も含む合計に税額を足す形
-      const totalWithTax = grandTotal + taxAmount;
-
-      // 合計ボックス
-      const totalBoxY = HEADER_HEIGHT + 10;
-      const totalBoxHeight = 70;
-      doc.setFillColor(255, 255, 200);
-      doc.roundedRect(MARGIN, totalBoxY, PAGE_WIDTH - MARGIN * 2, totalBoxHeight, 4, 4, 'F');
-      doc.setTextColor(0);
-      doc.setFontSize(12);
-      doc.setFont("helvetica", "bold");
-      doc.text("Total (Tax Included)", MARGIN + 10, totalBoxY + 20);
-      doc.text(`¥${totalWithTax.toLocaleString()}`, PAGE_WIDTH - MARGIN - 10, totalBoxY + 20, { align: 'right' });
-
-      doc.setFont("helvetica", "normal");
-      doc.setFontSize(11);
-      doc.text("Total (Excl. Tax)", MARGIN + 10, totalBoxY + 40);
-      doc.text(`¥${roundedTaxableTotal.toLocaleString()}`, PAGE_WIDTH - MARGIN - 10, totalBoxY + 40, { align: 'right' });
-
-      doc.text("Consumption Tax (10%)", MARGIN + 10, totalBoxY + 60);
-      doc.text(`¥${taxAmount.toLocaleString()}`, PAGE_WIDTH - MARGIN - 10, totalBoxY + 60, { align: 'right' });
-
-      // テーブル
-      doc.autoTable({
-        startY: HEADER_HEIGHT + 90,
-        margin: { left: MARGIN, right: MARGIN },
-        head: [['Type', 'Sub Total', 'Work Load']],
-        body: rows,
-        theme: 'grid',
-        headStyles: { fillColor: ACCENT_COLOR, textColor: 255, fontStyle: 'bold' },
-        styles: { font: 'helvetica', fontSize: 11, cellPadding: 8 },
-        alternateRowStyles: { fillColor: [245, 245, 245] },
       });
+    };
 
-      // pipeFormのデータ取得とテーブル追加
-      const pipeFormIframe = document.getElementById('pipeForm');
-      let pipeData = [];
+    // 対象iframeのIDリスト
+    const iframeIds = ["app1", "app2", "app3", "app4", "pipeForm"];
+    await Promise.all(
+      iframeIds.map(id => waitForIframeLoad(document.getElementById(id)))
+    );
+
+    // === PDF基本設定 ===
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({ unit: 'pt', format: 'a4' });
+
+    // ページ設定定数
+    const PAGE_WIDTH = doc.internal.pageSize.getWidth();
+    const PAGE_HEIGHT = doc.internal.pageSize.getHeight();
+    const MARGIN = 40;
+    const HEADER_HEIGHT = 60;
+    const FOOTER_HEIGHT = 30;
+    const ACCENT_COLOR = '#003366';
+
+    const logoBase64 = ""; // ロゴ画像があればここにBase64を設定
+
+    // === ヘッダー作成 ===
+    doc.setFillColor(ACCENT_COLOR);
+    doc.rect(0, 0, PAGE_WIDTH, HEADER_HEIGHT, 'F');
+    if (logoBase64) doc.addImage(logoBase64, 'PNG', 345, 22.5, 20, 20);
+
+    // === 日付情報生成 (JST) ===
+    const today = new Date();
+    const jstOffset = 9 * 60; // JST = UTC+9時間 → 分単位
+    const localOffset = today.getTimezoneOffset(); // 現地のUTCとの差（分）
+    const jst = new Date(today.getTime() + (jstOffset + localOffset) * 60000);
+
+    const issueDate = jst.toLocaleDateString('ja-JP', {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit'
+    }).replace(/\//g, '-'); // YYYY-MM-DD形式に整形
+
+    const validUntilDate = new Date(jst);
+    validUntilDate.setMonth(validUntilDate.getMonth() + 1);
+
+    const validUntil = validUntilDate.toLocaleDateString('ja-JP', {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit'
+    }).replace(/\//g, '-');
+
+    // ヘッダーテキスト
+    doc.setFontSize(10);
+    doc.setTextColor(255);
+    doc.text(`Issue Date: ${issueDate}`, MARGIN, 25);
+    doc.text(`Valid Until: ${validUntil}`, MARGIN, 40);
+
+    doc.setFontSize(20);
+    doc.text('YUMIKOU CO.,LTD.', PAGE_WIDTH - MARGIN, 40, { align: 'right' });
+
+    // === 各iframeからデータ収集 ===
+    const validFrames = []; // 有効なiframeデータを保持する配列
+
+    const iframes = [
+      { id: "app1", label: "Total Person-Days" },
+      { id: "app2", label: "Pipe Length / Weight" },
+      { id: "app3", label: "Complete Welding" },
+      { id: "app4", label: "Lift and Crane" },
+      { id: "app5", label: "Tools cost" },
+      { id: "pipeForm", label: "Item Description" }
+    ];
+
+    const rows = []; // テーブル行データ
+    let grandTotal = 0; // 全合計金額
+    let taxableTotal = 0; // 税計算用の合計金額（app5を除外）
+
+    // 各iframeからデータ取得
+    for (const frame of iframes) {
       try {
-        pipeData = pipeFormIframe.contentWindow.getPipeFormData();
+        const iframe = document.getElementById(frame.id);
+        const data = iframe.contentWindow.getEstimateData();
+
+        if (!data || data.subtotal === 0) continue;
+
+        // 作業量表示文字列を生成
+        const workLoad =
+          frame.id === 'app3'
+            ? `${data.totalDB?.toFixed(1) ?? 'N/A'} DB`
+            : frame.id === 'app1'
+              ? `${data.manhour ?? 'N/A'} Days`
+              : frame.id === 'app2'
+                ? `${data.size ?? 'N/A'} A / ${data.pipeLength ?? 'N/A'} m / ${data.pipeWeight ?? 'N/A'} kg`
+                : "N/A";
+
+        // テーブル行追加
+        rows.push([
+          frame.label,
+          `¥${data.subtotal.toLocaleString()}`,
+          workLoad
+        ]);
+
+        grandTotal += data.subtotal;
+
+        // app5の場合は課税対象に含めない
+        if (frame.id !== 'app5' && frame.id !== '') {
+          taxableTotal += data.subtotal;
+        }
+
+        validFrames.push({ ...frame, data });
       } catch (e) {
-        console.warn("pipeFormのデータ取得に失敗:", e);
+        // iframeが未読み込みなどの例外は無視
       }
+    }
 
-      // pipeDataが空配列でなくても、全ての行が空の場合を除外
-      const hasNonEmptyRow = pipeData.some(row => {
-        return (row.size && row.size.trim() !== '') || (row.material && row.material.trim() !== '');
+    // === 税計算処理 ===
+    const roundDownTotal = (amount) => {
+      if (amount < 1000) return amount; // 1000円未満はそのまま
+      return Math.floor(amount / 1000) * 1000; // 1000円以上は下3桁切り捨て
+    };
+
+    const roundedTaxableTotal = roundDownTotal(taxableTotal);
+    const taxRate = 0.1;
+    const taxAmount = Math.floor(roundedTaxableTotal * taxRate);
+    const totalWithTax = grandTotal + taxAmount;
+
+    // === 合計ボックス作成 ===
+    const totalBoxY = HEADER_HEIGHT + 10;
+    const totalBoxHeight = 70;
+    doc.setFillColor(255, 255, 200);
+    doc.roundedRect(MARGIN, totalBoxY, PAGE_WIDTH - MARGIN * 2, totalBoxHeight, 4, 4, 'F');
+    doc.setTextColor(0);
+    doc.setFontSize(12);
+    doc.setFont("helvetica", "bold");
+    doc.text("Total (Tax Included)", MARGIN + 10, totalBoxY + 20);
+    doc.text(`¥${totalWithTax.toLocaleString()}`, PAGE_WIDTH - MARGIN - 10, totalBoxY + 20, { align: 'right' });
+
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(11);
+    doc.text("Total (Excl. Tax)", MARGIN + 10, totalBoxY + 40);
+    doc.text(`¥${roundedTaxableTotal.toLocaleString()}`, PAGE_WIDTH - MARGIN - 10, totalBoxY + 40, { align: 'right' });
+
+    doc.text("Consumption Tax (10%)", MARGIN + 10, totalBoxY + 60);
+    doc.text(`¥${taxAmount.toLocaleString()}`, PAGE_WIDTH - MARGIN - 10, totalBoxY + 60, { align: 'right' });
+
+    // === メインテーブル作成 ===
+    doc.autoTable({
+      startY: HEADER_HEIGHT + 90,
+      margin: { left: MARGIN, right: MARGIN },
+      head: [['Type', 'Sub Total', 'Work Load']],
+      body: rows,
+      theme: 'grid',
+      headStyles: { fillColor: ACCENT_COLOR, textColor: 255, fontStyle: 'bold' },
+      styles: { font: 'helvetica', fontSize: 11, cellPadding: 8 },
+      alternateRowStyles: { fillColor: [245, 245, 245] },
+    });
+
+    // === pipeFormのデータ取得とテーブル追加 ===
+    const pipeFormIframe = document.getElementById('pipeForm');
+    let pipeData = [];
+    try {
+      pipeData = pipeFormIframe.contentWindow.getPipeFormData();
+    } catch (e) {
+      console.warn("pipeFormのデータ取得に失敗:", e);
+    }
+
+    // pipeDataが空配列でなくても、全ての行が空の場合を除外
+    const hasNonEmptyRow = pipeData.some(row => {
+      return (row.size && row.size.trim() !== '') || (row.material && row.material.trim() !== '');
+    });
+
+    if (hasNonEmptyRow) {
+      doc.addPage();
+      doc.setFontSize(14);
+      doc.text("Item Description", MARGIN, 40);
+
+      const head = ['Size', 'Material', 'Schedule (SCH)', 'Fitting Typ', 'Valve Type', 'Quantity', 'Unit'];
+
+      const body = pipeData
+        .filter(row => (row.size && row.size.trim() !== '') || (row.material && row.material.trim() !== ''))
+        .map(row => [
+          row.size || '',
+          row.material || '',
+          row.schedule || '',
+          row.shape || '',
+          row.valveType || '',
+          row.cutLength || row.quantity || '',
+          row.unit || ''
+        ]);
+
+      doc.autoTable({
+        startY: 60,
+        head: [head],
+        body: body,
+        margin: { left: MARGIN, right: MARGIN },
+        styles: { fontSize: 10 },
+        headStyles: { fillColor: ACCENT_COLOR, textColor: 255 },
       });
+    }
 
-      if (hasNonEmptyRow) {
-        doc.addPage();
-        doc.setFontSize(14);
-        doc.text("Item Description", MARGIN, 40);
+    // === iframeスクリーンショット処理 ===
+    for (const frame of validFrames) {
+      try {
+        const iframe = document.getElementById(frame.id);
+        const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
 
-        const head = ['Size', 'Material', 'Schedule (SCH)', 'Fitting Typ', 'Valve Type', 'Quantity', 'Unit'];
+        // 余白除去
+        iframeDoc.body.style.margin = '0';
+        iframeDoc.body.style.padding = '0';
+        iframeDoc.documentElement.style.margin = '0';
+        iframeDoc.documentElement.style.padding = '0';
 
-        const body = pipeData
-          .filter(row => (row.size && row.size.trim() !== '') || (row.material && row.material.trim() !== ''))
-          .map(row => [
-            row.size || '',
-            row.material || '',
-            row.schedule || '',
-            row.shape || '',
-            row.valveType || '',
-            row.cutLength || row.quantity || '',
-            row.unit || ''
-          ]);
-
-        doc.autoTable({
-          startY: 60,
-          head: [head],
-          body: body,
-          margin: { left: MARGIN, right: MARGIN },
-          styles: { fontSize: 10 },
-          headStyles: { fillColor: ACCENT_COLOR, textColor: 255 },
+        const canvas = await html2canvas(iframeDoc.body, {
+          scale: 1,
+          useCORS: true,
+          backgroundColor: '#ffffff',
+          scrollX: 0,
+          scrollY: 0,
+          windowWidth: iframeDoc.documentElement.scrollWidth,
+          windowHeight: iframeDoc.documentElement.scrollHeight
         });
-      }
 
-      // iframeごとにスクリーンショットをPDFに追加
-      for (const frame of validFrames) {
-        try {
-          const iframe = document.getElementById(frame.id);
-          const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+        const imgData = canvas.toDataURL('image/jpeg', 0.7);
 
-          // 余白除去
-          iframeDoc.body.style.margin = '0';
-          iframeDoc.body.style.padding = '0';
-          iframeDoc.documentElement.style.margin = '0';
-          iframeDoc.documentElement.style.padding = '0';
+        // app5とapp2は特別な画像処理
+        if (frame.id === 'app5' || frame.id === 'app2') {
+          const imgProps = doc.getImageProperties(imgData);
+          const imgWidth = imgProps.width;
+          const imgHeight = imgProps.height;
 
-          const canvas = await html2canvas(iframeDoc.body, {
-            scale: 1,
-            useCORS: true,
-            backgroundColor: '#ffffff',
-            scrollX: 0,
-            scrollY: 0,
-            windowWidth: iframeDoc.documentElement.scrollWidth,
-            windowHeight: iframeDoc.documentElement.scrollHeight
-          });
+          const maxWidth = PAGE_WIDTH - MARGIN * 2;
+          const maxHeight = PAGE_HEIGHT - 40;
 
-          const imgData = canvas.toDataURL('image/jpeg', 0.7);
+          let renderWidth = maxWidth;
+          let renderHeight = (imgHeight * maxWidth) / imgWidth;
 
+          if (renderHeight > maxHeight) {
+            renderHeight = maxHeight;
+            renderWidth = (imgWidth * maxHeight) / imgHeight;
+          }
+
+          const x = (PAGE_WIDTH - renderWidth) / 2;
+          const y = 30;
+
+          doc.addPage();
+          doc.setFontSize(14);
+          doc.text(frame.label, MARGIN, 20);
+          doc.addImage(imgData, 'PNG', x, y, renderWidth, renderHeight);
+        } else {
+          // 通常の画像処理
           const imgProps = doc.getImageProperties(imgData);
           const pdfWidth = PAGE_WIDTH - MARGIN * 2;
           const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
@@ -420,58 +456,28 @@
           doc.addPage();
           doc.setFontSize(14);
           doc.text(frame.label, MARGIN, 20);
-
-          if (frame.id === 'app5' || frame.id === 'app2') {            // app5だけアスペクト比を保って中央に表示
-            const imgWidth = imgProps.width;
-            const imgHeight = imgProps.height;
-
-            const maxWidth = PAGE_WIDTH - MARGIN * 2;
-            const maxHeight = PAGE_HEIGHT - 40;
-
-            let renderWidth = maxWidth;
-            let renderHeight = (imgHeight * maxWidth) / imgWidth;
-
-            if (renderHeight > maxHeight) {
-              renderHeight = maxHeight;
-              renderWidth = (imgWidth * maxHeight) / imgHeight;
-            }
-
-            const x = (PAGE_WIDTH - renderWidth) / 2;
-            const y = 30;
-
-            doc.addImage(imgData, 'PNG', x, y, renderWidth, renderHeight);
-          } else {
-            // 通常通り横幅固定・高さ縮小で描画
-            const pdfWidth = PAGE_WIDTH - MARGIN * 2;
-            const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-            const maxImgHeight = PAGE_HEIGHT - 40;
-            const pdfHeightClamped = Math.min(pdfHeight, maxImgHeight);
-
-            doc.addImage(imgData, 'PNG', MARGIN, 30, pdfWidth, pdfHeightClamped);
-          }
-
-
-        } catch (err) {
-          doc.addPage();
-          doc.text(`${frame.label} - スクリーンショット取得失敗`, MARGIN, 50);
+          doc.addImage(imgData, 'PNG', MARGIN, 30, pdfWidth, pdfHeightClamped);
         }
+      } catch (err) {
+        doc.addPage();
+        doc.text(`${frame.label} - スクリーンショット取得失敗`, MARGIN, 50);
       }
-
-      // フッター（ページ番号）
-      const totalPages = doc.internal.getNumberOfPages();
-
-      for (let i = 1; i <= totalPages; i++) {
-        doc.setPage(i);
-        const y = PAGE_HEIGHT - FOOTER_HEIGHT + 10;
-        doc.setFontSize(10);
-        doc.setTextColor(150);
-        doc.text(`Page ${i} / ${totalPages}`, PAGE_WIDTH - MARGIN, y, { align: 'right' });
-      }
-
-      doc.save("YUMIKOU Inc.pdf");
     }
-  </script>
 
+    // === フッター作成 (ページ番号) ===
+    const totalPages = doc.internal.getNumberOfPages();
+    for (let i = 1; i <= totalPages; i++) {
+      doc.setPage(i);
+      const y = PAGE_HEIGHT - FOOTER_HEIGHT + 10;
+      doc.setFontSize(10);
+      doc.setTextColor(150);
+      doc.text(`Page ${i} / ${totalPages}`, PAGE_WIDTH - MARGIN, y, { align: 'right' });
+    }
+
+    // PDF保存
+    doc.save("YUMIKOU Inc.pdf");
+  }
+</script>
 
 </body>
 
