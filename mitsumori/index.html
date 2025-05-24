@@ -20,7 +20,7 @@
       color: black;
       text-align: center;
       overflow: hidden;
-      height: 100%;
+      height: calc(var(--vh, 1vh) * 100);
     }
 
     body {
@@ -154,6 +154,11 @@
       color: #222;
       font-weight: 700;
     }
+
+    input {
+      margin-bottom: 2em;
+      width: 80%;
+    }
   </style>
 </head>
 
@@ -174,6 +179,14 @@
     window.addEventListener('resize', setViewportHeight);
     window.addEventListener('orientationchange', setViewportHeight);
     setViewportHeight();
+
+    document.addEventListener('focusin', () => {
+      // 入力フォーカス時にスクロール位置を制御
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+      }, 100); // 少し遅延させる
+    });
+
 
     // 質問と選択肢
     const questions = [
