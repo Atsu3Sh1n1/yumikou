@@ -6,15 +6,13 @@
   <style>
     body {
       font-family: 'Segoe UI', 'メイリオ', sans-serif;
-      background-color: #f7f9fa;
-      padding: 40px;
+      padding: 6px;
       color: #333;
     }
 
     .container {
       max-width: 800px;
       margin: auto;
-      background: #fff;
       padding: 30px;
       border-left: 5px solid #3498db;
       box-shadow: 0 0 10px rgba(0,0,0,0.1);
@@ -22,6 +20,7 @@
     }
 
     h1 {
+      font-size: 24px;
       text-align: center;
       color: #2c3e50;
       margin-bottom: 30px;
@@ -81,11 +80,13 @@
 <body>
 
   <div class="container">
-    <h1>足場工事 出来高計算</h1>
+    <h1>足場工事 出来高計算機</h1>
+    
 
     <!-- 基本面積 -->
     <label for="area">足場面積（㎡）</label>
     <input type="number" id="area" placeholder="例: 250">
+    <span style="font-size: 0.8em; color: #0059ff">ビケ足場1スパン(1.8m×1.8m)約3.24㎡</span>
 
     <!-- 単価 -->
     <label for="unitPrice">足場単価（円/㎡）</label>
