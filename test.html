@@ -8,7 +8,6 @@
     <style>
         body {
             font-family: sans-serif;
-            
             color: #fff;
             margin: 0;
             padding: 1rem;
@@ -34,7 +33,6 @@
             overflow: hidden;
             height: 55px;
             font-size: 1rem;
-            background: #222;
             display: flex;
             align-items: center;
             padding-left: 90px;
@@ -48,7 +46,7 @@
             text-align: right;
             margin-right: 10px;
             font-size: 1rem;
-            color: #ccc;
+            color: #000000;
             user-select: none;
             font-weight: 600;
         }
@@ -97,7 +95,7 @@
 
         .time-scale {
             margin-left: 90px;
-            height: 30px;
+            height: 45px;
             position: relative;
             user-select: none;
             font-size: 0.85rem;
@@ -108,7 +106,6 @@
 
         .time-tick {
             position: absolute;
-            top: 0;
             transform: translateX(-50%);
             height: 30px;
             display: flex;
@@ -117,6 +114,18 @@
             font-size: 0.75rem;
             color: #888;
             cursor: default;
+        }
+
+        .time-tick.lower {
+            top: 15px;
+        }
+
+        .time-tick.upper {
+            top: 0;
+        }
+
+        .time-tick.lower .line {
+            display: none;
         }
 
         .time-tick .line {
@@ -191,38 +200,39 @@
             block.appendChild(segment);
         });
 
-        // 時間目盛りと区切り線作成
         const timeScale = document.getElementById("timeScale");
         const scaleStart = startBase;
         const scaleEnd = startBase + fullMinutes;
 
-        // まずスケジュール開始時刻をセット（重複なし）
         const tickTimesSet = new Set(schedule.map(s => toMinutes(s.start)));
-        tickTimesSet.add(scaleEnd); // 最後に17:00も追加
+        tickTimesSet.add(scaleEnd);
 
-        // 配列化してソート
         const tickTimes = Array.from(tickTimesSet).sort((a, b) => a - b);
 
+        let lastLeft = -10;
         tickTimes.forEach(t => {
             const tick = document.createElement("div");
-            tick.className = "time-tick";
-
-            // 左位置%計算
             const leftPercent = ((t - scaleStart) / fullMinutes) * 100;
             tick.style.left = `${leftPercent}%`;
 
-            // 縦線
-            const line = document.createElement("div");
-            line.className = "line";
-            tick.appendChild(line);
-
-            // 時刻文字列
             const h = Math.floor(t / 60);
             const m = t % 60;
             const timeText = `${h}:${m.toString().padStart(2, "0")}`;
 
             const span = document.createElement("span");
             span.textContent = timeText;
+
+            const tickWidth = 30; // 想定幅
+            if (leftPercent - lastLeft < (tickWidth / timeScale.offsetWidth) * 100) {
+                tick.className = "time-tick lower";
+            } else {
+                tick.className = "time-tick upper";
+                lastLeft = leftPercent;
+            }
+
+            const line = document.createElement("div");
+            line.className = "line";
+            tick.appendChild(line);
             tick.appendChild(span);
 
             timeScale.appendChild(tick);
