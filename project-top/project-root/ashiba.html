@@ -9,13 +9,21 @@
     <style>
         body {
             font-family: sans-serif;
-            max-width: 800px;
-            width: 100%;
-            /* ← これを追加 */
-            padding: 8px;
+            text-align: center;
+            width: 300px;
+
+
+            margin: 0 auto;
+
+
+        }
+
+        .container {
+            width: 300px;
             margin: 20px auto;
-            box-sizing: border-box;
-            /* ← パディング込みで幅を計算 */
+            padding: 8px;
+            background: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
 
 
@@ -30,30 +38,55 @@
             border: 1px solid #ccc;
             padding: 8px;
             text-align: center;
+
         }
 
-        th {}
+        .subtotal {
+            padding: 0px 2px;
+
+            font-size: 0.8em;
+        }
+
+        input.unit-price,
+        input.quantity {
+            width: 40px;
+        }
+
+        
+        input.material-name {
+            width: 60px;
+
+        }
+
 
         input[type="text"] {
-            width: 80px;
+            
             text-align: right;
-            font-size: 1em;
+            font-size: 0.8em;
         }
 
         fieldset {
             margin-top: 20px;
+
         }
 
         #result {
             margin-top: 20px;
-            font-size: 1.5em;
+            font-size: 1em;
             font-weight: bold;
+
         }
 
         button {
             margin-top: 10px;
-            padding: 6px 12px;
-            font-size: 1.2em;
+            padding: 4px 10px;
+            font-size: 1em;
+
+        }
+
+        button.delete-row {
+            font-size: 0.3em;
+            padding: 1px 1px;
         }
 
         .footer {
@@ -73,110 +106,111 @@
 </head>
 
 <body>
+    <div class="container">
+        <h2>足場施工費算出機(開発中)</h2>
+        <div class="footer">
+            <a href="https://atsu3sh1n1.github.io/yumikou/" target="_blank">Created by YUMIKOU Inc.</a>
+        </div>
 
-    <h2>足場施工費算出機(開発中)</h2>
-    <div class="footer">
-        <a href="https://atsu3sh1n1.github.io/yumikou/" target="_blank">Created by YUMIKOU Inc.</a>
+        <table id="materialTable">
+            <thead>
+                <tr>
+                    <th>材料名</th>
+                    <th>単価</th>
+                    <th>個数</th>
+                    <th>小計</th>
+                    <th>削除</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><input type="text" class="material-name" value="単管" /></td>
+                    <td><input type="text" class="unit-price" inputmode="numeric" pattern="[0-9]*" value="80" /></td>
+                    <td><input type="text" class="quantity" inputmode="numeric" pattern="[0-9]*" placeholder="0" /></td>
+                    <td class="subtotal">0</td>
+                    <td><button class="delete-row">×</button></td>
+                </tr>
+                <tr>
+                    <td><input type="text" class="material-name" value="クランプ" /></td>
+                    <td><input type="text" class="unit-price" inputmode="numeric" pattern="[0-9]*" value="15" /></td>
+                    <td><input type="text" class="quantity" inputmode="numeric" pattern="[0-9]*" placeholder="0" /></td>
+                    <td class="subtotal">0</td>
+                    <td><button class="delete-row">×</button></td>
+                </tr>
+                <tr>
+                    <td><input type="text" class="material-name" value="足場板" /></td>
+                    <td><input type="text" class="unit-price" inputmode="numeric" pattern="[0-9]*" value="120" /></td>
+                    <td><input type="text" class="quantity" inputmode="numeric" pattern="[0-9]*" placeholder="0" /></td>
+                    <td class="subtotal">0</td>
+                    <td><button class="delete-row">×</button></td>
+                </tr>
+                <tr>
+                    <td><input type="text" class="material-name" value="ジャッキベース" /></td>
+                    <td><input type="text" class="unit-price" inputmode="numeric" pattern="[0-9]*" value="50" /></td>
+                    <td><input type="text" class="quantity" inputmode="numeric" pattern="[0-9]*" placeholder="0" /></td>
+                    <td class="subtotal">0</td>
+                    <td><button class="delete-row">×</button></td>
+                </tr>
+                <tr>
+                    <td><input type="text" class="material-name" value="単管 1m" /></td>
+                    <td><input type="text" class="unit-price" inputmode="numeric" pattern="[0-9]*" value="50" /></td>
+                    <td><input type="text" class="quantity" inputmode="numeric" pattern="[0-9]*" placeholder="0" /></td>
+                    <td class="subtotal">0</td>
+                    <td><button class="delete-row">×</button></td>
+                </tr>
+                <tr>
+                    <td><input type="text" class="material-name" value="単管 1.5m" /></td>
+                    <td><input type="text" class="unit-price" inputmode="numeric" pattern="[0-9]*" value="50" /></td>
+                    <td><input type="text" class="quantity" inputmode="numeric" pattern="[0-9]*" placeholder="0" /></td>
+                    <td class="subtotal">0</td>
+                    <td><button class="delete-row">×</button></td>
+                </tr>
+                <tr>
+                    <td><input type="text" class="material-name" value="単管 2m" /></td>
+                    <td><input type="text" class="unit-price" inputmode="numeric" pattern="[0-9]*" value="50" /></td>
+                    <td><input type="text" class="quantity" inputmode="numeric" pattern="[0-9]*" placeholder="0" /></td>
+                    <td class="subtotal">0</td>
+                    <td><button class="delete-row">×</button></td>
+                </tr>
+                <tr>
+                    <td><input type="text" class="material-name" value="単管 2.5m" /></td>
+                    <td><input type="text" class="unit-price" inputmode="numeric" pattern="[0-9]*" value="50" /></td>
+                    <td><input type="text" class="quantity" inputmode="numeric" pattern="[0-9]*" placeholder="0" /></td>
+                    <td class="subtotal">0</td>
+                    <td><button class="delete-row">×</button></td>
+                </tr>
+                <tr>
+                    <td><input type="text" class="material-name" value="単管 1m" /></td>
+                    <td><input type="text" class="unit-price" inputmode="numeric" pattern="[0-9]*" value="50" /></td>
+                    <td><input type="text" class="quantity" inputmode="numeric" pattern="[0-9]*" placeholder="0" /></td>
+                    <td class="subtotal">0</td>
+                    <td><button class="delete-row">×</button></td>
+                </tr>
+                <tr>
+                    <td><input type="text" class="material-name" value="単管 1m" /></td>
+                    <td><input type="text" class="unit-price" inputmode="numeric" pattern="[0-9]*" value="50" /></td>
+                    <td><input type="text" class="quantity" inputmode="numeric" pattern="[0-9]*" placeholder="0" /></td>
+                    <td class="subtotal">0</td>
+                    <td><button class="delete-row">×</button></td>
+                </tr>
+
+            </tbody>
+        </table>
+
+        <button id="addRow">材料を追加</button>
+
+        <label>
+            作業床㎡：<input type="text" id="area" inputmode="numeric" pattern="[0-9]*" placeholder="100" />
+        </label>
+
+        <fieldset>
+            <legend>施工条件係数（任意選択）</legend>
+            <label><input type="checkbox" class="factor" value="0.2"> 高所</label>
+            <label><input type="checkbox" class="factor" value="0.1"> 狭所</label>
+            <label><input type="checkbox" class="factor" value="0.15"> 安全強化</label>
+            <label><input type="checkbox" class="factor" value="0.3"> 急工期</label>
+        </fieldset>
     </div>
-
-    <table id="materialTable">
-        <thead>
-            <tr>
-                <th>材料名</th>
-                <th>単価</th>
-                <th>個数</th>
-                <th>小計</th>
-                <th>削除</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td><input type="text" class="material-name" value="単管" /></td>
-                <td><input type="text" class="unit-price" inputmode="numeric" pattern="[0-9]*" value="80" /></td>
-                <td><input type="text" class="quantity" inputmode="numeric" pattern="[0-9]*" placeholder="0" /></td>
-                <td class="subtotal">0</td>
-                <td><button class="delete-row">×</button></td>
-            </tr>
-            <tr>
-                <td><input type="text" class="material-name" value="クランプ" /></td>
-                <td><input type="text" class="unit-price" inputmode="numeric" pattern="[0-9]*" value="15" /></td>
-                <td><input type="text" class="quantity" inputmode="numeric" pattern="[0-9]*" placeholder="0" /></td>
-                <td class="subtotal">0</td>
-                <td><button class="delete-row">×</button></td>
-            </tr>
-            <tr>
-                <td><input type="text" class="material-name" value="足場板" /></td>
-                <td><input type="text" class="unit-price" inputmode="numeric" pattern="[0-9]*" value="120" /></td>
-                <td><input type="text" class="quantity" inputmode="numeric" pattern="[0-9]*" placeholder="0" /></td>
-                <td class="subtotal">0</td>
-                <td><button class="delete-row">×</button></td>
-            </tr>
-            <tr>
-                <td><input type="text" class="material-name" value="ジャッキベース" /></td>
-                <td><input type="text" class="unit-price" inputmode="numeric" pattern="[0-9]*" value="50" /></td>
-                <td><input type="text" class="quantity" inputmode="numeric" pattern="[0-9]*" placeholder="0" /></td>
-                <td class="subtotal">0</td>
-                <td><button class="delete-row">×</button></td>
-            </tr>
-             <tr>
-                <td><input type="text" class="material-name" value="単管 1m" /></td>
-                <td><input type="text" class="unit-price" inputmode="numeric" pattern="[0-9]*" value="50" /></td>
-                <td><input type="text" class="quantity" inputmode="numeric" pattern="[0-9]*" placeholder="0" /></td>
-                <td class="subtotal">0</td>
-                <td><button class="delete-row">×</button></td>
-            </tr>
-             <tr>
-                <td><input type="text" class="material-name" value="単管 1.5m" /></td>
-                <td><input type="text" class="unit-price" inputmode="numeric" pattern="[0-9]*" value="50" /></td>
-                <td><input type="text" class="quantity" inputmode="numeric" pattern="[0-9]*" placeholder="0" /></td>
-                <td class="subtotal">0</td>
-                <td><button class="delete-row">×</button></td>
-            </tr>
-             <tr>
-                <td><input type="text" class="material-name" value="単管 2m" /></td>
-                <td><input type="text" class="unit-price" inputmode="numeric" pattern="[0-9]*" value="50" /></td>
-                <td><input type="text" class="quantity" inputmode="numeric" pattern="[0-9]*" placeholder="0" /></td>
-                <td class="subtotal">0</td>
-                <td><button class="delete-row">×</button></td>
-            </tr>
-             <tr>
-                <td><input type="text" class="material-name" value="単管 2.5m" /></td>
-                <td><input type="text" class="unit-price" inputmode="numeric" pattern="[0-9]*" value="50" /></td>
-                <td><input type="text" class="quantity" inputmode="numeric" pattern="[0-9]*" placeholder="0" /></td>
-                <td class="subtotal">0</td>
-                <td><button class="delete-row">×</button></td>
-            </tr>
-             <tr>
-                <td><input type="text" class="material-name" value="単管 1m" /></td>
-                <td><input type="text" class="unit-price" inputmode="numeric" pattern="[0-9]*" value="50" /></td>
-                <td><input type="text" class="quantity" inputmode="numeric" pattern="[0-9]*" placeholder="0" /></td>
-                <td class="subtotal">0</td>
-                <td><button class="delete-row">×</button></td>
-            </tr> <tr>
-                <td><input type="text" class="material-name" value="単管 1m" /></td>
-                <td><input type="text" class="unit-price" inputmode="numeric" pattern="[0-9]*" value="50" /></td>
-                <td><input type="text" class="quantity" inputmode="numeric" pattern="[0-9]*" placeholder="0" /></td>
-                <td class="subtotal">0</td>
-                <td><button class="delete-row">×</button></td>
-            </tr>
-
-        </tbody>
-    </table>
-
-    <button id="addRow">材料を追加</button>
-
-    <label>
-        作業床㎡：<input type="text" id="area" inputmode="numeric" pattern="[0-9]*" placeholder="100" />
-    </label>
-
-    <fieldset>
-        <legend>施工条件係数（任意選択）</legend>
-        <label><input type="checkbox" class="factor" value="0.2"> 高所</label>
-        <label><input type="checkbox" class="factor" value="0.1"> 狭所</label>
-        <label><input type="checkbox" class="factor" value="0.15"> 安全強化</label>
-        <label><input type="checkbox" class="factor" value="0.3"> 急工期</label>
-    </fieldset>
-
     <div id="result">施工費合計：0 円</div>
 
     <script>
