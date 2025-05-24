@@ -153,7 +153,7 @@
       const group = document.createElement("div");
       group.className = "form-group";
       group.innerHTML = `
-      <div class="form-row">${label} / ${factor}</div>
+<div class="form-row">${label} / <span style="color: red; display: inline;">${factor}</span></div>
       <div class="input-group">
         <input type="number" inputmode="numeric" id="${id}" placeholder="人" min="0" />
         <input type="number" inputmode="numeric" id="${id}d" placeholder="日" min="0" />
