@@ -1,37 +1,35 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <title>足場工事 出来高計算フォーム</title>
+  <meta charset="UTF-8" />
+  <title>足場工事 出来高計算（面積基準）</title>
   <style>
     body {
       font-family: 'Segoe UI', 'メイリオ', sans-serif;
-      padding: 6px;
+      padding: 10px;
+      background: #f4f6f8;
       color: #333;
     }
-
     .container {
       max-width: 800px;
       margin: auto;
+      background: #fff;
       padding: 30px;
       border-left: 5px solid #3498db;
       box-shadow: 0 0 10px rgba(0,0,0,0.1);
-      border-radius: 6px;
+      border-radius: 8px;
     }
-
     h1 {
       font-size: 24px;
       text-align: center;
       color: #2c3e50;
-      margin-bottom: 30px;
+      margin-bottom: 25px;
     }
-
     label {
       display: block;
       margin-top: 15px;
       font-weight: bold;
     }
-
     input[type="number"], select {
       width: 100%;
       padding: 10px;
@@ -40,17 +38,11 @@
       border: 1px solid #ccc;
       border-radius: 4px;
     }
-
-    .checkbox-group {
-      margin-top: 10px;
-    }
-
     .checkbox-group label {
       font-weight: normal;
       display: block;
       margin: 4px 0;
     }
-
     button {
       margin-top: 25px;
       padding: 12px 25px;
@@ -61,11 +53,9 @@
       border-radius: 4px;
       cursor: pointer;
     }
-
     button:hover {
       background-color: #2980b9;
     }
-
     .result {
       margin-top: 30px;
       background: #ecf0f1;
@@ -75,93 +65,94 @@
       font-weight: bold;
       border-radius: 4px;
     }
+    small {
+      color: #666;
+      font-size: 0.85em;
+    }
   </style>
 </head>
 <body>
 
   <div class="container">
-    <h1>足場工事 出来高計算機</h1>
-    
+    <h1>足場工事 出来高計算（調整中）</h1>
 
-    <!-- 基本面積 -->
+    <!-- 面積 -->
     <label for="area">足場面積（㎡）</label>
-    <input type="number" id="area" placeholder="例: 250">
-    <span style="font-size: 0.8em; color: #0059ff">ビケ足場1スパン(1.8m×1.8m)約3.24㎡</span>
+    <input type="number" id="area" placeholder="例: 250" />
+
+    <small>※ 1スパン（1.8m×1.8m）≒ 3.24㎡</small>
 
     <!-- 単価 -->
-    <label for="unitPrice">足場単価（円/㎡）</label>
-    <input type="number" id="unitPrice" placeholder="例: 4500">
+    <label for="unitPrice">基本単価（円/㎡）</label>
+    <input type="number" id="unitPrice" pattern="[0-9]*" placeholder="例: 3500" />
 
-    <!-- 階数補正 -->
-    <label for="floor">施工階数（1階=0, 2階=1, ...）</label>
-    <input type="number" id="floor" placeholder="例: 3">
+    <!-- 補正単価 -->
+    <label for="floorAdj">階数補正（フロア階数）</label>
+    <input type="number" id="floorAdj" placeholder="フロア階数" />
 
-    <!-- 運搬距離 -->
-    <label for="distance">搬入出距離（片道m）</label>
-    <input type="number" id="distance" placeholder="例: 50">
+    <label for="distanceAdj">搬入出距離補正（ｍ）</label>
+    <input type="number" id="distanceAdj" placeholder="例: 100ｍ" />
 
-    <!-- 解体作業 -->
-    <label for="disassemble">解体作業あり？</label>
-    <select id="disassemble">
-      <option value="1">あり</option>
-      <option value="0">なし</option>
-    </select>
+    <label for="disassembleAdj">解体作業補正（円/㎡）</label>
+    <input type="number" id="disassembleAdj" placeholder="例: 300" />
 
     <!-- 安全対策 -->
-    <label>安全対策（該当するものすべて）</label>
+    <label>安全対策（加算単価/㎡）</label>
     <div class="checkbox-group">
-      <label><input type="checkbox" class="safety" value="1000"> 手摺設置</label>
-      <label><input type="checkbox" class="safety" value="1500"> 親綱設置</label>
-      <label><input type="checkbox" class="safety" value="2000"> 朝礼参加・KY記録</label>
+      <label><input type="checkbox" class="safety" value="100" /> 手摺設置</label>
+      <label><input type="checkbox" class="safety" value="150" /> 親綱設置</label>
+      <label><input type="checkbox" class="safety" value="200" /> 開口部養生</label>
     </div>
 
-    <!-- 特別条件 -->
-    <label for="bonus">特殊条件（夜間・狭小地など加算）</label>
-    <input type="number" id="bonus" placeholder="円単位で直接加算（例：5000）">
+    <!-- 特殊条件 -->
+    <label for="bonus">特殊条件（直接加算：円）</label>
+    <input type="number" id="bonus" placeholder="例: 5000" />
 
     <button onclick="calculate()">計算する</button>
 
-    <!-- 結果 -->
     <div class="result" id="result">ここに出来高が表示されます</div>
   </div>
 
   <script>
     function calculate() {
-      // 入力値取得
       const area = parseFloat(document.getElementById("area").value);
       const unitPrice = parseFloat(document.getElementById("unitPrice").value);
-      const floor = parseInt(document.getElementById("floor").value) || 0;
-      const distance = parseFloat(document.getElementById("distance").value) || 0;
-      const disassemble = parseInt(document.getElementById("disassemble").value);
+      const floorAdjInput = parseFloat(document.getElementById("floorAdj").value) || 0;
+      const distanceAdjInput = parseFloat(document.getElementById("distanceAdj").value) || 0;
+      const disassembleAdjInput = parseFloat(document.getElementById("disassembleAdj").value) || 0;
       const bonus = parseFloat(document.getElementById("bonus").value) || 0;
 
-      // 入力バリデーション
       if (isNaN(area) || isNaN(unitPrice)) {
         document.getElementById("result").innerText = "面積と単価は必須です。";
         return;
       }
 
-      // 安全対策コスト合計
-      const safetyOptions = document.querySelectorAll(".safety:checked");
-      let safetyCost = 0;
-      safetyOptions.forEach(opt => {
-        safetyCost += parseInt(opt.value);
+      // --- 補正倍率（ここを調整してください） ---
+      const COEFFICIENTS = {
+        floorAdj: 1.2,       // 階数補正の倍率（例: 1.2倍）
+        distanceAdj: 0.8,    // 搬入出距離補正の倍率（例: 0.8倍）
+        disassembleAdj: 1.1, // 解体作業補正の倍率（例: 1.1倍）
+        safetyAdj: 1.0       // 安全対策の倍率（例: 1.0倍）
+      };
+      // -----------------------------------------
+
+      // 安全対策の㎡加算
+      let safetySum = 0;
+      document.querySelectorAll(".safety:checked").forEach(cb => {
+        safetySum += parseFloat(cb.value);
       });
+      safetySum *= COEFFICIENTS.safetyAdj;
 
-      // 面積ベース出来高
-      let baseTotal = area * unitPrice;
+      // 各補正値に倍率をかける
+      const floorAdj = floorAdjInput * COEFFICIENTS.floorAdj;
+      const distanceAdj = distanceAdjInput * COEFFICIENTS.distanceAdj;
+      const disassembleAdj = disassembleAdjInput * COEFFICIENTS.disassembleAdj;
 
-      // 階数補正（1階上がるごとに+3%）
-      const floorAdj = 1 + floor * 0.03;
+      // 単価総和
+      const totalPerM2 = unitPrice + floorAdj + distanceAdj + disassembleAdj + safetySum;
 
-      // 搬入距離補正（50mごとに+2%）
-      const distanceAdj = 1 + Math.floor(distance / 50) * 0.02;
-
-      // 解体補正（あり＝+30%）
-      const disassembleAdj = disassemble === 1 ? 1.3 : 1.0;
-
-      // 総出来高計算
-      const total = baseTotal * floorAdj * distanceAdj * disassembleAdj + safetyCost + bonus;
+      // 出来高計算
+      const total = totalPerM2 * area + bonus;
 
       document.getElementById("result").innerText = `出来高合計：${total.toLocaleString()} 円（税込）`;
     }
