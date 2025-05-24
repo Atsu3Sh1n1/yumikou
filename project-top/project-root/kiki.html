@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <title>機器据付工事情報チェックリスト</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 40px;
+            background-color: #f8f9fa;
+        }
+
+        h1,
+        h2 {
+            color: #2c3e50;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 40px;
+        }
+
+        th,
+        td {
+            border: 1px solid #ccc;
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #e9ecef;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f1f1f1;
+        }
+
+        .section-title {
+            margin-top: 50px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>プラント配管工事向け：機器据付工事情報チェックリスト</h1>
+
+    <h2 class="section-title">1. 機器概要情報</h2>
+    <table>
+        <tr>
+            <th>項目</th>
+            <th>内容</th>
+        </tr>
+        <tr>
+            <td>機器名称</td>
+            <td>（例：熱交換器、反応槽など）</td>
+        </tr>
+        <tr>
+            <td>機器型式 / 型番</td>
+            <td>メーカー型式や社内管理番号</td>
+        </tr>
+        <tr>
+            <td>用途</td>
+            <td>プロセス中の役割（例：冷却、混合）</td>
+        </tr>
+        <tr>
+            <td>材質</td>
+            <td>例：SUS304、SS400</td>
+        </tr>
+        <tr>
+            <td>重量</td>
+            <td>kg 単位</td>
+        </tr>
+        <tr>
+            <td>サイズ（W×D×H）</td>
+            <td>mm 単位</td>
+        </tr>
+    </table>
+
+    <h2 class="section-title">2. 据付位置情報</h2>
+    <table>
+        <tr>
+            <th>項目</th>
+            <th>内容</th>
+        </tr>
+        <tr>
+            <td>設置フロア / 高さ</td>
+            <td>地上、地階、架台上など</td>
+        </tr>
+        <tr>
+            <td>X・Y・Z座標</td>
+            <td>基準点からの据付位置</td>
+        </tr>
+        <tr>
+            <td>アンカーボルト仕様</td>
+            <td>サイズ・ピッチ・本数</td>
+        </tr>
+        <tr>
+            <td>基礎図面の有無</td>
+            <td>PDFやDWGなどの提供可能性</td>
+        </tr>
+        <tr>
+            <td>耐震要件</td>
+            <td>有無とレベル（例：震度6対応）</td>
+        </tr>
+    </table>
+
+    <h2 class="section-title">3. 接続ノズル情報</h2>
+    <table>
+        <tr>
+            <th>項目</th>
+            <th>内容</th>
+        </tr>
+        <tr>
+            <td>ノズル本数</td>
+            <td>配管と接続される口数</td>
+        </tr>
+        <tr>
+            <td>ノズル位置</td>
+            <td>高さ、方向（天、横、下など）</td>
+        </tr>
+        <tr>
+            <td>フランジ仕様</td>
+            <td>JIS / ANSI / その他、呼び径・圧力</td>
+        </tr>
+        <tr>
+            <td>接続方向・角度</td>
+            <td>3Dモデルか図面での明示が望ましい</td>
+        </tr>
+        <tr>
+            <td>特殊要件</td>
+            <td>例：ライニング、ジャケット、ガスケット指定など</td>
+        </tr>
+    </table>
+
+    <h2 class="section-title">4. 据付作業条件</h2>
+    <table>
+        <tr>
+            <th>項目</th>
+            <th>内容</th>
+        </tr>
+        <tr>
+            <td>搬入経路</td>
+            <td>サイズ制限、障害物、クレーン使用可否など</td>
+        </tr>
+        <tr>
+            <td>設置可能時間帯</td>
+            <td>日中限定・夜間工事・休日対応など</td>
+        </tr>
+        <tr>
+            <td>設置エリアの足場・仮設条件</td>
+            <td>工事用足場の有無、スペース制約</td>
+        </tr>
+        <tr>
+            <td>作業環境</td>
+            <td>防爆区域、高温エリアなどの注意事項</td>
+        </tr>
+    </table>
+
+    <h2 class="section-title">5. その他</h2>
+    <table>
+        <tr>
+            <th>項目</th>
+            <th>内容</th>
+        </tr>
+        <tr>
+            <td>図面・3Dデータの提供可否</td>
+            <td>PDF, DXF, STEP など</td>
+        </tr>
+        <tr>
+            <td>現地調査の予定</td>
+            <td>立ち合いの必要有無</td>
+        </tr>
+        <tr>
+            <td>施工上の制約条件</td>
+            <td>例：隣接設備稼働中、清浄区域など</td>
+        </tr>
+    </table>
+    <div class="footer">
+        <a href="https://atsu3sh1n1.github.io/yumikou/" target="_blank">Created by YUMIKOU Inc.</a>
+    </div>
+</body>
+
+</html>
