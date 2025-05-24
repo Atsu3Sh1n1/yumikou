@@ -795,10 +795,12 @@
   </script>
   <script>
     // アコーディオン動作
-    document.querySelectorAll('.accordion').forEach(button => {
-      button.addEventListener('click', () => {
-        button.classList.toggle('active');
-        const panel = button.nextElementSibling;
+    document.addEventListener("DOMContentLoaded", function () {
+    const accordions = document.querySelectorAll(".accordion");
+    accordions.forEach((accordion) => {
+      accordion.addEventListener("click", function () {
+        this.classList.toggle("active");
+        const panel = this.nextElementSibling;
         if (panel.style.maxHeight) {
           panel.style.maxHeight = null;
         } else {
@@ -806,21 +808,7 @@
         }
       });
     });
-
-    // ケーススタディの表示切替
-    function showCaseStudy(id) {
-      const el = document.getElementById(id);
-      if (el.style.display === "none" || el.style.display === "") {
-        el.style.display = "block";
-      } else {
-        el.style.display = "none";
-      }
-    }
-
-    // 安全動画表示用の仮関数（実装してないなら最低限これ）
-    function showSafetyVideo() {
-      alert("安全指導動画をここに表示する処理を実装してください。");
-    }
+  });
   </script>
 
 </body>
