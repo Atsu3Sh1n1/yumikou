@@ -1,127 +1,126 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8" />
-  <title>正確施工費計算ツール</title>
+  <meta charset="UTF-8">
+  <title>施工費計算ツール</title>
   <style>
-    body { font-family: Arial, sans-serif; padding: 8px; max-width: 600px; margin: 20px auto; }
+    body { font-family: sans-serif; max-width: 700px; margin: 20px auto; }
     table { width: 100%; border-collapse: collapse; margin-top: 10px; }
     th, td { border: 1px solid #ccc; padding: 8px; text-align: center; }
-    th { background: #eee; }
-    input[type="number"] { width: 80px; padding: 5px; }
-    label { margin-right: 15px; }
+    th { background: #f0f0f0; }
+    input[type="number"] { width: 80px; }
     fieldset { margin-top: 20px; }
     #result { margin-top: 20px; font-size: 1.5em; font-weight: bold; }
   </style>
 </head>
 <body>
 
-  <h2>足場施工費計算機（準備中）</h2>
+<h2>足場施工費算出機(準備中)</h2>
 
-  <table>
-    <thead>
-      <tr>
-        <th>材料名</th>
-        <th>単価（円）</th>
-        <th>個数</th>
-        <th>小計（円）</th>
-      </tr>
-    </thead>
-    <tbody id="materialTable">
-      <tr>
-        <td>単管</td>
-        <td><input type="number" class="unitPrice" value="800" min="0" /></td>
-        <td><input type="number" class="quantity" value="0" min="0" /></td>
-        <td class="subtotal">0</td>
-      </tr>
-      <tr>
-        <td>クランプ</td>
-        <td><input type="number" class="unitPrice" value="150" min="0" /></td>
-        <td><input type="number" class="quantity" value="0" min="0" /></td>
-        <td class="subtotal">0</td>
-      </tr>
-      <tr>
-        <td>足場板</td>
-        <td><input type="number" class="unitPrice" value="1200" min="0" /></td>
-        <td><input type="number" class="quantity" value="0" min="0" /></td>
-        <td class="subtotal">0</td>
-      </tr>
-      <tr>
-        <td>ジャッキベース</td>
-        <td><input type="number" class="unitPrice" value="500" min="0" /></td>
-        <td><input type="number" class="quantity" value="0" min="0" /></td>
-        <td class="subtotal">0</td>
-      </tr>
-    </tbody>
-  </table>
+<table id="materialTable">
+  <thead>
+    <tr>
+      <th>材料名</th>
+      <th>単価（見た目）</th>
+      <th>個数</th>
+      <th>小計</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr data-unit-price="800">
+      <td>単管</td>
+      <td>80</td>
+      <td><input type="number" class="quantity" value="0" /></td>
+      <td class="subtotal">0</td>
+    </tr>
+    <tr data-unit-price="150">
+      <td>クランプ</td>
+      <td>15</td>
+      <td><input type="number" class="quantity" value="0" /></td>
+      <td class="subtotal">0</td>
+    </tr>
+    <tr data-unit-price="1200">
+      <td>足場板</td>
+      <td>120</td>
+      <td><input type="number" class="quantity" value="0" /></td>
+      <td class="subtotal">0</td>
+    </tr>
+    <tr data-unit-price="500">
+      <td>ジャッキベース</td>
+      <td>50</td>
+      <td><input type="number" class="quantity" value="0" /></td>
+      <td class="subtotal">0</td>
+    </tr>
+  </tbody>
+</table>
 
-  <label>
-    基本人工単価（円／㎡）：
-    <input type="number" id="baseLaborUnitPrice" value="4000" min="0" step="100" />
-  </label>
+<label>
+  面積（㎡）：
+  <input type="number" id="area" value="100" step="0.1" />
+</label>
 
-  <label>
-    施工面積（㎡）：
-    <input type="number" id="area" value="100" min="0" step="0.1" />
-  </label>
+<fieldset>
+  <legend>施工条件係数（任意選択）</legend>
+  <label><input type="checkbox" class="factor" value="1.2"> 高所</label>
+  <label><input type="checkbox" class="factor" value="1.3"> 狭所</label>
+  <label><input type="checkbox" class="factor" value="1.15"> 安全強化</label>
+  <label><input type="checkbox" class="factor" value="1.1"> 急工期</label>
+</fieldset>
 
-  <fieldset>
-    <legend>施工条件係数（該当するものにチェック）</legend>
-    <label><input type="checkbox" class="factor" value="1.2" /> 高所作業（1.2倍）</label>
-    <label><input type="checkbox" class="factor" value="1.3" /> 狭所作業（1.3倍）</label>
-    <label><input type="checkbox" class="factor" value="1.15" /> 安全対策強化（1.15倍）</label>
-    <label><input type="checkbox" class="factor" value="1.1" /> 急工期（1.1倍）</label>
-  </fieldset>
-
-  <div id="result">施工費合計：0 円</div>
+<div id="result">施工費合計：0 円</div>
 
 <script>
-  const materialTable = document.getElementById('materialTable');
-  const baseLaborUnitPriceInput = document.getElementById('baseLaborUnitPrice');
+  const materialRows = document.querySelectorAll('#materialTable tbody tr');
   const areaInput = document.getElementById('area');
   const factorCheckboxes = document.querySelectorAll('.factor');
   const resultDiv = document.getElementById('result');
 
+  function getUnitPriceFactor() {
+    // 任意に調整可能（将来は指数関数や物価連動もOK）
+    return 1.15;
+  }
+
+  function getAreaFactor(area) {
+    // 微調整可能な面積係数（例：100㎡ → 1.01）
+    return 1 + (area * 0.0001);  // 例：100㎡ → 1.01
+  }
+
   function calculate() {
-    // 材料費合計
-    let materialTotal = 0;
-    const rows = materialTable.querySelectorAll('tr');
-    rows.forEach(row => {
-      const unitPriceInput = row.querySelector('.unitPrice');
+    let baseMaterialCost = 0;
+
+    materialRows.forEach(row => {
+      const unitPrice = parseFloat(row.dataset.unitPrice); // 実際の単価
       const quantityInput = row.querySelector('.quantity');
       const subtotalCell = row.querySelector('.subtotal');
 
-      const unitPrice = parseFloat(unitPriceInput.value) || 0;
-      const quantity = parseFloat(quantityInput.value) || 0;
-      const subtotal = unitPrice * quantity;
-      subtotalCell.textContent = subtotal.toLocaleString();
-      materialTotal += subtotal;
+      const qty = parseFloat(quantityInput.value) || 0;
+      const subtotal = unitPrice * qty;
+
+      subtotalCell.textContent = Math.floor(subtotal).toLocaleString();
+      baseMaterialCost += subtotal;
     });
 
-    // 基本人工費×面積×係数
-    const baseLaborUnitPrice = parseFloat(baseLaborUnitPriceInput.value) || 0;
     const area = parseFloat(areaInput.value) || 0;
+    const unitPriceFactor = getUnitPriceFactor();
+    const areaFactor = getAreaFactor(area);
 
-    let factor = 1;
+    let conditionFactor = 1;
     factorCheckboxes.forEach(cb => {
-      if(cb.checked) {
-        factor *= parseFloat(cb.value);
+      if (cb.checked) {
+        conditionFactor *= parseFloat(cb.value);
       }
     });
 
-    const laborCost = baseLaborUnitPrice * area * factor;
-
-    // 合計施工費
-    const totalCost = materialTotal + laborCost;
-
-    resultDiv.textContent = `施工費合計：${Math.floor(totalCost).toLocaleString()} 円`;
+    const finalCost = baseMaterialCost * unitPriceFactor * areaFactor * conditionFactor;
+    resultDiv.textContent = `施工費合計：${Math.floor(finalCost).toLocaleString()} 円`;
   }
 
-  // イベント設定
-  materialTable.addEventListener('input', calculate);
-  baseLaborUnitPriceInput.addEventListener('input', calculate);
   areaInput.addEventListener('input', calculate);
   factorCheckboxes.forEach(cb => cb.addEventListener('change', calculate));
+  materialRows.forEach(row => {
+    const input = row.querySelector('.quantity');
+    input.addEventListener('input', calculate);
+  });
 
   window.onload = calculate;
 </script>
