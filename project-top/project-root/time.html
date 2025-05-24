@@ -8,7 +8,7 @@
     <style>
         body {
             font-family: sans-serif;
-            
+
             color: #fff;
             margin: 0;
             padding: 1rem;
@@ -34,7 +34,7 @@
             overflow: hidden;
             height: 55px;
             font-size: 1rem;
-            background: #222;
+
             display: flex;
             align-items: center;
             padding-left: 90px;
@@ -48,7 +48,7 @@
             text-align: right;
             margin-right: 10px;
             font-size: 1rem;
-            color: #ccc;
+            color: #000000;
             user-select: none;
             font-weight: 600;
         }
@@ -133,6 +133,12 @@
             color: #0af;
             font-weight: 600;
         }
+
+        .time-scale {
+    height: 45px; /* 30px → 45px にして上下余裕を作る */
+    /* 他はそのまま */
+}
+
     </style>
 </head>
 
@@ -203,13 +209,17 @@
         // 配列化してソート
         const tickTimes = Array.from(tickTimesSet).sort((a, b) => a - b);
 
-        tickTimes.forEach(t => {
+        tickTimes.forEach((t, index) => {
             const tick = document.createElement("div");
             tick.className = "time-tick";
 
             // 左位置%計算
             const leftPercent = ((t - scaleStart) / fullMinutes) * 100;
             tick.style.left = `${leftPercent}%`;
+
+            // 交互に上下ずらす（上位置を交互に変える）
+            // 下にずらす時は top: 15px, 上にずらす時は top: 0px など調整
+            tick.style.top = (index % 2 === 0) ? '0px' : '15px';
 
             // 縦線
             const line = document.createElement("div");
@@ -227,6 +237,7 @@
 
             timeScale.appendChild(tick);
         });
+
 
         const hours = Math.floor(workTime / 60);
         const mins = workTime % 60;
