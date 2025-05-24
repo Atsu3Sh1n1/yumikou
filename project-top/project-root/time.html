@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>タイムテーブル</title>
+    <title>作業タイムテーブル</title>
     <style>
         body {
             font-family: sans-serif;
@@ -13,6 +13,7 @@
             margin: 0;
             padding: 0;
         }
+
 
         h1 {
             text-align: center;
@@ -34,7 +35,6 @@
             overflow: hidden;
             height: 55px;
             font-size: 1rem;
-
             display: flex;
             align-items: center;
             padding-left: 90px;
@@ -97,7 +97,7 @@
 
         .time-scale {
             margin-left: 90px;
-            height: 30px;
+            height: 45px;
             position: relative;
             user-select: none;
             font-size: 0.85rem;
@@ -108,7 +108,6 @@
 
         .time-tick {
             position: absolute;
-            top: 0;
             transform: translateX(-50%);
             height: 30px;
             display: flex;
@@ -117,6 +116,18 @@
             font-size: 0.75rem;
             color: #888;
             cursor: default;
+        }
+
+        .time-tick.lower {
+            top: 30px;
+        }
+
+        .time-tick.upper {
+            top: 0;
+        }
+
+        .time-tick.lower .line {
+            display: none;
         }
 
         .time-tick .line {
@@ -134,12 +145,6 @@
             font-weight: 600;
         }
 
-        .time-scale {
-            height: 45px;
-            /* 30px → 45px にして上下余裕を作る */
-            /* 他はそのまま */
-        }
-
         .footer {
             text-align: center;
             font-size: 11px;
@@ -155,6 +160,7 @@
     <div class="footer">
         <a href="https://atsu3sh1n1.github.io/yumikou/" target="_blank">Created by YUMIKOU Inc.</a>
     </div>
+
 
     <div class="timeline">
         <div class="bar">
@@ -207,47 +213,43 @@
             block.appendChild(segment);
         });
 
-        // 時間目盛りと区切り線作成
         const timeScale = document.getElementById("timeScale");
         const scaleStart = startBase;
         const scaleEnd = startBase + fullMinutes;
 
-        // まずスケジュール開始時刻をセット（重複なし）
         const tickTimesSet = new Set(schedule.map(s => toMinutes(s.start)));
-        tickTimesSet.add(scaleEnd); // 最後に17:00も追加
+        tickTimesSet.add(scaleEnd);
 
-        // 配列化してソート
         const tickTimes = Array.from(tickTimesSet).sort((a, b) => a - b);
 
-        tickTimes.forEach((t, index) => {
+        let lastLeft = -10;
+        tickTimes.forEach(t => {
             const tick = document.createElement("div");
-            tick.className = "time-tick";
-
-            // 左位置%計算
             const leftPercent = ((t - scaleStart) / fullMinutes) * 100;
             tick.style.left = `${leftPercent}%`;
 
-            // 交互に上下ずらす（上位置を交互に変える）
-            // 下にずらす時は top: 15px, 上にずらす時は top: 0px など調整
-            tick.style.top = (index % 2 === 0) ? '0px' : '15px';
-
-            // 縦線
-            const line = document.createElement("div");
-            line.className = "line";
-            tick.appendChild(line);
-
-            // 時刻文字列
             const h = Math.floor(t / 60);
             const m = t % 60;
             const timeText = `${h}:${m.toString().padStart(2, "0")}`;
 
             const span = document.createElement("span");
             span.textContent = timeText;
+
+            const tickWidth = 30; // 想定幅
+            if (leftPercent - lastLeft < (tickWidth / timeScale.offsetWidth) * 100) {
+                tick.className = "time-tick lower";
+            } else {
+                tick.className = "time-tick upper";
+                lastLeft = leftPercent;
+            }
+
+            const line = document.createElement("div");
+            line.className = "line";
+            tick.appendChild(line);
             tick.appendChild(span);
 
             timeScale.appendChild(tick);
         });
-
 
         const hours = Math.floor(workTime / 60);
         const mins = workTime % 60;
