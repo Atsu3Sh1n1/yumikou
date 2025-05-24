@@ -32,28 +32,28 @@
     <tr>
       <td><input type="text" class="material-name" value="単管" /></td>
       <td><input type="text" class="unit-price" inputmode="numeric" pattern="[0-9]*" value="80" /></td>
-      <td><input type="text" class="quantity" inputmode="numeric" pattern="[0-9]*" value="0" /></td>
+      <td><input type="text" class="quantity" inputmode="numeric" pattern="[0-9]*" placeholder="0" /></td>
       <td class="subtotal">0</td>
       <td><button class="delete-row">×</button></td>
     </tr>
     <tr>
       <td><input type="text" class="material-name" value="クランプ" /></td>
       <td><input type="text" class="unit-price" inputmode="numeric" pattern="[0-9]*" value="15" /></td>
-      <td><input type="text" class="quantity" inputmode="numeric" pattern="[0-9]*" value="0" /></td>
+      <td><input type="text" class="quantity" inputmode="numeric" pattern="[0-9]*" placeholder="0" /></td>
       <td class="subtotal">0</td>
       <td><button class="delete-row">×</button></td>
     </tr>
     <tr>
       <td><input type="text" class="material-name" value="足場板" /></td>
       <td><input type="text" class="unit-price" inputmode="numeric" pattern="[0-9]*" value="120" /></td>
-      <td><input type="text" class="quantity" inputmode="numeric" pattern="[0-9]*" value="0" /></td>
+      <td><input type="text" class="quantity" inputmode="numeric" pattern="[0-9]*" placeholder="0" /></td>
       <td class="subtotal">0</td>
       <td><button class="delete-row">×</button></td>
     </tr>
     <tr>
       <td><input type="text" class="material-name" value="ジャッキベース" /></td>
       <td><input type="text" class="unit-price" inputmode="numeric" pattern="[0-9]*" value="50" /></td>
-      <td><input type="text" class="quantity" inputmode="numeric" pattern="[0-9]*" value="0" /></td>
+      <td><input type="text" class="quantity" inputmode="numeric" pattern="[0-9]*" placeholder="0" /></td>
       <td class="subtotal">0</td>
       <td><button class="delete-row">×</button></td>
     </tr>
@@ -63,15 +63,15 @@
 <button id="addRow">材料を追加</button>
 
 <label>
-  面積（㎡）：<input type="text" id="area" inputmode="numeric" pattern="[0-9]*" value="100" />
+  作業床㎡：<input type="text" id="area" inputmode="numeric" pattern="[0-9]*" placeholder="100" />
 </label>
 
 <fieldset>
   <legend>施工条件係数（任意選択）</legend>
   <label><input type="checkbox" class="factor" value="0.2"> 高所</label>
-  <label><input type="checkbox" class="factor" value="0.3"> 狭所</label>
+  <label><input type="checkbox" class="factor" value="0.1"> 狭所</label>
   <label><input type="checkbox" class="factor" value="0.15"> 安全強化</label>
-  <label><input type="checkbox" class="factor" value="0.1"> 急工期</label>
+  <label><input type="checkbox" class="factor" value="0.3"> 急工期</label>
 </fieldset>
 
 <div id="result">施工費合計：0 円</div>
@@ -84,7 +84,7 @@
   const addRowBtn = document.getElementById('addRow');
 
   function getAreaFactor(area) {
-    return area * 0.0001;
+    return area * 0.01;
   }
 
   function getConditionFactor() {
@@ -121,8 +121,8 @@
     const newRow = document.createElement('tr');
     newRow.innerHTML = `
       <td><input type="text" class="material-name" value="" /></td>
-      <td><input type="text" class="unit-price" inputmode="numeric" pattern="[0-9]*" value="0" /></td>
-      <td><input type="text" class="quantity" inputmode="numeric" pattern="[0-9]*" value="0" /></td>
+      <td><input type="text" class="unit-price" inputmode="numeric" pattern="[0-9]*" placeholder="0" /></td>
+      <td><input type="text" class="quantity" inputmode="numeric" pattern="[0-9]*" placeholder="0" /></td>
       <td class="subtotal">0</td>
       <td><button class="delete-row">×</button></td>
     `;
