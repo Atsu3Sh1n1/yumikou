@@ -2,161 +2,129 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8" />
-  <title>足場工事 出来高計算（面積基準）</title>
+  <title>正確施工費計算ツール</title>
   <style>
-    body {
-      font-family: 'Segoe UI', 'メイリオ', sans-serif;
-      padding: 10px;
-      background: #f4f6f8;
-      color: #333;
-    }
-    .container {
-      max-width: 800px;
-      margin: auto;
-      background: #fff;
-      padding: 30px;
-      border-left: 5px solid #3498db;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-      border-radius: 8px;
-    }
-    h1 {
-      font-size: 24px;
-      text-align: center;
-      color: #2c3e50;
-      margin-bottom: 25px;
-    }
-    label {
-      display: block;
-      margin-top: 15px;
-      font-weight: bold;
-    }
-    input[type="number"], select {
-      width: 100%;
-      padding: 10px;
-      font-size: 16px;
-      margin-top: 5px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-    }
-    .checkbox-group label {
-      font-weight: normal;
-      display: block;
-      margin: 4px 0;
-    }
-    button {
-      margin-top: 25px;
-      padding: 12px 25px;
-      font-size: 16px;
-      background-color: #3498db;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-    button:hover {
-      background-color: #2980b9;
-    }
-    .result {
-      margin-top: 30px;
-      background: #ecf0f1;
-      padding: 20px;
-      text-align: center;
-      font-size: 18px;
-      font-weight: bold;
-      border-radius: 4px;
-    }
-    small {
-      color: #666;
-      font-size: 0.85em;
-    }
+    body { font-family: Arial, sans-serif; padding: 8px; max-width: 600px; margin: 20px auto; }
+    table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+    th, td { border: 1px solid #ccc; padding: 8px; text-align: center; }
+    th { background: #eee; }
+    input[type="number"] { width: 80px; padding: 5px; }
+    label { margin-right: 15px; }
+    fieldset { margin-top: 20px; }
+    #result { margin-top: 20px; font-size: 1.5em; font-weight: bold; }
   </style>
 </head>
 <body>
 
-  <div class="container">
-    <h1>足場出来高計算（材料ベースで作り直し中）</h1>
+  <h2>足場施工費計算機（準備中）</h2>
 
-    <!-- 面積 -->
-    <label for="area">足場面積（㎡）</label>
-    <input type="number" id="area" placeholder="例: 250" />
+  <table>
+    <thead>
+      <tr>
+        <th>材料名</th>
+        <th>単価（円）</th>
+        <th>個数</th>
+        <th>小計（円）</th>
+      </tr>
+    </thead>
+    <tbody id="materialTable">
+      <tr>
+        <td>単管</td>
+        <td><input type="number" class="unitPrice" value="800" min="0" /></td>
+        <td><input type="number" class="quantity" value="0" min="0" /></td>
+        <td class="subtotal">0</td>
+      </tr>
+      <tr>
+        <td>クランプ</td>
+        <td><input type="number" class="unitPrice" value="150" min="0" /></td>
+        <td><input type="number" class="quantity" value="0" min="0" /></td>
+        <td class="subtotal">0</td>
+      </tr>
+      <tr>
+        <td>足場板</td>
+        <td><input type="number" class="unitPrice" value="1200" min="0" /></td>
+        <td><input type="number" class="quantity" value="0" min="0" /></td>
+        <td class="subtotal">0</td>
+      </tr>
+      <tr>
+        <td>ジャッキベース</td>
+        <td><input type="number" class="unitPrice" value="500" min="0" /></td>
+        <td><input type="number" class="quantity" value="0" min="0" /></td>
+        <td class="subtotal">0</td>
+      </tr>
+    </tbody>
+  </table>
 
-    <small>※1m×1m=1㎡</small>
+  <label>
+    基本人工単価（円／㎡）：
+    <input type="number" id="baseLaborUnitPrice" value="4000" min="0" step="100" />
+  </label>
 
-    <!-- 単価 -->
-    <label for="unitPrice">基本単価（円/㎡）</label>
-    <input type="number" id="unitPrice" pattern="[0-9]*" value="4500" />
+  <label>
+    施工面積（㎡）：
+    <input type="number" id="area" value="100" min="0" step="0.1" />
+  </label>
 
-    <!-- 補正単価 -->
-    <label for="floorAdj">階数補正（フロア階数）</label>
-    <input type="number" id="floorAdj" placeholder="フロア階数" />
+  <fieldset>
+    <legend>施工条件係数（該当するものにチェック）</legend>
+    <label><input type="checkbox" class="factor" value="1.2" /> 高所作業（1.2倍）</label>
+    <label><input type="checkbox" class="factor" value="1.3" /> 狭所作業（1.3倍）</label>
+    <label><input type="checkbox" class="factor" value="1.15" /> 安全対策強化（1.15倍）</label>
+    <label><input type="checkbox" class="factor" value="1.1" /> 急工期（1.1倍）</label>
+  </fieldset>
 
-    <label for="distanceAdj">搬入出距離補正（ｍ）</label>
-    <input type="number" id="distanceAdj" placeholder="例: 100ｍ" />
+  <div id="result">施工費合計：0 円</div>
 
-    <label for="disassembleAdj">解体作業補正（円/㎡）</label>
-    <input type="number" id="disassembleAdj" placeholder="例: 300" />
+<script>
+  const materialTable = document.getElementById('materialTable');
+  const baseLaborUnitPriceInput = document.getElementById('baseLaborUnitPrice');
+  const areaInput = document.getElementById('area');
+  const factorCheckboxes = document.querySelectorAll('.factor');
+  const resultDiv = document.getElementById('result');
 
-    <!-- 安全対策 -->
-    <label>安全対策（加算単価/㎡）</label>
-    <div class="checkbox-group">
-      <label><input type="checkbox" class="safety" value="100" /> 手摺設置</label>
-      <label><input type="checkbox" class="safety" value="150" /> 親綱設置</label>
-      <label><input type="checkbox" class="safety" value="200" /> 開口部養生</label>
-    </div>
+  function calculate() {
+    // 材料費合計
+    let materialTotal = 0;
+    const rows = materialTable.querySelectorAll('tr');
+    rows.forEach(row => {
+      const unitPriceInput = row.querySelector('.unitPrice');
+      const quantityInput = row.querySelector('.quantity');
+      const subtotalCell = row.querySelector('.subtotal');
 
-    <!-- 特殊条件 -->
-    <label for="bonus">特殊条件（直接加算：円）</label>
-    <input type="number" id="bonus" placeholder="例: 5000" />
+      const unitPrice = parseFloat(unitPriceInput.value) || 0;
+      const quantity = parseFloat(quantityInput.value) || 0;
+      const subtotal = unitPrice * quantity;
+      subtotalCell.textContent = subtotal.toLocaleString();
+      materialTotal += subtotal;
+    });
 
-    <button onclick="calculate()">計算する</button>
+    // 基本人工費×面積×係数
+    const baseLaborUnitPrice = parseFloat(baseLaborUnitPriceInput.value) || 0;
+    const area = parseFloat(areaInput.value) || 0;
 
-    <div class="result" id="result">ここに出来高が表示されます</div>
-  </div>
-
-  <script>
-    function calculate() {
-      const area = parseFloat(document.getElementById("area").value);
-      const unitPrice = parseFloat(document.getElementById("unitPrice").value);
-      const floorAdjInput = parseFloat(document.getElementById("floorAdj").value) || 0;
-      const distanceAdjInput = parseFloat(document.getElementById("distanceAdj").value) || 0;
-      const disassembleAdjInput = parseFloat(document.getElementById("disassembleAdj").value) || 0;
-      const bonus = parseFloat(document.getElementById("bonus").value) || 0;
-
-      if (isNaN(area) || isNaN(unitPrice)) {
-        document.getElementById("result").innerText = "面積と単価は必須です。";
-        return;
+    let factor = 1;
+    factorCheckboxes.forEach(cb => {
+      if(cb.checked) {
+        factor *= parseFloat(cb.value);
       }
+    });
 
-      // --- 補正倍率（ここを調整してください） ---
-      const COEFFICIENTS = {
-        floorAdj: 1.2,       // 階数補正の倍率（例: 1.2倍）
-        distanceAdj: 0.8,    // 搬入出距離補正の倍率（例: 0.8倍）
-        disassembleAdj: 1.1, // 解体作業補正の倍率（例: 1.1倍）
-        safetyAdj: 1.0       // 安全対策の倍率（例: 1.0倍）
-      };
-      // -----------------------------------------
+    const laborCost = baseLaborUnitPrice * area * factor;
 
-      // 安全対策の㎡加算
-      let safetySum = 0;
-      document.querySelectorAll(".safety:checked").forEach(cb => {
-        safetySum += parseFloat(cb.value);
-      });
-      safetySum *= COEFFICIENTS.safetyAdj;
+    // 合計施工費
+    const totalCost = materialTotal + laborCost;
 
-      // 各補正値に倍率をかける
-      const floorAdj = floorAdjInput * COEFFICIENTS.floorAdj;
-      const distanceAdj = distanceAdjInput * COEFFICIENTS.distanceAdj;
-      const disassembleAdj = disassembleAdjInput * COEFFICIENTS.disassembleAdj;
+    resultDiv.textContent = `施工費合計：${Math.floor(totalCost).toLocaleString()} 円`;
+  }
 
-      // 単価総和
-      const totalPerM2 = unitPrice + floorAdj + distanceAdj + disassembleAdj + safetySum;
+  // イベント設定
+  materialTable.addEventListener('input', calculate);
+  baseLaborUnitPriceInput.addEventListener('input', calculate);
+  areaInput.addEventListener('input', calculate);
+  factorCheckboxes.forEach(cb => cb.addEventListener('change', calculate));
 
-      // 出来高計算
-      const total = totalPerM2 * area + bonus;
-
-      document.getElementById("result").innerText = `出来高合計：${total.toLocaleString()} 円（税込）`;
-    }
-  </script>
+  window.onload = calculate;
+</script>
 
 </body>
 </html>
