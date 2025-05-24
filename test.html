@@ -1,260 +1,35 @@
 <!DOCTYPE html>
 <html lang="ja">
-
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>作業タイムテーブル</title>
-    <style>
-        body {
-            font-family: sans-serif;
-            color: #fff;
-            margin: 0;
-            padding: 1rem;
-        }
+  <meta charset="UTF-8">
+  <title>左スワイプ</title>
+  <style>
+    .swipe {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: gray;
+      position: relative;
+      animation: swipeLeft 1.2s infinite;
+      margin: 100px auto;
+    }
 
-        h1 {
-            text-align: center;
-            font-size: 1.5rem;
-            color: #0af;
-            margin-bottom: 1rem;
-        }
+    @keyframes swipeLeft {
+      0%   { left: 0; opacity: 1; }
+      50%  { left: -40px; opacity: 0.5; }
+      100% { left: 0; opacity: 1; }
+    }
 
-        .timeline {
-            display: flex;
-            flex-direction: column;
-            gap: 0.75rem;
-            margin-top: 1rem;
-        }
-
-        .bar {
-            position: relative;
-            border-radius: 8px;
-            overflow: hidden;
-            height: 55px;
-            font-size: 1rem;
-            display: flex;
-            align-items: center;
-            padding-left: 90px;
-            box-sizing: border-box;
-        }
-
-        .label {
-            position: absolute;
-            left: 0;
-            width: 80px;
-            text-align: right;
-            margin-right: 10px;
-            font-size: 1rem;
-            color: #000000;
-            user-select: none;
-            font-weight: 600;
-        }
-
-        .block {
-            flex-grow: 1;
-            height: 100%;
-            position: relative;
-            border-radius: 8px;
-            overflow: visible;
-        }
-
-        .segment {
-            height: 100%;
-            position: absolute;
-            top: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.85rem;
-            color: #fff;
-            white-space: normal;
-            padding: 0 5px;
-            box-sizing: border-box;
-            text-align: center;
-            line-height: 1.2;
-            border-radius: 6px;
-            cursor: default;
-        }
-
-        .work {
-            background: linear-gradient(to right, #10b981 0%, #34d399 30%, #6dff85 70%, #34d399 100%);
-        }
-
-        .break {
-            background-color: #f59e0b;
-        }
-
-        .meet {
-            background-color: #3b82f6;
-        }
-
-        .clean {
-            background-color: #ef4444;
-        }
-
-        .time-scale {
-            margin-left: 90px;
-            height: 45px;
-            position: relative;
-            user-select: none;
-            font-size: 0.85rem;
-            color: #aaa;
-            border-top: 1px solid #444;
-            padding-top: 5px;
-        }
-
-        .time-tick {
-            position: absolute;
-            transform: translateX(-50%);
-            height: 30px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            font-size: 0.75rem;
-            color: #888;
-            cursor: default;
-        }
-
-        .time-tick.lower {
-            top: 15px;
-        }
-
-        .time-tick.upper {
-            top: 0;
-        }
-
-        .time-tick.lower .line {
-            display: none;
-        }
-
-        .time-tick .line {
-            width: 1px;
-            height: 15px;
-            background-color: #555;
-            margin-bottom: 3px;
-        }
-
-        .total {
-            text-align: center;
-            margin-top: 1.5rem;
-            font-size: 1.2rem;
-            color: #0af;
-            font-weight: 600;
-        }
-
-        .footer {
-            text-align: center;
-            font-size: 11px;
-            margin-bottom: 0px;
-            padding: 0;
-        }
-    </style>
+    .label {
+      text-align: center;
+      font-size: 14px;
+      color: #555;
+      margin-top: 10px;
+    }
+  </style>
 </head>
-
 <body>
-
-    <h1>タイムテーブル</h1>
-    <div class="footer">
-        <a href="https://atsu3sh1n1.github.io/yumikou/" target="_blank">Created by YUMIKOU Inc.</a>
-    </div>
-
-
-    <div class="timeline">
-        <div class="bar">
-            <div class="label">7:45〜17:00</div>
-            <div class="block" id="scheduleBar"></div>
-        </div>
-
-        <div class="time-scale" id="timeScale"></div>
-    </div>
-
-    <div class="total" id="totalTime"></div>
-
-    <script>
-        const fullMinutes = (17 * 60 + 0) - (7 * 60 + 45); // 555分 (7:45〜17:00)
-        const schedule = [
-            { start: "07:45", end: "08:00", label: "体操", type: "meet" },
-            { start: "08:00", end: "08:15", label: "朝礼", type: "meet" },
-            { start: "08:15", end: "10:00", label: "作業①", type: "work" },
-            { start: "10:00", end: "10:15", label: "休憩", type: "break" },
-            { start: "10:15", end: "12:00", label: "作業②", type: "work" },
-            { start: "12:00", end: "13:00", label: "昼休", type: "break" },
-            { start: "13:00", end: "15:00", label: "作業③", type: "work" },
-            { start: "15:00", end: "15:15", label: "休憩", type: "break" },
-            { start: "15:15", end: "16:30", label: "作業④", type: "work" },
-            { start: "16:30", end: "17:00", label: "清掃", type: "clean" },
-        ];
-
-        function toMinutes(str) {
-            const [h, m] = str.split(":").map(Number);
-            return h * 60 + m;
-        }
-
-        const startBase = toMinutes("07:45");
-        const block = document.getElementById("scheduleBar");
-        let workTime = 0;
-
-        schedule.forEach(item => {
-            const start = toMinutes(item.start) - startBase;
-            const end = toMinutes(item.end) - startBase;
-            const widthPercent = ((end - start) / fullMinutes) * 100;
-
-            if (item.type === "work") workTime += (end - start);
-
-            const segment = document.createElement("div");
-            segment.className = `segment ${item.type}`;
-            segment.style.left = `${(start / fullMinutes) * 100}%`;
-            segment.style.width = `${widthPercent}%`;
-            segment.title = `${item.start}〜${item.end} ${item.label}`;
-            segment.textContent = `${item.label}`;
-            block.appendChild(segment);
-        });
-
-        const timeScale = document.getElementById("timeScale");
-        const scaleStart = startBase;
-        const scaleEnd = startBase + fullMinutes;
-
-        const tickTimesSet = new Set(schedule.map(s => toMinutes(s.start)));
-        tickTimesSet.add(scaleEnd);
-
-        const tickTimes = Array.from(tickTimesSet).sort((a, b) => a - b);
-
-        let lastLeft = -10;
-        tickTimes.forEach(t => {
-            const tick = document.createElement("div");
-            const leftPercent = ((t - scaleStart) / fullMinutes) * 100;
-            tick.style.left = `${leftPercent}%`;
-
-            const h = Math.floor(t / 60);
-            const m = t % 60;
-            const timeText = `${h}:${m.toString().padStart(2, "0")}`;
-
-            const span = document.createElement("span");
-            span.textContent = timeText;
-
-            const tickWidth = 30; // 想定幅
-            if (leftPercent - lastLeft < (tickWidth / timeScale.offsetWidth) * 100) {
-                tick.className = "time-tick lower";
-            } else {
-                tick.className = "time-tick upper";
-                lastLeft = leftPercent;
-            }
-
-            const line = document.createElement("div");
-            line.className = "line";
-            tick.appendChild(line);
-            tick.appendChild(span);
-
-            timeScale.appendChild(tick);
-        });
-
-        const hours = Math.floor(workTime / 60);
-        const mins = workTime % 60;
-        document.getElementById("totalTime").textContent =
-            `実作業時間：${hours}時間${mins}分（全体${(fullMinutes / 60).toFixed(2)}時間）`;
-    </script>
-
+  <div class="swipe"></div>
+  <div class="label">左にスワイプ</div>
 </body>
-
 </html>
