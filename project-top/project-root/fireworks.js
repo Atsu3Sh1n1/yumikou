@@ -163,7 +163,7 @@ window.addEventListener('DOMContentLoaded', () => {
   // 3秒後にアニメーションを開始
   setTimeout(() => {
     animate();
-  }, 1600); // 3000ミリ秒 (3秒)
+  }, 900); // 3000ミリ秒 (3秒)
 
   // リサイズイベントの最適化
   let resizeTimeout;
