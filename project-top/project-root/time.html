@@ -80,7 +80,7 @@
         }
 
         .work {
-            background: linear-gradient(to right, #10b981 0%, #34d399 30%, #6dff85 70%, #34d399 100%);
+            background: linear-gradient(to right, #14e49f 0%, #10b981 50%, #14e49f 100%);
         }
 
         .break {
@@ -258,7 +258,11 @@
         const mins = workTime % 60;
         document.getElementById("totalTime").textContent =
             `実作業時間：${hours}時間${mins}分（全体${(fullMinutes / 60).toFixed(2)}時間）`;
+
     </script>
+    <div style="text-align: center; font-size: 0.8em; color: #555;">
+        ワークレイショ（Work Ratio）＝<br>「作業員が現場にいる総時間のうち、実際に手を動かしているのは約60％です」
+    </div>
 
 </body>
 
