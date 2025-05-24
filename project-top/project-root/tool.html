@@ -37,8 +37,9 @@
       const years = parseFloat(yearsInput.value);
 
       if (!isNaN(price) && !isNaN(years) && years > 0) {
-        const annual = Math.floor(price / years);
-        resultDiv.textContent = `年間減価償却費：¥${annual.toLocaleString()}`;
+       const monthly = Math.floor(price / years / 12);
+resultDiv.textContent = `月間減価償却費：¥${monthly.toLocaleString()}`;
+
       }
     }
 

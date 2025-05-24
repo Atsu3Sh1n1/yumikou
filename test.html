@@ -1,89 +1,461 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
-    <meta charset="UTF-8">
-    <title>機器据付工事情報チェックリスト</title>
-    <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 40px;
-            background-color: #f8f9fa;
-        }
-        h1, h2 {
-            color: #2c3e50;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 40px;
-        }
-        th, td {
-            border: 1px solid #ccc;
-            padding: 12px;
-            text-align: left;
-        }
-        th {
-            background-color: #e9ecef;
-        }
-        tr:nth-child(even) {
-            background-color: #f1f1f1;
-        }
-        .section-title {
-            margin-top: 50px;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <title>プラント設計判断 MAX支援SPA</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    body {
+      background: #1c1c1c;
+      color: #f1f1f1;
+      font-family: "Meiryo", sans-serif;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+    }
+
+    header {
+      background: #ff3f34;
+      padding: 20px;
+      font-size: 2em;
+      text-align: center;
+      font-weight: bold;
+      letter-spacing: 0.1em;
+      text-shadow: 1px 1px 2px #330000;
+    }
+
+    nav {
+      display: flex;
+      background: #2f3640;
+      box-shadow: inset 0 -3px 5px #ff5e57;
+    }
+
+    nav button {
+      flex: 1;
+      padding: 15px 0;
+      border: none;
+      background: #2f3640;
+      color: white;
+      cursor: pointer;
+      font-size: 1.1em;
+      transition: background 0.3s, color 0.3s;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+    }
+
+    nav button.active,
+    nav button:hover {
+      background: #ff5e57;
+      color: #000;
+      font-weight: 800;
+      box-shadow: 0 2px 8px #ff5e57aa;
+      transform: scale(1.05);
+      z-index: 10;
+    }
+
+    section {
+      display: none;
+      padding: 20px 30px;
+      max-width: 720px;
+      margin: 20px auto;
+      border-radius: 10px;
+      background: #292929dd;
+      box-shadow: 0 0 20px #000 inset;
+      min-height: 320px;
+    }
+
+    section.active {
+      display: block;
+      animation: fadein 0.6s ease forwards;
+    }
+
+    @keyframes fadein {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    input,
+    textarea,
+    select {
+      width: 100%;
+      padding: 12px 14px;
+      margin-top: 10px;
+      background: #333;
+      color: #eee;
+      border: 1.8px solid #666;
+      border-radius: 6px;
+      font-size: 1em;
+      font-weight: 600;
+      resize: vertical;
+      box-sizing: border-box;
+      transition: border-color 0.3s;
+    }
+
+    input:focus,
+    textarea:focus,
+    select:focus {
+      outline: none;
+      border-color: #ff5e57;
+      box-shadow: 0 0 8px #ff5e57cc;
+      background: #3a3a3a;
+    }
+
+    label {
+      display: block;
+      font-weight: 700;
+      margin-top: 20px;
+      letter-spacing: 0.05em;
+    }
+
+    button.action {
+      margin-top: 18px;
+      padding: 14px 30px;
+      background: #0fbcf9;
+      color: #000;
+      font-weight: 900;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1.2em;
+      letter-spacing: 0.07em;
+      transition: background 0.3s ease;
+      user-select: none;
+    }
+
+    button.action:hover {
+      background: #06a7db;
+      box-shadow: 0 0 14px #0fbcf9bb;
+      transform: scale(1.05);
+    }
+
+    #aiResult,
+    #exportStatus {
+      white-space: pre-wrap;
+      margin-top: 24px;
+      background: #111;
+      padding: 14px 16px;
+      border-radius: 8px;
+      font-family: monospace;
+      font-size: 1.05em;
+      min-height: 90px;
+      box-shadow: inset 0 0 8px #ff5e5733;
+    }
+
+    ul#checkList {
+      margin-top: 20px;
+      padding-left: 0;
+      list-style-type: none;
+      font-size: 1.05em;
+    }
+
+    ul#checkList li {
+      margin: 10px 0;
+      background: #444;
+      border-left: 5px solid #0fbcf9;
+      padding: 10px 15px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      border-radius: 5px;
+      box-shadow: 0 0 8px #0fbcf9aa inset;
+    }
+
+    canvas#forceCanvas {
+      background: #111;
+      margin-top: 30px;
+      border-radius: 12px;
+      box-shadow: 0 0 15px #0fbcf9cc inset;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    footer {
+      text-align: center;
+      color: #777;
+      font-size: 0.9em;
+      margin: 40px 0 20px;
+      letter-spacing: 0.1em;
+      user-select: none;
+    }
+  </style>
 </head>
+
 <body>
+  <header>AI×力学×責任分界 - 超設計SPA</header>
+  <nav>
+    <button class="active" onclick="switchTab(event, 'ai')">AI判断</button>
+    <button onclick="switchTab(event, 'force')">応力描画</button>
+    <button onclick="switchTab(event, 'check')">チェック生成</button>
+    <button onclick="switchTab(event, 'export')">帳票出力</button>
+  </nav>
 
-    <h1>プラント配管工事向け：機器据付工事情報チェックリスト</h1>
+  <section id="ai" class="active">
+    <h2>条件入力 & AI設計判断</h2>
+    <textarea id="conditionText" rows="7" placeholder="例: 屋外配管・床耐荷重500kg/m2・架台必要・防振装置あり..."
+      spellcheck="false"></textarea>
+    <button class="action" onclick="aiJudge()">AI判断開始</button>
+    <div id="aiResult" aria-live="polite" role="region"></div>
+  </section>
 
-    <h2 class="section-title">1. 機器概要情報</h2>
-    <table>
-        <tr><th>項目</th><th>内容</th></tr>
-        <tr><td>機器名称</td><td>（例：熱交換器、反応槽など）</td></tr>
-        <tr><td>機器型式 / 型番</td><td>メーカー型式や社内管理番号</td></tr>
-        <tr><td>用途</td><td>プロセス中の役割（例：冷却、混合）</td></tr>
-        <tr><td>材質</td><td>例：SUS304、SS400</td></tr>
-        <tr><td>重量</td><td>kg 単位</td></tr>
-        <tr><td>サイズ（W×D×H）</td><td>mm 単位</td></tr>
-    </table>
+  <section id="force">
+    <h2>荷重応力計算と描画</h2>
+    <label for="forceVal">吊荷重 (kg):</label>
+    <input id="forceVal" type="number" min="1" max="100000" step="1" value="1000" />
+    <label for="angleVal">吊角度 (°):</label>
+    <input id="angleVal" type="number" min="1" max="90" step="1" value="45" />
+    <button class="action" onclick="drawForce()">描画実行</button>
+    <canvas id="forceCanvas" width="420" height="320" aria-label="吊荷重の応力図"></canvas>
+  </section>
 
-    <h2 class="section-title">2. 据付位置情報</h2>
-    <table>
-        <tr><th>項目</th><th>内容</th></tr>
-        <tr><td>設置フロア / 高さ</td><td>地上、地階、架台上など</td></tr>
-        <tr><td>X・Y・Z座標</td><td>基準点からの据付位置</td></tr>
-        <tr><td>アンカーボルト仕様</td><td>サイズ・ピッチ・本数</td></tr>
-        <tr><td>基礎図面の有無</td><td>PDFやDWGなどの提供可能性</td></tr>
-        <tr><td>耐震要件</td><td>有無とレベル（例：震度6対応）</td></tr>
-    </table>
+  <section id="check">
+    <h2>責任分界チェック項目生成</h2>
+    <textarea id="designText" rows="5" placeholder="例: アンカー不要、屋上架台、振動制御措置あり..." spellcheck="false"></textarea>
+    <button class="action" onclick="generateChecklist()">チェックリスト生成</button>
+    <ul id="checkList" role="list"></ul>
+  </section>
 
-    <h2 class="section-title">3. 接続ノズル情報</h2>
-    <table>
-        <tr><th>項目</th><th>内容</th></tr>
-        <tr><td>ノズル本数</td><td>配管と接続される口数</td></tr>
-        <tr><td>ノズル位置</td><td>高さ、方向（天、横、下など）</td></tr>
-        <tr><td>フランジ仕様</td><td>JIS / ANSI / その他、呼び径・圧力</td></tr>
-        <tr><td>接続方向・角度</td><td>3Dモデルか図面での明示が望ましい</td></tr>
-        <tr><td>特殊要件</td><td>例：ライニング、ジャケット、ガスケット指定など</td></tr>
-    </table>
+  <section id="export">
+    <h2>帳票出力</h2>
+    <button class="action" onclick="exportPDF()">PDF出力（実装予定）</button>
+    <button class="action" onclick="exportCSV()">CSV出力（即ダウンロード）</button>
+    <div id="exportStatus" aria-live="polite" role="status"></div>
+  </section>
 
-    <h2 class="section-title">4. 据付作業条件</h2>
-    <table>
-        <tr><th>項目</th><th>内容</th></tr>
-        <tr><td>搬入経路</td><td>サイズ制限、障害物、クレーン使用可否など</td></tr>
-        <tr><td>設置可能時間帯</td><td>日中限定・夜間工事・休日対応など</td></tr>
-        <tr><td>設置エリアの足場・仮設条件</td><td>工事用足場の有無、スペース制約</td></tr>
-        <tr><td>作業環境</td><td>防爆区域、高温エリアなどの注意事項</td></tr>
-    </table>
+  <footer>© 2025 BeyondStandard Design Systems</footer>
 
-    <h2 class="section-title">5. その他</h2>
-    <table>
-        <tr><th>項目</th><th>内容</th></tr>
-        <tr><td>図面・3Dデータの提供可否</td><td>PDF, DXF, STEP など</td></tr>
-        <tr><td>現地調査の予定</td><td>立ち合いの必要有無</td></tr>
-        <tr><td>施工上の制約条件</td><td>例：隣接設備稼働中、清浄区域など</td></tr>
-    </table>
+  <script>
+    function switchTab(evt, tabId) {
+      document.querySelectorAll("section").forEach((s) => s.classList.remove("active"));
+      document.querySelectorAll("nav button").forEach((b) => b.classList.remove("active"));
+      document.getElementById(tabId).classList.add("active");
+      evt.target.classList.add("active");
+    }
 
+    function aiJudge() {
+      const txt = document.getElementById("conditionText").value.trim();
+      const resArea = document.getElementById("aiResult");
+      if (!txt) {
+        resArea.textContent = "⚠️ 条件を入力してください。";
+        return;
+      }
+
+      let lines = [];
+      // AI判断ロジック（超詳細版）
+      // ① 屋外設置かどうか
+      if (/屋外/.test(txt)) {
+        lines.push(
+          "✅ 【屋外設置】\n - 防錆・耐候性塗装は必須\n - 伸縮継手やエキスパンションの設計確認"
+        );
+      }
+      // ② 床耐荷重の指定があるか
+      const weightMatch = txt.match(/床耐荷重\s*(\d+)/);
+      if (weightMatch) {
+        const val = parseInt(weightMatch[1]);
+        lines.push(
+          `✅ 【床耐荷重】 ${val}kg/m²\n - 荷重分散設計を検討\n - 重量機器架台の基礎強化検討`
+        );
+      }
+      // ③ 防振装置関連
+      if (/防振|振動/.test(txt)) {
+        lines.push(
+          "✅ 【防振設計】\n - アイソレーター設置の検討\n - 振動絶縁性能確認\n - 配管支持の柔軟性確保"
+        );
+      }
+      // ④ 高温・高圧関連
+      if (/高温|高圧/.test(txt)) {
+        lines.push(
+          "⚠️ 【高温・高圧条件】\n - 材料選定の厳格化\n - 配管膨張計算の実施必須\n - 安全弁・逃がし弁設置"
+        );
+      }
+      // ⑤ 特殊環境（腐食性液体など）
+      if (/腐食|薬品|酸/.test(txt)) {
+        lines.push(
+          "⚠️ 【腐食環境】\n - 耐腐食材料使用\n - 定期点検・交換計画作成推奨"
+        );
+      }
+      // ⑥ その他、構造物との干渉
+      if (/干渉|架台/.test(txt)) {
+        lines.push(
+          "✅ 【構造物干渉】\n - クリアランスチェック実施\n - 架台耐荷重計算を厳密に"
+        );
+      }
+      if (lines.length === 0) {
+        lines.push("ℹ️ 入力内容から判断できる注意点が見当たりません。もっと詳細に記載してください。");
+      }
+
+      resArea.textContent = lines.join("\n\n");
+    }
+
+    function drawForce() {
+      const canvas = document.getElementById("forceCanvas");
+      const ctx = canvas.getContext("2d");
+      const F = parseFloat(document.getElementById("forceVal").value);
+      const angleDeg = parseFloat(document.getElementById("angleVal").value);
+      const angleRad = (angleDeg * Math.PI) / 180;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      if (isNaN(F) || F <= 0) {
+        ctx.fillStyle = "#f44";
+        ctx.font = "bold 20px monospace";
+        ctx.fillText("⚠️ 正しい吊荷重を入力してください", 30, 160);
+        return;
+      }
+      if (isNaN(angleDeg) || angleDeg <= 0 || angleDeg >= 90) {
+        ctx.fillStyle = "#f44";
+        ctx.font = "bold 20px monospace";
+        ctx.fillText("⚠️ 吊角度は1～89度で入力してください", 30, 160);
+        return;
+      }
+
+      // 張力T = F / (2 sin θ)
+      const tension = F / (2 * Math.sin(angleRad));
+      const tensionRounded = tension.toFixed(1);
+
+      // 描画設定
+      ctx.lineWidth = 4;
+      ctx.strokeStyle = "#0fbcf9";
+      ctx.fillStyle = "#0fbcf9";
+      ctx.font = "bold 20px monospace";
+
+      // 基準点(吊点)
+      const x0 = canvas.width / 2;
+      const y0 = 60;
+      const length = 160;
+
+      // 左右の吊り具終点座標
+      const x1 = x0 - length * Math.cos(angleRad);
+      const y1 = y0 + length * Math.sin(angleRad);
+      const x2 = x0 + length * Math.cos(angleRad);
+      const y2 = y1;
+
+      // 吊荷重矢印
+      ctx.beginPath();
+      ctx.moveTo(x0, y0);
+      ctx.lineTo(x1, y1);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(x0, y0);
+      ctx.lineTo(x2, y2);
+      ctx.stroke();
+
+      // 矢印頭
+      function drawArrowhead(x, y, angle) {
+        const size = 12;
+        ctx.beginPath();
+        ctx.moveTo(x, y);
+        ctx.lineTo(x - size * Math.cos(angle - 0.4), y - size * Math.sin(angle - 0.4));
+        ctx.lineTo(x - size * Math.cos(angle + 0.4), y - size * Math.sin(angle + 0.4));
+        ctx.closePath();
+        ctx.fill();
+      }
+      drawArrowhead(x1, y1, Math.atan2(y1 - y0, x1 - x0));
+      drawArrowhead(x2, y2, Math.atan2(y2 - y0, x2 - x0));
+
+      // 中央荷重矢印（下向き）
+      ctx.strokeStyle = "#ff5e57";
+      ctx.fillStyle = "#ff5e57";
+      ctx.beginPath();
+      ctx.moveTo(x0, y0);
+      ctx.lineTo(x0, y0 + 110);
+      ctx.stroke();
+      drawArrowhead(x0, y0 + 110, Math.PI / 2);
+
+      // テキスト表示
+      ctx.fillStyle = "#0fbcf9";
+      ctx.fillText(`吊荷重 F = ${F.toFixed(1)} kg`, 10, 30);
+      ctx.fillText(`吊角度 θ = ${angleDeg.toFixed(1)}°`, 10, 60);
+      ctx.fillText(`張力 T = ${tensionRounded} kgf`, 10, 90);
+    }
+
+    function generateChecklist() {
+      const txt = document.getElementById("designText").value.trim();
+      const list = document.getElementById("checkList");
+      list.innerHTML = "";
+      if (!txt) {
+        const li = document.createElement("li");
+        li.textContent = "⚠️ 条件を入力してください。";
+        list.appendChild(li);
+        return;
+      }
+
+      const items = [];
+      // ロジックによるチェック項目生成
+      if (/アンカー/.test(txt)) {
+        items.push("✔ アンカー免除理由を設計根拠として明示");
+      }
+      if (/屋上/.test(txt)) {
+        items.push("✔ 屋上架台の耐荷重と風荷重検討済み");
+      }
+      if (/防振|振動/.test(txt)) {
+        items.push("✔ 防振対策が設計に反映されている");
+      }
+      if (/腐食|薬品|酸/.test(txt)) {
+        items.push("✔ 耐腐食材料の使用確認");
+      }
+      if (/高温|高圧/.test(txt)) {
+        items.push("✔ 高温・高圧対応の配管仕様確認");
+      }
+      if (/基礎|支持/.test(txt)) {
+        items.push("✔ 支持構造の荷重分散設計済み");
+      }
+      if (items.length === 0) {
+        items.push("ℹ️ 条件に基づく特記事項はありません。詳細入力を推奨。");
+      }
+      items.forEach((v) => {
+        const li = document.createElement("li");
+        li.textContent = v;
+        list.appendChild(li);
+      });
+    }
+
+    javascript
+    コピーする
+    編集する
+    function exportCSV() {
+      const lines = [];
+      lines.push("AI判断結果");
+      const aiText = document.getElementById("aiResult").textContent.trim();
+      lines.push(aiText.replace(/\n/g, " | "));
+      lines.push("");
+      lines.push("責任分界チェックリスト");
+      const checkLis = document.querySelectorAll("#checkList li");
+      if (checkLis.length === 0) {
+        lines.push("（未生成）");
+      } else {
+        checkLis.forEach((li) => {
+          lines.push(li.textContent);
+        });
+      }
+
+      const csvContent = lines.join("\r\n");
+      const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = "plant_project_report.csv";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      const status = document.getElementById("exportStatus");
+      status.textContent = "✅ CSV帳票をダウンロードしました。";
+    }
+
+    function exportPDF() {
+      const status = document.getElementById("exportStatus");
+      status.textContent = "🛠 PDF出力機能は現在開発中です。しばらくお待ちください。";
+    }
+
+    // 初回描画呼び出し（任意）
+    drawForce();
+  </script>
 </body>
-</html>
+
+</html> 
