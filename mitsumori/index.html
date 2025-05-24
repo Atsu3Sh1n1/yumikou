@@ -180,11 +180,9 @@
     window.addEventListener('orientationchange', setViewportHeight);
     setViewportHeight();
 
-    document.addEventListener('focusin', () => {
-      // 入力フォーカス時にスクロール位置を制御
-      setTimeout(() => {
-        window.scrollTo(0, 0);
-      }, 100); // 少し遅延させる
+
+    input.addEventListener('focus', () => {
+      input.scrollIntoView({ block: "center", behavior: "smooth" });
     });
 
 
