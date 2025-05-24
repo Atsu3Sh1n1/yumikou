@@ -223,6 +223,8 @@
         const tickTimes = Array.from(tickTimesSet).sort((a, b) => a - b);
 
         let lastLeft = -10;
+        const endMinute = toMinutes("17:00");
+
         tickTimes.forEach(t => {
             const tick = document.createElement("div");
             const leftPercent = ((t - scaleStart) / fullMinutes) * 100;
@@ -236,7 +238,7 @@
             span.textContent = timeText;
 
             const tickWidth = 30; // 想定幅
-            if (leftPercent - lastLeft < (tickWidth / timeScale.offsetWidth) * 100) {
+            if (t === endMinute || leftPercent - lastLeft < (tickWidth / timeScale.offsetWidth) * 100) {
                 tick.className = "time-tick lower";
             } else {
                 tick.className = "time-tick upper";
@@ -250,6 +252,7 @@
 
             timeScale.appendChild(tick);
         });
+
 
         const hours = Math.floor(workTime / 60);
         const mins = workTime % 60;
