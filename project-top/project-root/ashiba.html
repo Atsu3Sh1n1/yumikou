@@ -1,290 +1,73 @@
 <!DOCTYPE html>
 <html lang="ja">
-
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <meta charset="UTF-8">
-    <title>施工費計算ツール</title>
-    <style>
-        body {
-            font-family: sans-serif;
-            text-align: center;
-            width: 300px;
-
-
-            margin: 0 auto;
-
-
-        }
-
-        .container {
-            width: 300px;
-            margin: 20px auto;
-            padding: 8px;
-            background: white;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 10px;
-        }
-
-        th,
-        td {
-            border: 1px solid #ccc;
-            padding: 8px;
-            text-align: center;
-
-        }
-
-        .subtotal {
-            padding: 0px 2px;
-
-            font-size: 0.8em;
-        }
-
-        input.unit-price,
-        input.quantity {
-            width: 40px;
-        }
-
-        
-        input.material-name {
-            width: 60px;
-
-        }
-
-
-        input[type="text"] {
-            
-            text-align: right;
-            font-size: 0.8em;
-        }
-
-        fieldset {
-            margin-top: 20px;
-
-        }
-
-        #result {
-            margin-top: 20px;
-            font-size: 1em;
-            font-weight: bold;
-
-        }
-
-        button {
-            margin-top: 10px;
-            padding: 4px 10px;
-            font-size: 1em;
-
-        }
-
-        button.delete-row {
-            font-size: 0.3em;
-            padding: 1px 1px;
-        }
-
-        .footer {
-            text-align: center;
-            font-size: 11px;
-            margin-top: 0;
-            padding: 0.5rem;
-        }
-
-        h2 {
-            text-align: center;
-
-        }
-    </style>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+  <meta charset="UTF-8">
+  <title>足場 原価計算（くさび式）</title>
+  <style>
+    body { font-family: sans-serif; margin: 2em; }
+    label { display: block; margin-top: 1em; }
+    input { font-size: 1em; margin-left: 0.5em; width: 100px; }
+    #result, #totalCost { margin-top: 1em; font-weight: bold; font-size: 1.2em; }
+    small { display: block; margin-top: 1em; color: #555; }
+  </style>
 </head>
-
 <body>
-    <div class="container">
-        <h2>足場施工費算出機(開発中)</h2>
-        <div class="footer">
-            <a href="https://atsu3sh1n1.github.io/yumikou/" target="_blank">Created by YUMIKOU Inc.</a>
-        </div>
+  <h2>足場・金額 計算（くさび式）*開発中</h2>
 
-        <table id="materialTable">
-            <thead>
-                <tr>
-                    <th>材料名</th>
-                    <th>単価</th>
-                    <th>個数</th>
-                    <th>小計</th>
-                    <th>削除</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td><input type="text" class="material-name" value="単管" /></td>
-                    <td><input type="text" class="unit-price" inputmode="numeric" pattern="[0-9]*" value="80" /></td>
-                    <td><input type="text" class="quantity" inputmode="numeric" pattern="[0-9]*" placeholder="0" /></td>
-                    <td class="subtotal">0</td>
-                    <td><button class="delete-row">×</button></td>
-                </tr>
-                <tr>
-                    <td><input type="text" class="material-name" value="クランプ" /></td>
-                    <td><input type="text" class="unit-price" inputmode="numeric" pattern="[0-9]*" value="15" /></td>
-                    <td><input type="text" class="quantity" inputmode="numeric" pattern="[0-9]*" placeholder="0" /></td>
-                    <td class="subtotal">0</td>
-                    <td><button class="delete-row">×</button></td>
-                </tr>
-                <tr>
-                    <td><input type="text" class="material-name" value="足場板" /></td>
-                    <td><input type="text" class="unit-price" inputmode="numeric" pattern="[0-9]*" value="120" /></td>
-                    <td><input type="text" class="quantity" inputmode="numeric" pattern="[0-9]*" placeholder="0" /></td>
-                    <td class="subtotal">0</td>
-                    <td><button class="delete-row">×</button></td>
-                </tr>
-                <tr>
-                    <td><input type="text" class="material-name" value="ジャッキベース" /></td>
-                    <td><input type="text" class="unit-price" inputmode="numeric" pattern="[0-9]*" value="50" /></td>
-                    <td><input type="text" class="quantity" inputmode="numeric" pattern="[0-9]*" placeholder="0" /></td>
-                    <td class="subtotal">0</td>
-                    <td><button class="delete-row">×</button></td>
-                </tr>
-                <tr>
-                    <td><input type="text" class="material-name" value="単管 1m" /></td>
-                    <td><input type="text" class="unit-price" inputmode="numeric" pattern="[0-9]*" value="50" /></td>
-                    <td><input type="text" class="quantity" inputmode="numeric" pattern="[0-9]*" placeholder="0" /></td>
-                    <td class="subtotal">0</td>
-                    <td><button class="delete-row">×</button></td>
-                </tr>
-                <tr>
-                    <td><input type="text" class="material-name" value="単管 1.5m" /></td>
-                    <td><input type="text" class="unit-price" inputmode="numeric" pattern="[0-9]*" value="50" /></td>
-                    <td><input type="text" class="quantity" inputmode="numeric" pattern="[0-9]*" placeholder="0" /></td>
-                    <td class="subtotal">0</td>
-                    <td><button class="delete-row">×</button></td>
-                </tr>
-                <tr>
-                    <td><input type="text" class="material-name" value="単管 2m" /></td>
-                    <td><input type="text" class="unit-price" inputmode="numeric" pattern="[0-9]*" value="50" /></td>
-                    <td><input type="text" class="quantity" inputmode="numeric" pattern="[0-9]*" placeholder="0" /></td>
-                    <td class="subtotal">0</td>
-                    <td><button class="delete-row">×</button></td>
-                </tr>
-                <tr>
-                    <td><input type="text" class="material-name" value="単管 2.5m" /></td>
-                    <td><input type="text" class="unit-price" inputmode="numeric" pattern="[0-9]*" value="50" /></td>
-                    <td><input type="text" class="quantity" inputmode="numeric" pattern="[0-9]*" placeholder="0" /></td>
-                    <td class="subtotal">0</td>
-                    <td><button class="delete-row">×</button></td>
-                </tr>
-                <tr>
-                    <td><input type="text" class="material-name" value="単管 1m" /></td>
-                    <td><input type="text" class="unit-price" inputmode="numeric" pattern="[0-9]*" value="50" /></td>
-                    <td><input type="text" class="quantity" inputmode="numeric" pattern="[0-9]*" placeholder="0" /></td>
-                    <td class="subtotal">0</td>
-                    <td><button class="delete-row">×</button></td>
-                </tr>
-                <tr>
-                    <td><input type="text" class="material-name" value="単管 1m" /></td>
-                    <td><input type="text" class="unit-price" inputmode="numeric" pattern="[0-9]*" value="50" /></td>
-                    <td><input type="text" class="quantity" inputmode="numeric" pattern="[0-9]*" placeholder="0" /></td>
-                    <td class="subtotal">0</td>
-                    <td><button class="delete-row">×</button></td>
-                </tr>
+  <label>
+    人工単価（円／日）:
+    <input type="number" id="laborCost" value="25000" min="0">
+  </label>
 
-            </tbody>
-        </table>
+  <label>
+    作業床 面積（㎡）:
+    <input type="number" id="area" value="100" min="0">
+  </label>
 
-        <button id="addRow">材料を追加</button>
+  <label>
+    高さ（m）:
+    <input type="number" id="height" value="6" min="0">
+  </label>
 
-        <label>
-            作業床㎡：<input type="text" id="area" inputmode="numeric" pattern="[0-9]*" placeholder="100" />
-        </label>
+  <div id="result">原価単価: 325.00 円／㎡</div>
+  <div id="totalCost">合計金額: 195,000 円</div>
 
-        <fieldset>
-            <legend>施工条件係数（任意選択）</legend>
-            <label><input type="checkbox" class="factor" value="0.2"> 高所</label>
-            <label><input type="checkbox" class="factor" value="0.1"> 狭所</label>
-            <label><input type="checkbox" class="factor" value="0.15"> 安全強化</label>
-            <label><input type="checkbox" class="factor" value="0.3"> 急工期</label>
-        </fieldset>
-    </div>
-    <div id="result">施工費合計：0 円</div>
+  <small>
+    ※ 国土交通省「公共建築工事標準単価積算基準」によれば、くさび式足場の組立・解体施工量は77㎡／人工と定められています。<br>
+    <a href="https://www.mlit.go.jp/gobuild/content/001733127.pdf" target="_blank">出典：国交省 積算基準資料</a>
+  </small>
 
-    <script>
-        const tableBody = document.querySelector('#materialTable tbody');
-        const areaInput = document.getElementById('area');
-        const factorCheckboxes = document.querySelectorAll('.factor');
-        const resultDiv = document.getElementById('result');
-        const addRowBtn = document.getElementById('addRow');
+  <script>
+    const laborCostInput = document.getElementById('laborCost');
+    const areaInput = document.getElementById('area');
+    const heightInput = document.getElementById('height');
+    const resultDiv = document.getElementById('result');
+    const totalCostDiv = document.getElementById('totalCost');
+    const 施工量 = 77;
 
-        function getAreaFactor(area) {
-            return area * 0.01;
-        }
+    function updateAll() {
+      const laborCost = parseFloat(laborCostInput.value);
+      const area = parseFloat(areaInput.value);
+      const height = parseFloat(heightInput.value);
 
-        function getConditionFactor() {
-            let total = 0;
-            factorCheckboxes.forEach(cb => {
-                if (cb.checked) {
-                    total += parseFloat(cb.value);
-                }
-            });
-            return total;
-        }
+      if (!isNaN(laborCost) && !isNaN(area) && !isNaN(height) && 施工量 > 0) {
+        const unitCost = laborCost / 施工量;
+        const total = unitCost * area * height;
 
-        function calculate() {
-            let baseMaterialCost = 0;
-            const rows = tableBody.querySelectorAll('tr');
+        resultDiv.textContent = `原価単価: ${unitCost.toFixed(2)} 円／㎡`;
+        totalCostDiv.textContent = `合計金額: ${total.toLocaleString()} 円`;
+      } else {
+        resultDiv.textContent = '原価単価: - 円／㎡';
+        totalCostDiv.textContent = '合計金額: - 円';
+      }
+    }
 
-            rows.forEach(row => {
-                const unitPrice = parseFloat(row.querySelector('.unit-price').value) || 0;
-                const qty = parseFloat(row.querySelector('.quantity').value) || 0;
-                const subtotal = unitPrice * qty;
-                row.querySelector('.subtotal').textContent = Math.floor(subtotal).toLocaleString();
-                baseMaterialCost += subtotal;
-            });
+    laborCostInput.addEventListener('input', updateAll);
+    areaInput.addEventListener('input', updateAll);
+    heightInput.addEventListener('input', updateAll);
 
-            const area = parseFloat(areaInput.value) || 0;
-            const areaFactor = getAreaFactor(area);
-            const conditionFactor = getConditionFactor();
-            const finalCost = baseMaterialCost * (1 + areaFactor + conditionFactor);
-
-            resultDiv.textContent = `施工費合計：${Math.floor(finalCost).toLocaleString()} 円`;
-        }
-
-        function addRow() {
-            const newRow = document.createElement('tr');
-            newRow.innerHTML = `
-      <td><input type="text" class="material-name" value="" /></td>
-      <td><input type="text" class="unit-price" inputmode="numeric" pattern="[0-9]*" placeholder="0" /></td>
-      <td><input type="text" class="quantity" inputmode="numeric" pattern="[0-9]*" placeholder="0" /></td>
-      <td class="subtotal">0</td>
-      <td><button class="delete-row">×</button></td>
-    `;
-            tableBody.appendChild(newRow);
-            attachRowEvents(newRow);
-            calculate();
-        }
-
-        function attachRowEvents(row) {
-            row.querySelectorAll('input').forEach(input => {
-                input.addEventListener('input', calculate);
-            });
-            row.querySelector('.delete-row').addEventListener('click', () => {
-                row.remove();
-                calculate();
-            });
-        }
-
-        tableBody.querySelectorAll('tr').forEach(attachRowEvents);
-        addRowBtn.addEventListener('click', addRow);
-        areaInput.addEventListener('input', calculate);
-        factorCheckboxes.forEach(cb => cb.addEventListener('change', calculate));
-        window.onload = calculate;
-    </script>
-
+    // 初期表示
+    updateAll();
+  </script>
 </body>
-
 </html>
