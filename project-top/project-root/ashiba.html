@@ -163,6 +163,37 @@
         <label><input type="radio" name="type" value="0.90"> 移動式足場（係数 0.90）</label>
     </div><br><br>
 
+    <!-- 基本入力セクション -->
+    <div class="form-section">
+        <label>
+            人工単価（円／日）:
+            <input type="number" id="laborCost" value="25000" min="0">
+        </label>
+
+        <label>
+            作業床 面積（㎡）:
+            <input type="number" id="area" placeholder="100" min="0">
+        </label>
+
+        <label>
+            高さ（m）:
+            <input type="number" id="height" value="6" min="0">
+        </label>
+
+        <!-- 追加1: 諸経費率入力欄 -->
+        <label>
+            諸経費率（％）:
+            <input type="number" id="overheadRate" value="17" min="0" max="2000">
+        </label>
+        <label>
+            コメント（備考）:
+            <textarea id="comment" rows="3" placeholder="例：消耗品5% / 管理費12%"
+                style="width: 100%; padding: 8px; font-size: 1em; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box;"></textarea>
+        </label>
+        
+
+    </div><br><br>
+
     <div class="score-form">
         <h3>作業難易度評価</h3>
         <div class="footnote">
@@ -239,36 +270,7 @@
     </fieldset>
 
 
-    <!-- 基本入力セクション -->
-    <div class="form-section">
-        <label>
-            人工単価（円／日）:
-            <input type="number" id="laborCost" value="25000" min="0">
-        </label>
-
-        <label>
-            作業床 面積（㎡）:
-            <input type="number" id="area" placeholder="100" min="0">
-        </label>
-
-        <label>
-            高さ（m）:
-            <input type="number" id="height" value="6" min="0">
-        </label>
-
-        <!-- 追加1: 諸経費率入力欄 -->
-        <label>
-            諸経費率（％）:
-            <input type="number" id="overheadRate" value="17" min="0" max="2000">
-        </label>
-        <label>
-            コメント（備考）:
-            <textarea id="comment" rows="3" placeholder="例：消耗品5% / 管理費12%"
-                style="width: 100%; padding: 8px; font-size: 1em; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box;"></textarea>
-        </label>
-        <br><br>
-
-    </div>
+    
 
     <!-- 計算結果表示セクション -->
     <div id="result">原価単価: 325.00 円／㎡</div>
