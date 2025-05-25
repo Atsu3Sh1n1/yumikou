@@ -473,12 +473,13 @@
         function calculateManpower(area, height, difficultyFactor, safetyFactor, conditionFactor) {
             if (isNaN(area) || area <= 0) return 0;
 
-            const baseManpower = area * getLaborCoefficient(area);
+            const baseCoefficient = getLaborCoefficient(area);
+            const adjustedCoefficient = baseCoefficient * difficultyFactor * safetyFactor * conditionFactor;
 
             if (height > 0) {
-                return baseManpower * height * difficultyFactor * safetyFactor * conditionFactor;
+                return area * height * adjustedCoefficient;
             }
-            return baseManpower * difficultyFactor * safetyFactor * conditionFactor;
+            return area * adjustedCoefficient;
         }
 
         function formatDate(date) {
@@ -515,12 +516,13 @@
                     ※大規模現場のため要確認（${area <= 3000 ? '逓減率自動適用' : '3000㎡超のため頭打ち適用'}）
                 </span>`;
                 }
+
                 resultDiv.innerHTML = `
   <div style="font-size:1.2em; font-weight:bold; margin-bottom:3px;">
      原価単価: ${unitCost.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} 円/㎡
   </div>
   <div style="font-size:0.9em; color:#555;">
-    (${currentCoefficient.toFixed(5)} 人工/㎡)
+   （人工係数: ${currentCoefficient.toFixed(5)} 人工/㎡）
   </div>
 `;
 
