@@ -314,7 +314,21 @@
         const manpowerCalcDiv = document.getElementById('manpowerCalc');
         const scoreResultDiv = document.getElementById('scoreResult');
         const printDateSpan = document.getElementById('printDate');
-        const 施工量 = 27.93;
+
+        // 効率テーブルデータ（0㎡から1000㎡まで拡張）
+        const efficiencyTable = [
+            { area: 0, coefficient: 0.04000, efficiency: 25.00 },  // 0㎡時の仮想値（外挿用）
+            { area: 100, coefficient: 0.03834, efficiency: 26.09 },
+            { area: 200, coefficient: 0.03768, efficiency: 26.53 },
+            { area: 300, coefficient: 0.03702, efficiency: 27.01 },
+            { area: 400, coefficient: 0.03636, efficiency: 27.51 },
+            { area: 500, coefficient: 0.03580, efficiency: 27.93 },
+            { area: 600, coefficient: 0.03514, efficiency: 28.45 },
+            { area: 700, coefficient: 0.03448, efficiency: 29.00 },
+            { area: 800, coefficient: 0.03382, efficiency: 29.57 },
+            { area: 900, coefficient: 0.03316, efficiency: 30.16 },
+            { area: 1000, coefficient: 0.03250, efficiency: 30.77 }
+        ];
 
         function getSafetyFactor() {
             for (const radio of typeRadios) {
@@ -357,6 +371,38 @@
             return factor;
         }
 
+        // 面積から施工量を線形補間で計算（0㎡から完全対応）
+        function getEfficiency(area) {
+            if (area <= 0) return efficiencyTable[0].efficiency;
+            if (area >= 1000) return efficiencyTable[efficiencyTable.length - 1].efficiency;
+
+            for (let i = 0; i < efficiencyTable.length - 1; i++) {
+                if (area >= efficiencyTable[i].area && area < efficiencyTable[i + 1].area) {
+                    const lower = efficiencyTable[i];
+                    const upper = efficiencyTable[i + 1];
+                    const ratio = (area - lower.area) / (upper.area - lower.area);
+                    return lower.efficiency + (upper.efficiency - lower.efficiency) * ratio;
+                }
+            }
+            return efficiencyTable[efficiencyTable.length - 1].efficiency;
+        }
+
+        // 面積から人工係数を線形補間で計算（0㎡から完全対応）
+        function getLaborCoefficient(area) {
+            if (area <= 0) return efficiencyTable[0].coefficient;
+            if (area >= 1000) return efficiencyTable[efficiencyTable.length - 1].coefficient;
+
+            for (let i = 0; i < efficiencyTable.length - 1; i++) {
+                if (area >= efficiencyTable[i].area && area < efficiencyTable[i + 1].area) {
+                    const lower = efficiencyTable[i];
+                    const upper = efficiencyTable[i + 1];
+                    const ratio = (area - lower.area) / (upper.area - lower.area);
+                    return lower.coefficient + (upper.coefficient - lower.coefficient) * ratio;
+                }
+            }
+            return efficiencyTable[efficiencyTable.length - 1].coefficient;
+        }
+
         function calculateSellingPrice(baseCost) {
             const overheadRate = parseFloat(overheadRateInput.value) || 0;
             return baseCost * (1 + overheadRate / 100);
@@ -365,11 +411,12 @@
         function calculateManpower(area, height, difficultyFactor, safetyFactor, conditionFactor) {
             if (isNaN(area) || area <= 0) return 0;
 
+            const baseManpower = area * getLaborCoefficient(area);
+
             if (height > 0) {
-                return (area * height * difficultyFactor * safetyFactor * conditionFactor) / 施工量;
-            } else {
-                return (area * difficultyFactor * safetyFactor * conditionFactor) / 施工量;
+                return baseManpower * height * difficultyFactor * safetyFactor * conditionFactor;
             }
+            return baseManpower * difficultyFactor * safetyFactor * conditionFactor;
         }
 
         function formatDate(date) {
@@ -391,27 +438,20 @@
                 !isNaN(area) && area >= 0 &&
                 !isNaN(height) && height >= 0) {
 
-                const unitCost = laborCost / 施工量;
-                const adjustedCost = unitCost * safetyFactor;
+                const manpower = calculateManpower(area, height, difficultyFactor, safetyFactor, conditionFactor);
+                const totalCost = manpower * laborCost;
+                const unitCost = totalCost / area;
+                const sellingPrice = calculateSellingPrice(totalCost);
 
-                const attenuationFactor = 1 - (area * 0.0001);
-                const safeAttenuationFactor = attenuationFactor < 0 ? 0 : attenuationFactor;
+                const currentEfficiency = getEfficiency(area);
+                const currentCoefficient = getLaborCoefficient(area);
 
-                const baseTotal = (height > 0)
-                    ? adjustedCost * area * height * difficultyFactor * safeAttenuationFactor
-                    : adjustedCost * area * difficultyFactor * safeAttenuationFactor;
-
-                const totalWithCondition = baseTotal * conditionFactor;
-                const sellingPrice = calculateSellingPrice(totalWithCondition);
-
-                const manpower = calculateManpower(area, height, difficultyFactor, safetyFactor, conditionFactor) * safeAttenuationFactor;
-
-                resultDiv.textContent = `原価単価: ${adjustedCost.toFixed(2)} 円／㎡`;
-                totalCostDiv.textContent = `合計金額: ${Math.round(totalWithCondition).toLocaleString()} 円`;
+                resultDiv.textContent = `原価単価: ${unitCost.toFixed(2)} 円/㎡ (人工係数: ${currentCoefficient.toFixed(5)} 人工/㎡)`;
+                totalCostDiv.textContent = `合計金額: ${Math.round(totalCost).toLocaleString()} 円`;
                 sellingPriceDiv.textContent = `小計（税別）: ${Math.round(sellingPrice).toLocaleString()} 円`;
-                manpowerCalcDiv.textContent = `必要人工数: ${manpower.toFixed(2)} 人日`;
+                manpowerCalcDiv.textContent = `必要人工数: ${manpower.toFixed(2)} 人日 (施工量: ${currentEfficiency.toFixed(2)}㎡/人工)`;
             } else {
-                resultDiv.textContent = '原価単価: - 円／㎡';
+                resultDiv.textContent = '原価単価: - 円/㎡';
                 totalCostDiv.textContent = '合計金額: - 円';
                 sellingPriceDiv.textContent = '小計（税別）: - 円';
                 manpowerCalcDiv.textContent = '必要人工数: - 人日';
@@ -420,6 +460,7 @@
             printDateSpan.textContent = formatDate(new Date());
         }
 
+        // イベントリスナーの設定
         laborCostInput.addEventListener('input', updateAll);
         areaInput.addEventListener('input', updateAll);
         heightInput.addEventListener('input', updateAll);
