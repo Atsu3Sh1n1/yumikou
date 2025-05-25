@@ -190,7 +190,7 @@
             <textarea id="comment" rows="3" placeholder="例：消耗品5% / 管理費12%"
                 style="width: 100%; padding: 8px; font-size: 1em; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box;"></textarea>
         </label>
-        
+
 
     </div><br><br>
 
@@ -270,7 +270,7 @@
     </fieldset>
 
 
-    
+
 
     <!-- 計算結果表示セクション -->
     <div id="result">原価単価: 325.00 円／㎡</div>
@@ -302,7 +302,6 @@
     </div>
 
     <script>
-        // 要素の取得
         const laborCostInput = document.getElementById('laborCost');
         const areaInput = document.getElementById('area');
         const heightInput = document.getElementById('height');
@@ -315,9 +314,8 @@
         const manpowerCalcDiv = document.getElementById('manpowerCalc');
         const scoreResultDiv = document.getElementById('scoreResult');
         const printDateSpan = document.getElementById('printDate');
-        const 施工量 = 26.09;
+        const 施工量 = 27.93;
 
-        // 安全係数の取得
         function getSafetyFactor() {
             for (const radio of typeRadios) {
                 if (radio.checked) return parseFloat(radio.value);
@@ -334,10 +332,7 @@
             return factor;
         }
 
-
-        // 難易度係数の計算
         function getDifficultyFactor() {
-            const conditionFactor = getConditionFactor();
             const formData = new FormData(form);
             let score = 0;
             for (const value of formData.values()) score += Number(value);
@@ -349,7 +344,6 @@
 
             scoreResultDiv.innerText = `合計スコア: ${score} / 難易度補正係数: ${factor.toFixed(1)}`;
 
-            // スコアに応じて色を変える
             if (score >= 17) {
                 scoreResultDiv.style.color = 'red';
             } else if (score >= 13) {
@@ -363,23 +357,21 @@
             return factor;
         }
 
-        // 諸経費率を考慮した見積金額計算
         function calculateSellingPrice(baseCost) {
             const overheadRate = parseFloat(overheadRateInput.value) || 0;
             return baseCost * (1 + overheadRate / 100);
         }
 
-        // 人工数の計算（難易度係数・安全係数を反映）
         function calculateManpower(area, height, difficultyFactor, safetyFactor, conditionFactor) {
-            if (!isNaN(area) && !isNaN(height)) {
+            if (isNaN(area) || area <= 0) return 0;
+
+            if (height > 0) {
                 return (area * height * difficultyFactor * safetyFactor * conditionFactor) / 施工量;
+            } else {
+                return (area * difficultyFactor * safetyFactor * conditionFactor) / 施工量;
             }
-            return 0;
         }
 
-
-
-        // 日付フォーマット
         function formatDate(date) {
             const year = date.getFullYear();
             const month = String(date.getMonth() + 1).padStart(2, '0');
@@ -387,7 +379,6 @@
             return `${year}年${month}月${day}日`;
         }
 
-        // メインの更新関数
         function updateAll() {
             const laborCost = parseFloat(laborCostInput.value);
             const area = parseFloat(areaInput.value);
@@ -396,21 +387,28 @@
             const difficultyFactor = getDifficultyFactor();
             const conditionFactor = getConditionFactor();
 
-            if (!isNaN(laborCost) && !isNaN(area) && !isNaN(height)) {
+            if (!isNaN(laborCost) && laborCost >= 0 &&
+                !isNaN(area) && area >= 0 &&
+                !isNaN(height) && height >= 0) {
+
                 const unitCost = laborCost / 施工量;
-
                 const adjustedCost = unitCost * safetyFactor;
-                const baseTotal = adjustedCost * area * height * difficultyFactor;
 
-                // 🔸ここで施工条件係数を合計金額と売値に反映
+                const attenuationFactor = 1 - (area * 0.0001);
+                const safeAttenuationFactor = attenuationFactor < 0 ? 0 : attenuationFactor;
+
+                const baseTotal = (height > 0)
+                    ? adjustedCost * area * height * difficultyFactor * safeAttenuationFactor
+                    : adjustedCost * area * difficultyFactor * safeAttenuationFactor;
+
                 const totalWithCondition = baseTotal * conditionFactor;
                 const sellingPrice = calculateSellingPrice(totalWithCondition);
 
-                const manpower = calculateManpower(area, height, difficultyFactor, safetyFactor, conditionFactor);
+                const manpower = calculateManpower(area, height, difficultyFactor, safetyFactor, conditionFactor) * safeAttenuationFactor;
 
-                resultDiv.textContent = `原価単価: ${adjustedCost.toFixed(2)} 円／㎡`; // ❌施工条件係数なし
-                totalCostDiv.textContent = `合計金額: ${Math.round(totalWithCondition).toLocaleString()} 円`; // ✅施工条件係数あり
-                sellingPriceDiv.textContent = `見積金額（売値）: ${Math.round(sellingPrice).toLocaleString()} 円`;
+                resultDiv.textContent = `原価単価: ${adjustedCost.toFixed(2)} 円／㎡`;
+                totalCostDiv.textContent = `合計金額: ${Math.round(totalWithCondition).toLocaleString()} 円`;
+                sellingPriceDiv.textContent = `小計（税別）: ${Math.round(sellingPrice).toLocaleString()} 円`;
                 manpowerCalcDiv.textContent = `必要人工数: ${manpower.toFixed(2)} 人日`;
             } else {
                 resultDiv.textContent = '原価単価: - 円／㎡';
@@ -419,24 +417,24 @@
                 manpowerCalcDiv.textContent = '必要人工数: - 人日';
             }
 
-
-            // 印刷用日付更新
             printDateSpan.textContent = formatDate(new Date());
         }
 
-        // イベントリスナーの設定
         laborCostInput.addEventListener('input', updateAll);
         areaInput.addEventListener('input', updateAll);
         heightInput.addEventListener('input', updateAll);
         overheadRateInput.addEventListener('input', updateAll);
-        typeRadios.forEach(r => r.addEventListener('change', updateAll));
+
+        typeRadios.forEach(radio => {
+            radio.addEventListener('change', updateAll);
+        });
+
         form.addEventListener('change', updateAll);
 
         document.querySelectorAll('input[name="conditions"]').forEach(cb => {
             cb.addEventListener('change', updateAll);
         });
 
-        // 初期表示
         updateAll();
     </script>
 </body>
