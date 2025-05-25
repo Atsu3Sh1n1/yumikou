@@ -16,14 +16,14 @@
         }
 
         h3 {
-            font-size: 1.3em;
+            font-size: 1.5em;
             margin: 0.8em 0 0.5em;
         }
 
         h2 {
             text-align: center;
             margin-bottom: -30px;
-            font-size: 1.8rem;
+            font-size: 2rem;
         }
 
         h1 {
@@ -32,6 +32,16 @@
             font-size: 1rem;
         }
 
+        h4 {
+
+            margin-bottom: -10px;
+            font-size: 1.4rem;
+        }
+
+        .form-section,
+        .seko {
+            font-size: 1.3rem;
+        }
 
         label {
             display: block;
@@ -63,6 +73,7 @@
 
         .checkbox-group,
         .score-form {
+            font-size: 1.3em;
             margin: 1em 0;
         }
 
@@ -137,7 +148,34 @@
             text-align: center;
             font-size: 12px;
             margin-bottom: -10px;
-            padding: 1.2rem;
+            padding: 0.8rem;
+        }
+
+        /* 結果表示エリア全体のスタイル */
+        #result,
+        #manpowerCalc {
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        .result-box {
+            font-size: 1.15rem;
+            line-height: 1.5;
+        }
+
+        .main-value {
+            font-size: 1.3em;
+            font-weight: bold;
+        }
+
+        .sub-value {
+            font-size: 0.85em;
+            color: #444;
+        }
+
+        .warning-text {
+            font-size: 0.75em;
+            color: red;
         }
     </style>
 </head>
@@ -149,10 +187,10 @@
         <a href="https://atsu3sh1n1.github.io/yumikou/" target="_blank">Created by YUMIKOU Inc.</a>
     </div>
 
-    <!-- 難易度スコアを上部に移動 -->
+
 
     <div class="checkbox-group">
-        <strong>足場の種類（安全対応係数適用）:</strong>
+        <h4><strong>足場の種類（安全対応係数適用）</strong></h4>
         <div class="footnote">
             安全対応係数とは、足場の構造計算や設計において、
             構造物の強度や安定性を安全に保つために使用される補正係数を意味します。</div>
@@ -184,7 +222,7 @@
         <label>
             諸経費率（％）:
             <input type="number" id="overheadRate" value="15" min="0" max="2000">
-        </label>
+        </label><br>
         <label>
             コメント（備考）:
             <textarea id="comment" rows="3" placeholder="例：消耗品5% / 管理費10%"
@@ -258,17 +296,18 @@
         <div id="scoreResult">合計スコア: 6 / 難易度補正係数: 1.0</div>
     </div><br><br>
 
-    <fieldset>
-        <legend>施工条件係数</legend>
-        <label><input type="checkbox" name="conditions" value="1.05"> 安全対策強化（1.05）</label>
-        <label><input type="checkbox" name="conditions" value="1.2"> 急工期対応（1.2）</label>
-        <label><input type="checkbox" name="conditions" value="1.03"> 開口部養生強化（1.03）</label>
-        <label><input type="checkbox" name="conditions" value="1.02"> 昇降口増設（1.02）</label>
-        <label><input type="checkbox" name="conditions" value="1.1"> 他社共同足場（1.1）</label>
-        <label><input type="checkbox" name="conditions" value="1.4"> 足場盛替え（1.4）</label>
-        <label><input type="checkbox" name="conditions" value="0.85"> 解体（0.85）</label>
-    </fieldset>
-
+    <div class="seko">
+        <fieldset>
+            <legend>施工条件係数</legend>
+            <label><input type="checkbox" name="conditions" value="1.05"> 安全対策強化（1.05）</label>
+            <label><input type="checkbox" name="conditions" value="1.2"> 急工期対応（1.2）</label>
+            <label><input type="checkbox" name="conditions" value="1.03"> 開口部養生強化（1.03）</label>
+            <label><input type="checkbox" name="conditions" value="1.02"> 昇降口増設（1.02）</label>
+            <label><input type="checkbox" name="conditions" value="1.1"> 他社共同足場（1.1）</label>
+            <label><input type="checkbox" name="conditions" value="1.4"> 足場盛替え（1.4）</label>
+            <label><input type="checkbox" name="conditions" value="0.85"> 解体（0.85）</label>
+        </fieldset>
+    </div>
 
 
 
@@ -294,11 +333,11 @@
     </div>
 
     <div class="footnote">
-        ※ マコト君は、国土交通省「公共建築工事標準単価積算基準」に基づき、<br>
-        くさび式足場の施工量を、500㎡規模：人工係数 = 0.0358 人工／㎡<br>
+        ※ マコト君は、国土交通省「 <a href="https://www.mlit.go.jp/gobuild/content/001733127.pdf" target="_blank">
+            公共建築工事標準単価積算基準</a>」に基づき、くさび式足場の施工量を、500㎡規模：人工係数 = 0.0358 人工／㎡、
         1000㎡規模：人工係数 = 0.0325 人工／㎡を基に設計されています。<br>
-        <a href="https://www.mlit.go.jp/gobuild/content/001733127.pdf" target="_blank">．国交省 積算基準資料</a><br><br>
-       
+        <br><br>
+
         *難易度係数は作業環境6項目を元に評価。総スコアに応じて最大2.0倍まで加算されます。<br>
 
     </div>
@@ -355,7 +394,7 @@
                 } else {
                     return baseEfficiency / Math.pow(0.98, 4); // ≈33.33
                 }
-                
+
             }
         }
 
@@ -476,18 +515,44 @@
                     ※大規模現場のため要確認（${area <= 3000 ? '逓減率自動適用' : '3000㎡超のため頭打ち適用'}）
                 </span>`;
                 }
+                resultDiv.innerHTML = `
+  <div style="font-size:1.2em; font-weight:bold; margin-bottom:3px;">
+    原価単価: ${unitCost.toFixed(2)} 円/㎡
+  </div>
+  <div style="font-size:0.9em; color:#555;">
+    (${currentCoefficient.toFixed(5)} 人工/㎡)
+  </div>
+`;
 
-                resultDiv.innerHTML = `原価単価: ${unitCost.toFixed(2)} 円/㎡ (${currentCoefficient.toFixed(5)} 人工/㎡)`;
-                totalCostDiv.textContent = `合計金額: ${Math.round(totalCost).toLocaleString()} 円`;
-                sellingPriceDiv.textContent = `小計（税別）: ${Math.round(sellingPrice).toLocaleString()} 円`;
-                manpowerCalcDiv.innerHTML = `必要人工数: ${manpower.toFixed(2)} 人日 (${currentEfficiency.toFixed(2)}㎡/人工) ${warningMsg}`;
+                totalCostDiv.innerHTML = `
+  <div style="font-size:1.2em; font-weight:bold;">
+    合計金額: ${Math.round(totalCost).toLocaleString()} 円
+  </div>
+`;
+
+                sellingPriceDiv.innerHTML = `
+  <div style="font-size:1.2em; font-weight:bold; color:#0066cc;">
+    小計（税別）: ${Math.round(sellingPrice).toLocaleString()} 円
+  </div>
+`;
+
+                manpowerCalcDiv.innerHTML = `
+  <div style="font-size:1.2em; font-weight:bold; margin-bottom:3px;">
+    必要人工数: ${manpower.toFixed(2)} 人日
+  </div>
+  <div style="font-size:0.9em; color:#555; margin-bottom:5px;">
+    (${currentEfficiency.toFixed(2)}㎡/人工)
+  </div>
+  ${warningMsg}
+`;
+
+                // エラー表示部分
             } else {
-                resultDiv.textContent = '原価単価: - 円/㎡';
-                totalCostDiv.textContent = '合計金額: - 円';
-                sellingPriceDiv.textContent = '小計（税別）: - 円';
-                manpowerCalcDiv.textContent = '必要人工数: - 人日';
+                resultDiv.innerHTML = '<div style="font-size:1.1em; color:#999;">原価単価: - 円/㎡</div>';
+                totalCostDiv.innerHTML = '<div style="font-size:1.1em; color:#999;">合計金額: - 円</div>';
+                sellingPriceDiv.innerHTML = '<div style="font-size:1.1em; color:#999;">小計（税別）: - 円</div>';
+                manpowerCalcDiv.innerHTML = '<div style="font-size:1.1em; color:#999;">必要人工数: - 人日</div>';
             }
-
             printDateSpan.textContent = formatDate(new Date());
         }
 
