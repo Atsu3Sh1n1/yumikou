@@ -2,17 +2,18 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>足場 原価計算（くさび式）</title>
+  <title>足場施工費算出機（くさび式基準）開発中</title>
   <style>
     body { font-family: sans-serif; margin: 2em; }
     label { display: block; margin-top: 1em; }
-    input { font-size: 1em; margin-left: 0.5em; width: 100px; }
+    input[type="number"] { font-size: 1em; margin-left: 0.5em; width: 100px; }
     #result, #totalCost { margin-top: 1em; font-weight: bold; font-size: 1.2em; }
-    small { display: block; margin-top: 1em; color: #555; }
+    .footnote { margin-top: 1em; font-size: 0.9em; color: #555; }
+    .checkbox-group { margin-top: 1em; }
   </style>
 </head>
 <body>
-  <h2>足場・金額 計算（くさび式1.0）*開発中</h2>
+  <h2>足場・金額 計算（くさび式1.0基準）</h2>
 
   <label>
     人工単価（円／日）:
@@ -29,13 +30,23 @@
     <input type="number" id="height" value="6" min="0">
   </label>
 
+  <div class="checkbox-group">
+    <strong>足場の種類（安全対応係数適用）:</strong>
+    <label><input type="radio" name="type" value="1.00" checked> くさび式足場（係数 1.00）</label>
+    <label><input type="radio" name="type" value="1.15"> 枠組足場（係数 1.15）</label>
+    <label><input type="radio" name="type" value="1.30"> 単管足場（係数 1.30）</label>
+    <label><input type="radio" name="type" value="1.50"> 吊り足場（係数 1.50）</label>
+    <label><input type="radio" name="type" value="0.90"> 移動式足場（係数 0.90）</label>
+  </div>
+
   <div id="result">原価単価: 325.00 円／㎡</div>
   <div id="totalCost">合計金額: 195,000 円</div>
 
-  <small>
+  <div class="footnote">
     ※ 国土交通省「公共建築工事標準単価積算基準」によれば、くさび式足場の組立・解体施工量は77㎡／人工と定められています。<br>
-    <a href="https://www.mlit.go.jp/gobuild/content/001733127.pdf" target="_blank">出典：国交省 積算基準資料</a>
-  </small>
+    <a href="https://www.mlit.go.jp/gobuild/content/001733127.pdf" target="_blank">出典：国交省 積算基準資料（PDF）</a><br>
+    また、安全対応係数は労働安全衛生規則や建災防資料等を基に各足場方式の安全対策手間を反映しています。
+  </div>
 
   <script>
     const laborCostInput = document.getElementById('laborCost');
@@ -43,18 +54,41 @@
     const heightInput = document.getElementById('height');
     const resultDiv = document.getElementById('result');
     const totalCostDiv = document.getElementById('totalCost');
-    const 施工量 = 77;
+    const footAmount = 77; // くさび式基準：77㎡／人工
+
+    // 安全係数は type ラジオボタンで選択
+    const typeRadios = document.getElementsByName('type');
+
+    // 各方式の安全係数（コメント付き）
+    const safetyFactors = {
+      kusabi: 1.00,      // くさび式（標準、安全対応が最もしやすい）
+      wakugumi: 1.15,    // 枠組足場（やや高所で構造が大きく、安全作業に若干手間）
+      tkan: 1.30,        // 単管足場（手組みが多く、安全確保の追加作業が必要）
+      tsuri: 1.50,       // 吊り足場（不安定な足場、安全設備と管理が特に重要）
+      idou: 0.90         // 移動式（小規模、安全管理が比較的容易）
+    };
+
+    function getSelectedSafetyFactor() {
+      for (const radio of typeRadios) {
+        if (radio.checked) {
+          return parseFloat(radio.value);
+        }
+      }
+      return 1.00; // デフォルト
+    }
 
     function updateAll() {
       const laborCost = parseFloat(laborCostInput.value);
       const area = parseFloat(areaInput.value);
       const height = parseFloat(heightInput.value);
+      const safetyFactor = getSelectedSafetyFactor();
 
-      if (!isNaN(laborCost) && !isNaN(area) && !isNaN(height) && 施工量 > 0) {
-        const unitCost = laborCost / 施工量;
-        const total = unitCost * area * height;
+      if (!isNaN(laborCost) && !isNaN(area) && !isNaN(height) && footAmount > 0) {
+        const unitCost = laborCost / footAmount;
+        const adjustedUnitCost = unitCost * safetyFactor;
+        const total = adjustedUnitCost * area * height;
 
-        resultDiv.textContent = `原価単価: ${unitCost.toFixed(2)} 円／㎡`;
+        resultDiv.textContent = `原価単価: ${adjustedUnitCost.toFixed(2)} 円／㎡`;
         totalCostDiv.textContent = `合計金額: ${total.toLocaleString()} 円`;
       } else {
         resultDiv.textContent = '原価単価: - 円／㎡';
@@ -65,9 +99,9 @@
     laborCostInput.addEventListener('input', updateAll);
     areaInput.addEventListener('input', updateAll);
     heightInput.addEventListener('input', updateAll);
+    typeRadios.forEach(radio => radio.addEventListener('change', updateAll));
 
-    // 初期表示
-    updateAll();
+    updateAll(); // 初期計算
   </script>
 </body>
 </html>
