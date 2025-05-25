@@ -517,7 +517,7 @@
                 }
                 resultDiv.innerHTML = `
   <div style="font-size:1.2em; font-weight:bold; margin-bottom:3px;">
-    原価単価: ${unitCost.toFixed(2)} 円/㎡
+     原価単価: ${unitCost.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} 円/㎡
   </div>
   <div style="font-size:0.9em; color:#555;">
     (${currentCoefficient.toFixed(5)} 人工/㎡)
