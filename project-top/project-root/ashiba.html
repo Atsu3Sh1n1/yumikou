@@ -7,17 +7,32 @@
     body { font-family: sans-serif; margin: 2em; max-width: 900px; }
     label { display: block; margin-top: 0.5em; }
     input[type="number"] { width: 100px; font-size: 1em; margin-left: 0.5em; }
-    #result, #totalCost { margin-top: 1em; font-weight: bold; font-size: 1.2em; }
+    #result, #totalCost, #estimateAmount, #manDays { margin-top: 1em; font-weight: bold; font-size: 1.2em; }
     .checkbox-group, .score-form { margin-top: 2em; }
     fieldset { margin-bottom: 1em;  }
     legend { font-weight: bold;  }
     .footnote { font-size: 0.9em; color: #555; margin-top: 1em; }
     .score-form{ width: 300px; font-size: 1em; margin-left: 0.5em; }
+    .additional-options { margin-top: 2em; padding-top: 1em; border-top: 1px solid #ccc; }
+    .button-group { margin-top: 1em; }
+    button { padding: 0.5em 1em; font-size: 1em; cursor: pointer; }
+    
+    /* 印刷用スタイル */
+    @media print {
+      body { font-size: 12pt; }
+      button, .no-print { display: none; }
+      .print-header { display: block; text-align: center; margin-bottom: 1em; }
+      .print-footer { display: block; text-align: center; margin-top: 1em; font-size: 0.8em; }
+    }
   </style>
 </head>
 <body>
+  <div class="print-header no-print">
+    
+   
+  </div>
 
-  <h2>足場・金額計算（くさび式基準 + 難易度係数）</h2>
+  <h2>足場施工費算出機マコト君１号</h2>
 
   <label>
     人工単価（円／日）:
@@ -26,7 +41,7 @@
 
   <label>
     作業床 面積（㎡）:
-    <input type="number" id="area" value="100" min="0">
+    <input type="number" id="area" placeholder="100" min="0">
   </label>
 
   <label>
@@ -45,6 +60,16 @@
 
   <div id="result">原価単価: 325.00 円／㎡</div>
   <div id="totalCost">合計金額: 195,000 円</div>
+
+  <div class="additional-options"> 
+    <label>
+      諸経費率（%）:
+      <input type="number" id="overheadRate" value="20" min="0" max="100">
+    </label>
+    
+    <div id="estimateAmount">見積金額（売値）: - 円</div>
+    <div id="manDays">必要人工数: - 人日</div>
+  </div>
 
   <div class="score-form">
     <h3>難易度評価</h3>
@@ -107,6 +132,15 @@
     <div id="scoreResult">合計スコア: 6 / 難易度補正係数: 1.0</div>
   </div>
 
+  <div class="button-group no-print">
+    <button id="printButton">見積書を印刷</button>
+    <button id="pdfButton">PDFとして保存</button>
+  </div>
+
+  <div class="print-footer no-print">
+    ※ 本見積書の有効期限は発行日から30日間です。
+  </div>
+
   <div class="footnote">
     ※ 国土交通省「公共建築工事標準単価積算基準」によれば、くさび式足場の施工量は77㎡／人工とされています。<br>
     <a href="https://www.mlit.go.jp/gobuild/content/001733127.pdf" target="_blank">出典：国交省 積算基準資料</a><br>
@@ -118,11 +152,21 @@
     const areaInput = document.getElementById('area');
     const heightInput = document.getElementById('height');
     const typeRadios = document.getElementsByName('type');
+    const overheadRateInput = document.getElementById('overheadRate');
     const form = document.getElementById('difficultyForm');
     const resultDiv = document.getElementById('result');
     const totalCostDiv = document.getElementById('totalCost');
+    const estimateAmountDiv = document.getElementById('estimateAmount');
+    const manDaysDiv = document.getElementById('manDays');
     const scoreResultDiv = document.getElementById('scoreResult');
+    const printButton = document.getElementById('printButton');
+    const pdfButton = document.getElementById('pdfButton');
+    const estimateDateSpan = document.getElementById('estimateDate');
     const 施工量 = 77;
+
+    // 日付を設定
+    const today = new Date();
+    estimateDateSpan.textContent = today.toLocaleDateString('ja-JP');
 
     function getSafetyFactor() {
       for (const radio of typeRadios) {
@@ -149,6 +193,7 @@
       const laborCost = parseFloat(laborCostInput.value);
       const area = parseFloat(areaInput.value);
       const height = parseFloat(heightInput.value);
+      const overheadRate = parseFloat(overheadRateInput.value) / 100;
       const safetyFactor = getSafetyFactor();
       const difficultyFactor = getDifficultyFactor();
 
@@ -156,19 +201,38 @@
         const unitCost = laborCost / 施工量;
         const adjustedCost = unitCost * safetyFactor;
         const total = adjustedCost * area * height * difficultyFactor;
+        const estimateAmount = total * (1 + overheadRate);
+        const manDays = (area * height) / 施工量;
 
         resultDiv.textContent = `原価単価: ${(adjustedCost).toFixed(2)} 円／㎡`;
         totalCostDiv.textContent = `合計金額: ${Math.round(total).toLocaleString()} 円`;
+        estimateAmountDiv.textContent = `見積金額（売値）: ${Math.round(estimateAmount).toLocaleString()} 円`;
+        manDaysDiv.textContent = `必要人工数: ${Math.ceil(manDays * 10) / 10} 人日`;
       } else {
         resultDiv.textContent = '原価単価: - 円／㎡';
         totalCostDiv.textContent = '合計金額: - 円';
+        estimateAmountDiv.textContent = '見積金額（売値）: - 円';
+        manDaysDiv.textContent = '必要人工数: - 人日';
       }
     }
+
+    // 印刷機能
+    printButton.addEventListener('click', () => {
+      window.print();
+    });
+
+    // PDF出力機能（簡易版 - 実際にはサーバーサイド処理やライブラリが必要）
+    pdfButton.addEventListener('click', () => {
+      alert('PDF出力機能は実際の実装ではhtml2pdf.jsなどのライブラリを使用する必要があります。このデモでは印刷機能をご利用ください。');
+      // 実際の実装例:
+      // html2pdf().from(document.body).save('足場見積書.pdf');
+    });
 
     // イベント設定
     laborCostInput.addEventListener('input', updateAll);
     areaInput.addEventListener('input', updateAll);
     heightInput.addEventListener('input', updateAll);
+    overheadRateInput.addEventListener('input', updateAll);
     typeRadios.forEach(r => r.addEventListener('change', updateAll));
     form.addEventListener('change', updateAll);
 
