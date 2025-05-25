@@ -211,6 +211,16 @@
         <div id="scoreResult">合計スコア: 6 / 難易度補正係数: 1.0</div>
     </div>
 
+    <fieldset>
+        <legend>施工条件係数</legend>
+        <label><input type="checkbox" name="conditions" value="1.01"> 安全対策強化（+1%）</label>
+        <label><input type="checkbox" name="conditions" value="1.3"> 急工期対応（+3%）</label>
+        <label><input type="checkbox" name="conditions" value="1.01"> 開口部養生強化（+2%）</label>
+        <label><input type="checkbox" name="conditions" value="1.01"> 昇降口増加（+1%）</label>
+        <label><input type="checkbox" name="conditions" value="1.025"> 他業種との連携(配管取り込みなど)（+2.5%）</label>
+    </fieldset>
+
+
     <!-- 基本入力セクション -->
     <div class="form-section">
         <label>
@@ -302,8 +312,19 @@
             return 1.00;
         }
 
+        function getConditionFactor() {
+            const checkboxes = document.querySelectorAll('input[name="conditions"]:checked');
+            let factor = 1.0;
+            checkboxes.forEach(cb => {
+                factor *= parseFloat(cb.value);
+            });
+            return factor;
+        }
+
+
         // 難易度係数の計算
         function getDifficultyFactor() {
+            const conditionFactor = getConditionFactor();
             const formData = new FormData(form);
             let score = 0;
             for (const value of formData.values()) score += Number(value);
@@ -324,12 +345,13 @@
         }
 
         // 人工数の計算（難易度係数・安全係数を反映）
-        function calculateManpower(area, height, difficultyFactor, safetyFactor) {
+        function calculateManpower(area, height, difficultyFactor, safetyFactor, conditionFactor) {
             if (!isNaN(area) && !isNaN(height)) {
-                return (area * height * difficultyFactor * safetyFactor) / 施工量;
+                return (area * height * difficultyFactor * safetyFactor * conditionFactor) / 施工量;
             }
             return 0;
         }
+
 
 
         // 日付フォーマット
@@ -347,17 +369,22 @@
             const height = parseFloat(heightInput.value);
             const safetyFactor = getSafetyFactor();
             const difficultyFactor = getDifficultyFactor();
+            const conditionFactor = getConditionFactor();
 
             if (!isNaN(laborCost) && !isNaN(area) && !isNaN(height)) {
                 const unitCost = laborCost / 施工量;
+
                 const adjustedCost = unitCost * safetyFactor;
-                const total = adjustedCost * area * height * difficultyFactor;
-                const sellingPrice = calculateSellingPrice(total);
-                const manpower = calculateManpower(area, height, difficultyFactor, safetyFactor);
+                const baseTotal = adjustedCost * area * height * difficultyFactor;
 
+                // 🔸ここで施工条件係数を合計金額と売値に反映
+                const totalWithCondition = baseTotal * conditionFactor;
+                const sellingPrice = calculateSellingPrice(totalWithCondition);
 
-                resultDiv.textContent = `原価単価: ${(adjustedCost).toFixed(2)} 円／㎡`;
-                totalCostDiv.textContent = `合計金額: ${Math.round(total).toLocaleString()} 円`;
+                const manpower = calculateManpower(area, height, difficultyFactor, safetyFactor, conditionFactor);
+
+                resultDiv.textContent = `原価単価: ${adjustedCost.toFixed(2)} 円／㎡`; // ❌施工条件係数なし
+                totalCostDiv.textContent = `合計金額: ${Math.round(totalWithCondition).toLocaleString()} 円`; // ✅施工条件係数あり
                 sellingPriceDiv.textContent = `見積金額（売値）: ${Math.round(sellingPrice).toLocaleString()} 円`;
                 manpowerCalcDiv.textContent = `必要人工数: ${manpower.toFixed(2)} 人日`;
             } else {
@@ -366,6 +393,7 @@
                 sellingPriceDiv.textContent = '小計（税別）: - 円';
                 manpowerCalcDiv.textContent = '必要人工数: - 人日';
             }
+
 
             // 印刷用日付更新
             printDateSpan.textContent = formatDate(new Date());
@@ -378,6 +406,10 @@
         overheadRateInput.addEventListener('input', updateAll);
         typeRadios.forEach(r => r.addEventListener('change', updateAll));
         form.addEventListener('change', updateAll);
+
+        document.querySelectorAll('input[name="conditions"]').forEach(cb => {
+            cb.addEventListener('change', updateAll);
+        });
 
         // 初期表示
         updateAll();
