@@ -12,6 +12,7 @@
             font-size: 1rem;
             line-height: 1.5;
             -webkit-text-size-adjust: 100%;
+            
         }
 
         h3 {
@@ -45,6 +46,7 @@
             border: 1px solid #ddd;
             border-radius: 4px;
             box-sizing: border-box;
+            text-align: right;
         }
 
         #result,
@@ -229,8 +231,12 @@
         <!-- 追加1: 諸経費率入力欄 -->
         <label>
             諸経費率（％）:
-            <input type="number" id="overheadRate" value="10" min="0" max="100">
+            <input type="number" id="overheadRate" value="17" min="0" max="2000">
         </label>
+        <label>
+    コメント（備考）:
+    <textarea id="comment" rows="3" placeholder="例：消耗品5% / 管理費12%" style="width: 100%; padding: 8px; font-size: 1em; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box;"></textarea>
+</label>
 
         <div class="checkbox-group">
             <strong>足場の種類（安全対応係数適用）:</strong>
