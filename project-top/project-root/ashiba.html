@@ -317,9 +317,9 @@
         const scoreResultDiv = document.getElementById('scoreResult');
         const printDateSpan = document.getElementById('printDate');
 
-        // 効率テーブルデータ（0㎡から1000㎡まで拡張）
+        // 効率テーブルデータ
         const efficiencyTable = [
-            { area: 0, coefficient: 0.04000, efficiency: 25.00 },  // 0㎡時の仮想値（外挿用）
+            { area: 0, coefficient: 0.04000, efficiency: 25.00 },
             { area: 100, coefficient: 0.03834, efficiency: 26.09 },
             { area: 200, coefficient: 0.03768, efficiency: 26.53 },
             { area: 300, coefficient: 0.03702, efficiency: 27.01 },
@@ -331,6 +331,58 @@
             { area: 900, coefficient: 0.03316, efficiency: 30.16 },
             { area: 1000, coefficient: 0.03250, efficiency: 30.77 }
         ];
+
+        // 面積から施工量を計算
+        function getEfficiency(area) {
+            if (area <= 0) return efficiencyTable[0].efficiency;
+            if (area <= 1000) {
+                for (let i = 0; i < efficiencyTable.length - 1; i++) {
+                    if (area >= efficiencyTable[i].area && area < efficiencyTable[i + 1].area) {
+                        const lower = efficiencyTable[i];
+                        const upper = efficiencyTable[i + 1];
+                        const ratio = (area - lower.area) / (upper.area - lower.area);
+                        return lower.efficiency + (upper.efficiency - lower.efficiency) * ratio;
+                    }
+                }
+                return efficiencyTable[efficiencyTable.length - 1].efficiency;
+            }
+            // 1000㎡超の場合
+            else {
+                const baseEfficiency = 30.77;
+                if (area <= 3000) {
+                    const steps = Math.floor((area - 1000) / 500);
+                    return baseEfficiency / Math.pow(0.98, steps);
+                } else {
+                    return baseEfficiency / Math.pow(0.98, 4); // ≈33.33
+                }
+            }
+        }
+
+        // 面積から人工係数を計算
+        function getLaborCoefficient(area) {
+            if (area <= 0) return efficiencyTable[0].coefficient;
+            if (area <= 1000) {
+                for (let i = 0; i < efficiencyTable.length - 1; i++) {
+                    if (area >= efficiencyTable[i].area && area < efficiencyTable[i + 1].area) {
+                        const lower = efficiencyTable[i];
+                        const upper = efficiencyTable[i + 1];
+                        const ratio = (area - lower.area) / (upper.area - lower.area);
+                        return lower.coefficient + (upper.coefficient - lower.coefficient) * ratio;
+                    }
+                }
+                return efficiencyTable[efficiencyTable.length - 1].coefficient;
+            }
+            // 1000㎡超の場合
+            else {
+                const baseCoefficient = 0.03250;
+                if (area <= 3000) {
+                    const steps = Math.floor((area - 1000) / 500);
+                    return baseCoefficient * Math.pow(0.98, steps);
+                } else {
+                    return baseCoefficient * Math.pow(0.98, 4); // ≈0.0298
+                }
+            }
+        }
 
         function getSafetyFactor() {
             for (const radio of typeRadios) {
@@ -371,38 +423,6 @@
             }
 
             return factor;
-        }
-
-        // 面積から施工量を線形補間で計算（0㎡から完全対応）
-        function getEfficiency(area) {
-            if (area <= 0) return efficiencyTable[0].efficiency;
-            if (area >= 1000) return efficiencyTable[efficiencyTable.length - 1].efficiency;
-
-            for (let i = 0; i < efficiencyTable.length - 1; i++) {
-                if (area >= efficiencyTable[i].area && area < efficiencyTable[i + 1].area) {
-                    const lower = efficiencyTable[i];
-                    const upper = efficiencyTable[i + 1];
-                    const ratio = (area - lower.area) / (upper.area - lower.area);
-                    return lower.efficiency + (upper.efficiency - lower.efficiency) * ratio;
-                }
-            }
-            return efficiencyTable[efficiencyTable.length - 1].efficiency;
-        }
-
-        // 面積から人工係数を線形補間で計算（0㎡から完全対応）
-        function getLaborCoefficient(area) {
-            if (area <= 0) return efficiencyTable[0].coefficient;
-            if (area >= 1000) return efficiencyTable[efficiencyTable.length - 1].coefficient;
-
-            for (let i = 0; i < efficiencyTable.length - 1; i++) {
-                if (area >= efficiencyTable[i].area && area < efficiencyTable[i + 1].area) {
-                    const lower = efficiencyTable[i];
-                    const upper = efficiencyTable[i + 1];
-                    const ratio = (area - lower.area) / (upper.area - lower.area);
-                    return lower.coefficient + (upper.coefficient - lower.coefficient) * ratio;
-                }
-            }
-            return efficiencyTable[efficiencyTable.length - 1].coefficient;
         }
 
         function calculateSellingPrice(baseCost) {
@@ -448,10 +468,18 @@
                 const currentEfficiency = getEfficiency(area);
                 const currentCoefficient = getLaborCoefficient(area);
 
-                resultDiv.textContent = `原価単価: ${unitCost.toFixed(2)} 円/㎡ (人工係数: ${currentCoefficient.toFixed(5)} 人工/㎡)`;
+                // 警告メッセージ準備
+                let warningMsg = '';
+                if (area > 1000) {
+                    warningMsg = `<span style="color:red; font-size:0.8em; display:block; margin-top:5px;">
+                    ※大規模現場のため要確認（${area <= 3000 ? '逓減率自動適用' : '3000㎡超のため頭打ち適用'}）
+                </span>`;
+                }
+
+                resultDiv.innerHTML = `原価単価: ${unitCost.toFixed(2)} 円/㎡ (人工係数: ${currentCoefficient.toFixed(5)} 人工/㎡)`;
                 totalCostDiv.textContent = `合計金額: ${Math.round(totalCost).toLocaleString()} 円`;
                 sellingPriceDiv.textContent = `小計（税別）: ${Math.round(sellingPrice).toLocaleString()} 円`;
-                manpowerCalcDiv.textContent = `必要人工数: ${manpower.toFixed(2)} 人日 (施工量: ${currentEfficiency.toFixed(2)}㎡/人工)`;
+                manpowerCalcDiv.innerHTML = `必要人工数: ${manpower.toFixed(2)} 人日 (施工量: ${currentEfficiency.toFixed(2)}㎡/人工) ${warningMsg}`;
             } else {
                 resultDiv.textContent = '原価単価: - 円/㎡';
                 totalCostDiv.textContent = '合計金額: - 円';
@@ -462,7 +490,7 @@
             printDateSpan.textContent = formatDate(new Date());
         }
 
-        // イベントリスナーの設定
+        // イベントリスナー設定
         laborCostInput.addEventListener('input', updateAll);
         areaInput.addEventListener('input', updateAll);
         heightInput.addEventListener('input', updateAll);
@@ -480,6 +508,5 @@
 
         updateAll();
     </script>
-</body>
 
 </html>
