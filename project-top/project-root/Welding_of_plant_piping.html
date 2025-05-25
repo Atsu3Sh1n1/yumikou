@@ -127,11 +127,23 @@
     }
 
      #app8 {
-      width: 420px;
-      height: 2800px;
-      margin-top: 0px;
-      margin-bottom: 0px;
+    width: 100%;
+    max-width: 420px; /* 最大幅を設定 */
+    height: 2800px; /* 必要に応じて調整 */
+    margin: 0 auto;
+    border: none;
+    display: block;
+    overflow: hidden; /* スクロールバーを制御 */
+  }
+
+  /* モバイルデバイス用の調整 */
+  @media (max-width: 480px) {
+    #app8 {
+      height: 2800px; /* スマホでは高さを少し減らす */
+      width: 100%;
+      max-width: 100%;
     }
+  }
 
    
     @media screen and (min-width: 768px) {
