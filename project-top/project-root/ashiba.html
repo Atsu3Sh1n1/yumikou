@@ -2,18 +2,22 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>足場施工費算出機（くさび式基準）開発中</title>
+  <title>足場 原価計算（難易度補正込み）</title>
   <style>
-    body { font-family: sans-serif; margin: 2em; }
-    label { display: block; margin-top: 1em; }
-    input[type="number"] { font-size: 1em; margin-left: 0.5em; width: 100px; }
+    body { font-family: sans-serif; margin: 2em; max-width: 900px; }
+    label { display: block; margin-top: 0.5em; }
+    input[type="number"] { width: 100px; font-size: 1em; margin-left: 0.5em; }
     #result, #totalCost { margin-top: 1em; font-weight: bold; font-size: 1.2em; }
-    .footnote { margin-top: 1em; font-size: 0.9em; color: #555; }
-    .checkbox-group { margin-top: 1em; }
+    .checkbox-group, .score-form { margin-top: 2em; }
+    fieldset { margin-bottom: 1em;  }
+    legend { font-weight: bold;  }
+    .footnote { font-size: 0.9em; color: #555; margin-top: 1em; }
+    .score-form{ width: 300px; font-size: 1em; margin-left: 0.5em; }
   </style>
 </head>
 <body>
-  <h2>足場・金額 計算（くさび式1.0基準）</h2>
+
+  <h2>足場・金額計算（くさび式基準 + 難易度係数）</h2>
 
   <label>
     人工単価（円／日）:
@@ -42,66 +46,133 @@
   <div id="result">原価単価: 325.00 円／㎡</div>
   <div id="totalCost">合計金額: 195,000 円</div>
 
+  <div class="score-form">
+    <h3>難易度評価</h3>
+    <form id="difficultyForm">
+      <fieldset>
+        <legend>作業高さ</legend>
+        <label><input type="radio" name="heightScore" value="1" checked> 地上〜2m</label>
+        <label><input type="radio" name="heightScore" value="2"> 2〜5m</label>
+        <label><input type="radio" name="heightScore" value="3"> 5〜10m</label>
+        <label><input type="radio" name="heightScore" value="4"> 10〜15m</label>
+        <label><input type="radio" name="heightScore" value="5"> 15m以上</label>
+      </fieldset>
+
+      <fieldset>
+        <legend>搬入条件</legend>
+        <label><input type="radio" name="transport" value="1" checked> 整地・近距離</label>
+        <label><input type="radio" name="transport" value="2"> 小さな段差あり</label>
+        <label><input type="radio" name="transport" value="3"> 100m以内手運び</label>
+        <label><input type="radio" name="transport" value="4"> 100m超〜300m</label>
+        <label><input type="radio" name="transport" value="5"> 300m超〜500m以上</label>
+      </fieldset>
+
+      <fieldset>
+        <legend>足場支持地</legend>
+        <label><input type="radio" name="base" value="1" checked> コンクリ平地</label>
+        <label><input type="radio" name="base" value="2"> 軟弱地盤</label>
+        <label><input type="radio" name="base" value="3"> 傾斜地</label>
+        <label><input type="radio" name="base" value="4"> 配管上</label>
+        <label><input type="radio" name="base" value="5"> 不安定</label>
+      </fieldset>
+
+      <fieldset>
+        <legend>作業姿勢</legend>
+        <label><input type="radio" name="posture" value="1" checked> 直立作業</label>
+        <label><input type="radio" name="posture" value="2"> かがみ作業</label>
+        <label><input type="radio" name="posture" value="3"> 懸垂あり</label>
+        <label><input type="radio" name="posture" value="4"> 腰曲げ</label>
+        <label><input type="radio" name="posture" value="5"> 狭小・不安定</label>
+      </fieldset>
+
+      <fieldset>
+        <legend>環境要因</legend>
+        <label><input type="radio" name="environment" value="1" checked> 常温・昼間</label>
+        <label><input type="radio" name="environment" value="2"> 高温・湿気</label>
+        <label><input type="radio" name="environment" value="3"> 夜間作業</label>
+        <label><input type="radio" name="environment" value="4"> 有害ガス</label>
+        <label><input type="radio" name="environment" value="5"> 爆発対応</label>
+      </fieldset>
+
+      <fieldset>
+        <legend>干渉物</legend>
+        <label><input type="radio" name="interference" value="1" checked> なし</label>
+        <label><input type="radio" name="interference" value="2"> 少数配管</label>
+        <label><input type="radio" name="interference" value="3"> 密集配管</label>
+        <label><input type="radio" name="interference" value="4"> 電気設備多</label>
+        <label><input type="radio" name="interference" value="5"> 360度密集</label>
+      </fieldset>
+    </form>
+
+    <div id="scoreResult">合計スコア: 6 / 難易度補正係数: 1.0</div>
+  </div>
+
   <div class="footnote">
-    ※ 国土交通省「公共建築工事標準単価積算基準」によれば、くさび式足場の組立・解体施工量は77㎡／人工と定められています。<br>
-    <a href="https://www.mlit.go.jp/gobuild/content/001733127.pdf" target="_blank">出典：国交省 積算基準資料（PDF）</a><br>
-    また、安全対応係数は労働安全衛生規則や建災防資料等を基に各足場方式の安全対策手間を反映しています。
+    ※ 国土交通省「公共建築工事標準単価積算基準」によれば、くさび式足場の施工量は77㎡／人工とされています。<br>
+    <a href="https://www.mlit.go.jp/gobuild/content/001733127.pdf" target="_blank">出典：国交省 積算基準資料</a><br>
+    難易度係数は作業環境6項目を元に評価。総スコアに応じて最大2.0倍まで加算されます。
   </div>
 
   <script>
     const laborCostInput = document.getElementById('laborCost');
     const areaInput = document.getElementById('area');
     const heightInput = document.getElementById('height');
+    const typeRadios = document.getElementsByName('type');
+    const form = document.getElementById('difficultyForm');
     const resultDiv = document.getElementById('result');
     const totalCostDiv = document.getElementById('totalCost');
-    const footAmount = 77; // くさび式基準：77㎡／人工
+    const scoreResultDiv = document.getElementById('scoreResult');
+    const 施工量 = 77;
 
-    // 安全係数は type ラジオボタンで選択
-    const typeRadios = document.getElementsByName('type');
-
-    // 各方式の安全係数（コメント付き）
-    const safetyFactors = {
-      kusabi: 1.00,      // くさび式（標準、安全対応が最もしやすい）
-      wakugumi: 1.15,    // 枠組足場（やや高所で構造が大きく、安全作業に若干手間）
-      tkan: 1.30,        // 単管足場（手組みが多く、安全確保の追加作業が必要）
-      tsuri: 1.50,       // 吊り足場（不安定な足場、安全設備と管理が特に重要）
-      idou: 0.90         // 移動式（小規模、安全管理が比較的容易）
-    };
-
-    function getSelectedSafetyFactor() {
+    function getSafetyFactor() {
       for (const radio of typeRadios) {
-        if (radio.checked) {
-          return parseFloat(radio.value);
-        }
+        if (radio.checked) return parseFloat(radio.value);
       }
-      return 1.00; // デフォルト
+      return 1.00;
+    }
+
+    function getDifficultyFactor() {
+      const formData = new FormData(form);
+      let score = 0;
+      for (const value of formData.values()) score += Number(value);
+
+      let factor = 1.0;
+      if (score >= 17) factor = 2.0;
+      else if (score >= 13) factor = 1.5;
+      else if (score >= 9) factor = 1.2;
+
+      scoreResultDiv.innerText = `合計スコア: ${score} / 難易度補正係数: ${factor}`;
+      return factor;
     }
 
     function updateAll() {
       const laborCost = parseFloat(laborCostInput.value);
       const area = parseFloat(areaInput.value);
       const height = parseFloat(heightInput.value);
-      const safetyFactor = getSelectedSafetyFactor();
+      const safetyFactor = getSafetyFactor();
+      const difficultyFactor = getDifficultyFactor();
 
-      if (!isNaN(laborCost) && !isNaN(area) && !isNaN(height) && footAmount > 0) {
-        const unitCost = laborCost / footAmount;
-        const adjustedUnitCost = unitCost * safetyFactor;
-        const total = adjustedUnitCost * area * height;
+      if (!isNaN(laborCost) && !isNaN(area) && !isNaN(height)) {
+        const unitCost = laborCost / 施工量;
+        const adjustedCost = unitCost * safetyFactor;
+        const total = adjustedCost * area * height * difficultyFactor;
 
-        resultDiv.textContent = `原価単価: ${adjustedUnitCost.toFixed(2)} 円／㎡`;
-        totalCostDiv.textContent = `合計金額: ${total.toLocaleString()} 円`;
+        resultDiv.textContent = `原価単価: ${(adjustedCost).toFixed(2)} 円／㎡`;
+        totalCostDiv.textContent = `合計金額: ${Math.round(total).toLocaleString()} 円`;
       } else {
         resultDiv.textContent = '原価単価: - 円／㎡';
         totalCostDiv.textContent = '合計金額: - 円';
       }
     }
 
+    // イベント設定
     laborCostInput.addEventListener('input', updateAll);
     areaInput.addEventListener('input', updateAll);
     heightInput.addEventListener('input', updateAll);
-    typeRadios.forEach(radio => radio.addEventListener('change', updateAll));
+    typeRadios.forEach(r => r.addEventListener('change', updateAll));
+    form.addEventListener('change', updateAll);
 
-    updateAll(); // 初期計算
+    updateAll(); // 初期表示
   </script>
 </body>
 </html>
