@@ -152,6 +152,9 @@
     <!-- 難易度スコアを上部に移動 -->
     <div class="score-form">
         <h3>難易度評価スコア</h3>
+        <div class="footnote">
+            *難易度係数は作業環境6項目を元に評価。総スコアに応じて最大2.0倍まで加算されます。
+        </div>
         <form id="difficultyForm">
             <fieldset>
                 <legend>作業高さ</legend>
@@ -209,7 +212,7 @@
         </form>
 
         <div id="scoreResult">合計スコア: 6 / 難易度補正係数: 1.0</div>
-    </div>
+    </div><br>
 
     <fieldset>
         <legend>施工条件係数</legend>
@@ -334,7 +337,19 @@
             else if (score >= 13) factor = 1.5;
             else if (score >= 9) factor = 1.2;
 
-            scoreResultDiv.innerText = `合計スコア: ${score} / 難易度補正係数: ${factor}`;
+            scoreResultDiv.innerText = `合計スコア: ${score} / 難易度補正係数: ${factor.toFixed(1)}`;
+
+            // スコアに応じて色を変える
+            if (score >= 17) {
+                scoreResultDiv.style.color = 'red';
+            } else if (score >= 13) {
+                scoreResultDiv.style.color = 'orange';
+            } else if (score >= 9) {
+                scoreResultDiv.style.color = 'blue';
+            } else {
+                scoreResultDiv.style.color = 'green';
+            }
+
             return factor;
         }
 
