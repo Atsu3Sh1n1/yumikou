@@ -46,7 +46,7 @@
             border: 1px solid #ddd;
             border-radius: 4px;
             box-sizing: border-box;
-            text-align: right;
+            text-align: left;
         }
 
         #result,
@@ -172,22 +172,22 @@
 
         <label>
             作業床 面積（㎡）:
-            <input type="number" id="area" placeholder="100" min="0">
+            <input type="number" id="area" placeholder="0" min="0">
         </label>
 
         <label>
             高さ（m）:
-            <input type="number" id="height" value="6" min="0">
+            <input type="number" id="height" placeholder="0" min="0">
         </label>
 
         <!-- 追加1: 諸経費率入力欄 -->
         <label>
             諸経費率（％）:
-            <input type="number" id="overheadRate" value="17" min="0" max="2000">
+            <input type="number" id="overheadRate" value="15" min="0" max="2000">
         </label>
         <label>
             コメント（備考）:
-            <textarea id="comment" rows="3" placeholder="例：消耗品5% / 管理費12%"
+            <textarea id="comment" rows="3" placeholder="例：消耗品5% / 管理費10%"
                 style="width: 100%; padding: 8px; font-size: 1em; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box;"></textarea>
         </label>
 
@@ -260,13 +260,13 @@
 
     <fieldset>
         <legend>施工条件係数</legend>
-        <label><input type="checkbox" name="conditions" value="1.03"> 安全対策強化（1.03）</label>
-        <label><input type="checkbox" name="conditions" value="1.25"> 急工期対応（1.25）</label>
-        <label><input type="checkbox" name="conditions" value="1.02"> 開口部養生強化（1.02）</label>
+        <label><input type="checkbox" name="conditions" value="1.05"> 安全対策強化（1.05）</label>
+        <label><input type="checkbox" name="conditions" value="1.2"> 急工期対応（1.2）</label>
+        <label><input type="checkbox" name="conditions" value="1.03"> 開口部養生強化（1.03）</label>
         <label><input type="checkbox" name="conditions" value="1.02"> 昇降口増設（1.02）</label>
-        <label><input type="checkbox" name="conditions" value="1.08"> 他業種との連携/配管取り込みなど（1.08）</label>
-        <label><input type="checkbox" name="conditions" value="1.5"> 足場盛替え（1.5）*作業床㎠×高さをピンポイントで計測</label>
-        <label><input type="checkbox" name="conditions" value="0.85"> 解体（0.9）</label>
+        <label><input type="checkbox" name="conditions" value="1.1"> 他社共同足場（1.1）</label>
+        <label><input type="checkbox" name="conditions" value="1.4"> 足場盛替え（1.4）</label>
+        <label><input type="checkbox" name="conditions" value="0.85"> 解体（0.85）</label>
     </fieldset>
 
 
@@ -296,9 +296,9 @@
     <div class="footnote">
         ※ マコト君は、国土交通省「公共建築工事標準単価積算基準」に基づき、<br>
         くさび式足場の施工量を、500㎡規模：人工係数 = 0.0358 人工／㎡<br>
-        1000㎡規模：人工係数 = 0.0325 人工／㎡(最低値で頭打ち)を基に設計されています。<br>
+        1000㎡規模：人工係数 = 0.0325 人工／㎡を基に設計されています。<br>
         <a href="https://www.mlit.go.jp/gobuild/content/001733127.pdf" target="_blank">．国交省 積算基準資料</a><br><br>
-
+       
         *難易度係数は作業環境6項目を元に評価。総スコアに応じて最大2.0倍まで加算されます。<br>
 
     </div>
@@ -355,6 +355,7 @@
                 } else {
                     return baseEfficiency / Math.pow(0.98, 4); // ≈33.33
                 }
+                
             }
         }
 
@@ -410,7 +411,7 @@
             else if (score >= 13) factor = 1.5;
             else if (score >= 9) factor = 1.2;
 
-            scoreResultDiv.innerText = `合計スコア: ${score} / 難易度補正係数: ${factor.toFixed(1)}`;
+            scoreResultDiv.innerText = `合計スコア: ${score} / 難易度補正: ${factor.toFixed(1)}`;
 
             if (score >= 17) {
                 scoreResultDiv.style.color = 'red';
@@ -476,10 +477,10 @@
                 </span>`;
                 }
 
-                resultDiv.innerHTML = `原価単価: ${unitCost.toFixed(2)} 円/㎡ (人工係数: ${currentCoefficient.toFixed(5)} 人工/㎡)`;
+                resultDiv.innerHTML = `原価単価: ${unitCost.toFixed(2)} 円/㎡ (${currentCoefficient.toFixed(5)} 人工/㎡)`;
                 totalCostDiv.textContent = `合計金額: ${Math.round(totalCost).toLocaleString()} 円`;
                 sellingPriceDiv.textContent = `小計（税別）: ${Math.round(sellingPrice).toLocaleString()} 円`;
-                manpowerCalcDiv.innerHTML = `必要人工数: ${manpower.toFixed(2)} 人日 (施工量: ${currentEfficiency.toFixed(2)}㎡/人工) ${warningMsg}`;
+                manpowerCalcDiv.innerHTML = `必要人工数: ${manpower.toFixed(2)} 人日 (${currentEfficiency.toFixed(2)}㎡/人工) ${warningMsg}`;
             } else {
                 resultDiv.textContent = '原価単価: - 円/㎡';
                 totalCostDiv.textContent = '合計金額: - 円';
