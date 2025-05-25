@@ -12,7 +12,7 @@
             font-size: 1rem;
             line-height: 1.5;
             -webkit-text-size-adjust: 100%;
-            
+
         }
 
         h3 {
@@ -234,9 +234,10 @@
             <input type="number" id="overheadRate" value="17" min="0" max="2000">
         </label>
         <label>
-    コメント（備考）:
-    <textarea id="comment" rows="3" placeholder="例：消耗品5% / 管理費12%" style="width: 100%; padding: 8px; font-size: 1em; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box;"></textarea>
-</label>
+            コメント（備考）:
+            <textarea id="comment" rows="3" placeholder="例：消耗品5% / 管理費12%"
+                style="width: 100%; padding: 8px; font-size: 1em; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box;"></textarea>
+        </label>
 
         <div class="checkbox-group">
             <strong>足場の種類（安全対応係数適用）:</strong>
@@ -274,7 +275,7 @@
         <a href="https://www.mlit.go.jp/gobuild/content/001733127.pdf" target="_blank">．国交省 積算基準資料</a><br><br>
 
         *難易度係数は作業環境6項目を元に評価。総スコアに応じて最大2.0倍まで加算されます。<br>
-       
+
     </div>
 
     <script>
@@ -322,13 +323,14 @@
             return baseCost * (1 + overheadRate / 100);
         }
 
-        // 人工数の計算（難易度補正係数込み）
-        function calculateManpower(area, height, difficultyFactor) {
+        // 人工数の計算（難易度係数・安全係数を反映）
+        function calculateManpower(area, height, difficultyFactor, safetyFactor) {
             if (!isNaN(area) && !isNaN(height)) {
-                return (area * height * difficultyFactor) / 施工量;
+                return (area * height * difficultyFactor * safetyFactor) / 施工量;
             }
             return 0;
         }
+
 
         // 日付フォーマット
         function formatDate(date) {
@@ -351,7 +353,8 @@
                 const adjustedCost = unitCost * safetyFactor;
                 const total = adjustedCost * area * height * difficultyFactor;
                 const sellingPrice = calculateSellingPrice(total);
-                const manpower = calculateManpower(area, height, difficultyFactor);
+                const manpower = calculateManpower(area, height, difficultyFactor, safetyFactor);
+
 
                 resultDiv.textContent = `原価単価: ${(adjustedCost).toFixed(2)} 円／㎡`;
                 totalCostDiv.textContent = `合計金額: ${Math.round(total).toLocaleString()} 円`;
