@@ -268,7 +268,7 @@
                 <legend>作業高(フロア階含む)</legend>
                 <label><input type="radio" name="heightScore" value="1" checked> 地上〜2m</label>
                 <label><input type="radio" name="heightScore" value="2"> 2〜5m</label>
-                <label><input type="radio" name="heightScore" value="3"> 5〜10m (例:2FL~)</label>
+                <label><input type="radio" name="heightScore" value="3"> 5〜10m (例：2FL)</label>
                 <label><input type="radio" name="heightScore" value="4"> 10〜15m</label>
                 <label><input type="radio" name="heightScore" value="5"> 15m以上</label>
             </fieldset>
@@ -303,10 +303,10 @@
             <fieldset>
                 <legend>環境要因</legend>
                 <label><input type="radio" name="environment" value="1" checked> 常温・昼間</label>
-                <label><input type="radio" name="environment" value="2"> 高温・湿気</label>
-                <label><input type="radio" name="environment" value="3"> 夜間作業</label>
-                <label><input type="radio" name="environment" value="4"> 有害ガス</label>
-                <label><input type="radio" name="environment" value="5"> 爆発対応</label>
+                <label><input type="radio" name="environment" value="2"> 人込み</label>
+                <label><input type="radio" name="environment" value="3"> 埃、暗所</label>
+                <label><input type="radio" name="environment" value="4"> 防爆対応</label>
+                <label><input type="radio" name="environment" value="5"> 高温・炎天下</label>
             </fieldset>
 
             <fieldset>
@@ -333,7 +333,7 @@
             <label><input type="checkbox" name="conditions" value="1.5"> 足場盛替え（1.5）</label>
             <label><input type="checkbox" name="conditions" value="0.8"> 解体（0.8）</label>
             <label><input type="checkbox" name="conditions" value="1.3"> 雨天（1.3）</label>
-            <label><input type="checkbox" name="conditions" value="1.25"> 夜間（1.25）※スコア重複可</label>
+            <label><input type="checkbox" name="conditions" value="1.25"> 夜間（1.25）</label>
             <label><input type="checkbox" name="conditions" value="1.5"> 深夜（1.5）</label>
             <label><input type="checkbox" name="conditions" value="1.15"> 組み立て高さ10~20m（1.15）</label>
             <label><input type="checkbox" name="conditions" value="1.35"> 組み立て高さ20~30m（1.35）</label>
@@ -345,9 +345,9 @@
     <!-- 計算結果表示セクション -->
 
     <div id="totalVolume">総合体積: 0 ㎥</div>
-    <div id="result">原価単価: 325.00 円／㎥</div>
-    <div id="manpowerCalc">必要人工数: 7.79 人日</div>
-    <div id="totalCost">合計金額: 195,000 円</div>
+    <div id="result">原価単価: 0.00 円／㎥</div>
+    <div id="manpowerCalc">必要人工数: 0.00 人日</div>
+    <div id="totalCost">合計金額: 0 円</div>
 
     <div id="inputValues">
         作業床面積 <span id="displayArea">0</span>㎡<br>
