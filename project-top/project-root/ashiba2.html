@@ -3,32 +3,55 @@
 <head>
   <meta charset="UTF-8">
   <title>設計上の安全マージンに関する注意事項</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body {
       font-family: "メイリオ", sans-serif;
-      line-height: 1.6;
+      line-height: 1.8;
       padding: 20px;
       background-color: #f9f9f9;
+      font-size: 18px; /* 基本の文字サイズを拡大 */
     }
     .notice-box {
       background-color: #fff3cd;
       border: 1px solid #ffeeba;
-      padding: 20px;
-      border-radius: 8px;
+      padding: 24px;
+      border-radius: 10px;
     }
     h2 {
       color: #856404;
+      font-size: 22px;
+      margin-bottom: 16px;
     }
     ul {
-      padding-left: 20px;
+      padding-left: 24px;
+    }
+    li {
+      margin-bottom: 12px;
+    }
+    .footer {
+      text-align: center;
+      font-size: 14px;
+      margin-top: 20px;
+      padding: 1rem;
     }
 
-    .footer {
-            text-align: center;
-            font-size: 11px;
-            margin-bottom: -10px;
-            padding: 1.2rem;
-        }
+    /* スマホ用の追加調整 */
+    @media screen and (max-width: 480px) {
+      body {
+        font-size: 20px;
+        padding: 16px;
+      }
+      h2 {
+        font-size: 24px;
+      }
+      .notice-box {
+        padding: 20px;
+      }
+      .footer {
+        font-size: 13px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -55,10 +78,11 @@
       以上の方針により、実際の施工高さが40m以下であっても、より高負荷条件を想定することで、安全性と制度性を高めた設計としています。
     </p>
   </div>
-   <footer style="text-align:center; padding:0.5rem;">
-                <a href="https://atsu3sh1n1.github.io/yumikou/" style="color:#000; text-decoration:none;">
-                    有限会社弓工 All rights reserved.
-                </a>
-            </footer>
+
+  <footer class="footer">
+    <a href="https://atsu3sh1n1.github.io/yumikou/" style="color:#000; text-decoration:none;">
+      有限会社弓工 All rights reserved.
+    </a>
+  </footer>
 </body>
 </html>
