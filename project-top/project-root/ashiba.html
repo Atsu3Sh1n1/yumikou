@@ -330,72 +330,33 @@
         const printDateSpan = document.getElementById('printDate');
 
         // 高さ係数テーブルを効率データのように刻む
-        const heightCoefficientTable = [
-            { height: 0, coefficient: 1.00 },
-            { height: 1.7, coefficient: 1.00 },
-            { height: 1.8, coefficient: 1.05 },
-            { height: 4, coefficient: 1.05 },
-            { height: 5, coefficient: 1.15 },
-            { height: 6, coefficient: 1.15 },
-            { height: 7, coefficient: 1.20 },
-            { height: 9, coefficient: 1.20 },
-            { height: 10, coefficient: 1.30 },
-            { height: 14, coefficient: 1.30 },
-            { height: 15, coefficient: 1.40 },
-            { height: 19, coefficient: 1.40 },
-            { height: 20, coefficient: 1.50 },
-            { height: 24, coefficient: 1.50 },
-            { height: 25, coefficient: 1.60 },
-            { height: 29, coefficient: 1.60 },
-            { height: 30, coefficient: 1.75 },
-            { height: 34, coefficient: 1.75 },
-            { height: 35, coefficient: 1.90 },
-            { height: 39, coefficient: 1.90 },
-            { height: 40, coefficient: 2.10 },
-            { height: 44, coefficient: 2.10 },
-            { height: 45, coefficient: 2.30 },
-            { height: 49, coefficient: 2.30 },
-            { height: 50, coefficient: 2.50 },
-            { height: 59, coefficient: 2.50 },
-            { height: 60, coefficient: 2.75 },
-            { height: 69, coefficient: 2.75 },
-            { height: 70, coefficient: 3.00 },
-            { height: 79, coefficient: 3.00 },
-            { height: 80, coefficient: 3.30 },
-            { height: 89, coefficient: 3.30 },
-            { height: 90, coefficient: 3.60 },
-            { height: 99, coefficient: 3.60 },
-            { height: 100, coefficient: 4.00 },
-            { height: 109, coefficient: 4.00 },
-            { height: 110, coefficient: 4.50 },
-            { height: 119, coefficient: 4.50 },
-            { height: 120, coefficient: 5.00 },
-            { height: 139, coefficient: 5.00 },
-            { height: 140, coefficient: 5.50 },
-            { height: 159, coefficient: 5.50 },
-            { height: 160, coefficient: 6.00 },
-            { height: 179, coefficient: 6.00 },
-            { height: 180, coefficient: 7.00 },
-            { height: 199, coefficient: 7.00 },
-            { height: 200, coefficient: 8.00 }
-        ];
-
-
-
-        // 高さから係数を取得（元テーブルに高精度でフィット）
         function getHeightCoefficient(height) {
+            const table = [
+                { height: 0, coefficient: 1.00 },
+                { height: 10, coefficient: 1.34 },
+                { height: 30, coefficient: 2.04 },
+                { height: 60, coefficient: 3.24 },
+                { height: 100, coefficient: 5.26 },
+                { height: 150, coefficient: 7.16 },
+                { height: 200, coefficient: 8.00 },
+            ];
+
             if (height <= 0) return 1.0;
             if (height >= 200) return 8.0;
 
-            // 3次多項式フィッティング済み係数式
-            const a = -0.0000000416;
-            const b = 0.0000454;
-            const c = 0.02475;
-            const d = 0.97515;
+            // 線形補間
+            for (let i = 0; i < table.length - 1; i++) {
+                const h1 = table[i].height;
+                const h2 = table[i + 1].height;
+                const c1 = table[i].coefficient;
+                const c2 = table[i + 1].coefficient;
 
-            const coefficient = a * height ** 3 + b * height ** 2 + c * height + d;
-
-            return parseFloat(coefficient.toFixed(2));
+                if (height >= h1 && height <= h2) {
+                    const ratio = (height - h1) / (h2 - h1);
+                    const interpolated = c1 + (c2 - c1) * ratio;
+                    return parseFloat(interpolated.toFixed(2));
+                }
+            }
         }
 
 
