@@ -343,7 +343,7 @@
             <label><input type="checkbox" name="conditions" value="1.15"> 組み立て高さ10~20m（1.15）</label>
             <label><input type="checkbox" name="conditions" value="1.35"> 組み立て高さ20~30m（1.35）</label>
             <label><input type="checkbox" name="conditions" value="1.5"> 組み立て高さ30m~（1.5）</label>
-            ※作業高係数は自動で組み込んでもいいのですが、調整しやすいように分けています。
+            
         </fieldset>
     </div>
 
@@ -353,13 +353,13 @@
     <div id="result">原価単価: 0.00 円／㎥</div>
 
     <div id="totalCost">原価合計金額: 0 円</div>
-
+    <div id="manpowerCalc">総工数: 0.00 人日</div>
     <div id="inputValues">
         作業床面積 <span id="displayArea">0</span>㎡<br>
         作業床高 <span id="displayHeight">0</span> m<br>
         諸経費(利益含む) <span id="displayOverhead">0</span>%<br>
     </div>
-    <div id="manpowerCalc">総工数: 0.00 人日</div>
+
     <div id="sellingPrice">小計: 0 円</div>
     <div id="taxAmount">消費税(10%): 0 円</div>
     <div id="taxIncludedPrice" class="tax-included">税込み価格: 0 円</div>
@@ -549,6 +549,8 @@
                 const manpower = calculateManpower(area, height, difficultyFactor, safetyFactor, conditionFactor);
                 const totalCost = manpower * laborCost;
                 const unitCost = totalCost / (area * height);
+                const unitCostPerM2 = totalCost / area; // ✅ ㎡単価
+
                 const sellingPrice = calculateSellingPrice(totalCost);
                 const taxRate = 0.10; // 消費税率10%
                 const taxAmount = Math.floor(sellingPrice * taxRate); // 消費税額（端数切捨て）
@@ -568,6 +570,9 @@
                 resultDiv.innerHTML = `
   <div style="font-size:1.2em; font-weight:bold; margin-bottom:3px;">
      原価単価: ${unitCost.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })} 円/㎥
+  </div>
+  <div style="font-size:1.1em; font-weight:normal; margin-bottom:3px;">
+     原価単価: ${unitCostPerM2.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })} 円/㎡
   </div>
   <div style="font-size:0.9em; color:#555;">
    （人工係数: ${currentCoefficient.toFixed(5)} 人工/㎡）
