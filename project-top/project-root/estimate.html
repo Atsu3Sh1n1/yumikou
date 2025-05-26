@@ -112,7 +112,7 @@
           <input type="number" pattern="[0-9]*" id="s" placeholder="0" min="0" />
           <input type="number" pattern="[0-9]*" id="sc" placeholder="単価/23,000" min="0" />
         </div>
-        <span style="font-size: 0.8em; color: #0059ff">1スパン/￥5,000* 応用:高車5/大10/レッカー20</span>
+        <span style="font-size: 0.8em; color: #02d4df">1スパン/￥5,000* 応用:高車5/大10/レッカー20</span>
       </div>
 
 
@@ -138,11 +138,11 @@
     const workItems = [
       { id: "is", label: "一般作業員", factor: 0.8, note: "工事進行に必要な段取り、雑用など" },
       { id: "ep", label: "見習い・補助", factor: 0.7, note: "基本作業の補助・軽作業中心" },
-      { id: "tb", label: "とび職(足場専門)", factor: 1, note: "高所作業や足場組立、鉄骨建方など" },
+      { id: "tb", label: "足場鳶", factor: 1, note: "高所作業や足場組立、鉄骨建方など" },
       { id: "jr", label: "重量鳶", factor: 1.1, note: "重量物据付・クレーン作業など(足場も可)" },
-      { id: "pp", label: "配管工(中堅クラス)", factor: 1.0, note: "図面を見て一人で配管施工ができる" },
-      { id: "tp", label: "配管工(上級クラス)", factor: 1.2, note: "現場指示・品質管理・統括できる" },
-      { id: "ip", label: "配管工(職長クラス)", factor: 1.5, note: "現場調整、図面修正、他職との連携も可" },
+      { id: "pp", label: "配管工(中堅)", factor: 1.0, note: "図面を見て一人で配管施工ができる" },
+      { id: "tp", label: "配管工(上級)", factor: 1.2, note: "現場指示・品質管理・統括できる" },
+      { id: "ip", label: "配管工(職長)", factor: 1.5, note: "現場調整、図面修正、他職との連携も可" },
       { id: "fp", label: "溶接工(一般)", factor: 1.3, note: "アーク・半自動（CO2）、基本姿勢・鋼管対応" },
       { id: "cp", label: "溶接工(Tig)", factor: 1.5, note: "ステンレス・アルミ、仰向け等の全姿勢可" },
       { id: "dp", label: "溶接工(特殊)", factor: 2.4, note: "高圧・医薬・原子力、X線検査合格前提（RT100%合格など）" },
@@ -153,8 +153,8 @@
       { id: "et", label: "電気工", factor: 1.1, note: "電気配線・照明・電源設備の設置など" },
       { id: "dk", label: "土工", factor: 0.9, note: "掘削・埋戻し・造成など基礎作業" },
       { id: "tk", label: "塗装工", factor: 0.9, note: "外壁・内装・鉄部などの塗装仕上げ" },
-      { id: "kt", label: "現場監督（一般）", factor: 1.5, note: "現場全体の進行・工程・安全・品質を管理" },
-      { id: "sk", label: "専門監督（配管監督など）", factor: 1.6, note: "特定工種（配管・電気など）を専門的に管理" },
+      { id: "kt", label: "現場監督(一般)", factor: 1.5, note: "現場全体の進行・工程・安全・品質を管理" },
+      { id: "sk", label: "専門監督", factor: 1.6, note: "特定工種（配管・電気など）を専門的に管理" },
       { id: "ck", label: "工程管理監督", factor: 1.7, note: "工期計画・日程調整・全体スケジュール管理" },
       { id: "ak", label: "安全監督", factor: 1.6, note: "危険予知・ルール徹底・事故防止管理" },
       { id: "hk", label: "品質管理監督", factor: 1.5, note: "施工基準の確認・検査・品質保証" },
@@ -168,13 +168,13 @@
     workItems.forEach(({ id, label, factor, note }) => {
       const group = document.createElement("div");
       group.className = "form-group";
-      group.innerHTML = `
-<div class="form-row">${label} / <span style="color: red; display: inline;">${factor}</span></div>
-      <div class="input-group">
+     group.innerHTML = `
+<div class="form-row" style="font-size: 1.4em; margin-top: 2rem; font-weight: bold;">${label} / <span style="color: red;">${factor}</span></div>
+  <div class="input-group">
         <input type="number" inputmode="numeric" id="${id}" placeholder="人" min="0" />
         <input type="number" inputmode="numeric" id="${id}d" placeholder="日" min="0" />
       </div>
-      ${note ? `<span style="font-size: 0.8em; color: #0059ff">${note}</span>` : ""}
+      ${note ? `<span style="font-size: 0.8em; color: #02d4df">${note}</span>` : ""}
     `;
       f.insertBefore(group, insertBeforeEl);
     });
