@@ -1,137 +1,226 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8" />
-  <title>超最新トレンドボタン一覧</title>
-  <style>
-    body {
-      background: #0f0f0f;
-      color: #fff;
-      font-family: 'Segoe UI', sans-serif;
-      padding: 40px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>お洒落な最新トレンドボタン一覧</title>
+<style>
+  body {
+    background: #fff;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    color: #222;
+    padding: 50px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+  }
+  h1 {
+    font-weight: 900;
+    font-size: 2.8rem;
+    margin-bottom: 40px;
+    color: #333;
+    letter-spacing: 0.1em;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 25px;
+    width: 100%;
+    max-width: 900px;
+  }
+  button {
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 1.05rem;
+    border-radius: 14px;
+    padding: 15px 32px;
+    border: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.08);
+  }
 
-    h1 {
-      font-size: 2.5rem;
-      margin-bottom: 30px;
-      color: #00ffd5;
-    }
+  /* 1. ソフトグラデーション */
+  .soft-gradient {
+    background: linear-gradient(135deg, #a8edea, #fed6e3);
+    color: #5a3f6d;
+    box-shadow: 0 6px 15px rgba(168, 237, 234, 0.5);
+  }
+  .soft-gradient:hover {
+    background: linear-gradient(135deg, #fed6e3, #a8edea);
+    box-shadow: 0 9px 25px rgba(254, 214, 227, 0.6);
+    transform: translateY(-4px);
+  }
 
-    .button-grid {
-      display: grid;
-      gap: 20px;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      width: 100%;
-      max-width: 1000px;
-    }
+  /* 2. ミニマルライン */
+  .minimal-line {
+    background: transparent;
+    color: #2c3e50;
+    border: 2.5px solid #2c3e50;
+    box-shadow: none;
+  }
+  .minimal-line:hover {
+    background: #2c3e50;
+    color: #fff;
+    box-shadow: 0 8px 15px rgba(44, 62, 80, 0.4);
+    transform: scale(1.05);
+  }
 
-    .btn {
-      padding: 15px 25px;
-      font-size: 1rem;
-      font-weight: bold;
-      border: none;
-      border-radius: 12px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
+  /* 3. 3Dプレス感 */
+  .press-3d {
+    background: #ff6f61;
+    color: white;
+    box-shadow: 0 6px #d75b4a;
+  }
+  .press-3d:active {
+    box-shadow: none;
+    transform: translateY(6px);
+  }
 
-    /* 1. ネオモーフィズム */
-    .neo {
-      background: #1e1e1e;
-      color: #0ff;
-      box-shadow: 8px 8px 15px #0a0a0a, -8px -8px 15px #2a2a2a;
-    }
+  /* 4. エレガントシャドウ */
+  .elegant-shadow {
+    background: #fff;
+    color: #e91e63;
+    border: 2px solid #e91e63;
+    box-shadow: 0 8px 20px rgba(233, 30, 99, 0.3);
+  }
+  .elegant-shadow:hover {
+    background: #e91e63;
+    color: white;
+    box-shadow: 0 12px 30px rgba(233, 30, 99, 0.6);
+  }
 
-    /* 2. ガラスモーフィズム */
-    .glass {
-      background: rgba(255, 255, 255, 0.1);
-      color: #fff;
-      border: 1px solid rgba(255, 255, 255, 0.3);
-      backdrop-filter: blur(10px);
-    }
+  /* 5. ネオンライト */
+  .neon-light {
+    background: #111;
+    color: #0ff;
+    text-shadow:
+      0 0 5px #0ff,
+      0 0 10px #0ff,
+      0 0 20px #0ff,
+      0 0 40px #0ff;
+  }
+  .neon-light:hover {
+    color: #fff;
+    text-shadow:
+      0 0 8px #0ff,
+      0 0 16px #0ff,
+      0 0 32px #0ff,
+      0 0 48px #0ff;
+    background: #0ff;
+    box-shadow: 0 0 20px #0ff;
+  }
 
-    /* 3. グラデーション × アニメーション */
-    .grad-animate {
-      background: linear-gradient(45deg, #ff00cc, #3333ff);
-      background-size: 200% 200%;
-      color: white;
-      animation: gradientMove 3s ease infinite;
-    }
+  /* 6. ソフトシャドウ丸ボタン */
+  .soft-round {
+    background: #f0f0f0;
+    color: #444;
+    border-radius: 50px;
+    padding: 14px 38px;
+    box-shadow:
+      inset 2px 2px 5px #ccc,
+      inset -3px -3px 6px #fff;
+  }
+  .soft-round:hover {
+    background: #d9d9d9;
+    box-shadow:
+      inset 3px 3px 7px #bbb,
+      inset -3px -3px 8px #fff;
+    color: #222;
+    transform: scale(1.07);
+  }
 
-    @keyframes gradientMove {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
+  /* 7. シャープラインホバー */
+  .sharp-line {
+    background: transparent;
+    color: #555;
+    border: 2px solid #555;
+    position: relative;
+    overflow: hidden;
+  }
+  .sharp-line::before {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #555;
+    transition: top 0.3s ease;
+    z-index: -1;
+  }
+  .sharp-line:hover::before {
+    top: 0;
+  }
+  .sharp-line:hover {
+    color: white;
+  }
 
-    /* 4. 極太ボーダー */
-    .bordered {
-      background: #0f0f0f;
-      color: #00f6ff;
-      border: 3px solid #00f6ff;
+  /* 8. シンプルグリッチ */
+  .glitch {
+    position: relative;
+    background: #222;
+    color: #fff;
+    overflow: hidden;
+    box-shadow: 0 0 15px #08f;
+  }
+  .glitch::before,
+  .glitch::after {
+    content: attr(data-text);
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.8;
+    clip-path: polygon(0 2%, 100% 2%, 100% 15%, 0 15%);
+  }
+  .glitch::before {
+    left: 2px;
+    text-shadow: -2px 0 red;
+    animation: glitch-anim 2s infinite linear alternate-reverse;
+  }
+  .glitch::after {
+    left: -2px;
+    text-shadow: -2px 0 blue;
+    animation: glitch-anim 2s infinite linear alternate;
+    clip-path: polygon(0 85%, 100% 85%, 100% 98%, 0 98%);
+  }
+  @keyframes glitch-anim {
+    0% {
+      transform: translate(0);
     }
-
-    /* 5. アイコン付き（※Font Awesome使うならlink追加必要） */
-    .icon-btn::before {
-      content: "🔥 ";
+    20% {
+      transform: translate(-2px, 2px);
     }
-
-    /* 6. ミニマルモノクロ */
-    .minimal {
-      background: #fff;
-      color: #000;
+    40% {
+      transform: translate(-2px, -2px);
     }
-
-    /* 7. シャドウ + スケール */
-    .shadow-scale {
-      background: #0077ff;
-      color: white;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+    60% {
+      transform: translate(2px, 2px);
     }
-
-    .shadow-scale:hover {
-      transform: scale(1.05);
+    80% {
+      transform: translate(2px, -2px);
     }
-
-    /* 8. フルラディアルグラデーション */
-    .radial {
-      background: radial-gradient(circle at top left, #00ffcc, #0066ff);
-      color: #000;
+    100% {
+      transform: translate(0);
     }
-
-    /* 9. デジタルドット風 */
-    .pixel {
-      font-family: 'Courier New', monospace;
-      background: #000;
-      color: #0f0;
-      border: 2px dashed #0f0;
-    }
-
-    /* 10. ゴーストボタン（透過型） */
-    .ghost {
-      background: transparent;
-      border: 2px solid #fff;
-      color: #fff;
-    }
-
-  </style>
+  }
+</style>
 </head>
 <body>
-  <h1>超最新トレンドボタン10種</h1>
-  <div class="button-grid">
-    <button class="btn neo">ネオモーフィズム</button>
-    <button class="btn glass">ガラスモーフィズム</button>
-    <button class="btn grad-animate">グラデーション</button>
-    <button class="btn bordered">極太ボーダー</button>
-    <button class="btn icon-btn">アイコン付き</button>
-    <button class="btn minimal">ミニマル</button>
-    <button class="btn shadow-scale">ホバー拡大</button>
-    <button class="btn radial">ラディアル背景</button>
-    <button class="btn pixel">ドット風</button>
-    <button class="btn ghost">ゴーストボタン</button>
-  </div>
+
+<h1>お洒落な最新トレンドボタン一覧</h1>
+
+<div class="grid">
+  <button class="soft-gradient">ソフトグラデーション</button>
+  <button class="minimal-line">ミニマルライン</button>
+  <button class="press-3d">3Dプレス感</button>
+  <button class="elegant-shadow">エレガントシャドウ</button>
+  <button class="neon-light">ネオンライト</button>
+  <button class="soft-round">ソフトシャドウ丸ボタン</button>
+  <button class="sharp-line">シャープラインホバー</button>
+  <button class="glitch" data-text="グリッチ">グリッチ</button>
+</div>
+
 </body>
 </html>
