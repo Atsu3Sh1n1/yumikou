@@ -3,224 +3,132 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>お洒落な最新トレンドボタン一覧</title>
+<title>高所作業係数一覧</title>
 <style>
   body {
-    background: #fff;
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    color: #222;
-    padding: 50px 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    min-height: 100vh;
+    font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    background: #f9f9f9;
+    margin: 0;
+    padding: 10px;
+    color: #333;
   }
   h1 {
-    font-weight: 900;
-    font-size: 2.8rem;
-    margin-bottom: 40px;
-    color: #333;
-    letter-spacing: 0.1em;
+    text-align: center;
+    font-weight: 600;
+    margin-bottom: 1rem;
   }
-  .grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 25px;
+  table {
     width: 100%;
-    max-width: 900px;
-  }
-  button {
-    cursor: pointer;
-    font-weight: 700;
-    font-size: 1.05rem;
-    border-radius: 14px;
-    padding: 15px 32px;
-    border: none;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.08);
-  }
-
-  /* 1. ソフトグラデーション */
-  .soft-gradient {
-    background: linear-gradient(135deg, #a8edea, #fed6e3);
-    color: #5a3f6d;
-    box-shadow: 0 6px 15px rgba(168, 237, 234, 0.5);
-  }
-  .soft-gradient:hover {
-    background: linear-gradient(135deg, #fed6e3, #a8edea);
-    box-shadow: 0 9px 25px rgba(254, 214, 227, 0.6);
-    transform: translateY(-4px);
-  }
-
-  /* 2. ミニマルライン */
-  .minimal-line {
-    background: transparent;
-    color: #2c3e50;
-    border: 2.5px solid #2c3e50;
-    box-shadow: none;
-  }
-  .minimal-line:hover {
-    background: #2c3e50;
-    color: #fff;
-    box-shadow: 0 8px 15px rgba(44, 62, 80, 0.4);
-    transform: scale(1.05);
-  }
-
-  /* 3. 3Dプレス感 */
-  .press-3d {
-    background: #ff6f61;
-    color: white;
-    box-shadow: 0 6px #d75b4a;
-  }
-  .press-3d:active {
-    box-shadow: none;
-    transform: translateY(6px);
-  }
-
-  /* 4. エレガントシャドウ */
-  .elegant-shadow {
+    border-collapse: collapse;
     background: #fff;
-    color: #e91e63;
-    border: 2px solid #e91e63;
-    box-shadow: 0 8px 20px rgba(233, 30, 99, 0.3);
+    box-shadow: 0 0 6px rgba(0,0,0,0.1);
+    margin-bottom: 2rem;
   }
-  .elegant-shadow:hover {
-    background: #e91e63;
-    color: white;
-    box-shadow: 0 12px 30px rgba(233, 30, 99, 0.6);
-  }
-
-  /* 5. ネオンライト */
-  .neon-light {
-    background: #111;
-    color: #0ff;
-    text-shadow:
-      0 0 5px #0ff,
-      0 0 10px #0ff,
-      0 0 20px #0ff,
-      0 0 40px #0ff;
-  }
-  .neon-light:hover {
+  thead {
+    background: #007acc;
     color: #fff;
-    text-shadow:
-      0 0 8px #0ff,
-      0 0 16px #0ff,
-      0 0 32px #0ff,
-      0 0 48px #0ff;
-    background: #0ff;
-    box-shadow: 0 0 20px #0ff;
   }
-
-  /* 6. ソフトシャドウ丸ボタン */
-  .soft-round {
-    background: #f0f0f0;
-    color: #444;
-    border-radius: 50px;
-    padding: 14px 38px;
-    box-shadow:
-      inset 2px 2px 5px #ccc,
-      inset -3px -3px 6px #fff;
+  th, td {
+    padding: 12px 10px;
+    border: 1px solid #ddd;
+    font-size: 0.9rem;
   }
-  .soft-round:hover {
-    background: #d9d9d9;
-    box-shadow:
-      inset 3px 3px 7px #bbb,
-      inset -3px -3px 8px #fff;
-    color: #222;
-    transform: scale(1.07);
+  th {
+    font-weight: 600;
+    text-align: left;
   }
-
-  /* 7. シャープラインホバー */
-  .sharp-line {
-    background: transparent;
-    color: #555;
-    border: 2px solid #555;
-    position: relative;
-    overflow: hidden;
+  tbody tr:nth-child(even) {
+    background: #f0f7ff;
   }
-  .sharp-line::before {
-    content: "";
-    position: absolute;
-    top: 100%;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: #555;
-    transition: top 0.3s ease;
-    z-index: -1;
-  }
-  .sharp-line:hover::before {
-    top: 0;
-  }
-  .sharp-line:hover {
-    color: white;
-  }
-
-  /* 8. シンプルグリッチ */
-  .glitch {
-    position: relative;
-    background: #222;
-    color: #fff;
-    overflow: hidden;
-    box-shadow: 0 0 15px #08f;
-  }
-  .glitch::before,
-  .glitch::after {
-    content: attr(data-text);
-    position: absolute;
-    top: 0; left: 0;
-    width: 100%;
-    height: 100%;
-    opacity: 0.8;
-    clip-path: polygon(0 2%, 100% 2%, 100% 15%, 0 15%);
-  }
-  .glitch::before {
-    left: 2px;
-    text-shadow: -2px 0 red;
-    animation: glitch-anim 2s infinite linear alternate-reverse;
-  }
-  .glitch::after {
-    left: -2px;
-    text-shadow: -2px 0 blue;
-    animation: glitch-anim 2s infinite linear alternate;
-    clip-path: polygon(0 85%, 100% 85%, 100% 98%, 0 98%);
-  }
-  @keyframes glitch-anim {
-    0% {
-      transform: translate(0);
+  @media (max-width: 600px) {
+    table, thead, tbody, th, td, tr {
+      display: block;
     }
-    20% {
-      transform: translate(-2px, 2px);
+    thead tr {
+      display: none;
     }
-    40% {
-      transform: translate(-2px, -2px);
+    tbody tr {
+      margin-bottom: 1rem;
+      background: #fff;
+      box-shadow: 0 0 4px rgba(0,0,0,0.1);
+      padding: 10px;
+      border-radius: 6px;
     }
-    60% {
-      transform: translate(2px, 2px);
+    tbody td {
+      border: none;
+      padding-left: 50%;
+      position: relative;
+      font-size: 0.9rem;
     }
-    80% {
-      transform: translate(2px, -2px);
-    }
-    100% {
-      transform: translate(0);
+    tbody td::before {
+      content: attr(data-label);
+      position: absolute;
+      left: 10px;
+      top: 12px;
+      font-weight: 600;
+      color: #007acc;
+      white-space: nowrap;
     }
   }
 </style>
 </head>
 <body>
-
-<h1>お洒落な最新トレンドボタン一覧</h1>
-
-<div class="grid">
-  <button class="soft-gradient">ソフトグラデーション</button>
-  <button class="minimal-line">ミニマルライン</button>
-  <button class="press-3d">3Dプレス感</button>
-  <button class="elegant-shadow">エレガントシャドウ</button>
-  <button class="neon-light">ネオンライト</button>
-  <button class="soft-round">ソフトシャドウ丸ボタン</button>
-  <button class="sharp-line">シャープラインホバー</button>
-  <button class="glitch" data-text="グリッチ">グリッチ</button>
-</div>
-
+<h1>高所作業係数一覧（自己率・作業特性）</h1>
+<table>
+  <thead>
+    <tr>
+      <th>高さ区分（m）</th>
+      <th>作業係数（自己率）</th>
+      <th>作業特性・安全義務内容</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td data-label="高さ区分（m）">0～2</td>
+      <td data-label="作業係数（自己率）">1.00</td>
+      <td data-label="作業特性・安全義務内容">通常作業（高所扱いにならない）</td>
+    </tr>
+    <tr>
+      <td data-label="高さ区分（m）">2～5</td>
+      <td data-label="作業係数（自己率）">1.05</td>
+      <td data-label="作業特性・安全義務内容">軽度の足場または脚立が必要</td>
+    </tr>
+    <tr>
+      <td data-label="高さ区分（m）">5～7</td>
+      <td data-label="作業係数（自己率）">1.15</td>
+      <td data-label="作業特性・安全義務内容">高所作業の範囲に入り、高所作業主任者が必要な場合あり</td>
+    </tr>
+    <tr>
+      <td data-label="高さ区分（m）">7～10</td>
+      <td data-label="作業係数（自己率）">1.20</td>
+      <td data-label="作業特性・安全義務内容">安全帯・フルハーネス型の墜落制止用器具使用義務化</td>
+    </tr>
+    <tr>
+      <td data-label="高さ区分（m）">10～15</td>
+      <td data-label="作業係数（自己率）">1.30</td>
+      <td data-label="作業特性・安全義務内容">足場計画と安全管理者が必要</td>
+    </tr>
+    <tr>
+      <td data-label="高さ区分（m）">15～20</td>
+      <td data-label="作業係数（自己率）">1.40</td>
+      <td data-label="作業特性・安全義務内容">作業リスク増、作業指揮者の配置が求められる</td>
+    </tr>
+    <tr>
+      <td data-label="高さ区分（m）">20～25</td>
+      <td data-label="作業係数（自己率）">1.50</td>
+      <td data-label="作業特性・安全義務内容">重大事故リスクゾーン、安全対策を強化</td>
+    </tr>
+    <tr>
+      <td data-label="高さ区分（m）">25～30</td>
+      <td data-label="作業係数（自己率）">1.60</td>
+      <td data-label="作業特性・安全義務内容">高度な仮設計画と設計レビュー、安全審査が必要</td>
+    </tr>
+    <tr>
+      <td data-label="高さ区分（m）">30～35</td>
+      <td data-label="作業係数（自己率）">1.75</td>
+      <td data-label="作業特性・安全義務内容">足場構造物の設計計算書が要求されるレベル、監督者常駐推奨</td>
+    </tr>
+  </tbody>
+</table>
 </body>
 </html>
