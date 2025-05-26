@@ -191,6 +191,23 @@
         #taxIncludedPrice {
             text-align: right;
         }
+
+        #totalVolume {
+            margin: 1em 0;
+            font-weight: bold;
+            font-size: 1.1em;
+            padding: 0.5em;
+            border-radius: 4px;
+        }
+
+        #inputValues {
+            margin: 0.5em 0;
+            font-size: 1.2em;
+            padding: 0.5em;
+            border-radius: 4px;
+            color: #555;
+            text-align: right;
+        }
     </style>
 </head>
 
@@ -326,10 +343,18 @@
     </div>
 
     <!-- 計算結果表示セクション -->
+
+    <div id="totalVolume">総合㎥: 0 ㎥</div>
     <div id="result">原価単価: 325.00 円／㎥</div>
     <div id="manpowerCalc">必要人工数: 7.79 人日</div>
     <div id="totalCost">合計金額: 195,000 円</div>
-    <br>
+
+    <div id="inputValues">
+        面積 <span id="displayArea">0</span>㎡<br>
+        高さ <span id="displayHeight">0</span> m<br>
+        諸経費 <span id="displayOverhead">0</span>%<br>
+    </div>
+
     <div id="sellingPrice">小計: 214,500 円</div>
     <div id="taxAmount">消費税(10%): 21,450 円</div>
     <div id="taxIncludedPrice" class="tax-included">税込み価格: 235,950 円</div>
@@ -508,6 +533,9 @@
             const safetyFactor = getSafetyFactor();
             const difficultyFactor = getDifficultyFactor();
             const conditionFactor = getConditionFactor();
+            document.getElementById('displayArea').textContent = area || 0;
+            document.getElementById('displayHeight').textContent = height || 0;
+            document.getElementById('displayOverhead').textContent = overheadRateInput.value || 0;
 
             if (!isNaN(laborCost) && laborCost >= 0 &&
                 !isNaN(area) && area >= 0 &&
@@ -584,8 +612,37 @@
                 taxIncludedPriceDiv.innerHTML = '<div style="font-size:1.1em; color:#999;">税込み: - 円</div>';
                 manpowerCalcDiv.innerHTML = '<div style="font-size:1.1em; color:#999;">必要人工数: - 人日</div>';
             }
+
             printDateSpan.textContent = formatDate(new Date());
+            const totalVolumeDiv = document.getElementById('totalVolume');
+
+
+            // ...（既存のコード）
+
+            if (!isNaN(laborCost) && laborCost >= 0 &&
+                !isNaN(area) && area >= 0 &&
+                !isNaN(height) && height >= 0) {
+
+                // ...（既存の計算）
+
+                const totalVolume = area * height;
+                document.getElementById('totalVolume').textContent = totalVolume.toLocaleString(undefined, { maximumFractionDigits: 2 });
+
+                totalVolumeDiv.innerHTML = `
+            <div style="font-size:1.2em; font-weight:bold;">
+                総合㎥: ${totalVolume.toLocaleString(undefined, { maximumFractionDigits: 2 })} ㎥
+            </div>
+        `;
+
+                // ...（既存のコード）
+            } else {
+                // ...（既存のエラー処理）
+                totalVolumeDiv.innerHTML = '<div style="font-size:1.1em; color:#999;">総合㎥: - ㎥</div>';
+            }
+
+
         }
+
 
         // イベントリスナー設定
         laborCostInput.addEventListener('input', updateAll);
