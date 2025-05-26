@@ -220,12 +220,12 @@
 
         <!-- 追加1: 諸経費率入力欄 -->
         <label>
-            諸経費率（％）:
+            諸経費（％）:
             <input type="number" id="overheadRate" value="20" min="0" max="2000">
         </label><br>
         <label>
             コメント（備考）:
-            <textarea id="comment" rows="3" placeholder="例：諸経費+利益"
+            <textarea id="comment" rows="3" placeholder="例：諸経費+利益含む"
                 style="width: 100%; padding: 8px; font-size: 1em; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box;"></textarea>
         </label>
     </div>
@@ -249,10 +249,10 @@
         </div>
         <form id="difficultyForm">
             <fieldset>
-                <legend>作業高(フロア階数含む)</legend>
+                <legend>作業高(フロア階含む)</legend>
                 <label><input type="radio" name="heightScore" value="1" checked> 地上〜2m</label>
                 <label><input type="radio" name="heightScore" value="2"> 2〜5m</label>
-                <label><input type="radio" name="heightScore" value="3"> 5〜10m</label>
+                <label><input type="radio" name="heightScore" value="3"> 5〜10m (例:2FL~)</label>
                 <label><input type="radio" name="heightScore" value="4"> 10〜15m</label>
                 <label><input type="radio" name="heightScore" value="5"> 15m以上</label>
             </fieldset>
