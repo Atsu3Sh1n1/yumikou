@@ -49,7 +49,7 @@
         input[type="number"] {
             width: 100%;
             max-width: 120px;
-            padding: 8px;
+            padding: 10px;
             font-size: 1em;
             border: 1px solid #ddd;
             border-radius: 4px;
@@ -190,26 +190,30 @@
         #totalCost,
         #manpowerCalc,
         #result,
-        #totalVolume {
+        #totalVolume,
+        #heightWarningMsg {
             text-align: right;
             margin: 0;
+            font-size:1em;
         }
 
         #totalVolume {
             margin: 1em 0;
             font-weight: bold;
             font-size: 1.1em;
-            padding: 0.5em;
+            padding: 0;
             border-radius: 4px;
+            font-weight:bold;
         }
 
         #inputValues {
-            margin: 0.5em 0;
+            margin: 1em;
             font-size: 1.2em;
-            padding: 0.5em;
-            border-radius: 4px;
-            color: #555;
+            padding: 0em;
             text-align: right;
+            line-height: 2em;
+            font-weight: bold;
+            
         }
     </style>
 </head>
@@ -243,18 +247,10 @@
             諸経費（％）:
             <input type="number" id="overheadRate" value="20" min="0" max="2000">
         </label><br>
-        <label>
-            コメント（備考）:
-            <textarea id="comment" rows="3" placeholder="例：諸経費+利益含む"
-                style="width: 100%; padding: 8px; font-size: 1em; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box;"></textarea>
-        </label>
     </div>
 
     <div class="checkbox-group">
         <h4><strong>足場の種類（安全対応係数適用）</strong></h4>
-        <div class="footnote">
-            安全対応係数とは、足場の構造計算や設計において、
-            構造物の強度や安定性を安全に保つために使用される補正係数を意味します。</div>
         <label><input type="radio" name="type" value="1.00" checked> くさび式足場（1.00）</label>
         <label><input type="radio" name="type" value="1.15"> 枠組足場（1.15）</label>
         <label><input type="radio" name="type" value="1.30"> 単管足場（1.30）</label>
@@ -263,13 +259,14 @@
     </div><br><br>
 
 
-
     <!-- 計算結果表示セクション -->
-    <div id="totalVolume">総合体積: 0 ㎥</div>
-    <div id="result">原価単価: 0.00 円／㎥</div>
+    <div id="totalVolume">体積: 0 ㎥</div>
+    <div id="totalCost">合計: 0 円</div>
+    <div id="result">単価: 0.00 円／㎥</div>
 
-    <div id="totalCost">原価合計: 0 円</div>
-    <div id="manpowerCalc">総工数: 0.00 人日</div>
+    
+    <div id="manpowerCalc">工数: 0.00 人日</div>
+    
     <div id="inputValues">
         作業床面積 <span id="displayArea">0</span>㎡<br>
         作業床高 <span id="displayHeight">0</span> m<br>
@@ -278,7 +275,7 @@
 
     <div id="sellingPrice">小計: 0 円</div>
     <div id="taxAmount">消費税(10%): 0 円</div>
-    <div id="taxIncludedPrice" class="tax-included">税込み価格: 0 円</div>
+    <div id="taxIncludedPrice" class="tax-included">税込み: 0 円</div>
 
     <!-- 追加3: PDF出力/印刷ボタン -->
     <div class="no-print">
@@ -488,7 +485,7 @@
                 }
 
                 // 高さに関する警告メッセージ
-                let heightWarningMsg = `<span style="font-size:0.8em; display:block; margin-top:5px;">
+                let heightWarningMsg = `<span style="font-size:1.2em; display:block; margin-top:5px;">
   高さ係数: ${heightCoefficient.toFixed(2)}
 </span>`;
 
@@ -497,13 +494,13 @@
   原価単価: ${unitCost.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })} 円/㎥
 </div>
 
-<div style="font-size:0.9em; color:#555;">
+<div style="font-size:1em; color:#555;">
  （人工係数: ${currentCoefficient.toFixed(5)} 人工/㎡）
 </div>
 `;
 
                 totalCostDiv.innerHTML = `
-<div style="font-size:1.2em; font-weight:bold;">
+<div style=" font-weight:bold;">
   原価合計: ${Math.round(totalCost).toLocaleString()} 円
 </div>
 `;
@@ -515,13 +512,13 @@
 `;
 
                 taxAmountDiv.innerHTML = `
-<div style="font-size:1.1em; color:#666;">
+<div style="font-size:1.2em; color:#666;">
   消費税(10%): ${taxAmount.toLocaleString(0)} 円
 </div>
 `;
 
                 taxIncludedPriceDiv.innerHTML = `
-<div style="font-size:1.2em; font-weight:bold; color:#d9534f;">
+<div style="font-size:1.4em; font-weight:bold; color:#d9534f;">
   税込み: ${Math.round(taxIncludedPrice).toLocaleString()} 円
 </div>
 `;
@@ -530,7 +527,7 @@
 <div style="font-size:1.2em; font-weight:bold; margin-bottom:3px;">
   総工数: ${manpower.toFixed(2)} 人日
 </div>
-<div style="font-size:0.9em; color:#555; margin-bottom:5px;">
+<div style="font-size:1em; color:#555; margin-bottom:5px;">
   (${currentEfficiency.toFixed(2)}㎡/人工)
 </div>
 ${warningMsg}
@@ -539,12 +536,12 @@ ${heightWarningMsg}
 
                 // エラー表示部分
             } else {
-                resultDiv.innerHTML = '<div style="font-size:1.1em; color:#999;">原価単価: - 円/㎥</div>';
-                totalCostDiv.innerHTML = '<div style="font-size:1.1em; color:#999;">原価合計: - 円</div>';
-                sellingPriceDiv.innerHTML = '<div style="font-size:1.1em; color:#999;">小計: - 円</div>';
-                taxAmountDiv.innerHTML = '<div style="font-size:1.1em; color:#999;">消費税(10%): - 円</div>';
-                taxIncludedPriceDiv.innerHTML = '<div style="font-size:1.1em; color:#999;">税込み: - 円</div>';
-                manpowerCalcDiv.innerHTML = '<div style="font-size:1.1em; color:#999;">総工数: - 人日</div>';
+                resultDiv.innerHTML = '<div style="font-size:1.2em; color:#999;">単価: - 円/㎥</div>';
+                totalCostDiv.innerHTML = '<div style="font-size:1.2em; color:#999;">合計: - 円</div>';
+                sellingPriceDiv.innerHTML = '<div style="font-size:1.4em; color:#999;">小計: - 円</div>';
+                taxAmountDiv.innerHTML = '<div style="font-size:1.4em; color:#999;">消費税(10%): - 円</div>';
+                taxIncludedPriceDiv.innerHTML = '<div style="font-size:1.4em; color:#999;">税込み: - 円</div>';
+                manpowerCalcDiv.innerHTML = '<div style="font-size:1.2em; color:#999;">工数: - 人日</div>';
             }
 
             printDateSpan.textContent = formatDate(new Date());
@@ -558,12 +555,12 @@ ${heightWarningMsg}
                 document.getElementById('totalVolume').textContent = totalVolume.toLocaleString(undefined, { maximumFractionDigits: 2 });
 
                 totalVolumeDiv.innerHTML = `
-        <div style="font-size:1.2em; font-weight:bold;">
-            総合体積: ${totalVolume.toLocaleString(undefined, { maximumFractionDigits: 2 })} ㎥
+        <div style=" font-weight:bold;">
+            体積: ${totalVolume.toLocaleString(undefined, { maximumFractionDigits: 2 })} ㎥
         </div>
     `;
             } else {
-                totalVolumeDiv.innerHTML = '<div style="font-size:1.1em; color:#999;">総合体積: - ㎥</div>';
+                totalVolumeDiv.innerHTML = '<div style="font-size:1.1em; color:#999;">体積: - ㎥</div>';
             }
         }
 
