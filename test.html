@@ -2,113 +2,136 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>超最新トレンドボタン一覧</title>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap');
-
     body {
-      background: #121212;
+      background: #0f0f0f;
       color: #fff;
-      font-family: 'Poppins', sans-serif;
+      font-family: 'Segoe UI', sans-serif;
+      padding: 40px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 40px 20px;
-      min-height: 100vh;
     }
 
     h1 {
-      margin-bottom: 30px;
-      font-weight: 700;
       font-size: 2.5rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: #00ff99;
+      margin-bottom: 30px;
+      color: #00ffd5;
     }
 
-    .button-container {
-      display: flex;
-      flex-wrap: wrap;
+    .button-grid {
+      display: grid;
       gap: 20px;
-      max-width: 700px;
-      justify-content: center;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      width: 100%;
+      max-width: 1000px;
     }
 
-    button.trend-btn {
-      background: linear-gradient(45deg, #00ff99, #00ccff);
+    .btn {
+      padding: 15px 25px;
+      font-size: 1rem;
+      font-weight: bold;
       border: none;
       border-radius: 12px;
-      padding: 16px 28px;
-      font-size: 1.1rem;
-      font-weight: 600;
-      color: #121212;
       cursor: pointer;
-      box-shadow: 0 5px 15px rgba(0, 255, 153, 0.4);
       transition: all 0.3s ease;
-      position: relative;
-      overflow: hidden;
-      user-select: none;
     }
 
-    button.trend-btn::before {
-      content: "";
-      position: absolute;
-      top: -100%;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(120deg, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 60%);
-      transform: skewX(-20deg);
-      transition: top 0.4s ease;
-      pointer-events: none;
-      z-index: 1;
+    /* 1. ネオモーフィズム */
+    .neo {
+      background: #1e1e1e;
+      color: #0ff;
+      box-shadow: 8px 8px 15px #0a0a0a, -8px -8px 15px #2a2a2a;
     }
 
-    button.trend-btn:hover::before {
-      top: 100%;
+    /* 2. ガラスモーフィズム */
+    .glass {
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      backdrop-filter: blur(10px);
     }
 
-    button.trend-btn:hover {
-      box-shadow: 0 8px 20px rgba(0, 204, 255, 0.6);
-      transform: translateY(-3px);
+    /* 3. グラデーション × アニメーション */
+    .grad-animate {
+      background: linear-gradient(45deg, #ff00cc, #3333ff);
+      background-size: 200% 200%;
+      color: white;
+      animation: gradientMove 3s ease infinite;
     }
+
+    @keyframes gradientMove {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* 4. 極太ボーダー */
+    .bordered {
+      background: #0f0f0f;
+      color: #00f6ff;
+      border: 3px solid #00f6ff;
+    }
+
+    /* 5. アイコン付き（※Font Awesome使うならlink追加必要） */
+    .icon-btn::before {
+      content: "🔥 ";
+    }
+
+    /* 6. ミニマルモノクロ */
+    .minimal {
+      background: #fff;
+      color: #000;
+    }
+
+    /* 7. シャドウ + スケール */
+    .shadow-scale {
+      background: #0077ff;
+      color: white;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+    }
+
+    .shadow-scale:hover {
+      transform: scale(1.05);
+    }
+
+    /* 8. フルラディアルグラデーション */
+    .radial {
+      background: radial-gradient(circle at top left, #00ffcc, #0066ff);
+      color: #000;
+    }
+
+    /* 9. デジタルドット風 */
+    .pixel {
+      font-family: 'Courier New', monospace;
+      background: #000;
+      color: #0f0;
+      border: 2px dashed #0f0;
+    }
+
+    /* 10. ゴーストボタン（透過型） */
+    .ghost {
+      background: transparent;
+      border: 2px solid #fff;
+      color: #fff;
+    }
+
   </style>
 </head>
 <body>
-  <h1>超最新トレンドボタン一覧</h1>
-  <div class="button-container" id="buttonContainer">
-    <!-- ボタンはJSで生成 -->
+  <h1>超最新トレンドボタン10種</h1>
+  <div class="button-grid">
+    <button class="btn neo">ネオモーフィズム</button>
+    <button class="btn glass">ガラスモーフィズム</button>
+    <button class="btn grad-animate">グラデーション</button>
+    <button class="btn bordered">極太ボーダー</button>
+    <button class="btn icon-btn">アイコン付き</button>
+    <button class="btn minimal">ミニマル</button>
+    <button class="btn shadow-scale">ホバー拡大</button>
+    <button class="btn radial">ラディアル背景</button>
+    <button class="btn pixel">ドット風</button>
+    <button class="btn ghost">ゴーストボタン</button>
   </div>
-
-  <script>
-    const trends = [
-      "NFT",
-      "メタバース",
-      "AIチャット",
-      "サステナブル",
-      "リモートワーク",
-      "5G",
-      "ブロックチェーン",
-      "Web3",
-      "スマートシティ",
-      "デジタルツイン",
-      "VR/AR",
-      "自動運転",
-      "エッジコンピューティング",
-      "量子コンピュータ",
-      "ディープラーニング"
-    ];
-
-    const container = document.getElementById('buttonContainer');
-
-    trends.forEach(trend => {
-      const btn = document.createElement('button');
-      btn.className = 'trend-btn';
-      btn.textContent = trend;
-      btn.onclick = () => alert(`トレンド「${trend}」をクリック！`);
-      container.appendChild(btn);
-    });
-  </script>
 </body>
 </html>
