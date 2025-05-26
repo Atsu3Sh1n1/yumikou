@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>風圧力比較グラフ</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 20px;
+      background: #f9f9f9;
+    }
+    h2 {
+      color: #333;
+    }
+    canvas {
+      background: #fff;
+      border: 1px solid #ccc;
+      padding: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h2>建物高さと風圧力の比較グラフ（従来法 vs 詳細評価法）</h2>
+  <canvas id="windChart" width="800" height="400"></canvas>
+
+  <script>
+    const z = Array.from({length: 100}, (_, i) => 5 + i * 0.95); // 高さ 5〜100m
+    const q0 = 0.5 * 1.225 * Math.pow(34, 2); // ≒708.65 N/m²
+    const alpha = 0.25;
+    const Cf = 0.8;
+    const Cd = 1.0;
+    const R_static = 1.0;
+    const R_dynamic = 2.0;
+
+    // 風圧力配列
+    const P_static = z.map(() => q0 * Cf * R_static); // 一定
+    const P_detailed = z.map(h => q0 * Math.pow(h / 10, 2 * alpha) * Cf * Cd * R_dynamic);
+
+    const ctx = document.getElementById('windChart').getContext('2d');
+    new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: z,
+        datasets: [
+          {
+            label: '従来法（静的）',
+            data: P_static,
+            borderColor: 'blue',
+            borderWidth: 2,
+            fill: false,
+            borderDash: [5, 5]
+          },
+          {
+            label: '詳細評価法（動的＋高度依存）',
+            data: P_detailed,
+            borderColor: 'red',
+            borderWidth: 2,
+            fill: false
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          x: {
+            title: {
+              display: true,
+              text: '建物高さ z [m]'
+            }
+          },
+          y: {
+            title: {
+              display: true,
+              text: '風圧力 [N/m²]'
+            },
+            beginAtZero: true
+          }
+        },
+        plugins: {
+          legend: {
+            labels: {
+              color: '#333'
+            }
+          },
+          title: {
+            display: true,
+            text: '従来法と詳細評価法の風圧力比較'
+          }
+        }
+      }
+    });
+  </script>
+</body>
+</html>
