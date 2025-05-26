@@ -207,11 +207,11 @@
         <!-- 追加1: 諸経費率入力欄 -->
         <label>
             諸経費率（％）:
-            <input type="number" id="overheadRate" value="10" min="0" max="2000">
+            <input type="number" id="overheadRate" value="20" min="0" max="2000">
         </label><br>
         <label>
             コメント（備考）:
-            <textarea id="comment" rows="3" placeholder="例：消耗品5% / 管理費5%"
+            <textarea id="comment" rows="3" placeholder="例：諸経費+利益"
                 style="width: 100%; padding: 8px; font-size: 1em; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box;"></textarea>
         </label>
     
@@ -531,7 +531,7 @@
 
                 sellingPriceDiv.innerHTML = `
   <div style="font-size:1.2em; font-weight:bold; color:#0066cc;">
-    小計（諸経費込み税別）: ${Math.round(sellingPrice).toLocaleString()} 円
+   諸経費込み税別: ${Math.round(sellingPrice).toLocaleString()} 円
   </div>
 `;
 
@@ -549,7 +549,7 @@
             } else {
                 resultDiv.innerHTML = '<div style="font-size:1.1em; color:#999;">原価単価: - 円/作業床平面㎥</div>';
                 totalCostDiv.innerHTML = '<div style="font-size:1.1em; color:#999;">合計金額: - 円</div>';
-                sellingPriceDiv.innerHTML = '<div style="font-size:1.1em; color:#999;">小計（税別）: - 円</div>';
+                sellingPriceDiv.innerHTML = '<div style="font-size:1.1em; color:#999;">諸経費込み税別: - 円</div>';
                 manpowerCalcDiv.innerHTML = '<div style="font-size:1.1em; color:#999;">必要人工数: - 人日</div>';
             }
             printDateSpan.textContent = formatDate(new Date());
