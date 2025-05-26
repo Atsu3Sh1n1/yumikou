@@ -333,17 +333,18 @@
             <label><input type="checkbox" name="conditions" value="1.5"> 足場盛替え（1.5）</label>
             <label><input type="checkbox" name="conditions" value="0.8"> 解体（0.8）</label>
             <label><input type="checkbox" name="conditions" value="1.3"> 雨天（1.3）</label>
-            <label><input type="checkbox" name="conditions" value="1.25"> 夜間（1.25）</label>
+            <label><input type="checkbox" name="conditions" value="1.25"> 夜間（1.25）※スコア重複可</label>
             <label><input type="checkbox" name="conditions" value="1.5"> 深夜（1.5）</label>
             <label><input type="checkbox" name="conditions" value="1.15"> 組み立て高さ10~20m（1.15）</label>
             <label><input type="checkbox" name="conditions" value="1.35"> 組み立て高さ20~30m（1.35）</label>
             <label><input type="checkbox" name="conditions" value="1.5"> 組み立て高さ30m~（1.5）</label>
+            ※作業高係数は、自動で組み込んでもいいのですが、各社調整しやすいように分けています。
         </fieldset>
     </div>
 
     <!-- 計算結果表示セクション -->
 
-    <div id="totalVolume">総合㎥: 0 ㎥</div>
+    <div id="totalVolume">総合体積: 0 ㎥</div>
     <div id="result">原価単価: 325.00 円／㎥</div>
     <div id="manpowerCalc">必要人工数: 7.79 人日</div>
     <div id="totalCost">合計金額: 195,000 円</div>
@@ -351,7 +352,7 @@
     <div id="inputValues">
         作業床面積 <span id="displayArea">0</span>㎡<br>
         作業高 <span id="displayHeight">0</span> m<br>
-        諸経費 <span id="displayOverhead">0</span>%<br>
+        諸経費(利益含む) <span id="displayOverhead">0</span>%<br>
     </div>
 
     <div id="sellingPrice">小計: 0 円</div>
@@ -629,14 +630,14 @@
 
                 totalVolumeDiv.innerHTML = `
             <div style="font-size:1.2em; font-weight:bold;">
-                総合㎥: ${totalVolume.toLocaleString(undefined, { maximumFractionDigits: 2 })} ㎥
+                総合: ${totalVolume.toLocaleString(undefined, { maximumFractionDigits: 2 })} ㎥
             </div>
         `;
 
                 // ...（既存のコード）
             } else {
                 // ...（既存のエラー処理）
-                totalVolumeDiv.innerHTML = '<div style="font-size:1.1em; color:#999;">総合㎥: - ㎥</div>';
+                totalVolumeDiv.innerHTML = '<div style="font-size:1.1em; color:#999;">総合: - ㎥</div>';
             }
 
 
