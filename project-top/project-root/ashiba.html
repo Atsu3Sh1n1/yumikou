@@ -285,7 +285,7 @@
         <div class="main-value">原価単価: 0 円/㎥</div>
         <div class="sub-value">（人工係数: 0.00000 人工/㎡）</div>
     </div>
-    <div id="totalCost" class="main-value">原価合計: 0 円</div>
+   
 
     <div id="manpowerCalc">
         <div class="main-value">総工数: 0.00 人日</div>
@@ -296,6 +296,7 @@
         作業床高 <span id="displayHeight">0</span>  m<br>
         諸経費(利益含む) <span id="displayOverhead">0</span>  %<br>
     </div>
+     <div id="totalCost" class="main-value">原価: 0 円</div>
     <div id="sellingPrice" class="main-value">小計: 0 円</div>
     <div id="taxAmount">消費税(10%): 0 円</div>
     <div id="taxIncludedPrice" class="tax-included">税込み: 0 円</div>
@@ -533,7 +534,7 @@
 
                 totalCostDiv.innerHTML = `
 <div style=" font-weight:bold;">
-  原価合計: ${Math.round(totalCost).toLocaleString()} 円
+  原価: ${Math.round(totalCost).toLocaleString()} 円
 </div>
 `;
 
