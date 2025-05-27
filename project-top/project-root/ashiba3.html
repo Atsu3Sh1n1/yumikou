@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>足場組立時の風圧係数解説</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 100%;
+            padding: 15px;
+            background-color: #f9f9f9;
+        }
+
+        .container {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            color: #2c3e50;
+            font-size: 24px;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 8px;
+        }
+
+        h2 {
+            color: #2980b9;
+            font-size: 20px;
+            margin-top: 25px;
+        }
+
+        .highlight {
+            background-color: #f8f4e5;
+            padding: 15px;
+            border-left: 4px solid #e74c3c;
+            margin: 15px 0;
+            border-radius: 0 5px 5px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            font-size: 14px;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .formula {
+            font-family: 'Courier New', monospace;
+            background: #f5f5f5;
+            padding: 8px 12px;
+            border-radius: 4px;
+            display: inline-block;
+            margin: 5px 0;
+        }
+
+        .warning {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+
+        .note {
+            color: #7f8c8d;
+            font-size: 14px;
+        }
+
+        .key-point {
+            font-weight: bold;
+            color: #27ae60;
+        }
+
+        .footer {
+            text-align: center;
+            font-size: 11px;
+            margin-bottom: 45px;
+            padding: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>✅ 1. 結論（先に要点）</h1>
+        <div class="highlight">
+            <p>足場組立時において、<span class="key-point">風圧係数は1mの高さから確実に考慮すべき</span>であり、<br>
+                「2m未満だから影響がない」という考えは<span class="warning">科学的にも構造設計的にも誤り</span>です。</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <h1>✅ 2. よくある誤解：「2m以下は高所じゃないから、風圧は考えなくていい」</h1>
+        <p>この誤解は、労働安全衛生法に基づく作業区分（高所作業は2m以上）を、<br>
+            そのまま構造設計の荷重評価に適用してしまうことに起因しています。</p>
+
+        <p>しかし、次の点でこの考えは不適切です：</p>
+        <ul>
+            <li><strong>労働法上の「高所」</strong>は人の墜落リスクを基準に定義されており、<br>
+                　風荷重の影響とは無関係。</li>
+            <li>一方で、<strong>風荷重は空気抵抗の力学現象</strong>であり、地表面から少しでも高さがあれば風速差が生じます。</li>
+        </ul>
+    </div>
+
+    <div class="container">
+        <h1>✅ 3. 風圧の理論的背景</h1>
+        <p>風圧力は以下の式で表されます：</p>
+        <div class="formula">P = 0.6 × V²</div>
+        <p>ここでの <strong>V（設計風速）</strong>は、高さに応じて変化します。<br>
+            具体的には：</p>
+        <div class="formula">V = V₀ × C_z</div>
+        <ul>
+            <li><strong>V₀</strong>：地上10mの基準風速（例：30m/s）</li>
+            <li><strong>C_z</strong>：高さ補正係数（地上に近いほど小さい）</li>
+        </ul>
+
+        <p>この<strong>C_z</strong> は高さ1mでも明確に存在し、決して0ではありません。<br>
+            たとえば：</p>
+
+        <table>
+            <tr>
+                <th>高さ</th>
+                <th>係数（C_z）</th>
+                <th>説明</th>
+            </tr>
+            <tr>
+                <td>1m</td>
+                <td>約0.03〜0.05</td>
+                <td>実風速は存在し、風圧はゼロではない</td>
+            </tr>
+            <tr>
+                <td>2m</td>
+                <td>約0.07〜0.10</td>
+                <td>高さ増加により風速も上昇</td>
+            </tr>
+            <tr>
+                <td>10m</td>
+                <td>1.00</td>
+                <td>基準風速と一致</td>
+            </tr>
+        </table>
+
+        <p>➡️ 1mでも係数は明確に定義されており、設計風速 V が0にはならない。<br>
+            　したがって、1mの風圧力 <span class="formula">P = 0.6 × (V₀ × 0.03)²</span> も、明確に存在するのです。</p>
+    </div>
+
+    <div class="container">
+        <h1>✅ 4. 「無視してもいい程度」か？</h1>
+        <p>仮に30m/sの基準風速で、1m地点の係数を0.03とすると：</p>
+        <div class="formula">V = 30 × 0.03 = 0.9 m/s</div>
+        <div class="formula">P = 0.6 × 0.9² = 0.486 N/m²</div>
+        <p>たしかに微小ですが、足場の養生シートや仮設パネルなど、風を受ける面積が大きい構造物ではこのわずかな荷重も積算すれば無視できません。</p>
+
+        <p>また、2m地点で係数が0.07だとすると：</p>
+        <div class="formula">V = 30 × 0.07 = 2.1 m/s</div>
+        <div class="formula">P = 0.6 × 2.1² ≒ 2.65 N/m²</div>
+        <p>➡️ 数倍の差が即座に生まれます。<br>
+            ➡️ だからこそ、1m地点から段階的に係数を乗じて評価するのが合理的かつ安全。</p>
+    </div>
+
+    <div class="container">
+        <h1>✅ 5. 設計者・現場へのメッセージ</h1>
+        <ul>
+            <li><strong>法律上の「高所作業」</strong>は人的安全の基準</li>
+            <li><strong>風圧係数</strong>は構造安全の基準<br>
+                　👉 同じ「高さ」でも見るべき指標が異なることを正確に理解してください。</li>
+        </ul>
+
+        <div class="highlight">
+            <p>構造物は高さが1mでも倒壊することがあります。<br>
+                風の影響は高さ1mでも始まっており、それを設計に取り込むのは当然です。</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <h1>✅ 6. 結論：1m地点から係数をかけるのは「安全を守る最低限の設計倫理」</h1>
+        <p>現場で誤解が多いのは理解します。<br>
+            しかし、「2m未満は係数0でいい」とする判断は構造力学的にも制度的にも根拠がなく、安全性を損なう危険な簡略化です。</p>
+
+        <div class="highlight">
+            <p>1m地点から連続的に係数をかけるのは、</p>
+            <ul>
+                <li>科学的にも</li>
+                <li>実務的にも</li>
+                <li>安全管理上も</li>
+            </ul>
+            <p>最も正しい、そして責任ある設計姿勢です。</p>
+        </div>
+    </div>
+
+    <div class="footer">
+        <a href="https://atsu3sh1n1.github.io/yumikou/" target="_blank">2025 有限会社弓工 All rights reserved.</a>
+    </div>
+</body>
+
+</html>
