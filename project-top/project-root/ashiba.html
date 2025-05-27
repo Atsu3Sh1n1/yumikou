@@ -117,27 +117,7 @@
             transform: scale(1.2);
         }
 
-        /* 印刷用スタイル（簡略化） */
-        @media print {
-            body {
-                font-size: 12pt;
-                padding: 0.5in;
-            }
 
-            button,
-            .no-print {
-                display: none;
-            }
-
-            #result,
-            #totalCost,
-            #sellingPrice,
-            #taxAmount,
-            #taxIncludedPrice,
-            #manpowerCalc {
-                font-size: 0;
-            }
-        }
 
         /* 横長スクリーン用の調整 */
         @media (min-width: 400px) {
@@ -292,65 +272,68 @@
         </fieldset>
     </div>
 
+    <div id="estimate-content">
+        <!-- 計算結果表示セクション -->
+        <div id="totalVolume">体積: 0 ㎥</div>
+        <div id="result">
+            <div class="main-value">原価単価: 0 円/㎥</div>
+            <div class="sub-value">（人工係数: 0.00000 人工/㎡）</div>
+        </div>
 
-    <!-- 計算結果表示セクション -->
-    <div id="totalVolume">体積: 0 ㎥</div>
-    <div id="result">
-        <div class="main-value">原価単価: 0 円/㎥</div>
-        <div class="sub-value">（人工係数: 0.00000 人工/㎡）</div>
-    </div>
+
+        <div id="totalCost" class="main-value">原価: 0 円</div>
+
+        <div id="inputValues">
+            作業床面積 <span id="displayArea">0</span> ㎡<br>
+            作業床高 <span id="displayHeight">0</span> m<br>
+            <span id="heightCoefficientDisplay" style="color:#666; font-size:0.9em;"></span><br>
+            諸経費(利益含む) <span id="displayOverhead">0</span> %<br>
+        </div>
+        <div id="manpowerCalc">
+            <div class="main-value">工数: 0.00 人日</div>
+            <div class="sub-value">(0.00㎡/人工)</div>
+        </div>
+
+        <div id="sellingPrice" class="main-value">小計: 0 円</div>
+        <div id="taxAmount">消費税(10%): 0 円</div>
+        <div id="taxIncludedPrice" class="tax-included">税込み: 0 円</div>
+        <!-- 追加3: PDF出力/印刷ボタン -->
 
 
-    <div id="totalCost" class="main-value">原価: 0 円</div>
+        <button onclick="downloadEstimateAsPDF()">PDFとしてダウンロード</button>
 
-    <div id="inputValues">
-        作業床面積 <span id="displayArea">0</span> ㎡<br>
-        作業床高 <span id="displayHeight">0</span> m<br>
-        <span id="heightCoefficientDisplay" style="color:#666; font-size:0.9em;"></span><br>
-        諸経費(利益含む) <span id="displayOverhead">0</span> %<br>
-    </div>
-    <div id="manpowerCalc">
-        <div class="main-value">工数: 0.00 人日</div>
-        <div class="sub-value">(0.00㎡/人工)</div>
-    </div>
 
-    <div id="sellingPrice" class="main-value">小計: 0 円</div>
-    <div id="taxAmount">消費税(10%): 0 円</div>
-    <div id="taxIncludedPrice" class="tax-included">税込み: 0 円</div>
-    <!-- 追加3: PDF出力/印刷ボタン -->
-    <div class="no-print">
-        <button onclick="window.print()">見積書を印刷/PDF出力(未設定)</button>
-    </div>
+        <!-- 印刷時のみ表示されるヘッダー -->
+        <div class="print-only">
+            <p>見積日: <span id="printDate"></span></p>
+            <hr>
+            1. 面積 × 高さ × 係数 → 人工<br>
+            2. 人工 × 単価 → 原価<br>
+            3. 原価 × 諸経費率 → 小計<br>
+            4. 小計 × 税率 → 税込み価格<br>
 
-    <!-- 印刷時のみ表示されるヘッダー -->
-    <div class="print-only">
-        <p>見積日: <span id="printDate"></span></p>
-        <hr>
-        1. 面積 × 高さ × 係数 → 人工<br>
-        2. 人工 × 単価 → 原価<br>
-        3. 原価 × 諸経費率 → 小計<br>
-        4. 小計 × 税率 → 税込み価格<br>
+        </div>
 
-    </div>
+        <div class="footer">
+            <a href="https://atsu3sh1n1.github.io/yumikou/" target="_blank">Created by YUMIKOU Inc.</a>
 
-    <div class="footer">
-        <a href="https://atsu3sh1n1.github.io/yumikou/" target="_blank">Created by YUMIKOU Inc.</a>
-    </div>
 
-    <div class="footnote">
-        ※ 足場施工費算出機(マコトくん)は、国土交通省「 <a href="https://www.mlit.go.jp/gobuild/content/001733127.pdf" target="_blank">
-            公共建築工事標準単価積算基準</a>」に基づき、くさび式足場の施工量を、500㎡規模：人工係数 = 0.0358 人工／㎡、
-        1000㎡規模：人工係数 = 0.0325 人工／㎡を基に設計されています。<br>
-        <br>
-        ※ 高さ係数については、こちらをご参照ください。<br>
+            <div class="footnote">
+                ※ 足場施工費算出機(マコトくん)は、国土交通省「 <a href="https://www.mlit.go.jp/gobuild/content/001733127.pdf"
+                    target="_blank">
+                    公共建築工事標準単価積算基準</a>」に基づき、くさび式足場の施工量を、500㎡規模：人工係数 = 0.0358 人工／㎡、
+                1000㎡規模：人工係数 = 0.0325 人工／㎡を基に設計されています。<br>
+                <br>
+                ※ 高さ係数については、こちらをご参照ください。<br>
 
-        ・<a href="ashiba3.html" target="_blank">
-            「なぜ1m地点から係数をかけるのか？」に対する技術的根拠と説明</a> <br>
-        ・<a href="ashiba2.html" target="_blank">
-            設計上の注意事項と安全マージン</a> <br>
-        ・<a href="top.html" target="_blank">
-            風圧力と高さ係数の関数化による合理的設計</a> <br>
-
+                ・<a href="ashiba3.html" target="_blank">
+                    「なぜ1m地点から係数をかけるのか？」に対する技術的根拠と説明</a> <br>
+                ・<a href="ashiba2.html" target="_blank">
+                    設計上の注意事項と安全マージン</a> <br>
+                ・<a href="top.html" target="_blank">
+                    風圧力と高さ係数の関数化による合理的設計</a> <br>
+            </div>
+        </div>
     </div>
     (試作中/仮置き)
     <iframe src="ashiba4.html" width="300" height="300" style="border:1px solid #ccc;"></iframe>
@@ -642,6 +625,21 @@
 
         updateAll();
     </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script>
+        function downloadEstimateAsPDF() {
+            const element = document.getElementById('estimate-content');
+            const opt = {
+                margin: 0.5,
+                filename: '見積書.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+            };
+            html2pdf().set(opt).from(element).save();
+        }
+    </script>
+
 </body>
 
 </html>
