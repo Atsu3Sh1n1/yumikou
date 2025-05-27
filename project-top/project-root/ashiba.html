@@ -388,7 +388,8 @@
 
 
         <div class="footer"></div>
-        <p>見積日：<span id="printDate"></span> / 有効期限：<span id="oneMonthLaterSpan"></span> / 管理番号：<span id="randomCode"></span></p>
+        <p>見積日：<span id="printDate"></span> / 有効期限：<span id="oneMonthLaterSpan"></span> / 管理番号：<span
+                id="randomCode"></span></p>
 
 
 
@@ -692,7 +693,7 @@
 
             printDateSpan.textContent = formatDate(today);
             oneMonthLaterSpan.textContent = formatDate(oneMonthLater);
-            
+
             const randomCodeSpan = document.getElementById('randomCode');
             randomCodeSpan.textContent = generateRandomCode();
 
@@ -741,18 +742,19 @@
             const opt = {
                 margin: 0,
                 filename: '足場見積もり_有限会社弓工.pdf',
-                image: { type: 'jpeg', quality: 1 }, // 最高画質
+                image: { type: 'jpeg', quality: 0.85 }, // 高画質かつ軽量
                 html2canvas: {
-                    scale: 3, // 解像度を上げるためにスケールを3などにする
+                    scale: 2,
                     useCORS: true,
-                    scrollY: 0
+                    scrollY: 0,
+                    backgroundColor: '#ffffff'
                 },
                 jsPDF: {
                     unit: 'mm',
                     format: 'a4',
                     orientation: 'portrait'
                 },
-                pagebreak: { mode: ['avoid-all', 'css'] } // 自然な改ページ
+                pagebreak: { mode: ['avoid-all', 'css'] }
             };
 
             html2pdf().set(opt).from(element).save();
