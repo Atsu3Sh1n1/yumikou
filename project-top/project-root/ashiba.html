@@ -17,7 +17,7 @@
         }
 
         p {
-             line-height: 0.9;
+            line-height: 0.9;
         }
 
         h3 {
@@ -217,6 +217,37 @@
             font-weight: bold;
             margin-bottom: 0em;
         }
+
+        .estimate-label {
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 4px;
+        }
+
+        .estimate-input {
+            width: 100%;
+            border: none;
+            font-size: 14px;
+            padding: 5px;
+            box-sizing: border-box;
+            resize: none;
+        }
+
+
+        .estimate-table td {
+            padding: 8px;
+            vertical-align: top;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 100px;
+            font-size: 16px;
+            padding: 10px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
     </style>
 </head>
 
@@ -277,6 +308,8 @@
     </div>
 
     <div id="estimate-content">
+
+
         <!-- 計算結果表示セクション -->
         <div id="totalVolume">体積: 0 ㎥</div>
         <div id="result">
@@ -307,16 +340,22 @@
 
 
 
+        <strong>宛先：</strong><input type="text" name="client_name">
+        <strong>案件名：</strong><input type="text" name="project_name">
+
+
+        <div class="section remarks-section">
+            <label for="remarks"><strong></strong></label>
+            <textarea id="remarks" name="remarks" rows="6" placeholder=備考></textarea>
+        </div>
+
+
         <!-- 印刷時のみ表示されるヘッダー -->
         <div class="print-only">
             <p>見積日：<span id="printDate"></span></p>
             <p>有効期限：<span id="oneMonthLaterSpan"></span></p>
             <hr>
-            1. 面積 × 高さ × 係数 → 人工<br>
-            2. 人工 × 単価 → 原価<br>
-            3. 原価 × 諸経費率 → 小計<br>
-            4. 小計 × 税率 → 税込み価格<br>
-
+            面積×高さ×係数→人工/ 人工×単価→原価/ 原価×諸経費率→小計/ 小計×税率→税込み価格
         </div>
 
         <div class="footer">
