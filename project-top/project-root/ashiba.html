@@ -388,13 +388,13 @@
 
 
         <div class="footer"></div>
-        <p>見積日：<span id="printDate"></span> / 有効期限：<span id="oneMonthLaterSpan"></span></p>
+        <p>見積日：<span id="printDate"></span> / 有効期限：<span id="oneMonthLaterSpan"></span> / 管理番号：<span id="randomCode"></span></p>
 
 
 
 
         <div class="footnote">
-            面積×高さ×係数→人工 / 人工×単価→原価 / 原価×諸経費率→小計 / 小計×税率→税込み価格 / 500円単位切り下げ<br><br>
+            面積×高さ×係数→人工 / 人工×単価→原価 / 原価×諸経費率→小計 / 小計×税率→税込み価格 / 100円単位切り下げ<br><br>
             <hr>
             ※ 足場施工費算出機(マコトくん)は、国土交通省「 <a href="https://www.mlit.go.jp/gobuild/content/001733127.pdf" target="_blank">
                 公共建築工事標準単価積算基準</a>」に基づき、くさび式足場の施工量を、500㎡規模：人工係数 = 0.0358 人工／㎡、
@@ -464,6 +464,8 @@
                 }
             }
         }
+
+
 
 
         // 効率テーブルデータ
@@ -567,6 +569,16 @@
             return area * adjustedCoefficient;
         }
 
+        function generateRandomCode(length = 8) {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+            let code = '';
+            for (let i = 0; i < length; i++) {
+                code += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return code;
+        }
+
+
 
         function formatDate(date) {
             const year = date.getFullYear();
@@ -599,7 +611,7 @@
                 const taxAmount = Math.floor(sellingPrice * taxRate); // 消費税額（端数切捨て）
                 let taxIncludedPrice = sellingPrice + taxAmount;
                 if (taxIncludedPrice >= 1000) {
-                    taxIncludedPrice = Math.floor(taxIncludedPrice / 500) * 500;  // 1000円単位で切り下げ
+                    taxIncludedPrice = Math.floor(taxIncludedPrice / 100) * 100;  // 1000円単位で切り下げ
                 }
                 // 税込み価格
 
@@ -680,6 +692,10 @@
 
             printDateSpan.textContent = formatDate(today);
             oneMonthLaterSpan.textContent = formatDate(oneMonthLater);
+            
+            const randomCodeSpan = document.getElementById('randomCode');
+            randomCodeSpan.textContent = generateRandomCode();
+
 
 
 
