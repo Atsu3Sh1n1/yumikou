@@ -303,7 +303,7 @@
         <label><input type="radio" name="type" value="1.15"> 枠組足場（1.15）</label>
         <label><input type="radio" name="type" value="1.30"> 単管足場（1.30）</label>
         <label><input type="radio" name="type" value="1.50"> 吊り足場（1.50）</label>
-        <label><input type="radio" name="type" value="0.90"> 移動式足場（0.90）</label>
+        <label><input type="radio" name="type" value="0.85"> 移動式足場（0.85）</label>
     </div><br><br>
 
     <div class="seko">
@@ -339,12 +339,13 @@
             作業床面積 <span id="displayArea">0</span> ㎡<br>
             作業床高 <span id="displayHeight">0</span> m<br>
             <span id="heightCoefficientDisplay" style="color:#666; font-size:0.9em;"></span><br>
+            <div id="manpowerCalc">
+                <div class="main-value">工数: 0.00 人日</div>
+                <div class="sub-value">(0.00㎡/人工)</div>
+            </div>
             諸経費(利益含む) <span id="displayOverhead">0</span> %<br>
         </div>
-        <div id="manpowerCalc">
-            <div class="main-value">工数: 0.00 人日</div>
-            <div class="sub-value">(0.00㎡/人工)</div>
-        </div>
+
 
         <div id="sellingPrice" class="main-value">小計: 0 円</div>
         <div id="taxAmount">消費税(10%): 0 円</div>
@@ -700,37 +701,37 @@
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <script>
-       function downloadEstimateAsPDF() {
-  const element = document.getElementById('estimate-content');
-  const opt = {
-    margin:       0,
-    filename:     '見積書.pdf',
-    image:        { type: 'jpeg', quality: 1 },
-    html2canvas:  {
-      scale: 1,           // ↓ 値を小さくすると縮小されて1枚に収まりやすくなる
-      useCORS: true,
-      scrollY: 0
-    },
-    jsPDF: {
-      unit: 'mm',
-      format: 'a4',
-      orientation: 'portrait'
-    },
-    pagebreak: { mode: ['avoid-all', 'css'] } // 自動改ページさせない
-  };
+        function downloadEstimateAsPDF() {
+            const element = document.getElementById('estimate-content');
+            const opt = {
+                margin: 0,
+                filename: '見積書.pdf',
+                image: { type: 'jpeg', quality: 1 },
+                html2canvas: {
+                    scale: 1,           // ↓ 値を小さくすると縮小されて1枚に収まりやすくなる
+                    useCORS: true,
+                    scrollY: 0
+                },
+                jsPDF: {
+                    unit: 'mm',
+                    format: 'a4',
+                    orientation: 'portrait'
+                },
+                pagebreak: { mode: ['avoid-all', 'css'] } // 自動改ページさせない
+            };
 
-  html2pdf().set(opt).from(element).toPdf().get('pdf').then(pdf => {
-    // 縮小してでも1ページに収める
-    const totalPages = pdf.internal.getNumberOfPages();
-    if (totalPages > 1) {
-      const originalScale = opt.html2canvas.scale;
-      opt.html2canvas.scale = originalScale * 0.8; // 再試行：スケール下げて再生成
-      html2pdf().set(opt).from(element).save();
-    } else {
-      pdf.save('有限会社弓工.pdf');
-    }
-  });
-}
+            html2pdf().set(opt).from(element).toPdf().get('pdf').then(pdf => {
+                // 縮小してでも1ページに収める
+                const totalPages = pdf.internal.getNumberOfPages();
+                if (totalPages > 1) {
+                    const originalScale = opt.html2canvas.scale;
+                    opt.html2canvas.scale = originalScale * 0.8; // 再試行：スケール下げて再生成
+                    html2pdf().set(opt).from(element).save();
+                } else {
+                    pdf.save('有限会社弓工.pdf');
+                }
+            });
+        }
 
 
     </script>
