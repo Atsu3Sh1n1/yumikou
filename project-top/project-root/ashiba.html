@@ -300,12 +300,13 @@
         <!-- 追加3: PDF出力/印刷ボタン -->
 
 
-        <button onclick="downloadEstimateAsPDF()">PDFとしてダウンロード</button>
+       
 
 
         <!-- 印刷時のみ表示されるヘッダー -->
         <div class="print-only">
-            <p>見積日: <span id="printDate"></span></p>
+            <p>見積日：<span id="printDate"></span></p> <p>有効期限：<span id="oneMonthLaterSpan"></span></p>
+           
             <hr>
             1. 面積 × 高さ × 係数 → 人工<br>
             2. 人工 × 単価 → 原価<br>
@@ -335,6 +336,9 @@
             </div>
         </div>
     </div>
+
+     <button onclick="downloadEstimateAsPDF()">PDFとしてダウンロード</button>
+
     (試作中/仮置き)
     <iframe src="ashiba4.html" width="300" height="300" style="border:1px solid #ccc;"></iframe>
 
@@ -484,6 +488,7 @@
             return area * adjustedCoefficient;
         }
 
+
         function formatDate(date) {
             const year = date.getFullYear();
             const month = String(date.getMonth() + 1).padStart(2, '0');
@@ -535,49 +540,49 @@
 
 
                 resultDiv.innerHTML = `
-<div style="font-size:1.2em; font-weight:bold; margin-bottom:3px;">
-  原価単価: ${unitCost.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })} 円/㎥
-</div>
+            <div style="font-size:1.2em; font-weight:bold; margin-bottom:3px;">
+                原価単価: ${unitCost.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })} 円/㎥
+            </div>
 
-<div style="font-size:1em; color:#555;">
- （${currentCoefficient.toFixed(5)} 人工/㎡）
-</div>
-`;
+            <div style="font-size:1em; color:#555;">
+                （${currentCoefficient.toFixed(5)} 人工/㎡）
+            </div>
+            `;
 
                 totalCostDiv.innerHTML = `
-<div style=" font-size:1.2em; font-weight:bold;">
-  原価: ${Math.round(totalCost).toLocaleString()} 円
-</div>
-`;
+            <div style=" font-size:1.2em; font-weight:bold;">
+                原価: ${Math.round(totalCost).toLocaleString()} 円
+            </div>
+            `;
 
                 sellingPriceDiv.innerHTML = `
-<div style="font-size:1.3em; font-weight:bold; color:#0066cc;">
- 小計: ${Math.round(sellingPrice).toLocaleString()} 円
-</div>
-`;
+            <div style="font-size:1.3em; font-weight:bold; color:#0066cc;">
+                小計: ${Math.round(sellingPrice).toLocaleString()} 円
+            </div>
+            `;
 
                 taxAmountDiv.innerHTML = `
-<div style="font-size:1.2em; color:#666;">
-  消費税(10%): ${taxAmount.toLocaleString(0)} 円
-</div>
-`;
+            <div style="font-size:1.2em; color:#666;">
+                消費税(10%): ${taxAmount.toLocaleString(0)} 円
+            </div>
+            `;
 
                 taxIncludedPriceDiv.innerHTML = `
-<div style="font-size:1.4em; font-weight:bold; color:#d9534f;">
-  税込み: ${Math.round(taxIncludedPrice).toLocaleString()} 円
-</div>
-`;
+            <div style="font-size:1.4em; font-weight:bold; color:#d9534f;">
+                税込み: ${Math.round(taxIncludedPrice).toLocaleString()} 円
+            </div>
+            `;
 
                 // 修正後 ↓
                 manpowerCalcDiv.innerHTML = `
-  <div style="font-size:1.2em; font-weight:bold; margin-bottom:3px;">
-    工数: ${manpower.toFixed(2)} 人日
-  </div>
-  <div style="font-size:1em; color:#555; margin-bottom:5px;">
-    (${currentEfficiency.toFixed(2)}㎡/人工)
-  </div>
-  ${warningMsg}
-`;
+            <div style="font-size:1.2em; font-weight:bold; margin-bottom:3px;">
+                工数: ${manpower.toFixed(2)} 人日
+            </div>
+            <div style="font-size:1em; color:#555; margin-bottom:5px;">
+                (${currentEfficiency.toFixed(2)}㎡/人工)
+            </div>
+            ${warningMsg}
+            `;
 
                 // エラー表示部分
             } else {
@@ -590,6 +595,16 @@
             }
 
             printDateSpan.textContent = formatDate(new Date());
+            // 日付処理
+            const today = new Date();
+            const oneMonthLater = new Date(today);
+            oneMonthLater.setMonth(today.getMonth() + 1);
+
+            printDateSpan.textContent = formatDate(today);
+            oneMonthLaterSpan.textContent = formatDate(oneMonthLater);
+
+
+
             const totalVolumeDiv = document.getElementById('totalVolume');
 
             if (!isNaN(laborCost) && laborCost >= 0 &&
@@ -600,9 +615,9 @@
                 document.getElementById('totalVolume').textContent = totalVolume.toLocaleString(undefined, { maximumFractionDigits: 2 });
 
                 totalVolumeDiv.innerHTML = `
-        <div style=" font-size:1.2em; font-weight:bold;">
-            体積: ${totalVolume.toLocaleString(undefined, { maximumFractionDigits: 2 })} ㎥
-        </div>
+            <div style=" font-size:1.2em; font-weight:bold;">
+                体積: ${totalVolume.toLocaleString(undefined, { maximumFractionDigits: 2 })} ㎥
+            </div>
     `;
             } else {
                 totalVolumeDiv.innerHTML = '<div style="font-size:1.2em;">体積: - ㎥</div>';
