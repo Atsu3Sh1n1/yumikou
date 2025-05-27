@@ -1,105 +1,292 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>資材計算</title>
-  <style>
-    body {
-      font-family: sans-serif;
-      padding: 20px;
-      max-width: 600px;
-      margin: auto;
-      background: #f9f9f9;
-    }
-    input {
-      width: 100%;
-      padding: 8px;
-      margin: 4px 0;
-      box-sizing: border-box;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 10px;
-    }
-    th, td {
-      border: 1px solid #ccc;
-      text-align: center;
-      padding: 6px;
-    }
-    th {
-      background: #eee;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>単管足場材料計算ツール</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+            color: #333;
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        input {
+            width: 100%;
+            padding: 5px;
+            box-sizing: border-box;
+        }
+        .total-row {
+            font-weight: bold;
+            background-color: #e6f7ff;
+        }
+        .section {
+            margin-bottom: 30px;
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #3498db;
+        }
+        .section-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+    </style>
 </head>
 <body>
+    <h1>単管足場材料計算ツール</h1>
+    
+    <div class="section">
+        <div class="section-title">基本情報</div>
+        <table>
+            <tr>
+                <td style="width: 30%;">施工面積 (㎡)</td>
+                <td style="width: 70%;">
+                    <input type="number" id="constructionArea" min="0" step="0.01" value="1" onchange="calculateMaterials()">
+                </td>
+            </tr>
+            <tr>
+                <td>足場高さ</td>
+                <td>
+                    <select id="scaffoldHeight" onchange="calculateMaterials()">
+                        <option value="under10">10m未満</option>
+                        <option value="under20">20m未満</option>
+                        <option value="over20">20m以上</option>
+                    </select>
+                </td>
+            </tr>
+        </table>
+    </div>
+    
+    <div class="section">
+        <div class="section-title">材料計算</div>
+        <table id="materialsTable">
+            <thead>
+                <tr>
+                    <th>材料名</th>
+                    <th>単位</th>
+                    <th>1㎡あたり数量</th>
+                    <th>合計数量</th>
+                    <th>単価 (円)</th>
+                    <th>金額 (円)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- 材料行はJavaScriptで動的に生成 -->
+            </tbody>
+        </table>
+    </div>
+    
+    <div class="section">
+        <div class="section-title">労務費計算</div>
+        <table>
+            <thead>
+                <tr>
+                    <th>項目</th>
+                    <th>単位</th>
+                    <th>1㎡あたり数量</th>
+                    <th>合計数量</th>
+                    <th>単価 (円)</th>
+                    <th>金額 (円)</th>
+                </tr>
+            </thead>
+            <tbody id="laborTable">
+                <!-- 労務費行はJavaScriptで動的に生成 -->
+            </tbody>
+        </table>
+    </div>
+    
+    <div class="section">
+        <div class="section-title">合計金額</div>
+        <table>
+            <tr>
+                <td style="width: 30%;">材料費合計</td>
+                <td id="totalMaterialCost" style="width: 70%;">0 円</td>
+            </tr>
+            <tr>
+                <td>労務費合計</td>
+                <td id="totalLaborCost">0 円</td>
+            </tr>
+            <tr class="total-row">
+                <td>総合計金額</td>
+                <td id="grandTotalCost">0 円</td>
+            </tr>
+        </table>
+    </div>
 
-  <h2>資材数量・金額計算/寝不足くん(仮)</h2>
+    <script>
+        // 単管足場の材料データ (表A1-1-12 単管本足場)
+        const materialsData = {
+            under10: {
+                materials: [
+                    { name: "丸パイプ", unit: "m", quantity: 5.6 },
+                    { name: "合板足場板", unit: "枚", quantity: 0.34 },
+                    { name: "クランプ", unit: "個", quantity: 3.59 },
+                    { name: "ジョイント", unit: "個", quantity: 0.72 },
+                    { name: "固定ベース", unit: "個", quantity: 0.14 },
+                    { name: "壁つなぎ", unit: "個", quantity: 0.04 },
+                    { name: "つま先板(幅木)", unit: "枚", quantity: 0.28 },
+                    { name: "修理費", unit: "式", quantity: 1 }
+                ],
+                labor: [
+                    { name: "とび工", unit: "人", quantity: 0.10 }
+                ]
+            },
+            under20: {
+                materials: [
+                    { name: "丸パイプ", unit: "m", quantity: 5.5 },
+                    { name: "合板足場板", unit: "枚", quantity: 0.32 },
+                    { name: "クランプ", unit: "個", quantity: 3.66 },
+                    { name: "ジョイント", unit: "個", quantity: 0.71 },
+                    { name: "固定ベース", unit: "個", quantity: 0.06 },
+                    { name: "壁つなぎ", unit: "個", quantity: 0.04 },
+                    { name: "つま先板(幅木)", unit: "枚", quantity: 0.28 },
+                    { name: "修理費", unit: "式", quantity: 1 }
+                ],
+                labor: [
+                    { name: "とび工", unit: "人", quantity: 0.11 }
+                ]
+            },
+            over20: {
+                materials: [
+                    { name: "丸パイプ", unit: "m", quantity: 5.4 },
+                    { name: "合板足場板", unit: "枚", quantity: 0.31 },
+                    { name: "クランプ", unit: "個", quantity: 3.67 },
+                    { name: "ジョイント", unit: "個", quantity: 0.70 },
+                    { name: "固定ベース", unit: "個", quantity: 0.04 },
+                    { name: "壁つなぎ", unit: "個", quantity: 0.04 },
+                    { name: "つま先板(幅木)", unit: "枚", quantity: 0.28 },
+                    { name: "修理費", unit: "式", quantity: 1 }
+                ],
+                labor: [
+                    { name: "とび工", unit: "人", quantity: 0.12 }
+                ]
+            }
+        };
 
-  <label>㎥を入力：</label>
-  <input type="number" id="volume" value="1" step="0.1" min="0" oninput="updateTable()">
-
-  <table>
-    <thead>
-      <tr>
-        <th>材料名</th>
-        <th>単価 (円)</th>
-        <th>数量</th>
-        <th>金額 (円)</th>
-      </tr>
-    </thead>
-    <tbody id="materialTable">
-      <!-- JSで自動生成 -->
-    </tbody>
-  </table>
-
-  <h3>合計金額：<span id="totalCost">0</span> 円</h3>
-
-  <script>
-    const materials = [
-      { name: "丸パイプ(φ48.6)", unit: "m", qty: 5.6 },
-      { name: "合板足場板", unit: "枚", qty: 0.34 },
-      { name: "クランプ", unit: "個", qty: 3.59 },
-      { name: "ジョイント", unit: "個", qty: 0.72 },
-      { name: "固定ベース", unit: "個", qty: 0.14 },
-      { name: "壁つなぎ", unit: "個", qty: 0.04 },
-      { name: "つま先板", unit: "枚", qty: 0.28 }
-    ];
-
-    const tableBody = document.getElementById("materialTable");
-
-    function createTable() {
-      tableBody.innerHTML = "";
-      materials.forEach((mat, index) => {
-        const row = document.createElement("tr");
-        row.innerHTML = `
-          <td>${mat.name}</td>
-          <td><input type="number" value="0" step="1" min="0" onchange="updateTable()" id="price-${index}"></td>
-          <td><span id="qty-${index}">0</span> ${mat.unit}</td>
-          <td id="cost-${index}">0</td>
-        `;
-        tableBody.appendChild(row);
-      });
-    }
-
-    function updateTable() {
-      const volume = parseFloat(document.getElementById("volume").value) || 0;
-      let total = 0;
-      materials.forEach((mat, index) => {
-        const unitQty = mat.qty * 4 * volume;
-        const unitPrice = parseFloat(document.getElementById(`price-${index}`).value) || 0;
-        const cost = Math.round(unitQty * unitPrice);
-        document.getElementById(`qty-${index}`).textContent = unitQty.toFixed(2);
-        document.getElementById(`cost-${index}`).textContent = cost.toLocaleString();
-        total += cost;
-      });
-      document.getElementById("totalCost").textContent = total.toLocaleString();
-    }
-
-    createTable();
-    updateTable();
-  </script>
-
+        // 計算関数
+        function calculateMaterials() {
+            const area = parseFloat(document.getElementById("constructionArea").value) || 0;
+            const height = document.getElementById("scaffoldHeight").value;
+            const data = materialsData[height];
+            
+            // 材料テーブルを更新
+            const materialsTable = document.getElementById("materialsTable").getElementsByTagName('tbody')[0];
+            materialsTable.innerHTML = "";
+            
+            let totalMaterialCost = 0;
+            
+            data.materials.forEach(item => {
+                const totalQuantity = item.quantity * area;
+                const row = materialsTable.insertRow();
+                
+                // 材料名
+                row.insertCell(0).textContent = item.name;
+                
+                // 単位
+                row.insertCell(1).textContent = item.unit;
+                
+                // 1㎡あたり数量
+                row.insertCell(2).textContent = item.quantity.toFixed(2);
+                
+                // 合計数量
+                row.insertCell(3).textContent = totalQuantity.toFixed(2);
+                
+                // 単価入力
+                const priceCell = row.insertCell(4);
+                const priceInput = document.createElement("input");
+                priceInput.type = "number";
+                priceInput.min = "0";
+                priceInput.step = "1";
+                priceInput.value = localStorage.getItem(`price_${item.name}`) || "0";
+                priceInput.onchange = function() {
+                    localStorage.setItem(`price_${item.name}`, this.value);
+                    calculateMaterials();
+                };
+                priceCell.appendChild(priceInput);
+                
+                // 金額計算
+                const price = parseFloat(priceInput.value) || 0;
+                const cost = totalQuantity * price;
+                row.insertCell(5).textContent = cost.toFixed(0) + " 円";
+                
+                totalMaterialCost += cost;
+            });
+            
+            // 労務費テーブルを更新
+            const laborTable = document.getElementById("laborTable");
+            laborTable.innerHTML = "";
+            
+            let totalLaborCost = 0;
+            
+            data.labor.forEach(item => {
+                const totalQuantity = item.quantity * area;
+                const row = laborTable.insertRow();
+                
+                // 項目名
+                row.insertCell(0).textContent = item.name;
+                
+                // 単位
+                row.insertCell(1).textContent = item.unit;
+                
+                // 1㎡あたり数量
+                row.insertCell(2).textContent = item.quantity.toFixed(2);
+                
+                // 合計数量
+                row.insertCell(3).textContent = totalQuantity.toFixed(2);
+                
+                // 単価入力
+                const priceCell = row.insertCell(4);
+                const priceInput = document.createElement("input");
+                priceInput.type = "number";
+                priceInput.min = "0";
+                priceInput.step = "1";
+                priceInput.value = localStorage.getItem(`labor_price_${item.name}`) || "0";
+                priceInput.onchange = function() {
+                    localStorage.setItem(`labor_price_${item.name}`, this.value);
+                    calculateMaterials();
+                };
+                priceCell.appendChild(priceInput);
+                
+                // 金額計算
+                const price = parseFloat(priceInput.value) || 0;
+                const cost = totalQuantity * price;
+                row.insertCell(5).textContent = cost.toFixed(0) + " 円";
+                
+                totalLaborCost += cost;
+            });
+            
+            // 合計金額を更新
+            document.getElementById("totalMaterialCost").textContent = totalMaterialCost.toFixed(0) + " 円";
+            document.getElementById("totalLaborCost").textContent = totalLaborCost.toFixed(0) + " 円";
+            document.getElementById("grandTotalCost").textContent = (totalMaterialCost + totalLaborCost).toFixed(0) + " 円";
+        }
+        
+        // 初期計算
+        calculateMaterials();
+    </script>
 </body>
 </html>
