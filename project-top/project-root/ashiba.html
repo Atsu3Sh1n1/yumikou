@@ -560,15 +560,15 @@
         function calculateManpower(area, height, safetyFactor, conditionFactor) {
             if (isNaN(area) || area <= 0) return 0;
 
-            const baseCoefficient = getLaborCoefficient(area);
+            const efficiency = getEfficiency(area); // ㎡/人
             const heightCoefficient = getHeightCoefficient(height);
-            const adjustedCoefficient = baseCoefficient * safetyFactor * conditionFactor * heightCoefficient;
 
-            if (height > 0) {
-                return area * height * adjustedCoefficient;
-            }
-            return area * adjustedCoefficient;
+            const volume = area * height;
+            const manpower = (volume / efficiency) * safetyFactor * conditionFactor * heightCoefficient;
+
+            return manpower;
         }
+
 
         function generateRandomCode(length = 11) {
             const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
@@ -616,7 +616,9 @@
                 }
                 // 税込み価格
 
-                const currentEfficiency = getEfficiency(area);
+                const rawEfficiency = getEfficiency(area);
+                const adjustedEfficiency = rawEfficiency / (safetyFactor * conditionFactor * heightCoefficient);
+
                 const currentCoefficient = getLaborCoefficient(area);
 
                 // 警告メッセージ準備
@@ -664,16 +666,16 @@
             </div>
             `;
 
-                // 修正後 ↓
                 manpowerCalcDiv.innerHTML = `
-            <div style="font-size:1.2em; font-weight:bold; margin-bottom:3px;">
-                工数: ${manpower.toFixed(2)} 人日
-            </div>
-            <div style="font-size:1em; color:#555; margin-bottom:5px;">
-                (作業効率係数${currentEfficiency.toFixed(2)}㎡/人工)
-            </div>
-            ${warningMsg}
-            `;
+    <div style="font-size:1.2em; font-weight:bold; margin-bottom:3px;">
+        工数: ${manpower.toFixed(2)} 人日
+    </div>
+    <div style="font-size:1em; color:#555; margin-bottom:5px;">
+        (作業効率係数 ${adjustedEfficiency.toFixed(2)}㎡/人工)
+    </div>
+    ${warningMsg}
+`;
+
 
                 // エラー表示部分
             } else {
