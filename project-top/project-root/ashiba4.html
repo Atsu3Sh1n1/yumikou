@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>足場材数量計算機</title>
+  <style>
+    body { font-family: sans-serif; padding: 20px; margin: 0; }
+    table { border-collapse: collapse; width: 100%; margin-top: 10px; }
+    th, td { border: 1px solid #ccc; padding: 8px; text-align: center; }
+    input[type="number"] { width: 80px; }
+    .total { font-weight: bold; font-size: 1.2em; margin-top: 10px; }
+  </style>
+</head>
+<body>
+  <h2>足場体積 → 材料数量 自動計算</h2>
+
+  <label for="volume">足場体積（m³）:</label>
+  <input type="number" id="volume" value="650" onchange="calculateMaterials()" />
+
+  <table>
+    <thead>
+      <tr>
+        <th>項目</th>
+        <th>単位</th>
+        <th>係数 (/m³)</th>
+        <th>数量（自動計算）</th>
+        <th>単価（円）</th>
+        <th>小計（円）</th>
+      </tr>
+    </thead>
+    <tbody id="materialTable">
+      <tr>
+        <td>単管パイプ</td>
+        <td>本</td>
+        <td><input type="number" value="2.0" step="0.1" onchange="calculateMaterials()" /></td>
+        <td class="qty"></td>
+        <td><input type="number" value="500" onchange="calculateMaterials()" /></td>
+        <td class="subtotal"></td>
+      </tr>
+      <tr>
+        <td>クランプ</td>
+        <td>個</td>
+        <td><input type="number" value="4.0" step="0.1" onchange="calculateMaterials()" /></td>
+        <td class="qty"></td>
+        <td><input type="number" value="100" onchange="calculateMaterials()" /></td>
+        <td class="subtotal"></td>
+      </tr>
+      <tr>
+        <td>踏板</td>
+        <td>枚</td>
+        <td><input type="number" value="0.5" step="0.1" onchange="calculateMaterials()" /></td>
+        <td class="qty"></td>
+        <td><input type="number" value="1500" onchange="calculateMaterials()" /></td>
+        <td class="subtotal"></td>
+      </tr>
+      <tr>
+        <td>ジョイント</td>
+        <td>個</td>
+        <td><input type="number" value="0.5" step="0.1" onchange="calculateMaterials()" /></td>
+        <td class="qty"></td>
+        <td><input type="number" value="80" onchange="calculateMaterials()" /></td>
+        <td class="subtotal"></td>
+      </tr>
+      <tr>
+        <td>人工</td>
+        <td>人工</td>
+        <td><input type="number" value="0.015" step="0.001" onchange="calculateMaterials()" /></td>
+        <td class="qty"></td>
+        <td><input type="number" value="25000" onchange="calculateMaterials()" /></td>
+        <td class="subtotal"></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="total">合計金額：<span id="total">0</span> 円</div>
+
+  <script>
+    function calculateMaterials() {
+      const volume = parseFloat(document.getElementById('volume').value) || 0;
+      let total = 0;
+
+      document.querySelectorAll('#materialTable tr').forEach(row => {
+        const coeffInput = row.cells[2].querySelector('input');
+        const priceInput = row.cells[4].querySelector('input');
+        const coeff = parseFloat(coeffInput.value) || 0;
+        const unitPrice = parseFloat(priceInput.value) || 0;
+
+        const qty = coeff * volume;
+        const subtotal = qty * unitPrice;
+
+        row.querySelector('.qty').textContent = qty.toFixed(2);
+        row.querySelector('.subtotal').textContent = subtotal.toFixed(0);
+
+        total += subtotal;
+      });
+
+      document.getElementById('total').textContent = total.toLocaleString();
+    }
+
+    window.onload = calculateMaterials;
+  </script>
+</body>
+</html>
