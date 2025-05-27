@@ -614,7 +614,7 @@
                 }
 
                 // 高さに関する警告メッセージ
-                document.getElementById('heightCoefficientDisplay').textContent = `（高さ係数:${heightCoefficient.toFixed(2)}）`;
+                document.getElementById('heightCoefficientDisplay').textContent = `（高さ係数:${heightCoefficient.toFixed(2)}倍）`;
 
 
                 resultDiv.innerHTML = `
@@ -623,7 +623,7 @@
             </div>
 
             <div style="font-size:1em; color:#555;">
-                （${currentCoefficient.toFixed(5)}人工/㎡)</div>
+                （人工係数${currentCoefficient.toFixed(5)}人工/㎡)</div>
             `;
 
                 totalCostDiv.innerHTML = `
@@ -656,7 +656,7 @@
                 工数: ${manpower.toFixed(2)} 人日
             </div>
             <div style="font-size:1em; color:#555; margin-bottom:5px;">
-                (${currentEfficiency.toFixed(2)}㎡/人工)
+                (作業効率係数${currentEfficiency.toFixed(2)}㎡/人工)
             </div>
             ${warningMsg}
             `;
