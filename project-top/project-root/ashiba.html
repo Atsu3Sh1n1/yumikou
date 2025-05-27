@@ -270,16 +270,15 @@
             font-weight: bold;
             width: 280px;
         }
-          /* iframeに個別スタイルを適用 */
-    #materialFrame {
-      width: 100%;
-      height: 800px;
-      border: 2px solid #ccc;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    }
 
-   
+        /* iframeに個別スタイルを適用 */
+        #materialFrame {
+            width: 100%;
+            height: 800px;
+            border: 2px solid #ccc;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
     </style>
 </head>
 
@@ -719,34 +718,38 @@
     <script>
         function downloadEstimateAsPDF() {
             const element = document.getElementById('estimate-content');
-            const opt = {
-                margin: 0,
-                filename: '見積書.pdf',
-                image: { type: 'jpeg', quality: 1 },
-                html2canvas: {
-                    scale: 1,           // ↓ 値を小さくすると縮小されて1枚に収まりやすくなる
-                    useCORS: true,
-                    scrollY: 0
-                },
-                jsPDF: {
-                    unit: 'mm',
-                    format: 'a4',
-                    orientation: 'portrait'
-                },
-                pagebreak: { mode: ['avoid-all', 'css'] } // 自動改ページさせない
+            let scale = 1;
+
+            const generatePDF = () => {
+                const opt = {
+                    margin: 0,
+                    filename: '足場見積もり_有限会社弓工.pdf',
+                    image: { type: 'jpeg', quality: 1 },
+                    html2canvas: {
+                        scale: scale,
+                        useCORS: true,
+                        scrollY: 0
+                    },
+                    jsPDF: {
+                        unit: 'mm',
+                        format: 'a4', // A3 にする場合は 'a3' に
+                        orientation: 'portrait'
+                    },
+                    pagebreak: { mode: ['avoid-all', 'css'] }
+                };
+
+                html2pdf().set(opt).from(element).toPdf().get('pdf').then(pdf => {
+                    const totalPages = pdf.internal.getNumberOfPages();
+                    if (totalPages > 1 && scale > 0.2) {
+                        scale *= 0.8;
+                        generatePDF();
+                    } else {
+                        pdf.save(opt.filename);
+                    }
+                });
             };
 
-            html2pdf().set(opt).from(element).toPdf().get('pdf').then(pdf => {
-                // 縮小してでも1ページに収める
-                const totalPages = pdf.internal.getNumberOfPages();
-                if (totalPages > 1) {
-                    const originalScale = opt.html2canvas.scale;
-                    opt.html2canvas.scale = originalScale * 0.8; // 再試行：スケール下げて再生成
-                    html2pdf().set(opt).from(element).save();
-                } else {
-                    pdf.save('有限会社弓工.pdf');
-                }
-            });
+            generatePDF();
         }
 
 
