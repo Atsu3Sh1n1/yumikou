@@ -570,7 +570,7 @@
             return area * adjustedCoefficient;
         }
 
-        function generateRandomCode(length = 8) {
+        function generateRandomCode(length = 11) {
             const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
             let code = '';
             for (let i = 0; i < length; i++) {
@@ -670,7 +670,7 @@
                 工数: ${manpower.toFixed(2)} 人日
             </div>
             <div style="font-size:1em; color:#555; margin-bottom:5px;">
-                (効率係数${currentEfficiency.toFixed(2)}㎡/人工)
+                (作業効率係数${currentEfficiency.toFixed(2)}㎡/人工)
             </div>
             ${warningMsg}
             `;
