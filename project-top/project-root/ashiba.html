@@ -334,13 +334,13 @@
         1000㎡規模：人工係数 = 0.0325 人工／㎡を基に設計されています。<br>
         <br>
         ※ 高さ係数については、こちらをご参照ください。<br>
-        
+
         ・<a href="ashiba3.html" target="_blank">
-        「なぜ1m地点から係数をかけるのか？」に対する技術的根拠と説明</a> <br>
+            「なぜ1m地点から係数をかけるのか？」に対する技術的根拠と説明</a> <br>
         ・<a href="ashiba2.html" target="_blank">
-        設計上の注意事項と安全マージン</a> <br>
+            設計上の注意事項と安全マージン</a> <br>
         ・<a href="top.html" target="_blank">
-        風圧力と高さ係数の関数化による合理的設計</a> <br>
+            風圧力と高さ係数の関数化による合理的設計</a> <br>
 
 
     </div>
@@ -520,7 +520,11 @@
                 const sellingPrice = calculateSellingPrice(totalCost);
                 const taxRate = 0.10; // 消費税率10%
                 const taxAmount = Math.floor(sellingPrice * taxRate); // 消費税額（端数切捨て）
-                const taxIncludedPrice = sellingPrice + taxAmount; // 税込み価格
+                let taxIncludedPrice = sellingPrice + taxAmount;
+                if (taxIncludedPrice >= 1000) {
+                    taxIncludedPrice = Math.floor(taxIncludedPrice / 1000) * 1000;  // 1000円単位で切り下げ
+                }
+                // 税込み価格
 
                 const currentEfficiency = getEfficiency(area);
                 const currentCoefficient = getLaborCoefficient(area);
