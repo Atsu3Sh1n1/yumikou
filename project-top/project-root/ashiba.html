@@ -719,41 +719,41 @@
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <script>
-        function downloadEstimateAsPDF() {
-            const element = document.getElementById('estimate-content');
-            let scale = 1;
+function downloadEstimateAsPDF() {
+    const element = document.getElementById('estimate-content');
+    let scale = 2; // 初期値を大きくして文字をくっきり
 
-            const generatePDF = () => {
-                const opt = {
-                    margin: 0,
-                    filename: '足場見積もり_有限会社弓工.pdf',
-                    image: { type: 'jpeg', quality: 1 },
-                    html2canvas: {
-                        scale: scale,
-                        useCORS: true,
-                        scrollY: 0
-                    },
-                    jsPDF: {
-                        unit: 'mm',
-                        format: 'a4', // A3 にする場合は 'a3' に
-                        orientation: 'portrait'
-                    },
-                    pagebreak: { mode: ['avoid-all', 'css'] }
-                };
+    const generatePDF = () => {
+        const opt = {
+            margin: 0,
+            filename: '足場見積もり_有限会社弓工.pdf',
+            image: { type: 'jpeg', quality: 1 },
+            html2canvas: {
+                scale: scale,      // 文字をくっきり
+                useCORS: true,
+                scrollY: 0
+            },
+            jsPDF: {
+                unit: 'mm',
+                format: 'a4',
+                orientation: 'portrait'
+            },
+            pagebreak: { mode: ['avoid-all', 'css'] }
+        };
 
-                html2pdf().set(opt).from(element).toPdf().get('pdf').then(pdf => {
-                    const totalPages = pdf.internal.getNumberOfPages();
-                    if (totalPages > 1 && scale > 0.2) {
-                        scale *= 0.8;
-                        generatePDF();
-                    } else {
-                        pdf.save(opt.filename);
-                    }
-                });
-            };
+        html2pdf().set(opt).from(element).toPdf().get('pdf').then(pdf => {
+            const totalPages = pdf.internal.getNumberOfPages();
+            if (totalPages > 1 && scale > 0.4) {
+                scale *= 0.8; // 縮小して再試行（文字をなるべく保ったまま）
+                generatePDF();
+            } else {
+                pdf.save(opt.filename);
+            }
+        });
+    };
 
-            generatePDF();
-        }
+    generatePDF();
+}
 
 
     </script>
