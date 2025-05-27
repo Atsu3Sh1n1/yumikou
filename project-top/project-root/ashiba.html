@@ -69,7 +69,7 @@
         #manpowerCalc {
             margin: 1em 0;
             font-weight: bold;
-            font-size: 1.1em;
+            font-size: 1.2em;
             padding: 0.5em;
             border-radius: 4px;
         }
@@ -136,7 +136,7 @@
             #taxAmount,
             #taxIncludedPrice,
             #manpowerCalc {
-                font-size: 13pt;
+                font-size: 0;
             }
         }
 
@@ -277,6 +277,20 @@
         <label><input type="radio" name="type" value="1.50"> 吊り足場（1.50）</label>
         <label><input type="radio" name="type" value="0.90"> 移動式足場（0.90）</label>
     </div><br><br>
+
+    <div class="seko">
+        <fieldset>
+            <legend>施工条件係数</legend>
+            <label><input type="checkbox" name="conditions" value="1.08"> 急工期対応（1.2）</label>
+            <label><input type="checkbox" name="conditions" value="1.5"> 足場盛替え（1.5）</label>
+            <label><input type="checkbox" name="conditions" value="0.9"> 解体（0.9）</label>
+            <label><input type="checkbox" name="conditions" value="1.3"> 雨天（1.3）</label>
+            <label><input type="checkbox" name="conditions" value="1.25"> 夜間（1.25）</label>
+            <label><input type="checkbox" name="conditions" value="1.5"> 深夜（1.5）</label>
+           
+            
+        </fieldset>
+    </div>
 
 
     <!-- 計算結果表示セクション -->
@@ -533,13 +547,13 @@
 `;
 
                 totalCostDiv.innerHTML = `
-<div style=" font-weight:bold;">
+<div style=" font-size:1.2em; font-weight:bold;">
   原価: ${Math.round(totalCost).toLocaleString()} 円
 </div>
 `;
 
                 sellingPriceDiv.innerHTML = `
-<div style="font-size:1.2em; font-weight:bold; color:#0066cc;">
+<div style="font-size:1.3em; font-weight:bold; color:#0066cc;">
  小計: ${Math.round(sellingPrice).toLocaleString()} 円
 </div>
 `;
@@ -570,9 +584,9 @@ ${heightWarningMsg}
                 // エラー表示部分
             } else {
                 resultDiv.innerHTML = '<div style="font-size:1.2em; ">単価: - 円/㎥</div>';
-                totalCostDiv.innerHTML = '<div style="font-size:1.2em; ">合計: - 円</div>';
-                sellingPriceDiv.innerHTML = '<div style="font-size:1.4em; ">小計: - 円</div>';
-                taxAmountDiv.innerHTML = '<div style="font-size:1.4em; ">消費税(10%): - 円</div>';
+                totalCostDiv.innerHTML = '<div style="font-size:1.2em; ">原価: - 円</div>';
+                sellingPriceDiv.innerHTML = '<div style="font-size:1.3em; ">小計: - 円</div>';
+                taxAmountDiv.innerHTML = '<div style="font-size:1.2em; ">消費税(10%): - 円</div>';
                 taxIncludedPriceDiv.innerHTML = '<div style="font-size:1.4em; ">税込み: - 円</div>';
                 manpowerCalcDiv.innerHTML = '<div style="font-size:1.2em; ">工数: - 人日</div>';
             }
