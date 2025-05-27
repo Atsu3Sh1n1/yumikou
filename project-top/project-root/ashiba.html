@@ -270,6 +270,16 @@
             font-weight: bold;
             width: 280px;
         }
+          /* iframeに個別スタイルを適用 */
+    #materialFrame {
+      width: 100%;
+      height: 800px;
+      border: 2px solid #ccc;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+   
     </style>
 </head>
 
@@ -363,7 +373,8 @@
 
 
 
-        <strong>宛先：</strong><input type="text" name="client_name" class="custom-input"><strong>  案件名：</strong><input type="text" name="project_name" class="custom-input">
+        <strong>宛先：</strong><input type="text" name="client_name" class="custom-input"><strong> 案件名：</strong><input
+            type="text" name="project_name" class="custom-input">
 
         <div class="section remarks-section">
             <label for="remarks"><strong></strong></label>
@@ -403,7 +414,7 @@
     <button onclick="downloadEstimateAsPDF()">PDFとしてダウンロード</button>
 
     (試作中/仮置き)
-    <iframe src="ashiba4.html" width="300" height="300" style="border:1px solid #ccc;"></iframe>
+    <iframe id="materialFrame" src="ashiba7.html" title="資材計算" loading="lazy"></iframe>
 
     <script>
         const laborCostInput = document.getElementById('laborCost');
