@@ -17,7 +17,7 @@
         }
 
         p {
-            line-height: 0.9;
+            font-size: 1em;
         }
 
         h3 {
@@ -96,7 +96,7 @@
         }
 
         .footnote {
-            font-size: 0.8em;
+            font-size: 0.9em;
             color: #666;
             margin: 1.5em 0;
             line-height: 1.4;
@@ -133,7 +133,7 @@
 
         .footer {
             text-align: center;
-            font-size: 12px;
+            font-size: 14px;
             margin-bottom: -10px;
             padding: 0.8rem;
         }
@@ -263,6 +263,13 @@
             color: #000;
             /* 背景によっては白より黒が見やすい */
         }
+
+        .custom-input {
+            height: 30px;
+            font-size: 16px;
+            font-weight: bold;
+            width: 280px;
+        }
     </style>
 </head>
 
@@ -298,7 +305,7 @@
     </div>
 
     <div class="checkbox-group">
-        <h4><strong>足場の種類（安全対応係数適用）</strong></h4>
+        <h4><strong>足場の種類（安全対応係数）</strong></h4>
         <label><input type="radio" name="type" value="1.00" checked> くさび式足場（1.00）</label>
         <label><input type="radio" name="type" value="1.15"> 枠組足場（1.15）</label>
         <label><input type="radio" name="type" value="1.30"> 単管足場（1.30）</label>
@@ -356,9 +363,7 @@
 
 
 
-        <strong>宛先：</strong><input type="text" name="client_name">
-        <strong>　案件名：</strong><input type="text" name="project_name">
-
+        <strong>宛先：</strong><input type="text" name="client_name" class="custom-input"><strong>  案件名：</strong><input type="text" name="project_name" class="custom-input">
 
         <div class="section remarks-section">
             <label for="remarks"><strong></strong></label>
@@ -368,7 +373,7 @@
 
         <!-- 印刷時のみ表示されるヘッダー -->
         <div class="print-only">
-            <p>見積もり日：<span id="printDate"></span> / 有効期限：<span id="oneMonthLaterSpan"></span></p>
+            <p>見積日：<span id="printDate"></span> / 有効期限：<span id="oneMonthLaterSpan"></span></p>
             <hr>
             面積×高さ×係数→人工 / 人工×単価→原価 / 原価×諸経費率→小計 / 小計×税率→税込み価格 / 500円単位で切り下げ
         </div>
