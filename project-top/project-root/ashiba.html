@@ -699,19 +699,38 @@
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <script>
-        function downloadEstimateAsPDF() {
-            const element = document.getElementById("estimate-content");
+       function downloadEstimateAsPDF() {
+  const element = document.getElementById('estimate-content');
+  const opt = {
+    margin:       0,
+    filename:     '見積書.pdf',
+    image:        { type: 'jpeg', quality: 1 },
+    html2canvas:  {
+      scale: 1,           // ↓ 値を小さくすると縮小されて1枚に収まりやすくなる
+      useCORS: true,
+      scrollY: 0
+    },
+    jsPDF: {
+      unit: 'mm',
+      format: 'a4',
+      orientation: 'portrait'
+    },
+    pagebreak: { mode: ['avoid-all', 'css'] } // 自動改ページさせない
+  };
 
-            const opt = {
-                margin: 0.5,
-                filename: 'estimate.pdf',
-                image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 2 },
-                jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
-            };
+  html2pdf().set(opt).from(element).toPdf().get('pdf').then(pdf => {
+    // 縮小してでも1ページに収める
+    const totalPages = pdf.internal.getNumberOfPages();
+    if (totalPages > 1) {
+      const originalScale = opt.html2canvas.scale;
+      opt.html2canvas.scale = originalScale * 0.8; // 再試行：スケール下げて再生成
+      html2pdf().set(opt).from(element).save();
+    } else {
+      pdf.save('見積書.pdf');
+    }
+  });
+}
 
-            html2pdf().set(opt).from(element).save();
-        }
 
     </script>
 
