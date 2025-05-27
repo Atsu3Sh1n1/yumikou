@@ -61,7 +61,12 @@
       padding: 5px;
       font-size: 1em;
       width: 42%;
-      
+      border: 2px solid #dffdff;
+      background-color: #dffdff;
+      /* ここで枠線の色を指定 */
+      border-radius: 4px;
+      /* 角を丸くするのもお好みで */
+
     }
 
     .result {
@@ -95,7 +100,6 @@
     button[type="submit"]:hover {
       background-color: #45a049;
     }
-
   </style>
 </head>
 
@@ -170,7 +174,7 @@
     workItems.forEach(({ id, label, factor, note }) => {
       const group = document.createElement("div");
       group.className = "form-group";
-     group.innerHTML = `
+      group.innerHTML = `
 <div class="form-row" style="font-size: 1.2em; margin-top: 2rem; font-weight: bold;">${label} ： <span style="color: red;">${factor}</span></div>
   <div class="input-group">
         <input type="number" inputmode="numeric" id="${id}" placeholder="人" min="0" />
