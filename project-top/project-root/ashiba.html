@@ -190,8 +190,7 @@
         #taxAmount,
         #taxIncludedPrice,
         #manpowerCalc,
-        #totalVolume,
-        #inputValues {
+        #totalVolume {
             text-align: right;
             margin: 0.8em 0;
             font-size: 1.2rem;
@@ -221,9 +220,9 @@
 
         /* 入力値表示エリアのスタイル */
         #inputValues {
-            margin-top: 1.5em;
+            margin: 0em;
             margin-bottom: 0.5em;
-            font-size: 1.3rem;
+            font-size: 1.4em;
             text-align: right;
             line-height: 1.6;
             font-weight: bold;
@@ -232,7 +231,7 @@
         /* 体積表示のスタイル */
         #totalVolume {
             font-weight: bold;
-            margin-bottom: 0.5em;
+            margin-bottom: 0em;
         }
     </style>
 </head>
@@ -300,16 +299,19 @@
     </div>
 
 
+    <div id="totalCost" class="main-value">原価: 0 円</div>
+
+    <div id="inputValues">
+        作業床面積 <span id="displayArea">0</span> ㎡<br>
+        作業床高 <span id="displayHeight">0</span> m<br>
+        <span id="heightCoefficientDisplay" style="color:#666; font-size:0.9em;"></span><br>
+        諸経費(利益含む) <span id="displayOverhead">0</span> %<br>
+    </div>
     <div id="manpowerCalc">
         <div class="main-value">総工数: 0.00 人日</div>
         <div class="sub-value">(0.00㎡/人工)</div>
     </div>
-    <div id="inputValues">
-        作業床面積 <span id="displayArea">0</span> ㎡<br>
-        作業床高 <span id="displayHeight">0</span> m<br>
-        諸経費(利益含む) <span id="displayOverhead">0</span> %<br>
-    </div>
-    <div id="totalCost" class="main-value">原価: 0 円</div>
+
     <div id="sellingPrice" class="main-value">小計: 0 円</div>
     <div id="taxAmount">消費税(10%): 0 円</div>
     <div id="taxIncludedPrice" class="tax-included">税込み: 0 円</div>
@@ -522,7 +524,7 @@
                 const taxAmount = Math.floor(sellingPrice * taxRate); // 消費税額（端数切捨て）
                 let taxIncludedPrice = sellingPrice + taxAmount;
                 if (taxIncludedPrice >= 1000) {
-                    taxIncludedPrice = Math.floor(taxIncludedPrice / 1000) * 1000;  // 1000円単位で切り下げ
+                    taxIncludedPrice = Math.floor(taxIncludedPrice / 500) * 500;  // 1000円単位で切り下げ
                 }
                 // 税込み価格
 
@@ -538,9 +540,8 @@
                 }
 
                 // 高さに関する警告メッセージ
-                let heightWarningMsg = `<span style="font-size:1.2em; display:block; margin-top:5px;">
-  高さ係数: ${heightCoefficient.toFixed(2)}
-</span>`;
+                document.getElementById('heightCoefficientDisplay').textContent = `（高さ係数: ${heightCoefficient.toFixed(2)}）`;
+
 
                 resultDiv.innerHTML = `
 <div style="font-size:1.2em; font-weight:bold; margin-bottom:3px;">
@@ -548,7 +549,7 @@
 </div>
 
 <div style="font-size:1em; color:#555;">
- （人工係数: ${currentCoefficient.toFixed(5)} 人工/㎡）
+ （${currentCoefficient.toFixed(5)} 人工/㎡）
 </div>
 `;
 
@@ -577,15 +578,15 @@
 `;
 
                 manpowerCalcDiv.innerHTML = `
-<div style="font-size:1.2em; font-weight:bold; margin-bottom:3px;">
-  総工数: ${manpower.toFixed(2)} 人日
-</div>
-<div style="font-size:1em; color:#555; margin-bottom:5px;">
-  (${currentEfficiency.toFixed(2)}㎡/人工)
-</div>
-${warningMsg}
-${heightWarningMsg}
+  <div style="font-size:1.2em; font-weight:bold; margin-bottom:3px;">
+    総工数: ${manpower.toFixed(2)} 人日
+  </div>
+  <div style="font-size:1em; color:#555; margin-bottom:5px;">
+    (${currentEfficiency.toFixed(2)}㎡/人工)
+  </div>
+  ${warningMsg}
 `;
+
 
                 // エラー表示部分
             } else {
@@ -608,7 +609,7 @@ ${heightWarningMsg}
                 document.getElementById('totalVolume').textContent = totalVolume.toLocaleString(undefined, { maximumFractionDigits: 2 });
 
                 totalVolumeDiv.innerHTML = `
-        <div style=" font-weight:bold;">
+        <div style=" font-size:1.2em; font-weight:bold;">
             体積: ${totalVolume.toLocaleString(undefined, { maximumFractionDigits: 2 })} ㎥
         </div>
     `;
