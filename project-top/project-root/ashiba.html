@@ -326,10 +326,10 @@
     <div class="print-only">
         <p>見積日: <span id="printDate"></span></p>
         <hr>
-1. 面積・高さ・係数 → 人工<br>
-2. 人工 × 単価 → 原価<br>
-3. 原価 × 諸経費率 → 小計<br>
-4. 小計 × 税率 → 税込み価格<br>
+        1. 面積・高さ・係数 → 人工<br>
+        2. 人工 × 単価 → 原価<br>
+        3. 原価 × 諸経費率 → 小計<br>
+        4. 小計 × 税率 → 税込み価格<br>
 
     </div>
 
@@ -586,18 +586,15 @@
 `;
 
                 // 修正後 ↓
-                const efficiencyCalculated = area > 0 ? area / manpower : 0;
-
                 manpowerCalcDiv.innerHTML = `
   <div style="font-size:1.2em; font-weight:bold; margin-bottom:3px;">
     工数: ${manpower.toFixed(2)} 人日
   </div>
   <div style="font-size:1em; color:#555; margin-bottom:5px;">
-    (${efficiencyCalculated.toFixed(2)}㎡/人工)
+    (${currentEfficiency.toFixed(2)}㎡/人工)
   </div>
   ${warningMsg}
 `;
-
 
                 // エラー表示部分
             } else {
