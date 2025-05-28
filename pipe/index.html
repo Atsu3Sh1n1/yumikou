@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>配管図面解析ツール</title>
+    <title>配管図面解析ツール（線種・太さ分析）</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -90,11 +90,31 @@
             background-color: #f8f8f8;
             border-radius: 4px;
         }
+        .tab-container {
+            display: flex;
+            margin-bottom: 15px;
+        }
+        .tab {
+            padding: 8px 15px;
+            background-color: #e0e0e0;
+            cursor: pointer;
+            border-radius: 4px 4px 0 0;
+            margin-right: 5px;
+        }
+        .tab.active {
+            background-color: #4CAF50;
+            color: white;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>配管図面解析ツール</h1>
+        <h1>配管図面解析ツール（線種・太さ分析）</h1>
+        
+        <div class="tab-container">
+            <div class="tab active" id="tabAnalysis">分析モード</div>
+            <div class="tab" id="tabManual">手動モード</div>
+        </div>
         
         <div class="toolbar">
             <input type="file" id="pdfInput" accept=".pdf" />
@@ -110,6 +130,12 @@
                 <input type="range" id="lineWidthThreshold" min="1" max="10" value="3" step="0.1">
                 <span id="thresholdValue">3</span>
             </div>
+            
+            <div class="slider-container">
+                <label for="dashPatternThreshold">点線パターン閾値</label>
+                <input type="range" id="dashPatternThreshold" min="1" max="20" value="8" step="1">
+                <span id="dashThresholdValue">8</span>
+            </div>
         </div>
         
         <div class="canvas-container">
@@ -120,16 +146,36 @@
         
         <div class="color-legend">
             <div class="color-item">
-                <div class="color-box" style="background-color: red;"></div>
-                <span>太い配管</span>
+                <div class="color-box" style="background-color: #FF0000;"></div>
+                <span>太い実線</span>
             </div>
             <div class="color-item">
-                <div class="color-box" style="background-color: blue;"></div>
-                <span>中程度の配管</span>
+                <div class="color-box" style="background-color: #FF7F7F;"></div>
+                <span>中実線</span>
             </div>
             <div class="color-item">
-                <div class="color-box" style="background-color: green;"></div>
-                <span>細い配管</span>
+                <div class="color-box" style="background-color: #FFCCCC;"></div>
+                <span>細い実線</span>
+            </div>
+            <div class="color-item">
+                <div class="color-box" style="background-color: #0000FF;"></div>
+                <span>太い点線</span>
+            </div>
+            <div class="color-item">
+                <div class="color-box" style="background-color: #7F7FFF;"></div>
+                <span>中点線</span>
+            </div>
+            <div class="color-item">
+                <div class="color-box" style="background-color: #CCCCFF;"></div>
+                <span>細い点線</span>
+            </div>
+            <div class="color-item">
+                <div class="color-box" style="background-color: #00AA00;"></div>
+                <span>実線+点線+実線</span>
+            </div>
+            <div class="color-item">
+                <div class="color-box" style="background-color: #FFA500;"></div>
+                <span>その他の特殊パターン</span>
             </div>
         </div>
         
@@ -156,7 +202,11 @@
         const resetZoomBtn = document.getElementById('resetZoomBtn');
         const lineWidthThreshold = document.getElementById('lineWidthThreshold');
         const thresholdValue = document.getElementById('thresholdValue');
+        const dashPatternThreshold = document.getElementById('dashPatternThreshold');
+        const dashThresholdValue = document.getElementById('dashThresholdValue');
         const statusDiv = document.getElementById('status');
+        const tabAnalysis = document.getElementById('tabAnalysis');
+        const tabManual = document.getElementById('tabManual');
         
         // 変数
         let pdfDoc = null;
@@ -170,6 +220,7 @@
         let lastY = 0;
         let currentColor = '#000000';
         let lineWidth = 3;
+        let isAnalysisMode = true;
         
         // キャンバスサイズ調整
         function resizeCanvases() {
@@ -219,32 +270,26 @@
             });
         }
         
-        // ページレンダリングキュー
-        function queueRenderPage(num) {
-            if (pageRendering) {
-                pageNumPending = num;
-            } else {
-                renderPage(num);
+        // タブ切り替え
+        tabAnalysis.addEventListener('click', function() {
+            if (!isAnalysisMode) {
+                isAnalysisMode = true;
+                tabAnalysis.classList.add('active');
+                tabManual.classList.remove('active');
+                analysisCanvas.style.display = 'block';
+                drawingCanvas.style.display = 'none';
             }
-        }
+        });
         
-        // 前のページ
-        function onPrevPage() {
-            if (pageNum <= 1) {
-                return;
+        tabManual.addEventListener('click', function() {
+            if (isAnalysisMode) {
+                isAnalysisMode = false;
+                tabManual.classList.add('active');
+                tabAnalysis.classList.remove('active');
+                analysisCanvas.style.display = 'none';
+                drawingCanvas.style.display = 'block';
             }
-            pageNum--;
-            queueRenderPage(pageNum);
-        }
-        
-        // 次のページ
-        function onNextPage() {
-            if (pageNum >= pdfDoc.numPages) {
-                return;
-            }
-            pageNum++;
-            queueRenderPage(pageNum);
-        }
+        });
         
         // PDFファイル読み込み
         pdfInput.addEventListener('change', function(event) {
@@ -291,6 +336,10 @@
         // 閾値スライダー
         lineWidthThreshold.addEventListener('input', function() {
             thresholdValue.textContent = this.value;
+        });
+        
+        dashPatternThreshold.addEventListener('input', function() {
+            dashThresholdValue.textContent = this.value;
         });
         
         // 手描き機能
@@ -350,14 +399,14 @@
             isDrawing = false;
         }
         
-        // 配管分析機能
+        // 配管分析機能（線種と太さを考慮）
         analyzeBtn.addEventListener('click', function() {
             if (!pdfDoc) {
                 statusDiv.textContent = 'まずPDFを読み込んでください';
                 return;
             }
             
-            statusDiv.textContent = '配管を分析中...';
+            statusDiv.textContent = '配管を分析中...（線種と太さをチェック）';
             
             // 分析キャンバスをクリア
             const analysisCtx = analysisCanvas.getContext('2d');
@@ -369,67 +418,241 @@
             const data = imageData.data;
             
             // 線の太さ閾値
-            const threshold = parseFloat(lineWidthThreshold.value);
+            const widthThreshold = parseFloat(lineWidthThreshold.value);
+            const dashThreshold = parseInt(dashPatternThreshold.value);
             
-            // ここに配管分析のロジックを実装
-            // 簡易的な線検出と色分け（実際の実装はより複雑になる）
+            // 線の種類を分析するためのバッファ
+            const lineBuffer = [];
+            
+            // まず全ての線を検出して特徴を分析
             for (let y = 0; y < pdfCanvas.height; y++) {
                 for (let x = 0; x < pdfCanvas.width; x++) {
                     const idx = (y * pdfCanvas.width + x) * 4;
                     
-                    // 黒色のピクセルを検出（簡易的な方法）
+                    // 黒色のピクセルを検出
                     if (data[idx] < 50 && data[idx+1] < 50 && data[idx+2] < 50) {
-                        // 周囲のピクセルをチェックして線の太さを推定
-                        let lineSize = estimateLineSize(x, y, data, pdfCanvas.width, pdfCanvas.height);
+                        const lineInfo = analyzeLineAt(x, y, data, pdfCanvas.width, pdfCanvas.height, widthThreshold, dashThreshold);
                         
-                        if (lineSize > threshold * 1.5) {
-                            // 太い配管 - 赤色
-                            analysisCtx.fillStyle = 'rgba(255, 0, 0, 0.5)';
-                            analysisCtx.fillRect(x, y, 1, 1);
-                        } else if (lineSize > threshold) {
-                            // 中程度の配管 - 青色
-                            analysisCtx.fillStyle = 'rgba(0, 0, 255, 0.5)';
-                            analysisCtx.fillRect(x, y, 1, 1);
-                        } else {
-                            // 細い配管 - 緑色
-                            analysisCtx.fillStyle = 'rgba(0, 255, 0, 0.5)';
-                            analysisCtx.fillRect(x, y, 1, 1);
+                        if (lineInfo) {
+                            lineBuffer.push({
+                                x: x,
+                                y: y,
+                                type: lineInfo.type,
+                                width: lineInfo.width
+                            });
                         }
                     }
                 }
             }
             
-            statusDiv.textContent = '配管分析が完了しました';
+            // 分析結果に基づいて色分け
+            lineBuffer.forEach(line => {
+                let color;
+                let opacity = 0.7;
+                
+                switch(line.type) {
+                    case 'solid-thick':
+                        color = `rgba(255, 0, 0, ${opacity})`; // 赤
+                        break;
+                    case 'solid-medium':
+                        color = `rgba(255, 127, 127, ${opacity})`; // 薄い赤
+                        break;
+                    case 'solid-thin':
+                        color = `rgba(255, 204, 204, ${opacity})`; // 非常に薄い赤
+                        break;
+                    case 'dashed-thick':
+                        color = `rgba(0, 0, 255, ${opacity})`; // 青
+                        break;
+                    case 'dashed-medium':
+                        color = `rgba(127, 127, 255, ${opacity})`; // 薄い青
+                        break;
+                    case 'dashed-thin':
+                        color = `rgba(204, 204, 255, ${opacity})`; // 非常に薄い青
+                        break;
+                    case 'solid-dashed-solid':
+                        color = `rgba(0, 170, 0, ${opacity})`; // 緑
+                        break;
+                    default:
+                        color = `rgba(255, 165, 0, ${opacity})`; // オレンジ（その他）
+                }
+                
+                analysisCtx.fillStyle = color;
+                analysisCtx.fillRect(line.x, line.y, 1, 1);
+            });
+            
+            statusDiv.textContent = '配管分析が完了しました（線種と太さで色分け）';
         });
         
-        // 線の太さを推定する簡易関数（実際の実装はより精密なアルゴリズムが必要）
-        function estimateLineSize(x, y, data, width, height) {
-            let size = 1;
-            const maxCheck = 5; // 最大チェック範囲
+        // 線の特徴を分析する関数
+        function analyzeLineAt(x, y, data, width, height, widthThreshold, dashThreshold) {
+            // 線の太さを測定
+            const widthInfo = measureLineWidth(x, y, data, width, height);
+            if (widthInfo.width < 1) return null;
             
-            // 右方向にチェック
-            for (let i = 1; i <= maxCheck; i++) {
-                if (x + i >= width) break;
-                const idx = (y * width + (x + i)) * 4;
+            // 線の種類を判定
+            const lineType = determineLineType(x, y, data, width, height, widthInfo, dashThreshold);
+            
+            // 太さのカテゴリを判定
+            let widthCategory;
+            if (widthInfo.width > widthThreshold * 1.5) {
+                widthCategory = 'thick';
+            } else if (widthInfo.width > widthThreshold) {
+                widthCategory = 'medium';
+            } else {
+                widthCategory = 'thin';
+            }
+            
+            return {
+                type: `${lineType}-${widthCategory}`,
+                width: widthInfo.width
+            };
+        }
+        
+        // 線の太さを測定する関数
+        function measureLineWidth(x, y, data, width, height) {
+            let maxWidth = 1;
+            let maxHeight = 1;
+            
+            // 水平方向の太さを測定
+            for (let i = x + 1; i < Math.min(x + 20, width); i++) {
+                const idx = (y * width + i) * 4;
                 if (data[idx] < 50 && data[idx+1] < 50 && data[idx+2] < 50) {
-                    size++;
+                    maxWidth++;
                 } else {
                     break;
                 }
             }
             
-            // 下方向にチェック
-            for (let i = 1; i <= maxCheck; i++) {
-                if (y + i >= height) break;
-                const idx = ((y + i) * width + x) * 4;
+            // 垂直方向の太さを測定
+            for (let j = y + 1; j < Math.min(y + 20, height); j++) {
+                const idx = (j * width + x) * 4;
                 if (data[idx] < 50 && data[idx+1] < 50 && data[idx+2] < 50) {
-                    size++;
+                    maxHeight++;
                 } else {
                     break;
                 }
             }
             
-            return size;
+            return {
+                width: maxWidth,
+                height: maxHeight,
+                avg: (maxWidth + maxHeight) / 2
+            };
+        }
+        
+        // 線の種類を判定する関数
+        function determineLineType(x, y, data, width, height, widthInfo, dashThreshold) {
+            // 水平方向の線か垂直方向の線かを判断
+            const isHorizontal = widthInfo.width > widthInfo.height * 1.2;
+            const isVertical = widthInfo.height > widthInfo.width * 1.2;
+            
+            let checkDirection = 0; // 0=both, 1=horizontal, 2=vertical
+            if (isHorizontal) checkDirection = 1;
+            if (isVertical) checkDirection = 2;
+            
+            // 線に沿ってパターンをチェック
+            const pattern = checkLinePattern(x, y, data, width, height, checkDirection, dashThreshold);
+            
+            // パターンに基づいて線種を判定
+            if (pattern.isSolid) {
+                return 'solid';
+            } else if (pattern.isDashed) {
+                return 'dashed';
+            } else if (pattern.isSolidDashedSolid) {
+                return 'solid-dashed-solid';
+            } else {
+                return 'unknown';
+            }
+        }
+        
+        // 線のパターンをチェックする関数
+        function checkLinePattern(x, y, data, width, height, direction, dashThreshold) {
+            const result = {
+                isSolid: false,
+                isDashed: false,
+                isSolidDashedSolid: false
+            };
+            
+            // チェックする方向と距離
+            const checkDistance = 100; // パターンチェックする距離
+            let xStep = 0, yStep = 0;
+            
+            if (direction === 1 || direction === 0) { // 水平方向
+                xStep = 1;
+            }
+            if (direction === 2 || direction === 0) { // 垂直方向
+                yStep = 1;
+            }
+            
+            let currentX = x;
+            let currentY = y;
+            let solidCount = 0;
+            let gapCount = 0;
+            let pattern = [];
+            
+            for (let i = 0; i < checkDistance; i++) {
+                currentX += xStep;
+                currentY += yStep;
+                
+                if (currentX >= width || currentY >= height) break;
+                
+                const idx = (currentY * width + currentX) * 4;
+                const isLine = data[idx] < 50 && data[idx+1] < 50 && data[idx+2] < 50;
+                
+                if (isLine) {
+                    if (gapCount > 0) {
+                        pattern.push({type: 'gap', length: gapCount});
+                        gapCount = 0;
+                    }
+                    solidCount++;
+                } else {
+                    if (solidCount > 0) {
+                        pattern.push({type: 'solid', length: solidCount});
+                        solidCount = 0;
+                    }
+                    gapCount++;
+                }
+            }
+            
+            // 最後のセグメントを追加
+            if (solidCount > 0) {
+                pattern.push({type: 'solid', length: solidCount});
+            }
+            if (gapCount > 0) {
+                pattern.push({type: 'gap', length: gapCount});
+            }
+            
+            // パターン分析
+            if (pattern.length === 1 && pattern[0].type === 'solid') {
+                result.isSolid = true;
+            } else if (pattern.length >= 3) {
+                // 実線-点線-実線パターンのチェック
+                const firstSolid = pattern[0].type === 'solid' && pattern[0].length > dashThreshold/2;
+                const lastSolid = pattern[pattern.length-1].type === 'solid' && pattern[pattern.length-1].length > dashThreshold/2;
+                const middleDashed = pattern.slice(1, -1).some(seg => seg.type === 'gap' && seg.length < dashThreshold);
+                
+                if (firstSolid && lastSolid && middleDashed) {
+                    result.isSolidDashedSolid = true;
+                } else {
+                    // 点線パターンのチェック
+                    const hasShortSolids = pattern.filter(seg => seg.type === 'solid' && seg.length < dashThreshold).length > 1;
+                    const hasShortGaps = pattern.filter(seg => seg.type === 'gap' && seg.length < dashThreshold).length > 0;
+                    
+                    if (hasShortSolids && hasShortGaps) {
+                        result.isDashed = true;
+                    }
+                }
+            } else if (pattern.length >= 2) {
+                // 点線パターンのチェック
+                const hasShortSolids = pattern.filter(seg => seg.type === 'solid' && seg.length < dashThreshold).length > 0;
+                const hasShortGaps = pattern.filter(seg => seg.type === 'gap' && seg.length < dashThreshold).length > 0;
+                
+                if (hasShortSolids && hasShortGaps) {
+                    result.isDashed = true;
+                }
+            }
+            
+            return result;
         }
         
         // 初期化
