@@ -593,6 +593,16 @@
             return `${year}年${month}月${day}日`;
         }
 
+        function generateRandomCode(length = 11) {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+            let code = '';
+            for (let i = 0; i < length; i++) {
+                code += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return code;
+        }
+
+
         function updateAll() {
             const laborCost = parseFloat(laborCostInput.value);
             const area = parseFloat(areaInput.value);
@@ -635,8 +645,8 @@
                 }
 
                 // 高さに関する警告メッセージ
-                
-                document.getElementById('heightCoefficientDisplay').textContent = `（高さ係数:${heightCoefficient.toFixed(2)}倍）`;
+                <div style="font-size:1em; color:#555;">
+                    document.getElementById('heightCoefficientDisplay').textContent = `（高さ係数:${heightCoefficient.toFixed(2)}倍）`;</div>
 
 
                 resultDiv.innerHTML = `
