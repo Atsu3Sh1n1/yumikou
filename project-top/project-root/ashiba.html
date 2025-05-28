@@ -64,18 +64,6 @@
             text-align: left;
         }
 
-        #result,
-        #totalCost,
-        #sellingPrice,
-        #taxAmount,
-        #taxIncludedPrice,
-        #manpowerCalc {
-            margin: 1em 0;
-            font-weight: bold;
-            font-size: 1.2em;
-            padding: 0.5em;
-            border-radius: 4px;
-        }
 
         .checkbox-group {
             font-size: 1.3em;
@@ -174,13 +162,17 @@
         #taxAmount,
         #taxIncludedPrice,
         #manpowerCalc,
-        #totalVolume {
+        #totalVolume,
+        #totalVolumeDiv {
             text-align: right;
             margin: 0.8em 0;
-            font-size: 1.2rem;
+            font-size: 1rem;
             line-height: 1;
             padding: 0;
         }
+
+
+
 
         /* 主要な数値表示の強調スタイル */
         .main-value {
@@ -196,7 +188,7 @@
 
         /* 税込み価格の強調表示 */
         .tax-included {
-            font-size: 1.6em;
+
             font-weight: bold;
             color: #d9534f;
             margin-top: 0em;
@@ -207,7 +199,7 @@
         .large-text {
             margin: 0em;
             margin-bottom: 0em;
-            font-size: 1.5em;
+            font-size: 1em;
             text-align: right;
 
             font-weight: bold;
@@ -215,7 +207,7 @@
 
         /* 体積表示のスタイル */
         #totalVolume {
-            
+
             margin-bottom: 0em;
             font-size: 0.8em;
         }
@@ -280,13 +272,6 @@
             border: 2px solid #ccc;
             border-radius: 12px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        }
-
-        .large-text {
-            font-size: 0.9em;
-            margin-top: 0;
-            margin-bottom: 0;
-            font-weight: bold;
         }
     </style>
 </head>
@@ -357,24 +342,25 @@
 
 
         <div id="inputValues">
-            <div id="displayLaborCost" style="font-size:1em; color:#333; margin-top:0px;">
+            <div id="displayLaborCost" style="font-size:1em;  margin-top:0px;">
                 人工単価: 0 円/日
             </div>
             作業床面積 <span id="displayArea">0</span> ㎡<br>作業床高 <span id="displayHeight">0</span> m<br>
-            <span id="heightCoefficientDisplay" style="color:#666; font-size:0.8em;line-height: 0em;"></span><br>
+            <span id="heightCoefficientDisplay" style="color:#666; font-size:1em;line-height: 0em;"></span><br>
             <p><span id="selected-label" class="large-text">くさび式足場</span>(安全係数 <span id="selected-value"
                     class="large-text">0</span>)</p>
             <div id="totalVolume">床面積×床高: 0 ㎡</div>
             <div id="result">
                 <div class="main-value">原価単価: 0 円/㎡</div>
                 <div class="sub-value">（人工係数: 0.00000 人工/㎡）</div>
+
+                <div class="sub-value">(0.00㎡/人工)</div>
             </div>
             <div id="totalCost" class="main-value">原価小計: 0 円</div>
 
 
             <div id="manpowerCalc">
                 <div class="main-value">工数: 0.00 人日</div>
-                <div class="sub-value">(0.00㎡/人工)</div>
             </div>
             諸経費(利益含む) <span id="displayOverhead">0</span> %<br>
         </div>
@@ -407,7 +393,7 @@
 
         <div class="footnote">
             ※ 諸経費は小計に加算されます。<br>
-            ※ 補正係数は全て施工効率係数に差し引かれます。<br>
+            ※ 補正係数は全て施工効率係数へ差し引かれます。<br>
             <hr>
             ※ 足場施工費算出機(マコトくん)は、国土交通省「 <a href="https://www.mlit.go.jp/gobuild/content/001733127.pdf" target="_blank">
                 公共建築工事標準単価積算基準</a>」に基づき、くさび式足場の施工量を、500㎡規模：人工係数 = 0.0358 人工／㎡、
@@ -686,25 +672,25 @@
         `;
 
                 totalCostDiv.innerHTML = `
-            <div style=" font-size:1.2em; font-weight:bold;">
+            <div style=" font-size:1em; font-weight:bold;">
                 原価小計: ${Math.round(totalCost).toLocaleString()} 円
             </div>
         `;
 
                 sellingPriceDiv.innerHTML = `
-            <div style="font-size:1.2em; font-weight:bold; color:#0066cc;">
+            <div style="font-size:1.4em; font-weight:bold; color:#0066cc;">
                 小計: ${Math.round(sellingPrice).toLocaleString()} 円
             </div>
         `;
 
                 taxAmountDiv.innerHTML = `
-            <div style="font-size:1.1em; color:#666;">
+            <div style="font-size:1.4em; font-weight:bold; color:#666;">
                 消費税(10%): ${taxAmount.toLocaleString(0)} 円
             </div>
         `;
 
                 taxIncludedPriceDiv.innerHTML = `
-            <div style="font-size:1.3em; font-weight:bold; color:#d9534f;">
+            <div style="font-size:1.5em; font-weight:bold; color:#d9534f;">
                 税込み: ${Math.round(taxIncludedPrice).toLocaleString()} 円
             </div>
         `;
@@ -723,9 +709,9 @@
             } else {
                 resultDiv.innerHTML = '<div style="font-size:1em; ">原価単価: - 円/㎡</div>';
                 totalCostDiv.innerHTML = '<div style="font-size:1em; ">原価小計: - 円</div>';
-                sellingPriceDiv.innerHTML = '<div style="font-size:1.2em; ">小計: - 円</div>';
-                taxAmountDiv.innerHTML = '<div style="font-size:1.1em; ">消費税(10%): - 円</div>';
-                taxIncludedPriceDiv.innerHTML = '<div style="font-size:1.3em; ">税込み: - 円</div>';
+                sellingPriceDiv.innerHTML = '<div style="font-size:1.4em; ">小計: - 円</div>';
+                taxAmountDiv.innerHTML = '<div style="font-size:1.4em; font-weight:bold;">消費税(10%): - 円</div>';
+                taxIncludedPriceDiv.innerHTML = '<div style="font-size:1.5em; ">税込み: - 円</div>';
                 manpowerCalcDiv.innerHTML = '<div style="font-size:1em; ">工数: - 人日</div>';
             }
 
@@ -750,13 +736,14 @@
                 document.getElementById('totalVolume').textContent = totalVolume.toLocaleString(undefined, { maximumFractionDigits: 2 });
 
                 totalVolumeDiv.innerHTML = `
-            <div style=" font-size:1em; ">
-                床面積×床高: ${totalVolume.toLocaleString(undefined, { maximumFractionDigits: 2 })} ㎡
-            </div>
+           <div style=" font-size:1.2em; ">
+                床面積×床高: ${totalVolume.toLocaleString(undefined, { maximumFractionDigits: 2 })} ㎡<div>
+           
     `;
             } else {
-                totalVolumeDiv.innerHTML = '<div style="font-size:1em; margin-top: 0px; ">床面積×床高: - ㎡</div>';
+                totalVolumeDiv.innerHTML = '<div style="font-size: 1.2em; margin-top: 0px;">床面積×床高: - ㎡</div>';
             }
+
         }
 
         // イベントリスナー設定
