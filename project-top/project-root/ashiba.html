@@ -630,8 +630,9 @@
                 if (taxIncludedPrice >= 1000) {
                     taxIncludedPrice = Math.floor(taxIncludedPrice / 100) * 100;  // 1000円単位で切り下げ
                 }
-                // 税込み価格
+                
 
+                // 税込み価格
                 const currentEfficiency = getEfficiency(area);
                 const currentCoefficient = getLaborCoefficient(area);
 
@@ -663,19 +664,19 @@
             `;
 
                 sellingPriceDiv.innerHTML = `
-            <div style="font-size:1.3em; font-weight:bold; color:#0066cc;">
+            <div style="font-size:1.4em; font-weight:bold; color:#0066cc;">
                 小計: ${Math.round(sellingPrice).toLocaleString()} 円
             </div>
             `;
 
                 taxAmountDiv.innerHTML = `
-            <div style="font-size:1.2em; color:#666;">
+            <div style="font-size:1.3em; color:#666;">
                 消費税(10%): ${taxAmount.toLocaleString(0)} 円
             </div>
             `;
 
                 taxIncludedPriceDiv.innerHTML = `
-            <div style="font-size:1.4em; font-weight:bold; color:#d9534f;">
+            <div style="font-size:1.5em; font-weight:bold; color:#d9534f;">
                 税込み: ${Math.round(taxIncludedPrice).toLocaleString()} 円
             </div>
             `;
@@ -695,9 +696,9 @@
             } else {
                 resultDiv.innerHTML = '<div style="font-size:1.2em; ">原価単価: - 円/㎡</div>';
                 totalCostDiv.innerHTML = '<div style="font-size:1.2em; ">原価小計: - 円</div>';
-                sellingPriceDiv.innerHTML = '<div style="font-size:1.3em; ">小計: - 円</div>';
-                taxAmountDiv.innerHTML = '<div style="font-size:1.2em; ">消費税(10%): - 円</div>';
-                taxIncludedPriceDiv.innerHTML = '<div style="font-size:1.4em; ">税込み: - 円</div>';
+                sellingPriceDiv.innerHTML = '<div style="font-size:1.4em; ">小計: - 円</div>';
+                taxAmountDiv.innerHTML = '<div style="font-size:1.3em; ">消費税(10%): - 円</div>';
+                taxIncludedPriceDiv.innerHTML = '<div style="font-size:1.5em; ">税込み: - 円</div>';
                 manpowerCalcDiv.innerHTML = '<div style="font-size:1.2em; ">工数: - 人日</div>';
             }
 
@@ -722,12 +723,12 @@
                 document.getElementById('totalVolume').textContent = totalVolume.toLocaleString(undefined, { maximumFractionDigits: 2 });
 
                 totalVolumeDiv.innerHTML = `
-            <div style=" font-size:1.2em; font-weight:bold;">
+            <div style=" font-size:1em; font-weight:bold;">
                 床面積×床高: ${totalVolume.toLocaleString(undefined, { maximumFractionDigits: 2 })} ㎡
             </div>
     `;
             } else {
-                totalVolumeDiv.innerHTML = '<div style="font-size:1.2em;">床面積×床高: - ㎡</div>';
+                totalVolumeDiv.innerHTML = '<div style="font-size:1em;">床面積×床高: - ㎡</div>';
             }
         }
 
