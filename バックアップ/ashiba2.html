@@ -4,6 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <title>足場施工費計算機</title>
+    <meta name="robots" content="index, follow" />
+    <meta name="description" content="弓工" />
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
@@ -12,6 +14,10 @@
             font-size: 1rem;
             line-height: 1.5;
             -webkit-text-size-adjust: 100%;
+        }
+
+        p {
+            font-size: 1em;
         }
 
         h3 {
@@ -39,6 +45,7 @@
         .form-section,
         .seko {
             font-size: 1.3rem;
+            margin: 0px;
         }
 
         label {
@@ -49,7 +56,7 @@
         input[type="number"] {
             width: 100%;
             max-width: 120px;
-            padding: 8px;
+            padding: 10 px;
             font-size: 1em;
             border: 1px solid #ddd;
             border-radius: 4px;
@@ -65,15 +72,14 @@
         #manpowerCalc {
             margin: 1em 0;
             font-weight: bold;
-            font-size: 1.1em;
+            font-size: 1.2em;
             padding: 0.5em;
             border-radius: 4px;
         }
 
-        .checkbox-group,
-        .score-form {
+        .checkbox-group {
             font-size: 1.3em;
-            margin: 1em 0;
+            margin: 0;
         }
 
         fieldset {
@@ -93,7 +99,7 @@
             font-size: 0.8em;
             color: #666;
             margin: 1.5em 0;
-            line-height: 1.4;
+            line-height: 1.3;
         }
 
         button {
@@ -115,27 +121,7 @@
             transform: scale(1.2);
         }
 
-        /* 印刷用スタイル（簡略化） */
-        @media print {
-            body {
-                font-size: 12pt;
-                padding: 0.5in;
-            }
 
-            button,
-            .no-print {
-                display: none;
-            }
-
-            #result,
-            #totalCost,
-            #sellingPrice,
-            #taxAmount,
-            #taxIncludedPrice,
-            #manpowerCalc {
-                font-size: 13pt;
-            }
-        }
 
         /* 横長スクリーン用の調整 */
         @media (min-width: 400px) {
@@ -147,8 +133,9 @@
 
         .footer {
             text-align: center;
-            font-size: 12px;
+            font-size: 14px;
             margin-bottom: -10px;
+            margin-top: -20px;
             padding: 0.8rem;
         }
 
@@ -179,38 +166,120 @@
             color: red;
         }
 
-        .tax-included {
-            font-size: 1.2em;
-            font-weight: bold;
-            color: #d9534f;
-        }
 
+
+        /* 結果表示エリアのスタイル統一 */
+        #result,
+        #totalCost,
         #sellingPrice,
         #taxAmount,
         #taxIncludedPrice,
-        #totalCost,
         #manpowerCalc,
-        #result,
         #totalVolume {
             text-align: right;
-            margin: 0;
+            margin: 0.8em 0;
+            font-size: 1.2rem;
+            line-height: 1.4;
+            padding: 0;
         }
 
-        #totalVolume {
-            margin: 1em 0;
+        /* 主要な数値表示の強調スタイル */
+        .main-value {
+            font-size: 1.3em;
             font-weight: bold;
-            font-size: 1.1em;
-            padding: 0.5em;
-            border-radius: 4px;
         }
 
-        #inputValues {
-            margin: 0.5em 0;
-            font-size: 1.2em;
-            padding: 0.5em;
-            border-radius: 4px;
+        /* 補助的な数値表示のスタイル */
+        .sub-value {
+            font-size: 1em;
             color: #555;
+        }
+
+        /* 税込み価格の強調表示 */
+        .tax-included {
+            font-size: 1.6em;
+            font-weight: bold;
+            color: #d9534f;
+            margin-top: 0.5em;
+        }
+
+        /* 入力値表示エリアのスタイル */
+        #inputValues {
+            margin: 0em;
+            margin-bottom: 0.5em;
+            font-size: 1.5em;
             text-align: right;
+            line-height: 1.6;
+            font-weight: bold;
+        }
+
+        /* 体積表示のスタイル */
+        #totalVolume {
+            font-weight: bold;
+            margin-bottom: 0em;
+            font-size: 1em;
+        }
+
+        .estimate-label {
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 4px;
+        }
+
+        .estimate-input {
+            width: 100%;
+            border: none;
+            font-size: 14px;
+            padding: 5px;
+            box-sizing: border-box;
+            resize: none;
+        }
+
+
+        .estimate-table td {
+            padding: 8px;
+            vertical-align: top;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 30px;
+            font-size: 16px;
+            padding: 10px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        #estimate-content {
+            background-image: url('as.png');
+            /* 画像パスを指定 */
+            background-size: cover;
+            /* 全体に拡大 */
+            background-position: center;
+            /* 中央配置 */
+            background-repeat: no-repeat;
+            /* 繰り返しなし */
+            padding: 20px;
+            border-radius: 8px;
+            color: #000;
+            /* 背景によっては白より黒が見やすい */
+        }
+
+        .custom-input {
+            height: 30px;
+            font-size: 16px;
+            font-weight: bold;
+            width: 280px;
+        }
+
+        /* iframeに個別スタイルを適用 */
+        #materialFrame {
+            width: 100%;
+            height: 300px;
+            border: 2px solid #ccc;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
     </style>
 </head>
@@ -244,102 +313,25 @@
             諸経費（％）:
             <input type="number" id="overheadRate" value="20" min="0" max="2000">
         </label><br>
-        <label>
-            コメント（備考）:
-            <textarea id="comment" rows="3" placeholder="例：諸経費+利益含む"
-                style="width: 100%; padding: 8px; font-size: 1em; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box;"></textarea>
-        </label>
     </div>
 
     <div class="checkbox-group">
-        <h4><strong>足場の種類（安全対応係数適用）</strong></h4>
-        <div class="footnote">
-            安全対応係数とは、足場の構造計算や設計において、
-            構造物の強度や安定性を安全に保つために使用される補正係数を意味します。</div>
+        <h4><strong>足場の種類（安全対応係数）</strong></h4>
         <label><input type="radio" name="type" value="1.00" checked> くさび式足場（1.00）</label>
         <label><input type="radio" name="type" value="1.15"> 枠組足場（1.15）</label>
         <label><input type="radio" name="type" value="1.30"> 単管足場（1.30）</label>
         <label><input type="radio" name="type" value="1.50"> 吊り足場（1.50）</label>
-        <label><input type="radio" name="type" value="0.90"> 移動式足場（0.90）</label>
-    </div><br><br>
-
-    <div class="score-form">
-        <h3>作業難易度評価スコア</h3>
-        <div class="footnote">
-            *難易度係数は作業環境6項目を元に評価。総スコアに応じて最大2.0倍まで加算されます。
-        </div>
-        <form id="difficultyForm">
-            <fieldset>
-                <legend>作業高(フロア階含む)</legend>
-                <label><input type="radio" name="heightScore" value="1" checked> 地上〜2m</label>
-                <label><input type="radio" name="heightScore" value="2"> 2〜5m</label>
-                <label><input type="radio" name="heightScore" value="3"> 5〜10m (例：2FL)</label>
-                <label><input type="radio" name="heightScore" value="4"> 10〜15m</label>
-                <label><input type="radio" name="heightScore" value="5"> 15m以上</label>
-            </fieldset>
-
-            <fieldset>
-                <legend>搬入条件</legend>
-                <label><input type="radio" name="transport" value="1" checked> 整地・近距離</label>
-                <label><input type="radio" name="transport" value="2"> 小さな段差あり</label>
-                <label><input type="radio" name="transport" value="3"> 100m以内手運び</label>
-                <label><input type="radio" name="transport" value="4"> 100m超〜300m</label>
-                <label><input type="radio" name="transport" value="5"> 300m以上</label>
-            </fieldset>
-
-            <fieldset>
-                <legend>足場支持地</legend>
-                <label><input type="radio" name="base" value="1" checked> コンクリ平地</label>
-                <label><input type="radio" name="base" value="2"> 軟弱地盤</label>
-                <label><input type="radio" name="base" value="3"> 傾斜地</label>
-                <label><input type="radio" name="base" value="4"> 配管上</label>
-                <label><input type="radio" name="base" value="5"> 不安定</label>
-            </fieldset>
-
-            <fieldset>
-                <legend>作業姿勢</legend>
-                <label><input type="radio" name="posture" value="1" checked> 直立作業</label>
-                <label><input type="radio" name="posture" value="2"> かがみ作業</label>
-                <label><input type="radio" name="posture" value="3"> 懸垂あり</label>
-                <label><input type="radio" name="posture" value="4"> 腰曲げ</label>
-                <label><input type="radio" name="posture" value="5"> 狭小・不安定</label>
-            </fieldset>
-
-            <fieldset>
-                <legend>環境要因</legend>
-                <label><input type="radio" name="environment" value="1" checked> 常温・昼間</label>
-                <label><input type="radio" name="environment" value="2"> 人込み</label>
-                <label><input type="radio" name="environment" value="3"> 埃、暗所</label>
-                <label><input type="radio" name="environment" value="4"> 防爆対応</label>
-                <label><input type="radio" name="environment" value="5"> 高温・炎天下</label>
-            </fieldset>
-
-            <fieldset>
-                <legend>干渉物</legend>
-                <label><input type="radio" name="interference" value="1" checked> なし</label>
-                <label><input type="radio" name="interference" value="2"> 少数配管</label>
-                <label><input type="radio" name="interference" value="3"> 密集配管</label>
-                <label><input type="radio" name="interference" value="4"> 電気設備多</label>
-                <label><input type="radio" name="interference" value="5"> 360度密集</label>
-            </fieldset>
-        </form>
-
-        <div id="scoreResult">合計スコア: 6 / 難易度補正係数: 1.0</div>
+        <label><input type="radio" name="type" value="0.85"> 移動式足場（0.85）</label>
     </div><br><br>
 
     <div class="seko">
         <fieldset>
             <legend>施工条件係数</legend>
-            <label><input type="checkbox" name="conditions" value="1.15"> 組み立て高さ10~20m（1.15）</label>
-            <label><input type="checkbox" name="conditions" value="1.35"> 組み立て高さ20~30m（1.35）</label>
-            <label><input type="checkbox" name="conditions" value="1.5"> 組み立て高さ30m~（1.5）</label>
-            <label><input type="checkbox" name="conditions" value="1.05"> 安全対策強化（1.1）</label>
-            <label><input type="checkbox" name="conditions" value="1.08"> 急工期対応（1.2）</label>
-            <label><input type="checkbox" name="conditions" value="1.03"> 開口部養生強化（1.1）</label>
-            <label><input type="checkbox" name="conditions" value="1.02"> 昇降口増設（1.1）</label>
-            <label><input type="checkbox" name="conditions" value="1.1"> 他社共同足場（1.1）</label>
+            <label><input type="checkbox" name="conditions" value="1.7"> 組立・解体セット（1.7）</label>
             <label><input type="checkbox" name="conditions" value="1.5"> 足場盛替え（1.5）</label>
-            <label><input type="checkbox" name="conditions" value="0.9"> 解体（0.9）</label>
+            <label><input type="checkbox" name="conditions" value="0.8"> 解体（0.8）</label>
+            <label><input type="checkbox" name="conditions" value="1.3"> 急工期対応（1.3）</label>
+
             <label><input type="checkbox" name="conditions" value="1.3"> 雨天（1.3）</label>
             <label><input type="checkbox" name="conditions" value="1.25"> 夜間（1.25）</label>
             <label><input type="checkbox" name="conditions" value="1.5"> 深夜（1.5）</label>
@@ -348,40 +340,87 @@
         </fieldset>
     </div>
 
-    <!-- 計算結果表示セクション -->
+    <div id="estimate-content">
 
-    <div id="totalVolume">総合体積: 0 ㎥</div>
-    <div id="result">原価単価: 0.00 円／㎥</div>
 
-    <div id="totalCost">原価合計金額: 0 円</div>
-    <div id="manpowerCalc">総工数: 0.00 人日</div>
-    <div id="inputValues">
-        作業床面積 <span id="displayArea">0</span>㎡<br>
-        作業床高 <span id="displayHeight">0</span> m<br>
-        諸経費(利益含む) <span id="displayOverhead">0</span>%<br>
+        <!-- 計算結果表示セクション -->
+
+
+
+
+
+        <div id="inputValues">
+            作業床面積 <span id="displayArea">0</span> ㎡<br>
+            作業床高 <span id="displayHeight">0</span> m<br>
+            <span id="heightCoefficientDisplay" style="color:#666; font-size:1em;"></span><br>
+            <div id="totalVolume">床面積×床高: 0 ㎥</div>
+            <div id="result">
+                <div class="main-value">原価単価: 0 円/㎥</div>
+                <div class="sub-value">（人工係数: 0.00000 人工/㎡）</div>
+            </div>
+            <div id="totalCost" class="main-value">原価小計: 0 円</div>
+
+
+            <div id="manpowerCalc">
+                <div class="main-value">工数: 0.00 人日</div>
+                <div class="sub-value">(0.00㎡/人工)</div>
+            </div>
+            諸経費(利益含む) <span id="displayOverhead">0</span> %<br>
+        </div>
+
+
+        <div id="sellingPrice" class="main-value">小計: 0 円</div>
+        <div id="taxAmount">消費税(10%): 0 円</div>
+        <div id="taxIncludedPrice" class="tax-included">税込み: 0 円</div>
+        <!-- 追加3: PDF出力/印刷ボタン -->
+
+
+
+
+
+        <strong>宛先：</strong><input type="text" name="client_name" class="custom-input"><strong>　案件名：</strong><input
+            type="text" name="project_name" class="custom-input">
+
+        <div class="section remarks-section">
+            <label for="remarks"><strong></strong></label>
+            <textarea id="remarks" name="remarks" rows="6" placeholder=備考></textarea>
+        </div>
+
+
+
+        <div class="footer"></div>
+        <p>見積日：<span id="printDate"></span> / 有効期限：<span id="oneMonthLaterSpan"></span> / 管理番号：<span
+                id="randomCode"></span></p>
+
+
+
+
+        <div class="footnote">
+            面積に高さを掛け、高さ係数・安全係数・条件係数で補正し、作業効率（㎡/人日）で割って必要な人工を求め、それに単価を掛けて原価を出し、諸経費率を加えて小計とし、さらに消費税率を加えて税込価格を算出し、最後に100円単位で切り捨てます。<br><br>
+            <hr>
+            ※ 足場施工費算出機(マコトくん)は、国土交通省「 <a href="https://www.mlit.go.jp/gobuild/content/001733127.pdf" target="_blank">
+                公共建築工事標準単価積算基準</a>」に基づき、くさび式足場の施工量を、500㎡規模：人工係数 = 0.0358 人工／㎡、
+            1000㎡規模：人工係数 = 0.0325 人工／㎡を基に設計されています。
+            <br><br>
+            ※ 高さ係数(風圧補正係数)については、こちらをご参照ください。<br>
+
+            ・<a href="ashiba3.html" target="_blank">
+                「なぜ1m地点から係数をかけるのか？」に対する技術的根拠と説明</a> <br>
+            ・<a href="ashiba2.html" target="_blank">
+                設計上の注意事項と安全マージン</a> <br>
+            ・<a href="top.html" target="_blank">
+                風圧力と高さ係数の関数化による合理的設計</a> <br>
+        </div>
+        <div class="footer">
+            <a href="https://atsu3sh1n1.github.io/yumikou/" target="_blank">Created by YUMIKOU Inc.</a>
+        </div>
+    </div>
     </div>
 
-    <div id="sellingPrice">小計: 0 円</div>
-    <div id="taxAmount">消費税(10%): 0 円</div>
-    <div id="taxIncludedPrice" class="tax-included">税込み価格: 0 円</div>
+    <button onclick="downloadEstimateAsPDF()">PDFとしてダウンロード</button>
 
-    <!-- 追加3: PDF出力/印刷ボタン -->
-    <div class="no-print">
-        <button onclick="window.print()">見積書を印刷/PDF出力(未設定)</button>
-    </div>
-
-    <!-- 印刷時のみ表示されるヘッダー -->
-    <div class="print-only">
-        <p>見積日: <span id="printDate"></span></p>
-        <hr>
-    </div>
-
-    <div class="footnote">
-        ※ 足場施工費算出機(マコトくん)は、国土交通省「 <a href="https://www.mlit.go.jp/gobuild/content/001733127.pdf" target="_blank">
-            公共建築工事標準単価積算基準</a>」に基づき、くさび式足場の施工量を、500㎡規模：人工係数 = 0.0358 人工／㎡、
-        1000㎡規模：人工係数 = 0.0325 人工／㎡を基に設計されています。<br>
-        <br><br>
-    </div>
+    (試作中/仮置き)
+    <iframe id="materialFrame" src="ashiba7.html" title="資材計算" loading="lazy"></iframe>
 
     <script>
         const laborCostInput = document.getElementById('laborCost');
@@ -389,15 +428,47 @@
         const heightInput = document.getElementById('height');
         const overheadRateInput = document.getElementById('overheadRate');
         const typeRadios = document.getElementsByName('type');
-        const form = document.getElementById('difficultyForm');
         const resultDiv = document.getElementById('result');
         const totalCostDiv = document.getElementById('totalCost');
         const sellingPriceDiv = document.getElementById('sellingPrice');
         const taxAmountDiv = document.getElementById('taxAmount');
         const taxIncludedPriceDiv = document.getElementById('taxIncludedPrice');
         const manpowerCalcDiv = document.getElementById('manpowerCalc');
-        const scoreResultDiv = document.getElementById('scoreResult');
         const printDateSpan = document.getElementById('printDate');
+
+        // 高さ係数テーブルを効率データのように刻む
+        function getHeightCoefficient(height) {
+            const table = [
+                { height: 0, coefficient: 1.00 },
+                { height: 10, coefficient: 1.34 },
+                { height: 20, coefficient: 1.71 },
+                { height: 30, coefficient: 2.04 },
+                { height: 60, coefficient: 3.24 },
+                { height: 100, coefficient: 5.26 },
+                { height: 150, coefficient: 7.16 },
+                { height: 200, coefficient: 8.00 },
+            ];
+
+            if (height <= 0) return 1.0;
+            if (height >= 200) return 8.0;
+
+            // 線形補間
+            for (let i = 0; i < table.length - 1; i++) {
+                const h1 = table[i].height;
+                const h2 = table[i + 1].height;
+                const c1 = table[i].coefficient;
+                const c2 = table[i + 1].coefficient;
+
+                if (height >= h1 && height <= h2) {
+                    const ratio = (height - h1) / (h2 - h1);
+                    const interpolated = c1 + (c2 - c1) * ratio;
+                    return parseFloat(interpolated.toFixed(2));
+                }
+            }
+        }
+
+
+
 
         // 効率テーブルデータ
         const efficiencyTable = [
@@ -437,7 +508,6 @@
                 } else {
                     return baseEfficiency / Math.pow(0.98, 4); // ≈33.33
                 }
-
             }
         }
 
@@ -483,35 +553,23 @@
             return factor;
         }
 
-        function getDifficultyFactor() {
-            const formData = new FormData(form);
-            let score = 0;
-            for (const value of formData.values()) score += Number(value);
-
-            let factor = 1.0;
-            if (score >= 17) factor = 2.0;
-            else if (score >= 13) factor = 1.5;
-            else if (score >= 9) factor = 1.2;
-
-            scoreResultDiv.innerText = `合計スコア: ${score} / 難易度補正: ${factor.toFixed(1)}`;
-
-            if (score >= 17) {
-                scoreResultDiv.style.color = 'red';
-            } else if (score >= 13) {
-                scoreResultDiv.style.color = 'orange';
-            } else if (score >= 9) {
-                scoreResultDiv.style.color = 'blue';
-            } else {
-                scoreResultDiv.style.color = 'green';
-            }
-
-            return factor;
-        }
-
         function calculateSellingPrice(baseCost) {
             const overheadRate = parseFloat(overheadRateInput.value) || 0;
             return baseCost * (1 + overheadRate / 100);
         }
+
+        function calculateManpower(area, height, safetyFactor, conditionFactor) {
+            if (isNaN(area) || area <= 0) return 0;
+
+            const efficiency = getEfficiency(area); // ㎡/人
+            const heightCoefficient = getHeightCoefficient(height);
+
+            const volume = area * height;
+            const manpower = (volume / efficiency) * safetyFactor * conditionFactor * heightCoefficient;
+
+            return manpower;
+        }
+
 
         function calculateManpower(area, height, safetyFactor, conditionFactor) {
             if (isNaN(area) || area <= 0) return 0;
@@ -525,7 +583,10 @@
             }
             return area * adjustedCoefficient;
         }
-        
+
+
+
+
         function formatDate(date) {
             const year = date.getFullYear();
             const month = String(date.getMonth() + 1).padStart(2, '0');
@@ -534,48 +595,37 @@
         }
 
         function updateAll() {
-            // 入力欄の値を取得（文字列→数値へ変換）
-            const laborCost = parseFloat(laborCostInput.value);       // 人件費（1人日あたりの単価）
-            const area = parseFloat(areaInput.value);                 // 床面積
-            const height = parseFloat(heightInput.value);             // 高さ係数（施工体積を求めるため）
-
-            // 各種係数を取得
-            const safetyFactor = getSafetyFactor();                   // 安全対応係数（ラジオボタンから）
-            const difficultyFactor = getDifficultyFactor();           // 難易度係数（フォームスコアから）
-            const conditionFactor = getConditionFactor();             // 現場条件係数（チェックボックスから）
-
-            // 表示エリアに入力値を反映（確認用）
+            const laborCost = parseFloat(laborCostInput.value);
+            const area = parseFloat(areaInput.value);
+            const height = parseFloat(heightInput.value);
+            const safetyFactor = getSafetyFactor();
+            const conditionFactor = getConditionFactor();
+            const heightCoefficient = getHeightCoefficient(height);
             document.getElementById('displayArea').textContent = area || 0;
             document.getElementById('displayHeight').textContent = height || 0;
             document.getElementById('displayOverhead').textContent = overheadRateInput.value || 0;
 
-            // 入力値がすべて有効な場合のみ計算を実行
             if (!isNaN(laborCost) && laborCost >= 0 &&
                 !isNaN(area) && area >= 0 &&
                 !isNaN(height) && height >= 0) {
 
-                // --- 面積に基づく施工効率を取得して工数を算出 ---
-                const manpower = calculateManpower(area, height, difficultyFactor, safetyFactor, conditionFactor);
-                const base = manpower.base;                   // 基本工数（面積 ÷ 効率）
-                const adjusted = manpower.adjusted;           // 最終工数（基本工数 × 各種係数）
-                const efficiency = manpower.efficiency;       // 使用された施工効率値（㎡/人工）
+                const manpower = calculateManpower(area, height, safetyFactor, conditionFactor);
+                const totalCost = manpower * laborCost;
+                const unitCost = totalCost / (area * height);
 
-                // --- 原価の計算 ---
-                const totalCost = adjusted * laborCost;       // 原価合計：最終工数 × 単価（円）
-                const unitCost = totalCost / (area * height); // 体積単価（円/㎥）
-                const unitCostPerM2 = totalCost / area;       // 面積単価（円/㎡）
+                const sellingPrice = calculateSellingPrice(totalCost);
+                const taxRate = 0.10; // 消費税率10%
+                const taxAmount = Math.floor(sellingPrice * taxRate); // 消費税額（端数切捨て）
+                let taxIncludedPrice = sellingPrice + taxAmount;
+                if (taxIncludedPrice >= 1000) {
+                    taxIncludedPrice = Math.floor(taxIncludedPrice / 500) * 500;  // 1000円単位で切り下げ
+                }
+                // 税込み価格
 
-                // --- 原価に経費率を乗じて販売価格（小計）を算出 ---
-                const sellingPrice = calculateSellingPrice(totalCost); // 経費率を考慮した価格
-                const taxRate = 0.10;                                   // 消費税10%
-                const taxAmount = Math.floor(sellingPrice * taxRate);  // 消費税（小数切り捨て）
-                const taxIncludedPrice = sellingPrice + taxAmount;     // 税込み販売価格
+                const currentEfficiency = getEfficiency(area);
+                const currentCoefficient = getLaborCoefficient(area);
 
-                // --- 施工効率・人工係数の確認 ---
-                const currentEfficiency = getEfficiency(area);         // 面積から効率を逆算（再確認用）
-                const currentCoefficient = getLaborCoefficient(area);  // 面積から人工係数取得
-
-                // --- 注意メッセージの準備（大規模現場など） ---
+                // 警告メッセージ準備
                 let warningMsg = '';
                 if (area > 1000) {
                     warningMsg = `<span style="color:red; font-size:0.8em; display:block; margin-top:5px;">
@@ -583,76 +633,93 @@
             </span>`;
                 }
 
-                // --- 結果表示 ---
+                // 高さに関する警告メッセージ
+                document.getElementById('heightCoefficientDisplay').textContent = `（高さ係数: ${heightCoefficient.toFixed(2)} ）`;
+
+
                 resultDiv.innerHTML = `
-          <div style="font-size:1.2em; font-weight:bold; margin-bottom:3px;">
-             原価単価: ${unitCost.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })} 円/㎥
-          </div>
-          <div style="font-size:1.1em; font-weight:normal; margin-bottom:3px;">
-             原価単価: ${unitCostPerM2.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })} 円/㎡
-          </div>
-          <div style="font-size:0.9em; color:#555;">
-           （人工係数: ${currentCoefficient.toFixed(5)} 人工/㎡）
-          </div>
-        `;
+            <div style="font-size:1.2em; font-weight:bold; margin-bottom:3px;">
+                原価単価: ${unitCost.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })} 円/㎥
+            </div>
+
+            <div style="font-size:1em; color:#555;">
+                （${currentCoefficient.toFixed(5)}人工/㎡)</div>
+            `;
 
                 totalCostDiv.innerHTML = `
-          <div style="font-size:1.2em; font-weight:bold;">
-            原価合計金額: ${Math.round(totalCost).toLocaleString()} 円
-          </div>
-        `;
+            <div style=" font-size:1.2em; font-weight:bold;">
+                原価小計: ${Math.round(totalCost).toLocaleString()} 円
+            </div>
+            `;
 
                 sellingPriceDiv.innerHTML = `
-          <div style="font-size:1.2em; font-weight:bold; color:#0066cc;">
-           小計: ${Math.round(sellingPrice).toLocaleString()} 円
-          </div>
-        `;
+            <div style="font-size:1.3em; font-weight:bold; color:#0066cc;">
+                小計: ${Math.round(sellingPrice).toLocaleString()} 円
+            </div>
+            `;
 
                 taxAmountDiv.innerHTML = `
-          <div style="font-size:1.1em; color:#666;">
-            消費税(10%): ${taxAmount.toLocaleString(0)} 円
-          </div>
-        `;
+            <div style="font-size:1.2em; color:#666;">
+                消費税(10%): ${taxAmount.toLocaleString(0)} 円
+            </div>
+            `;
 
                 taxIncludedPriceDiv.innerHTML = `
-          <div style="font-size:1.2em; font-weight:bold; color:#d9534f;">
-            税込み: ${Math.round(taxIncludedPrice).toLocaleString()} 円
-          </div>
-        `;
-
-                manpowerCalcDiv.innerHTML = `
-          <div style="font-size:1.2em; font-weight:bold; margin-bottom:3px;">
-            基本工数: ${base.toFixed(2)} 人日 / 最終工数: ${adjusted.toFixed(2)} 人日
-          </div>
-          <div style="font-size:0.9em; color:#555;">
-            （施工効率: ${efficiency.toFixed(2)}㎡/人工）
-          </div>
-        `;
-
-                // --- 総合体積の計算と表示 ---
-                const totalVolume = area * height;
-                const totalVolumeDiv = document.getElementById('totalVolume');
-                totalVolumeDiv.innerHTML = `
-            <div style="font-size:1.2em; font-weight:bold;">
-                総合体積: ${totalVolume.toLocaleString(undefined, { maximumFractionDigits: 2 })} ㎥
+            <div style="font-size:1.4em; font-weight:bold; color:#d9534f;">
+                税込み: ${Math.round(taxIncludedPrice).toLocaleString()} 円
             </div>
-        `;
+            `;
 
+                // 修正後 ↓
+                manpowerCalcDiv.innerHTML = `
+            <div style="font-size:1.2em; font-weight:bold; margin-bottom:3px;">
+                工数: ${manpower.toFixed(2)} 人日
+            </div>
+            <div style="font-size:1em; color:#555; margin-bottom:5px;">
+                ( ${currentEfficiency.toFixed(2)} ㎡/人工 )
+            </div>
+            ${warningMsg}
+            `;
+
+                // エラー表示部分
             } else {
-                // --- 入力値が無効な場合のエラー表示 ---
-                resultDiv.innerHTML = '<div style="font-size:1.1em; color:#999;">原価単価: - 円/㎥</div>';
-                totalCostDiv.innerHTML = '<div style="font-size:1.1em; color:#999;">原価合計: - 円</div>';
-                sellingPriceDiv.innerHTML = '<div style="font-size:1.1em; color:#999;">小計: - 円</div>';
-                taxAmountDiv.innerHTML = '<div style="font-size:1.1em; color:#999;">消費税(10%): - 円</div>';
-                taxIncludedPriceDiv.innerHTML = '<div style="font-size:1.1em; color:#999;">税込み: - 円</div>';
-                manpowerCalcDiv.innerHTML = '<div style="font-size:1.1em; color:#999;">総工数: - 人日</div>';
-                document.getElementById('totalVolume').innerHTML = '<div style="font-size:1.1em; color:#999;">総合体積: - ㎥</div>';
+                resultDiv.innerHTML = '<div style="font-size:1.2em; ">原価単価: - 円/㎥</div>';
+                totalCostDiv.innerHTML = '<div style="font-size:1.2em; ">原価小計: - 円</div>';
+                sellingPriceDiv.innerHTML = '<div style="font-size:1.3em; ">小計: - 円</div>';
+                taxAmountDiv.innerHTML = '<div style="font-size:1.2em; ">消費税(10%): - 円</div>';
+                taxIncludedPriceDiv.innerHTML = '<div style="font-size:1.4em; ">税込み: - 円</div>';
+                manpowerCalcDiv.innerHTML = '<div style="font-size:1.2em; ">工数: - 人日</div>';
             }
 
-            // --- 最終印刷日の日付を更新（画面上に表示） ---
             printDateSpan.textContent = formatDate(new Date());
-        }
+            // 日付処理
+            const today = new Date();
+            const oneMonthLater = new Date(today);
+            oneMonthLater.setMonth(today.getMonth() + 1);
 
+            printDateSpan.textContent = formatDate(today);
+            oneMonthLaterSpan.textContent = formatDate(oneMonthLater);
+
+
+
+            const totalVolumeDiv = document.getElementById('totalVolume');
+
+            if (!isNaN(laborCost) && laborCost >= 0 &&
+                !isNaN(area) && area >= 0 &&
+                !isNaN(height) && height >= 0) {
+
+                const totalVolume = area * height;
+                document.getElementById('totalVolume').textContent = totalVolume.toLocaleString(undefined, { maximumFractionDigits: 2 });
+
+                totalVolumeDiv.innerHTML = `
+            <div style=" font-size:1.2em; font-weight:bold;">
+                床面積×床高: ${totalVolume.toLocaleString(undefined, { maximumFractionDigits: 2 })} ㎥
+            </div>
+    `;
+            } else {
+                totalVolumeDiv.innerHTML = '<div style="font-size:1.2em;">床面積×床高: - ㎥</div>';
+            }
+        }
 
         // イベントリスナー設定
         laborCostInput.addEventListener('input', updateAll);
@@ -664,14 +731,40 @@
             radio.addEventListener('change', updateAll);
         });
 
-        form.addEventListener('change', updateAll);
-
         document.querySelectorAll('input[name="conditions"]').forEach(cb => {
             cb.addEventListener('change', updateAll);
         });
 
         updateAll();
     </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script>
+        function downloadEstimateAsPDF() {
+            const element = document.getElementById('estimate-content');
+            const opt = {
+                margin: 0,
+                filename: '足場見積もり_有限会社弓工.pdf',
+                image: { type: 'jpeg', quality: 0.85 }, // 高画質かつ軽量
+                html2canvas: {
+                    scale: 2,
+                    useCORS: true,
+                    scrollY: 0,
+                    backgroundColor: '#ffffff'
+                },
+                jsPDF: {
+                    unit: 'mm',
+                    format: 'a4',
+                    orientation: 'portrait'
+                },
+                pagebreak: { mode: ['avoid-all', 'css'] }
+            };
+
+            html2pdf().set(opt).from(element).save();
+        }
+
+
+    </script>
+
 </body>
 
 </html>

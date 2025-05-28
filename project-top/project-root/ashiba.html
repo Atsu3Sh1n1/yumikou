@@ -586,22 +586,13 @@
 
 
 
+
         function formatDate(date) {
             const year = date.getFullYear();
             const month = String(date.getMonth() + 1).padStart(2, '0');
             const day = String(date.getDate()).padStart(2, '0');
             return `${year}年${month}月${day}日`;
         }
-
-        function generateRandomCode(length = 11) {
-            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-            let code = '';
-            for (let i = 0; i < length; i++) {
-                code += chars.charAt(Math.floor(Math.random() * chars.length));
-            }
-            return code;
-        }
-
 
         function updateAll() {
             const laborCost = parseFloat(laborCostInput.value);
@@ -627,13 +618,11 @@
                 const taxAmount = Math.floor(sellingPrice * taxRate); // 消費税額（端数切捨て）
                 let taxIncludedPrice = sellingPrice + taxAmount;
                 if (taxIncludedPrice >= 1000) {
-                    taxIncludedPrice = Math.floor(taxIncludedPrice / 100) * 100;  // 1000円単位で切り下げ
+                    taxIncludedPrice = Math.floor(taxIncludedPrice / 500) * 500;  // 1000円単位で切り下げ
                 }
                 // 税込み価格
 
-                const rawEfficiency = getEfficiency(area);
-                const adjustedEfficiency = rawEfficiency / (safetyFactor * conditionFactor * heightCoefficient);
-
+                const currentEfficiency = getEfficiency(area);
                 const currentCoefficient = getLaborCoefficient(area);
 
                 // 警告メッセージ準備
@@ -645,62 +634,61 @@
                 }
 
                 // 高さに関する警告メッセージ
-                <div style="font-size:1em; color:#555;">
-                    document.getElementById('heightCoefficientDisplay').textContent = `（高さ係数:${heightCoefficient.toFixed(2)}倍）`;</div>
+                document.getElementById('heightCoefficientDisplay').textContent = `（高さ係数: ${heightCoefficient.toFixed(2)} ）`;
 
 
                 resultDiv.innerHTML = `
-            <div style="font-size:1.3em; font-weight:bold; margin-bottom:3px;">
+            <div style="font-size:1.2em; font-weight:bold; margin-bottom:3px;">
                 原価単価: ${unitCost.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })} 円/㎥
             </div>
 
             <div style="font-size:1em; color:#555;">
-                （人工係数${currentCoefficient.toFixed(5)}人工/㎡)</div>
+                （${currentCoefficient.toFixed(5)}人工/㎡)</div>
             `;
 
                 totalCostDiv.innerHTML = `
-            <div style=" font-size:1.3em; font-weight:bold;">
+            <div style=" font-size:1.2em; font-weight:bold;">
                 原価小計: ${Math.round(totalCost).toLocaleString()} 円
             </div>
             `;
 
                 sellingPriceDiv.innerHTML = `
-            <div style="font-size:1.5em; font-weight:bold; color:#0066cc;">
+            <div style="font-size:1.3em; font-weight:bold; color:#0066cc;">
                 小計: ${Math.round(sellingPrice).toLocaleString()} 円
             </div>
             `;
 
                 taxAmountDiv.innerHTML = `
-            <div style="font-size:1.4em; color:#666;">
+            <div style="font-size:1.2em; color:#666;">
                 消費税(10%): ${taxAmount.toLocaleString(0)} 円
             </div>
             `;
 
                 taxIncludedPriceDiv.innerHTML = `
-            <div style="font-size:1.6em; font-weight:bold; color:#d9534f;">
+            <div style="font-size:1.4em; font-weight:bold; color:#d9534f;">
                 税込み: ${Math.round(taxIncludedPrice).toLocaleString()} 円
             </div>
             `;
 
+                // 修正後 ↓
                 manpowerCalcDiv.innerHTML = `
-    <div style="font-size:1.3em; font-weight:bold; margin-bottom:3px;">
-        工数: ${manpower.toFixed(2)} 人日
-    </div>
-    <div style="font-size:1em; color:#555; margin-bottom:5px;">
-        (施工効率係数 ${adjustedEfficiency.toFixed(2)}㎡/人工)
-    </div>
-    ${warningMsg}
-`;
-
+            <div style="font-size:1.2em; font-weight:bold; margin-bottom:3px;">
+                工数: ${manpower.toFixed(2)} 人日
+            </div>
+            <div style="font-size:1em; color:#555; margin-bottom:5px;">
+                ( ${currentEfficiency.toFixed(2)} ㎡/人工 )
+            </div>
+            ${warningMsg}
+            `;
 
                 // エラー表示部分
             } else {
-                resultDiv.innerHTML = '<div style="font-size:1.3em; ">原価単価: - 円/㎥</div>';
-                totalCostDiv.innerHTML = '<div style="font-size:1.3em; ">原価小計: - 円</div>';
-                sellingPriceDiv.innerHTML = '<div style="font-size:1.5em; ">小計: - 円</div>';
-                taxAmountDiv.innerHTML = '<div style="font-size:1.4em; ">消費税(10%): - 円</div>';
-                taxIncludedPriceDiv.innerHTML = '<div style="font-size:1.6em; ">税込み: - 円</div>';
-                manpowerCalcDiv.innerHTML = '<div style="font-size:1.3em; ">工数: - 人日</div>';
+                resultDiv.innerHTML = '<div style="font-size:1.2em; ">原価単価: - 円/㎥</div>';
+                totalCostDiv.innerHTML = '<div style="font-size:1.2em; ">原価小計: - 円</div>';
+                sellingPriceDiv.innerHTML = '<div style="font-size:1.3em; ">小計: - 円</div>';
+                taxAmountDiv.innerHTML = '<div style="font-size:1.2em; ">消費税(10%): - 円</div>';
+                taxIncludedPriceDiv.innerHTML = '<div style="font-size:1.4em; ">税込み: - 円</div>';
+                manpowerCalcDiv.innerHTML = '<div style="font-size:1.2em; ">工数: - 人日</div>';
             }
 
             printDateSpan.textContent = formatDate(new Date());
@@ -711,10 +699,6 @@
 
             printDateSpan.textContent = formatDate(today);
             oneMonthLaterSpan.textContent = formatDate(oneMonthLater);
-
-            const randomCodeSpan = document.getElementById('randomCode');
-            randomCodeSpan.textContent = generateRandomCode();
-
 
 
 
@@ -728,12 +712,12 @@
                 document.getElementById('totalVolume').textContent = totalVolume.toLocaleString(undefined, { maximumFractionDigits: 2 });
 
                 totalVolumeDiv.innerHTML = `
-            <div style=" font-size:1.3em; font-weight:bold;">
+            <div style=" font-size:1.2em; font-weight:bold;">
                 床面積×床高: ${totalVolume.toLocaleString(undefined, { maximumFractionDigits: 2 })} ㎥
             </div>
     `;
             } else {
-                totalVolumeDiv.innerHTML = '<div style="font-size:1.3em;">床面積×床高: - ㎥</div>';
+                totalVolumeDiv.innerHTML = '<div style="font-size:1.2em;">床面積×床高: - ㎥</div>';
             }
         }
 
