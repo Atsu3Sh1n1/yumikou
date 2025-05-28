@@ -4,11 +4,32 @@
 <head>
     <meta charset="UTF-8" />
     <title>工数計算機</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+        /* iframeを画面幅いっぱいに広げる */
+        iframe {
+            width: 100vw;
+            /* ビューポート幅いっぱい */
+            height: 100vh;
+            /* ビューポート高さいっぱい */
+            border: none;
+            /* フレームボーダーなし */
+            display: block;
+            /* ブロック要素に */
+        }
 
+        /* bodyの余白をなくして全画面に */
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+        }
+    </style>
 </head>
 
 <body>
-    <iframe src="工数計算.html" width="600" height="3600" frameborder="0"></iframe>
+    <iframe src="工数計算.html"></iframe>
 </body>
 
 </html>
