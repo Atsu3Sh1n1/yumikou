@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>配管図面解析ツール</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        button {
+            padding: 8px 12px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .canvas-container {
+            position: relative;
+            border: 1px solid #ddd;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+        #pdfCanvas {
+            display: block;
+            max-width: 100%;
+        }
+        .drawing-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+        }
+        .slider-container {
+            margin: 10px 0;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input[type="range"] {
+            width: 200px;
+        }
+        .color-legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .color-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .color-box {
+            width: 20px;
+            height: 20px;
+            border: 1px solid #ddd;
+        }
+        .status {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #f8f8f8;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>配管図面解析ツール</h1>
+        
+        <div class="toolbar">
+            <input type="file" id="pdfInput" accept=".pdf" />
+            <button id="analyzeBtn">配管を分析</button>
+            <button id="drawBtn">手書きモード</button>
+            <button id="clearDrawBtn">手書き消去</button>
+            <button id="zoomInBtn">ズームイン</button>
+            <button id="zoomOutBtn">ズームアウト</button>
+            <button id="resetZoomBtn">ズームリセット</button>
+            
+            <div class="slider-container">
+                <label for="lineWidthThreshold">線の太さ閾値</label>
+                <input type="range" id="lineWidthThreshold" min="1" max="10" value="3" step="0.1">
+                <span id="thresholdValue">3</span>
+            </div>
+        </div>
+        
+        <div class="canvas-container">
+            <canvas id="pdfCanvas"></canvas>
+            <canvas id="drawingCanvas" class="drawing-canvas"></canvas>
+            <canvas id="analysisCanvas" class="drawing-canvas"></canvas>
+        </div>
+        
+        <div class="color-legend">
+            <div class="color-item">
+                <div class="color-box" style="background-color: red;"></div>
+                <span>太い配管</span>
+            </div>
+            <div class="color-item">
+                <div class="color-box" style="background-color: blue;"></div>
+                <span>中程度の配管</span>
+            </div>
+            <div class="color-item">
+                <div class="color-box" style="background-color: green;"></div>
+                <span>細い配管</span>
+            </div>
+        </div>
+        
+        <div class="status" id="status">
+            ファイルを選択してください
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.min.js"></script>
+    <script>
+        // PDF.jsのworker設定
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.worker.min.js';
+        
+        // DOM要素
+        const pdfInput = document.getElementById('pdfInput');
+        const pdfCanvas = document.getElementById('pdfCanvas');
+        const drawingCanvas = document.getElementById('drawingCanvas');
+        const analysisCanvas = document.getElementById('analysisCanvas');
+        const analyzeBtn = document.getElementById('analyzeBtn');
+        const drawBtn = document.getElementById('drawBtn');
+        const clearDrawBtn = document.getElementById('clearDrawBtn');
+        const zoomInBtn = document.getElementById('zoomInBtn');
+        const zoomOutBtn = document.getElementById('zoomOutBtn');
+        const resetZoomBtn = document.getElementById('resetZoomBtn');
+        const lineWidthThreshold = document.getElementById('lineWidthThreshold');
+        const thresholdValue = document.getElementById('thresholdValue');
+        const statusDiv = document.getElementById('status');
+        
+        // 変数
+        let pdfDoc = null;
+        let pageNum = 1;
+        let pageRendering = false;
+        let pageNumPending = null;
+        let scale = 1.0;
+        const zoomFactor = 1.2;
+        let isDrawing = false;
+        let lastX = 0;
+        let lastY = 0;
+        let currentColor = '#000000';
+        let lineWidth = 3;
+        
+        // キャンバスサイズ調整
+        function resizeCanvases() {
+            const container = pdfCanvas.parentElement;
+            const width = container.clientWidth;
+            const height = container.clientHeight;
+            
+            [pdfCanvas, drawingCanvas, analysisCanvas].forEach(canvas => {
+                canvas.width = width;
+                canvas.height = height;
+            });
+        }
+        
+        // PDFレンダリング
+        function renderPage(num) {
+            pageRendering = true;
+            statusDiv.textContent = `ページをレンダリング中... ${num}`;
+            
+            pdfDoc.getPage(num).then(function(page) {
+                const viewport = page.getViewport({ scale: scale });
+                
+                // キャンバスサイズをビューポートに合わせる
+                pdfCanvas.height = viewport.height;
+                pdfCanvas.width = viewport.width;
+                drawingCanvas.height = viewport.height;
+                drawingCanvas.width = viewport.width;
+                analysisCanvas.height = viewport.height;
+                analysisCanvas.width = viewport.width;
+                
+                // PDFをレンダリング
+                const renderContext = {
+                    canvasContext: pdfCanvas.getContext('2d'),
+                    viewport: viewport
+                };
+                
+                const renderTask = page.render(renderContext);
+                
+                renderTask.promise.then(function() {
+                    pageRendering = false;
+                    statusDiv.textContent = `ページ ${num} を表示中`;
+                    
+                    if (pageNumPending !== null) {
+                        renderPage(pageNumPending);
+                        pageNumPending = null;
+                    }
+                });
+            });
+        }
+        
+        // ページレンダリングキュー
+        function queueRenderPage(num) {
+            if (pageRendering) {
+                pageNumPending = num;
+            } else {
+                renderPage(num);
+            }
+        }
+        
+        // 前のページ
+        function onPrevPage() {
+            if (pageNum <= 1) {
+                return;
+            }
+            pageNum--;
+            queueRenderPage(pageNum);
+        }
+        
+        // 次のページ
+        function onNextPage() {
+            if (pageNum >= pdfDoc.numPages) {
+                return;
+            }
+            pageNum++;
+            queueRenderPage(pageNum);
+        }
+        
+        // PDFファイル読み込み
+        pdfInput.addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (file.type !== 'application/pdf') {
+                statusDiv.textContent = 'PDFファイルを選択してください';
+                return;
+            }
+            
+            const fileReader = new FileReader();
+            
+            fileReader.onload = function() {
+                const typedarray = new Uint8Array(this.result);
+                
+                pdfjsLib.getDocument(typedarray).promise.then(function(pdf) {
+                    pdfDoc = pdf;
+                    statusDiv.textContent = `PDFを読み込みました。総ページ数: ${pdf.numPages}`;
+                    pageNum = 1;
+                    renderPage(pageNum);
+                }).catch(function(error) {
+                    statusDiv.textContent = 'PDFの読み込みに失敗しました: ' + error.message;
+                });
+            };
+            
+            fileReader.readAsArrayBuffer(file);
+        });
+        
+        // ズーム機能
+        zoomInBtn.addEventListener('click', function() {
+            scale *= zoomFactor;
+            renderPage(pageNum);
+        });
+        
+        zoomOutBtn.addEventListener('click', function() {
+            scale /= zoomFactor;
+            renderPage(pageNum);
+        });
+        
+        resetZoomBtn.addEventListener('click', function() {
+            scale = 1.0;
+            renderPage(pageNum);
+        });
+        
+        // 閾値スライダー
+        lineWidthThreshold.addEventListener('input', function() {
+            thresholdValue.textContent = this.value;
+        });
+        
+        // 手描き機能
+        drawBtn.addEventListener('click', function() {
+            isDrawing = !isDrawing;
+            drawBtn.textContent = isDrawing ? '手書きモード (ON)' : '手書きモード';
+            drawBtn.style.backgroundColor = isDrawing ? '#f39c12' : '#4CAF50';
+            
+            if (isDrawing) {
+                drawingCanvas.style.pointerEvents = 'auto';
+            } else {
+                drawingCanvas.style.pointerEvents = 'none';
+            }
+        });
+        
+        clearDrawBtn.addEventListener('click', function() {
+            const ctx = drawingCanvas.getContext('2d');
+            ctx.clearRect(0, 0, drawingCanvas.width, drawingCanvas.height);
+        });
+        
+        // 描画イベント
+        drawingCanvas.addEventListener('mousedown', startDrawing);
+        drawingCanvas.addEventListener('mousemove', draw);
+        drawingCanvas.addEventListener('mouseup', stopDrawing);
+        drawingCanvas.addEventListener('mouseout', stopDrawing);
+        
+        function startDrawing(e) {
+            if (!isDrawing) return;
+            
+            isDrawing = true;
+            const rect = drawingCanvas.getBoundingClientRect();
+            lastX = e.clientX - rect.left;
+            lastY = e.clientY - rect.top;
+        }
+        
+        function draw(e) {
+            if (!isDrawing) return;
+            
+            const ctx = drawingCanvas.getContext('2d');
+            const rect = drawingCanvas.getBoundingClientRect();
+            const currentX = e.clientX - rect.left;
+            const currentY = e.clientY - rect.top;
+            
+            ctx.beginPath();
+            ctx.moveTo(lastX, lastY);
+            ctx.lineTo(currentX, currentY);
+            ctx.strokeStyle = currentColor;
+            ctx.lineWidth = lineWidth;
+            ctx.lineCap = 'round';
+            ctx.stroke();
+            
+            lastX = currentX;
+            lastY = currentY;
+        }
+        
+        function stopDrawing() {
+            isDrawing = false;
+        }
+        
+        // 配管分析機能
+        analyzeBtn.addEventListener('click', function() {
+            if (!pdfDoc) {
+                statusDiv.textContent = 'まずPDFを読み込んでください';
+                return;
+            }
+            
+            statusDiv.textContent = '配管を分析中...';
+            
+            // 分析キャンバスをクリア
+            const analysisCtx = analysisCanvas.getContext('2d');
+            analysisCtx.clearRect(0, 0, analysisCanvas.width, analysisCanvas.height);
+            
+            // PDFキャンバスから画像データを取得
+            const pdfCtx = pdfCanvas.getContext('2d');
+            const imageData = pdfCtx.getImageData(0, 0, pdfCanvas.width, pdfCanvas.height);
+            const data = imageData.data;
+            
+            // 線の太さ閾値
+            const threshold = parseFloat(lineWidthThreshold.value);
+            
+            // ここに配管分析のロジックを実装
+            // 簡易的な線検出と色分け（実際の実装はより複雑になる）
+            for (let y = 0; y < pdfCanvas.height; y++) {
+                for (let x = 0; x < pdfCanvas.width; x++) {
+                    const idx = (y * pdfCanvas.width + x) * 4;
+                    
+                    // 黒色のピクセルを検出（簡易的な方法）
+                    if (data[idx] < 50 && data[idx+1] < 50 && data[idx+2] < 50) {
+                        // 周囲のピクセルをチェックして線の太さを推定
+                        let lineSize = estimateLineSize(x, y, data, pdfCanvas.width, pdfCanvas.height);
+                        
+                        if (lineSize > threshold * 1.5) {
+                            // 太い配管 - 赤色
+                            analysisCtx.fillStyle = 'rgba(255, 0, 0, 0.5)';
+                            analysisCtx.fillRect(x, y, 1, 1);
+                        } else if (lineSize > threshold) {
+                            // 中程度の配管 - 青色
+                            analysisCtx.fillStyle = 'rgba(0, 0, 255, 0.5)';
+                            analysisCtx.fillRect(x, y, 1, 1);
+                        } else {
+                            // 細い配管 - 緑色
+                            analysisCtx.fillStyle = 'rgba(0, 255, 0, 0.5)';
+                            analysisCtx.fillRect(x, y, 1, 1);
+                        }
+                    }
+                }
+            }
+            
+            statusDiv.textContent = '配管分析が完了しました';
+        });
+        
+        // 線の太さを推定する簡易関数（実際の実装はより精密なアルゴリズムが必要）
+        function estimateLineSize(x, y, data, width, height) {
+            let size = 1;
+            const maxCheck = 5; // 最大チェック範囲
+            
+            // 右方向にチェック
+            for (let i = 1; i <= maxCheck; i++) {
+                if (x + i >= width) break;
+                const idx = (y * width + (x + i)) * 4;
+                if (data[idx] < 50 && data[idx+1] < 50 && data[idx+2] < 50) {
+                    size++;
+                } else {
+                    break;
+                }
+            }
+            
+            // 下方向にチェック
+            for (let i = 1; i <= maxCheck; i++) {
+                if (y + i >= height) break;
+                const idx = ((y + i) * width + x) * 4;
+                if (data[idx] < 50 && data[idx+1] < 50 && data[idx+2] < 50) {
+                    size++;
+                } else {
+                    break;
+                }
+            }
+            
+            return size;
+        }
+        
+        // 初期化
+        resizeCanvases();
+        window.addEventListener('resize', resizeCanvases);
+    </script>
+</body>
+</html>
