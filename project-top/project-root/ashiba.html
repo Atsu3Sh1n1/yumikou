@@ -436,7 +436,7 @@
         const manpowerCalcDiv = document.getElementById('manpowerCalc');
         const printDateSpan = document.getElementById('printDate');
 
-        // 高さ係数テーブルを効率データのように刻む
+        // 高さ係数テーブルと補間計算
         function getHeightCoefficient(height) {
             const table = [
                 { height: 0, coefficient: 1.00 },
@@ -449,23 +449,31 @@
                 { height: 200, coefficient: 8.00 },
             ];
 
+            // 高さが0以下の場合は基本係数1.0を返す
             if (height <= 0) return 1.0;
+
+            // 高さが200以上の場合は最大係数8.0を返す
             if (height >= 200) return 8.0;
 
             // 線形補間
             for (let i = 0; i < table.length - 1; i++) {
                 const h1 = table[i].height;
                 const h2 = table[i + 1].height;
-                const c1 = table[i].coefficient;
-                const c2 = table[i + 1].coefficient;
 
                 if (height >= h1 && height <= h2) {
+                    const c1 = table[i].coefficient;
+                    const c2 = table[i + 1].coefficient;
                     const ratio = (height - h1) / (h2 - h1);
                     const interpolated = c1 + (c2 - c1) * ratio;
                     return parseFloat(interpolated.toFixed(2));
                 }
             }
+
+            return 1.0; // デフォルト値
         }
+
+
+
 
 
 
@@ -561,28 +569,20 @@
         function calculateManpower(area, height, safetyFactor, conditionFactor) {
             if (isNaN(area) || area <= 0) return 0;
 
-            const efficiency = getEfficiency(area); // ㎡/人
+            const baseEfficiency = getEfficiency(area); // ㎡/人工
             const heightCoefficient = getHeightCoefficient(height);
 
-            const volume = area * height;
-            const manpower = (volume / efficiency) * safetyFactor * conditionFactor * heightCoefficient;
+            // 安全係数・条件係数・高さ係数は施工効率を割る方向に使う
+            const adjustedEfficiency = baseEfficiency / safetyFactor / conditionFactor / heightCoefficient;
 
-            return manpower;
+            // 高さ0なら高さ1として計算
+            const volume = area * (height > 0 ? height : 1);
+
+            return volume / adjustedEfficiency;
         }
 
 
-        function calculateManpower(area, height, safetyFactor, conditionFactor) {
-            if (isNaN(area) || area <= 0) return 0;
 
-            const baseCoefficient = getLaborCoefficient(area);
-            const heightCoefficient = getHeightCoefficient(height);
-            const adjustedCoefficient = baseCoefficient * safetyFactor * conditionFactor * heightCoefficient;
-
-            if (height > 0) {
-                return area * height * adjustedCoefficient;
-            }
-            return area * adjustedCoefficient;
-        }
 
 
 
@@ -620,23 +620,22 @@
                 !isNaN(height) && height >= 0) {
 
                 const manpower = calculateManpower(area, height, safetyFactor, conditionFactor);
+
                 const totalCost = manpower * laborCost;
                 const unitCost = totalCost / (area * height);
 
                 const sellingPrice = calculateSellingPrice(totalCost);
                 const taxRate = 0.10; // 消費税率10%
-                const taxAmount = Math.floor(sellingPrice * taxRate); // 消費税額（端数切捨て）
+                const taxAmount = Math.floor(sellingPrice * taxRate);
                 let taxIncludedPrice = sellingPrice + taxAmount;
                 if (taxIncludedPrice >= 1000) {
-                    taxIncludedPrice = Math.floor(taxIncludedPrice / 100) * 100;  // 1000円単位で切り下げ
+                    taxIncludedPrice = Math.floor(taxIncludedPrice / 100) * 100;
                 }
-                
 
-                // 税込み価格
                 const currentEfficiency = getEfficiency(area);
                 const currentCoefficient = getLaborCoefficient(area);
+                const adjustedEfficiency = currentEfficiency / safetyFactor / conditionFactor / heightCoefficient;
 
-                // 警告メッセージ準備
                 let warningMsg = '';
                 if (area > 1000) {
                     warningMsg = `<span style="color:red; font-size:0.8em; display:block; margin-top:5px;">
@@ -644,53 +643,50 @@
             </span>`;
                 }
 
-                // 高さに関する警告メッセージ
                 document.getElementById('heightCoefficientDisplay').textContent = `（高さ係数: ${heightCoefficient.toFixed(2)} ）`;
-
 
                 resultDiv.innerHTML = `
             <div style="font-size:1.2em; font-weight:bold; margin-bottom:3px;">
                 原価単価: ${unitCost.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })} 円/㎡
             </div>
-
             <div style="font-size:1em; color:#555;">
-                （${currentCoefficient.toFixed(5)}人工/㎡)</div>
-            `;
+                （${currentCoefficient.toFixed(5)}人工/㎡)
+            </div>
+        `;
 
                 totalCostDiv.innerHTML = `
             <div style=" font-size:1.2em; font-weight:bold;">
                 原価小計: ${Math.round(totalCost).toLocaleString()} 円
             </div>
-            `;
+        `;
 
                 sellingPriceDiv.innerHTML = `
             <div style="font-size:1.4em; font-weight:bold; color:#0066cc;">
                 小計: ${Math.round(sellingPrice).toLocaleString()} 円
             </div>
-            `;
+        `;
 
                 taxAmountDiv.innerHTML = `
             <div style="font-size:1.3em; color:#666;">
                 消費税(10%): ${taxAmount.toLocaleString(0)} 円
             </div>
-            `;
+        `;
 
                 taxIncludedPriceDiv.innerHTML = `
             <div style="font-size:1.5em; font-weight:bold; color:#d9534f;">
                 税込み: ${Math.round(taxIncludedPrice).toLocaleString()} 円
             </div>
-            `;
+        `;
 
-                // 修正後 ↓
                 manpowerCalcDiv.innerHTML = `
             <div style="font-size:1.2em; font-weight:bold; margin-bottom:3px;">
                 工数: ${manpower.toFixed(2)} 人日
             </div>
             <div style="font-size:1em; color:#555; margin-bottom:5px;">
-                ( ${currentEfficiency.toFixed(2)} ㎡/人工 )
+                ( ${adjustedEfficiency.toFixed(2)} ㎡/人工 )
             </div>
             ${warningMsg}
-            `;
+        `;
 
                 // エラー表示部分
             } else {
@@ -723,12 +719,12 @@
                 document.getElementById('totalVolume').textContent = totalVolume.toLocaleString(undefined, { maximumFractionDigits: 2 });
 
                 totalVolumeDiv.innerHTML = `
-            <div style=" font-size:1em; font-weight:bold;">
+            <div style=" font-size:0.9em; font-weight:bold;">
                 床面積×床高: ${totalVolume.toLocaleString(undefined, { maximumFractionDigits: 2 })} ㎡
             </div>
     `;
             } else {
-                totalVolumeDiv.innerHTML = '<div style="font-size:1em;">床面積×床高: - ㎡</div>';
+                totalVolumeDiv.innerHTML = '<div style="font-size:0.9em;">床面積×床高: - ㎡</div>';
             }
         }
 
