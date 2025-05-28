@@ -200,16 +200,16 @@
             font-size: 1.6em;
             font-weight: bold;
             color: #d9534f;
-            margin-top: 0.5em;
+            margin-top: 0em;
         }
 
         /* 入力値表示エリアのスタイル */
         #inputValues {
             margin: 0em;
-            margin-bottom: 0.5em;
+            margin-bottom: 0em;
             font-size: 1.5em;
             text-align: right;
-            line-height: 1.6;
+           
             font-weight: bold;
         }
 
@@ -327,8 +327,8 @@
     <div class="seko">
         <fieldset>
             <legend>施工条件係数</legend>
-            <label><input type="checkbox" name="conditions" value="1.7"> 組立・解体セット（1.8）</label>
-            <label><input type="checkbox" name="conditions" value="1.5"> 足場盛替え（1.6）</label>
+            <label><input type="checkbox" name="conditions" value="1.8"> 組立・解体セット（1.8）</label>
+            <label><input type="checkbox" name="conditions" value="1.6"> 足場盛替え（1.6）</label>
             <label><input type="checkbox" name="conditions" value="0.9"> 解体（0.9）</label>
             <label><input type="checkbox" name="conditions" value="1.3"> 急工期対応（1.3）</label>
 
@@ -350,9 +350,12 @@
 
 
         <div id="inputValues">
+            <div id="displayLaborCost" style="font-size:1em; color:#333; margin-top:0px;">
+                人工単価: 0 円/日
+            </div>
             作業床面積 <span id="displayArea">0</span> ㎡<br>
             作業床高 <span id="displayHeight">0</span> m<br>
-            <span id="heightCoefficientDisplay" style="color:#666; font-size:1em;"></span><br>
+            <span id="heightCoefficientDisplay" style="color:#666; font-size:0.8em;line-height: 0em;"></span><br>
             <div id="totalVolume">床面積×床高: 0 ㎡</div>
             <div id="result">
                 <div class="main-value">原価単価: 0 円/㎡</div>
@@ -378,12 +381,12 @@
 
 
 
-        <strong>宛先：</strong><input type="text" name="client_name" class="custom-input"><strong>　件名：</strong><input
+        <strong>宛先：</strong><input type="text" name="client_name" class="custom-input"><strong>　案件名：</strong><input
             type="text" name="project_name" class="custom-input">
 
         <div class="section remarks-section">
             <label for="remarks"><strong></strong></label>
-            <textarea id="remarks" name="remarks" rows="6" placeholder=ｷﾀ━━━━(ﾟ∀ﾟ)━━━━ ></textarea>
+            <textarea id="remarks" name="remarks" rows="6" placeholder=備考></textarea>
         </div>
 
 
@@ -614,6 +617,8 @@
             document.getElementById('displayOverhead').textContent = overheadRateInput.value || 0;
             const randomCodeSpan = document.getElementById('randomCode');
             randomCodeSpan.textContent = generateRandomCode();
+            document.getElementById('displayLaborCost').textContent = `人工単価: ${laborCost.toLocaleString()} 円/日`;
+
 
             if (!isNaN(laborCost) && laborCost >= 0 &&
                 !isNaN(area) && area >= 0 &&
