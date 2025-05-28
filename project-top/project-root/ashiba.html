@@ -128,7 +128,7 @@
         }
 
         /* 結果表示エリア全体のスタイル */
-        #result,
+
         #manpowerCalc {
             font-size: 1.1rem;
             line-height: 1.6;
@@ -167,8 +167,12 @@
             text-align: right;
             margin: 0.8em 0;
             font-size: 1rem;
-            line-height: 1;
+            line-height: 1.6em;
             padding: 0;
+        }
+
+        #totalCost {
+            font-weight: normal !important;
         }
 
 
@@ -202,7 +206,7 @@
             font-size: 1em;
             text-align: right;
 
-            font-weight: bold;
+
         }
 
         /* 体積表示のスタイル */
@@ -272,6 +276,12 @@
             border: 2px solid #ccc;
             border-radius: 12px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .expense-label {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-top: 2em;
         }
     </style>
 </head>
@@ -345,13 +355,15 @@
             <div id="displayLaborCost" style="font-size:1em;  margin-top:0px;">
                 人工単価: 0 円/日
             </div>
-            作業床面積 <span id="displayArea">0</span> ㎡<br>作業床高 <span id="displayHeight">0</span> m<br>
-            <span id="heightCoefficientDisplay" style="color:#666; font-size:1em;line-height: 0em;"></span><br>
-            <p><span id="selected-label" class="large-text">くさび式足場</span>(安全係数 <span id="selected-value"
-                    class="large-text">0</span>)</p>
+            作業床面積 <span id="displayArea">0</span> ㎡<br>
+            作業床高 <span id="displayHeight">0</span> m<br>
+            <span id="heightCoefficientDisplay" style="color:#2bb637; font-size:1em;line-height: 0em;"></span><br>
+            <p><span id="selected-label" class="large-text">くさび式足場</span>/ ※ 安全係数 <span id="selected-value"
+                    class="large-text">0</span></p>
             <div id="totalVolume">床面積×床高: 0 ㎡</div>
             <div id="result">
                 <div class="main-value">原価単価: 0 円/㎡</div>
+
                 <div class="sub-value">（人工係数: 0.00000 人工/㎡）</div>
 
                 <div class="sub-value">(0.00㎡/人工)</div>
@@ -362,7 +374,10 @@
             <div id="manpowerCalc">
                 <div class="main-value">工数: 0.00 人日</div>
             </div>
-            諸経費(利益含む) <span id="displayOverhead">0</span> %<br>
+
+            <div class="expense-label">諸経費(利益含む) <span id="displayOverhead">0</span> %</div>
+
+
         </div>
 
 
@@ -660,19 +675,19 @@
             </span>`;
                 }
 
-                document.getElementById('heightCoefficientDisplay').textContent = `（風圧係数 ${heightCoefficient.toFixed(2)} 倍）`;
+                document.getElementById('heightCoefficientDisplay').textContent = `※ 風圧係数 ${heightCoefficient.toFixed(2)}`;
 
                 resultDiv.innerHTML = `
-            <div style="font-size:1em; font-weight:bold; margin-bottom:3px;">
+            <div style="font-size:1em;  ">
                 原価単価: ${unitCost.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })} 円/㎡
             </div>
-            <div style="font-size:1em; color:#555;">
-                （人工係数 ${currentCoefficient.toFixed(5)} 人工/㎡)
+            <div style="font-size:1em; color:#2bb637;">
+                ※ 人工係数 ${currentCoefficient.toFixed(5)} 人工/㎡
             </div>
         `;
 
                 totalCostDiv.innerHTML = `
-            <div style=" font-size:1em; font-weight:bold;">
+            <div style=" font-size:1em; ">
                 原価小計: ${Math.round(totalCost).toLocaleString()} 円
             </div>
         `;
@@ -690,7 +705,7 @@
         `;
 
                 taxIncludedPriceDiv.innerHTML = `
-            <div style="font-size:1.5em; font-weight:bold; color:#d9534f;">
+            <div style="font-size:1.6em; font-weight:bold; color:#d9534f;">
                 税込み: ${Math.round(taxIncludedPrice).toLocaleString()} 円
             </div>
         `;
@@ -699,8 +714,8 @@
             <div style="font-size:1em; ">
                 工数: ${manpower.toFixed(2)} 人日
             </div>
-            <div style="font-size:1em; color:#555; ">
-                (施工効率係数 ${adjustedEfficiency.toFixed(2)} ㎡/人工 )
+            <div style="font-size:1em; color:#2bb637; ">
+            ※ 施工効率係数 ${adjustedEfficiency.toFixed(2)} ㎡/人工
             </div>
             ${warningMsg}
         `;
@@ -711,7 +726,7 @@
                 totalCostDiv.innerHTML = '<div style="font-size:1em; ">原価小計: - 円</div>';
                 sellingPriceDiv.innerHTML = '<div style="font-size:1.4em; ">小計: - 円</div>';
                 taxAmountDiv.innerHTML = '<div style="font-size:1.4em; font-weight:bold;">消費税(10%): - 円</div>';
-                taxIncludedPriceDiv.innerHTML = '<div style="font-size:1.5em; ">税込み: - 円</div>';
+                taxIncludedPriceDiv.innerHTML = '<div style="font-size:1.6em; ">税込み: - 円</div>';
                 manpowerCalcDiv.innerHTML = '<div style="font-size:1em; ">工数: - 人日</div>';
             }
 
