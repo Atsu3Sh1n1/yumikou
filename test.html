@@ -1,292 +1,190 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>単管足場材料計算ツール</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            margin: 20px;
-            color: #333;
-        }
-        h1 {
-            color: #2c3e50;
-            border-bottom: 2px solid #3498db;
-            padding-bottom: 10px;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 20px 0;
-        }
-        th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: left;
-        }
-        th {
-            background-color: #f2f2f2;
-        }
-        tr:nth-child(even) {
-            background-color: #f9f9f9;
-        }
-        input {
-            width: 100%;
-            padding: 5px;
-            box-sizing: border-box;
-        }
-        .total-row {
-            font-weight: bold;
-            background-color: #e6f7ff;
-        }
-        .section {
-            margin-bottom: 30px;
-            background-color: #f8f9fa;
-            padding: 15px;
-            border-radius: 5px;
-            border-left: 4px solid #3498db;
-        }
-        .section-title {
-            font-size: 1.2em;
-            font-weight: bold;
-            margin-bottom: 10px;
-            color: #2c3e50;
-        }
-    </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>スマホ映えボタン大全</title>
+<style>
+  body {
+    background: #121214;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+    align-items: center;
+    padding: 3rem 1rem;
+    min-height: 100vh;
+    color: white;
+  }
+  h1 {
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    margin-bottom: 1rem;
+    user-select: none;
+  }
+  /* 共通ボタン基本 */
+  button {
+    cursor: pointer;
+    font-weight: 700;
+    outline: none;
+    border: none;
+    user-select: none;
+    font-size: 1.2rem;
+    min-width: 140px;
+    padding: 1rem 2.5rem;
+    border-radius: 50px;
+    position: relative;
+    overflow: hidden;
+    -webkit-tap-highlight-color: transparent;
+    transition: transform 0.25s ease, box-shadow 0.3s ease;
+    box-shadow:
+      0 6px 10px rgba(0,0,0,0.3);
+    touch-action: manipulation;
+  }
+
+  /* 1. リキッドジェルボタン */
+  .btn-liquid {
+    color: #000;
+    background: #0ff;
+    filter: url(#goo);
+  }
+  .btn-liquid::before {
+    content: '';
+    position: absolute;
+    top: 0; left: -75%;
+    width: 150%;
+    height: 100%;
+    background: radial-gradient(circle at center, #fff 20%, transparent 70%);
+    animation: blob 3s infinite;
+    opacity: 0.3;
+    z-index: 0;
+  }
+  @keyframes blob {
+    0%,100% {transform: translateX(0);}
+    50% {transform: translateX(50%);}
+  }
+
+  /* 2. 波紋ボタン */
+  .ripple-btn {
+    background: #ff6ec4;
+    color: white;
+    border-radius: 30px;
+  }
+  .ripple-btn span.ripple {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.5);
+    transform: scale(0);
+    animation: rippleAnim 0.6s linear;
+    pointer-events: none;
+  }
+  @keyframes rippleAnim {
+    to {
+      transform: scale(4);
+      opacity: 0;
+    }
+  }
+
+  /* 3. マグネットボタン */
+  .magnet-btn {
+    background: linear-gradient(135deg, #f6d365, #fda085);
+    color: #000;
+    border-radius: 20px;
+  }
+  .magnet-btn:active {
+    transform: scale(1.05);
+  }
+
+  /* 4. トグル変形ボタン */
+  .toggle-btn {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: #38bdf8;
+    color: white;
+    font-size: 2rem;
+    line-height: 60px;
+    text-align: center;
+    user-select: none;
+    transition: all 0.3s ease;
+  }
+  .toggle-btn.active {
+    background: #34d399;
+    transform: rotate(45deg);
+  }
+
+  /* 5. ニューモーフィズムボタン */
+  .neumorph-btn {
+    background: #1c1c1c;
+    color: white;
+    border-radius: 20px;
+    box-shadow:
+      5px 5px 15px #0a0a0a,
+      -5px -5px 15px #2e2e2e;
+    min-width: 160px;
+  }
+  .neumorph-btn:active {
+    box-shadow:
+      inset 5px 5px 10px #0a0a0a,
+      inset -5px -5px 10px #2e2e2e;
+  }
+
+  /* レイアウト */
+  .button-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    justify-content: center;
+    width: 100%;
+    max-width: 440px;
+  }
+
+</style>
 </head>
 <body>
-    <h1>単管足場材料計算ツール</h1>
-    
-    <div class="section">
-        <div class="section-title">基本情報</div>
-        <table>
-            <tr>
-                <td style="width: 30%;">施工面積 (㎡)</td>
-                <td style="width: 70%;">
-                    <input type="number" id="constructionArea" min="0" step="0.01" value="1" onchange="calculateMaterials()">
-                </td>
-            </tr>
-            <tr>
-                <td>足場高さ</td>
-                <td>
-                    <select id="scaffoldHeight" onchange="calculateMaterials()">
-                        <option value="under10">10m未満</option>
-                        <option value="under20">20m未満</option>
-                        <option value="over20">20m以上</option>
-                    </select>
-                </td>
-            </tr>
-        </table>
-    </div>
-    
-    <div class="section">
-        <div class="section-title">材料計算</div>
-        <table id="materialsTable">
-            <thead>
-                <tr>
-                    <th>材料名</th>
-                    <th>単位</th>
-                    <th>1㎡あたり数量</th>
-                    <th>合計数量</th>
-                    <th>単価 (円)</th>
-                    <th>金額 (円)</th>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- 材料行はJavaScriptで動的に生成 -->
-            </tbody>
-        </table>
-    </div>
-    
-    <div class="section">
-        <div class="section-title">労務費計算</div>
-        <table>
-            <thead>
-                <tr>
-                    <th>項目</th>
-                    <th>単位</th>
-                    <th>1㎡あたり数量</th>
-                    <th>合計数量</th>
-                    <th>単価 (円)</th>
-                    <th>金額 (円)</th>
-                </tr>
-            </thead>
-            <tbody id="laborTable">
-                <!-- 労務費行はJavaScriptで動的に生成 -->
-            </tbody>
-        </table>
-    </div>
-    
-    <div class="section">
-        <div class="section-title">合計金額</div>
-        <table>
-            <tr>
-                <td style="width: 30%;">材料費合計</td>
-                <td id="totalMaterialCost" style="width: 70%;">0 円</td>
-            </tr>
-            <tr>
-                <td>労務費合計</td>
-                <td id="totalLaborCost">0 円</td>
-            </tr>
-            <tr class="total-row">
-                <td>総合計金額</td>
-                <td id="grandTotalCost">0 円</td>
-            </tr>
-        </table>
-    </div>
 
-    <script>
-        // 単管足場の材料データ (表A1-1-12 単管本足場)
-        const materialsData = {
-            under10: {
-                materials: [
-                    { name: "丸パイプ", unit: "m", quantity: 5.6 },
-                    { name: "合板足場板", unit: "枚", quantity: 0.34 },
-                    { name: "クランプ", unit: "個", quantity: 3.59 },
-                    { name: "ジョイント", unit: "個", quantity: 0.72 },
-                    { name: "固定ベース", unit: "個", quantity: 0.14 },
-                    { name: "壁つなぎ", unit: "個", quantity: 0.04 },
-                    { name: "つま先板(幅木)", unit: "枚", quantity: 0.28 },
-                    { name: "修理費", unit: "式", quantity: 1 }
-                ],
-                labor: [
-                    { name: "とび工", unit: "人", quantity: 0.10 }
-                ]
-            },
-            under20: {
-                materials: [
-                    { name: "丸パイプ", unit: "m", quantity: 5.5 },
-                    { name: "合板足場板", unit: "枚", quantity: 0.32 },
-                    { name: "クランプ", unit: "個", quantity: 3.66 },
-                    { name: "ジョイント", unit: "個", quantity: 0.71 },
-                    { name: "固定ベース", unit: "個", quantity: 0.06 },
-                    { name: "壁つなぎ", unit: "個", quantity: 0.04 },
-                    { name: "つま先板(幅木)", unit: "枚", quantity: 0.28 },
-                    { name: "修理費", unit: "式", quantity: 1 }
-                ],
-                labor: [
-                    { name: "とび工", unit: "人", quantity: 0.11 }
-                ]
-            },
-            over20: {
-                materials: [
-                    { name: "丸パイプ", unit: "m", quantity: 5.4 },
-                    { name: "合板足場板", unit: "枚", quantity: 0.31 },
-                    { name: "クランプ", unit: "個", quantity: 3.67 },
-                    { name: "ジョイント", unit: "個", quantity: 0.70 },
-                    { name: "固定ベース", unit: "個", quantity: 0.04 },
-                    { name: "壁つなぎ", unit: "個", quantity: 0.04 },
-                    { name: "つま先板(幅木)", unit: "枚", quantity: 0.28 },
-                    { name: "修理費", unit: "式", quantity: 1 }
-                ],
-                labor: [
-                    { name: "とび工", unit: "人", quantity: 0.12 }
-                ]
-            }
-        };
+<h1>🔥スマホ映え！動的ボタン5連発🔥</h1>
 
-        // 計算関数
-        function calculateMaterials() {
-            const area = parseFloat(document.getElementById("constructionArea").value) || 0;
-            const height = document.getElementById("scaffoldHeight").value;
-            const data = materialsData[height];
-            
-            // 材料テーブルを更新
-            const materialsTable = document.getElementById("materialsTable").getElementsByTagName('tbody')[0];
-            materialsTable.innerHTML = "";
-            
-            let totalMaterialCost = 0;
-            
-            data.materials.forEach(item => {
-                const totalQuantity = item.quantity * area;
-                const row = materialsTable.insertRow();
-                
-                // 材料名
-                row.insertCell(0).textContent = item.name;
-                
-                // 単位
-                row.insertCell(1).textContent = item.unit;
-                
-                // 1㎡あたり数量
-                row.insertCell(2).textContent = item.quantity.toFixed(2);
-                
-                // 合計数量
-                row.insertCell(3).textContent = totalQuantity.toFixed(2);
-                
-                // 単価入力
-                const priceCell = row.insertCell(4);
-                const priceInput = document.createElement("input");
-                priceInput.type = "number";
-                priceInput.min = "0";
-                priceInput.step = "1";
-                priceInput.value = localStorage.getItem(`price_${item.name}`) || "0";
-                priceInput.onchange = function() {
-                    localStorage.setItem(`price_${item.name}`, this.value);
-                    calculateMaterials();
-                };
-                priceCell.appendChild(priceInput);
-                
-                // 金額計算
-                const price = parseFloat(priceInput.value) || 0;
-                const cost = totalQuantity * price;
-                row.insertCell(5).textContent = cost.toFixed(0) + " 円";
-                
-                totalMaterialCost += cost;
-            });
-            
-            // 労務費テーブルを更新
-            const laborTable = document.getElementById("laborTable");
-            laborTable.innerHTML = "";
-            
-            let totalLaborCost = 0;
-            
-            data.labor.forEach(item => {
-                const totalQuantity = item.quantity * area;
-                const row = laborTable.insertRow();
-                
-                // 項目名
-                row.insertCell(0).textContent = item.name;
-                
-                // 単位
-                row.insertCell(1).textContent = item.unit;
-                
-                // 1㎡あたり数量
-                row.insertCell(2).textContent = item.quantity.toFixed(2);
-                
-                // 合計数量
-                row.insertCell(3).textContent = totalQuantity.toFixed(2);
-                
-                // 単価入力
-                const priceCell = row.insertCell(4);
-                const priceInput = document.createElement("input");
-                priceInput.type = "number";
-                priceInput.min = "0";
-                priceInput.step = "1";
-                priceInput.value = localStorage.getItem(`labor_price_${item.name}`) || "0";
-                priceInput.onchange = function() {
-                    localStorage.setItem(`labor_price_${item.name}`, this.value);
-                    calculateMaterials();
-                };
-                priceCell.appendChild(priceInput);
-                
-                // 金額計算
-                const price = parseFloat(priceInput.value) || 0;
-                const cost = totalQuantity * price;
-                row.insertCell(5).textContent = cost.toFixed(0) + " 円";
-                
-                totalLaborCost += cost;
-            });
-            
-            // 合計金額を更新
-            document.getElementById("totalMaterialCost").textContent = totalMaterialCost.toFixed(0) + " 円";
-            document.getElementById("totalLaborCost").textContent = totalLaborCost.toFixed(0) + " 円";
-            document.getElementById("grandTotalCost").textContent = (totalMaterialCost + totalLaborCost).toFixed(0) + " 円";
-        }
-        
-        // 初期計算
-        calculateMaterials();
-    </script>
+<div class="button-list">
+  <button class="btn-liquid">Liquid</button>
+  <button class="ripple-btn">Ripple</button>
+  <button class="magnet-btn">Magnet</button>
+  <button class="toggle-btn">+</button>
+  <button class="neumorph-btn">Press Me</button>
+</div>
+
+<!-- SVG Filter for gooey -->
+<svg style="display:none">
+  <filter id="goo">
+    <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="blur" />
+    <feColorMatrix in="blur" mode="matrix" values="
+      1 0 0 0 0  
+      0 1 0 0 0  
+      0 0 1 0 0  
+      0 0 0 20 -10" result="goo" />
+    <feComposite in="SourceGraphic" in2="goo" operator="atop"/>
+  </filter>
+</svg>
+
+<script>
+  // Ripple effect
+  document.querySelectorAll('.ripple-btn').forEach(btn => {
+    btn.addEventListener('click', e => {
+      const rect = btn.getBoundingClientRect();
+      const ripple = document.createElement('span');
+      ripple.classList.add('ripple');
+      ripple.style.left = `${e.clientX - rect.left}px`;
+      ripple.style.top = `${e.clientY - rect.top}px`;
+      btn.appendChild(ripple);
+      setTimeout(() => ripple.remove(), 600);
+    });
+  });
+
+  // Toggle button active state
+  document.querySelector('.toggle-btn').addEventListener('click', e => {
+    e.currentTarget.classList.toggle('active');
+  });
+</script>
+
 </body>
 </html>
