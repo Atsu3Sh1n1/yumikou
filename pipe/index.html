@@ -1,30 +1,82 @@
 <!DOCTYPE html>
 <html lang="ja">
-
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>有限会社弓工</title>
-  <meta name="robots" content="index, follow" />
-  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: #f8f8f8;
+      font-family: sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .text-group {
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+      align-items: center;
+    }
+
+    .text-link span {
+      font-size: 36px;
+      font-weight: bold;
+      display: inline-block;
+      background: linear-gradient(90deg, #00f0ff, #ff00ff, #ffcc00);
+      background-size: 600% 600%;
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      -webkit-text-fill-color: transparent;
+      transform-style: preserve-3d;
+      animation-name: spinText, gradientShift;
+      animation-timing-function: linear, ease;
+      animation-iteration-count: infinite, infinite;
+    }
+
+    /* 回転速度は個別に */
+    .spin-slow    { animation-duration: 6s, 15s; }
+    .spin-medium  { animation-duration: 3s, 12s; }
+    .spin-fast    { animation-duration: 4s, 9s; }
+
+    /* グラデーション流れのフェーズをずらす */
+    .grad-delay-0   { animation-delay: 0s, 0s; }
+    .grad-delay-1   { animation-delay: 0s, 5s; }
+    .grad-delay-2   { animation-delay: 0s, 10s; }
+
+    @keyframes spinText {
+      0%   { transform: rotateY(0deg); }
+      100% { transform: rotateY(360deg); }
+    }
+
+    @keyframes gradientShift {
+      0%   { background-position: 0% 50%; }
+      50%  { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    a {
+      text-decoration: none;
+    }
+  </style>
 </head>
-
 <body>
-  <div class="button-wrapper">
-    
-    <a href="https://atsu3sh1n1.github.io/yumikou/pipe/1.html" target="_blank" rel="noopener noreferrer"
-      class="btn-art btn1">
-      <span class="btn-text">工数計算機</span>
+
+  <div class="text-group">
+    <a href="1.html" target="_blank" rel="noopener noreferrer" class="text-link">
+      <span class="spin-slow grad-delay-0">工数計算機</span>
     </a>
-
-    <a href="https://example.com/2" class="btn-art btn2"><span class="btn-text">Light Line</span></a>
-    <a href="https://example.com/3" class="btn-art btn3"><span class="btn-text">Stars</span></a>
-    <a href="https://example.com/4" class="btn-art btn4"><span class="btn-text">Spiral</span></a>
-    <a href="https://example.com/5" class="btn-art btn5"><span class="btn-text">Wave</span></a>
-    <a href="https://example.com/6" class="btn-art btn6"><span class="btn-text">Glow</span></a>
-    <a href="https://example.com/7" class="btn-art btn7"><span class="btn-text">Lines</span></a>
-    <a href="https://example.com/8" class="btn-art btn8"><span class="btn-text">Diagonal Glow</span></a>
+    <a href="https://example.com/2" target="_blank" rel="noopener noreferrer" class="text-link">
+      <span class="spin-medium grad-delay-1">工程管理</span>
+    </a>
+    <a href="https://example.com/3" target="_blank" rel="noopener noreferrer" class="text-link">
+      <span class="spin-fast grad-delay-2">進捗確認</span>
+    </a>
   </div>
-</body>
 
+</body>
 </html>

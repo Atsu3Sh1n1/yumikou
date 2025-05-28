@@ -1,190 +1,82 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>スマホ映えボタン大全</title>
-<style>
-  body {
-    background: #121214;
-    font-family: 'Helvetica Neue', Arial, sans-serif;
-    display: flex;
-    flex-direction: column;
-    gap: 2.5rem;
-    align-items: center;
-    padding: 3rem 1rem;
-    min-height: 100vh;
-    color: white;
-  }
-  h1 {
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    margin-bottom: 1rem;
-    user-select: none;
-  }
-  /* 共通ボタン基本 */
-  button {
-    cursor: pointer;
-    font-weight: 700;
-    outline: none;
-    border: none;
-    user-select: none;
-    font-size: 1.2rem;
-    min-width: 140px;
-    padding: 1rem 2.5rem;
-    border-radius: 50px;
-    position: relative;
-    overflow: hidden;
-    -webkit-tap-highlight-color: transparent;
-    transition: transform 0.25s ease, box-shadow 0.3s ease;
-    box-shadow:
-      0 6px 10px rgba(0,0,0,0.3);
-    touch-action: manipulation;
-  }
-
-  /* 1. リキッドジェルボタン */
-  .btn-liquid {
-    color: #000;
-    background: #0ff;
-    filter: url(#goo);
-  }
-  .btn-liquid::before {
-    content: '';
-    position: absolute;
-    top: 0; left: -75%;
-    width: 150%;
-    height: 100%;
-    background: radial-gradient(circle at center, #fff 20%, transparent 70%);
-    animation: blob 3s infinite;
-    opacity: 0.3;
-    z-index: 0;
-  }
-  @keyframes blob {
-    0%,100% {transform: translateX(0);}
-    50% {transform: translateX(50%);}
-  }
-
-  /* 2. 波紋ボタン */
-  .ripple-btn {
-    background: #ff6ec4;
-    color: white;
-    border-radius: 30px;
-  }
-  .ripple-btn span.ripple {
-    position: absolute;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.5);
-    transform: scale(0);
-    animation: rippleAnim 0.6s linear;
-    pointer-events: none;
-  }
-  @keyframes rippleAnim {
-    to {
-      transform: scale(4);
-      opacity: 0;
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: #f8f8f8;
+      font-family: sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
     }
-  }
 
-  /* 3. マグネットボタン */
-  .magnet-btn {
-    background: linear-gradient(135deg, #f6d365, #fda085);
-    color: #000;
-    border-radius: 20px;
-  }
-  .magnet-btn:active {
-    transform: scale(1.05);
-  }
+    .text-group {
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+      align-items: center;
+    }
 
-  /* 4. トグル変形ボタン */
-  .toggle-btn {
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    background: #38bdf8;
-    color: white;
-    font-size: 2rem;
-    line-height: 60px;
-    text-align: center;
-    user-select: none;
-    transition: all 0.3s ease;
-  }
-  .toggle-btn.active {
-    background: #34d399;
-    transform: rotate(45deg);
-  }
+    .text-link span {
+      font-size: 36px;
+      font-weight: bold;
+      display: inline-block;
+      background: linear-gradient(90deg, #00f0ff, #ff00ff, #ffcc00);
+      background-size: 600% 600%;
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      -webkit-text-fill-color: transparent;
+      transform-style: preserve-3d;
+      animation-name: spinText, gradientShift;
+      animation-timing-function: linear, ease;
+      animation-iteration-count: infinite, infinite;
+    }
 
-  /* 5. ニューモーフィズムボタン */
-  .neumorph-btn {
-    background: #1c1c1c;
-    color: white;
-    border-radius: 20px;
-    box-shadow:
-      5px 5px 15px #0a0a0a,
-      -5px -5px 15px #2e2e2e;
-    min-width: 160px;
-  }
-  .neumorph-btn:active {
-    box-shadow:
-      inset 5px 5px 10px #0a0a0a,
-      inset -5px -5px 10px #2e2e2e;
-  }
+    /* 回転速度は個別に */
+    .spin-slow    { animation-duration: 6s, 15s; }
+    .spin-medium  { animation-duration: 3s, 12s; }
+    .spin-fast    { animation-duration: 4s, 9s; }
 
-  /* レイアウト */
-  .button-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1.5rem;
-    justify-content: center;
-    width: 100%;
-    max-width: 440px;
-  }
+    /* グラデーション流れのフェーズをずらす */
+    .grad-delay-0   { animation-delay: 0s, 0s; }
+    .grad-delay-1   { animation-delay: 0s, 5s; }
+    .grad-delay-2   { animation-delay: 0s, 10s; }
 
-</style>
+    @keyframes spinText {
+      0%   { transform: rotateY(0deg); }
+      100% { transform: rotateY(360deg); }
+    }
+
+    @keyframes gradientShift {
+      0%   { background-position: 0% 50%; }
+      50%  { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    a {
+      text-decoration: none;
+    }
+  </style>
 </head>
 <body>
 
-<h1>🔥スマホ映え！動的ボタン5連発🔥</h1>
-
-<div class="button-list">
-  <button class="btn-liquid">Liquid</button>
-  <button class="ripple-btn">Ripple</button>
-  <button class="magnet-btn">Magnet</button>
-  <button class="toggle-btn">+</button>
-  <button class="neumorph-btn">Press Me</button>
-</div>
-
-<!-- SVG Filter for gooey -->
-<svg style="display:none">
-  <filter id="goo">
-    <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="blur" />
-    <feColorMatrix in="blur" mode="matrix" values="
-      1 0 0 0 0  
-      0 1 0 0 0  
-      0 0 1 0 0  
-      0 0 0 20 -10" result="goo" />
-    <feComposite in="SourceGraphic" in2="goo" operator="atop"/>
-  </filter>
-</svg>
-
-<script>
-  // Ripple effect
-  document.querySelectorAll('.ripple-btn').forEach(btn => {
-    btn.addEventListener('click', e => {
-      const rect = btn.getBoundingClientRect();
-      const ripple = document.createElement('span');
-      ripple.classList.add('ripple');
-      ripple.style.left = `${e.clientX - rect.left}px`;
-      ripple.style.top = `${e.clientY - rect.top}px`;
-      btn.appendChild(ripple);
-      setTimeout(() => ripple.remove(), 600);
-    });
-  });
-
-  // Toggle button active state
-  document.querySelector('.toggle-btn').addEventListener('click', e => {
-    e.currentTarget.classList.toggle('active');
-  });
-</script>
+  <div class="text-group">
+    <a href="https://example.com/1" target="_blank" rel="noopener noreferrer" class="text-link">
+      <span class="spin-slow grad-delay-0">工数計算機</span>
+    </a>
+    <a href="https://example.com/2" target="_blank" rel="noopener noreferrer" class="text-link">
+      <span class="spin-medium grad-delay-1">工程管理</span>
+    </a>
+    <a href="https://example.com/3" target="_blank" rel="noopener noreferrer" class="text-link">
+      <span class="spin-fast grad-delay-2">進捗確認</span>
+    </a>
+  </div>
 
 </body>
 </html>
