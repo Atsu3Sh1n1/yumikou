@@ -399,20 +399,20 @@
 
 
         <div class="footnote">
-            面積に高さを掛け、高さ係数・安全係数・条件係数で補正し、作業効率（㎡/人日）で割って必要な人工を求め、それに単価を掛けて原価を出し、諸経費率を加えて小計とし、さらに消費税率を加えて税込価格を算出し、最後に100円単位で切り捨てます。<br><br>
+            面積に高さを掛け、風圧係数・安全係数・条件係数で補正し、作業効率（㎡/人日）で割って必要な人工を求め、それに単価を掛けて原価を出し、諸経費率を加えて小計とし、さらに消費税率を加えて税込価格を算出し、最後に100円単位で切り捨てます。<br><br>
             <hr>
             ※ 足場施工費算出機(マコトくん)は、国土交通省「 <a href="https://www.mlit.go.jp/gobuild/content/001733127.pdf" target="_blank">
                 公共建築工事標準単価積算基準</a>」に基づき、くさび式足場の施工量を、500㎡規模：人工係数 = 0.0358 人工／㎡、
             1000㎡規模：人工係数 = 0.0325 人工／㎡を基に設計されています。
             <br><br>
-            ※ 高さ係数(風圧補正係数)については、こちらをご参照ください。<br>
+            ※ 風圧補正係数については、こちらをご参照ください。<br>
 
             ・<a href="ashiba3.html" target="_blank">
                 「なぜ1m地点から係数をかけるのか？」に対する技術的根拠と説明</a> <br>
             ・<a href="ashiba2.html" target="_blank">
                 設計上の注意事項と安全マージン</a> <br>
             ・<a href="top.html" target="_blank">
-                風圧力と高さ係数の関数化による合理的設計</a> <br>
+                風圧係数の関数化による合理的設計</a> <br>
         </div>
         <div class="footer">
             <a href="https://atsu3sh1n1.github.io/yumikou/" target="_blank">Created by YUMIKOU Inc.</a>
@@ -439,7 +439,7 @@
         const manpowerCalcDiv = document.getElementById('manpowerCalc');
         const printDateSpan = document.getElementById('printDate');
 
-        // 高さ係数テーブルと補間計算
+        // 風圧係数テーブルと補間計算
         function getHeightCoefficient(height) {
             const table = [
                 { height: 0, coefficient: 1.00 },
@@ -575,7 +575,7 @@
             const baseEfficiency = getEfficiency(area); // ㎡/人工
             const heightCoefficient = getHeightCoefficient(height);
 
-            // 安全係数・条件係数・高さ係数は施工効率を割る方向に使う
+            // 安全係数・条件係数・風圧係数は施工効率を割る方向に使う
             const adjustedEfficiency = baseEfficiency / safetyFactor / conditionFactor / heightCoefficient;
 
             // 高さ0なら高さ1として計算
@@ -596,8 +596,8 @@
             const day = String(date.getDate()).padStart(2, '0');
             return `${year}年${month}月${day}日`;
         }
-        function generateRandomCode(length = 8) {
-            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        function generateRandomCode(length = 10) {
+            const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
             let code = '';
             for (let i = 0; i < length; i++) {
                 code += chars.charAt(Math.floor(Math.random() * chars.length));
@@ -648,14 +648,14 @@
             </span>`;
                 }
 
-                document.getElementById('heightCoefficientDisplay').textContent = `（高さ係数: ${heightCoefficient.toFixed(2)} ）`;
+                document.getElementById('heightCoefficientDisplay').textContent = `（風圧係数 ${heightCoefficient.toFixed(2)} 倍）`;
 
                 resultDiv.innerHTML = `
             <div style="font-size:1.2em; font-weight:bold; margin-bottom:3px;">
                 原価単価: ${unitCost.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })} 円/㎡
             </div>
             <div style="font-size:1em; color:#555;">
-                （${currentCoefficient.toFixed(5)}人工/㎡)
+                （人工係数 ${currentCoefficient.toFixed(5)} 人工/㎡)
             </div>
         `;
 
@@ -678,17 +678,17 @@
         `;
 
                 taxIncludedPriceDiv.innerHTML = `
-            <div style="font-size:1.5em; font-weight:bold; color:#d9534f;">
+            <div style="font-size:1.4em; font-weight:bold; color:#d9534f;">
                 税込み: ${Math.round(taxIncludedPrice).toLocaleString()} 円
             </div>
         `;
 
                 manpowerCalcDiv.innerHTML = `
-            <div style="font-size:1.2em; font-weight:bold; margin-bottom:3px;">
+            <div style="font-size:1.2em; font-weight:bold; ">
                 工数: ${manpower.toFixed(2)} 人日
             </div>
-            <div style="font-size:1em; color:#555; margin-bottom:5px;">
-                ( ${adjustedEfficiency.toFixed(2)} ㎡/人工 )
+            <div style="font-size:1em; color:#555; ">
+                (施工効率係数 ${adjustedEfficiency.toFixed(2)} ㎡/人工 )
             </div>
             ${warningMsg}
         `;
@@ -699,7 +699,7 @@
                 totalCostDiv.innerHTML = '<div style="font-size:1.2em; ">原価小計: - 円</div>';
                 sellingPriceDiv.innerHTML = '<div style="font-size:1.4em; ">小計: - 円</div>';
                 taxAmountDiv.innerHTML = '<div style="font-size:1.3em; ">消費税(10%): - 円</div>';
-                taxIncludedPriceDiv.innerHTML = '<div style="font-size:1.5em; ">税込み: - 円</div>';
+                taxIncludedPriceDiv.innerHTML = '<div style="font-size:1.4em; ">税込み: - 円</div>';
                 manpowerCalcDiv.innerHTML = '<div style="font-size:1.2em; ">工数: - 人日</div>';
             }
 
@@ -724,12 +724,12 @@
                 document.getElementById('totalVolume').textContent = totalVolume.toLocaleString(undefined, { maximumFractionDigits: 2 });
 
                 totalVolumeDiv.innerHTML = `
-            <div style=" font-size:0.9em; font-weight:bold;">
+            <div style=" font-size:1em; font-weight:bold;">
                 床面積×床高: ${totalVolume.toLocaleString(undefined, { maximumFractionDigits: 2 })} ㎡
             </div>
     `;
             } else {
-                totalVolumeDiv.innerHTML = '<div style="font-size:0.9em;">床面積×床高: - ㎡</div>';
+                totalVolumeDiv.innerHTML = '<div style="font-size:1em; margin-top: 0px; ">床面積×床高: - ㎡</div>';
             }
         }
 
