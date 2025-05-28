@@ -1,663 +1,868 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>配管図面解析ツール（線種・太さ分析）</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
-            background-color: #f5f5f5;
-        }
-        .container {
-            display: flex;
-            flex-direction: column;
-            max-width: 1200px;
-            margin: 0 auto;
-            background-color: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-        }
-        .toolbar {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-bottom: 20px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid #eee;
-        }
-        button {
-            padding: 8px 12px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 14px;
-        }
-        button:hover {
-            background-color: #45a049;
-        }
-        .canvas-container {
-            position: relative;
-            border: 1px solid #ddd;
-            margin-bottom: 20px;
-            overflow: hidden;
-        }
-        #pdfCanvas {
-            display: block;
-            max-width: 100%;
-        }
-        .drawing-canvas {
-            position: absolute;
-            top: 0;
-            left: 0;
-            pointer-events: none;
-        }
-        .slider-container {
-            margin: 10px 0;
-        }
-        label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-        input[type="range"] {
-            width: 200px;
-        }
-        .color-legend {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-            margin-top: 20px;
-        }
-        .color-item {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-        .color-box {
-            width: 20px;
-            height: 20px;
-            border: 1px solid #ddd;
-        }
-        .status {
-            margin-top: 10px;
-            padding: 10px;
-            background-color: #f8f8f8;
-            border-radius: 4px;
-        }
-        .tab-container {
-            display: flex;
-            margin-bottom: 15px;
-        }
-        .tab {
-            padding: 8px 15px;
-            background-color: #e0e0e0;
-            cursor: pointer;
-            border-radius: 4px 4px 0 0;
-            margin-right: 5px;
-        }
-        .tab.active {
-            background-color: #4CAF50;
-            color: white;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>配管図面解析ツール（線種・太さ分析）</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background-color: #f5f5f5;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      max-width: 1200px;
+      margin: 0 auto;
+      background-color: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 20px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid #eee;
+    }
+
+    button {
+      padding: 8px 12px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    .canvas-container {
+      position: relative;
+      border: 1px solid #ddd;
+      margin-bottom: 20px;
+      overflow: hidden;
+    }
+
+    #pdfCanvas {
+      display: block;
+      max-width: 100%;
+    }
+
+    .drawing-canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+    }
+
+    .slider-container {
+      margin: 10px 0;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+
+    input[type="range"] {
+      width: 200px;
+    }
+
+    .color-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      margin-top: 20px;
+      padding: 10px;
+      background-color: #f8f8f8;
+      border-radius: 4px;
+    }
+
+    .color-item {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .color-box {
+      width: 20px;
+      height: 20px;
+      border: 1px solid #ddd;
+      border-radius: 3px;
+    }
+
+    .status {
+      margin-top: 10px;
+      padding: 10px;
+      background-color: #f8f8f8;
+      border-radius: 4px;
+    }
+
+    .tab-container {
+      display: flex;
+      margin-bottom: 15px;
+    }
+
+    .tab {
+      padding: 8px 15px;
+      background-color: #e0e0e0;
+      cursor: pointer;
+      border-radius: 4px 4px 0 0;
+      margin-right: 5px;
+    }
+
+    .tab.active {
+      background-color: #4CAF50;
+      color: white;
+    }
+
+    .settings-panel {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      margin-bottom: 15px;
+      padding: 15px;
+      background-color: #f0f8ff;
+      border-radius: 4px;
+    }
+
+    .settings-group {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+  </style>
 </head>
+
 <body>
-    <div class="container">
-        <h1>配管図面解析ツール（線種・太さ分析）※ 試作品</h1>
-        
-        <div class="tab-container">
-            <div class="tab active" id="tabAnalysis">分析モード</div>
-            <div class="tab" id="tabManual">手動モード</div>
-        </div>
-        
-        <div class="toolbar">
-            <input type="file" id="pdfInput" accept=".pdf" />
-            <button id="analyzeBtn">配管を分析</button>
-            <button id="drawBtn">手書きモード</button>
-            <button id="clearDrawBtn">手書き消去</button>
-            <button id="zoomInBtn">ズームイン</button>
-            <button id="zoomOutBtn">ズームアウト</button>
-            <button id="resetZoomBtn">ズームリセット</button>
-            
-            <div class="slider-container">
-                <label for="lineWidthThreshold">線の太さ閾値</label>
-                <input type="range" id="lineWidthThreshold" min="1" max="10" value="3" step="0.1">
-                <span id="thresholdValue">3</span>
-            </div>
-            
-            <div class="slider-container">
-                <label for="dashPatternThreshold">点線パターン閾値</label>
-                <input type="range" id="dashPatternThreshold" min="1" max="20" value="8" step="1">
-                <span id="dashThresholdValue">8</span>
-            </div>
-        </div>
-        
-        <div class="canvas-container">
-            <canvas id="pdfCanvas"></canvas>
-            <canvas id="drawingCanvas" class="drawing-canvas"></canvas>
-            <canvas id="analysisCanvas" class="drawing-canvas"></canvas>
-        </div>
-        
-        <div class="color-legend">
-            <div class="color-item">
-                <div class="color-box" style="background-color: #FF0000;"></div>
-                <span>太い実線</span>
-            </div>
-            <div class="color-item">
-                <div class="color-box" style="background-color: #FF7F7F;"></div>
-                <span>中実線</span>
-            </div>
-            <div class="color-item">
-                <div class="color-box" style="background-color: #FFCCCC;"></div>
-                <span>細い実線</span>
-            </div>
-            <div class="color-item">
-                <div class="color-box" style="background-color: #0000FF;"></div>
-                <span>太い点線</span>
-            </div>
-            <div class="color-item">
-                <div class="color-box" style="background-color: #7F7FFF;"></div>
-                <span>中点線</span>
-            </div>
-            <div class="color-item">
-                <div class="color-box" style="background-color: #CCCCFF;"></div>
-                <span>細い点線</span>
-            </div>
-            <div class="color-item">
-                <div class="color-box" style="background-color: #00AA00;"></div>
-                <span>実線+点線+実線</span>
-            </div>
-            <div class="color-item">
-                <div class="color-box" style="background-color: #FFA500;"></div>
-                <span>その他の特殊パターン</span>
-            </div>
-        </div>
-        
-        <div class="status" id="status">
-            ファイルを選択してください
-        </div>
+  <div class="container">
+    <h1>配管図面解析ツール（線種・太さ分析）※ 試作機</h1>
+
+    <div class="tab-container">
+      <div class="tab active" id="tabAnalysis">分析モード</div>
+      <div class="tab" id="tabManual">手動モード</div>
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.min.js"></script>
-    <script>
-        // PDF.jsのworker設定
-        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.worker.min.js';
-        
-        // DOM要素
-        const pdfInput = document.getElementById('pdfInput');
-        const pdfCanvas = document.getElementById('pdfCanvas');
-        const drawingCanvas = document.getElementById('drawingCanvas');
-        const analysisCanvas = document.getElementById('analysisCanvas');
-        const analyzeBtn = document.getElementById('analyzeBtn');
-        const drawBtn = document.getElementById('drawBtn');
-        const clearDrawBtn = document.getElementById('clearDrawBtn');
-        const zoomInBtn = document.getElementById('zoomInBtn');
-        const zoomOutBtn = document.getElementById('zoomOutBtn');
-        const resetZoomBtn = document.getElementById('resetZoomBtn');
-        const lineWidthThreshold = document.getElementById('lineWidthThreshold');
-        const thresholdValue = document.getElementById('thresholdValue');
-        const dashPatternThreshold = document.getElementById('dashPatternThreshold');
-        const dashThresholdValue = document.getElementById('dashThresholdValue');
-        const statusDiv = document.getElementById('status');
-        const tabAnalysis = document.getElementById('tabAnalysis');
-        const tabManual = document.getElementById('tabManual');
-        
-        // 変数
-        let pdfDoc = null;
-        let pageNum = 1;
-        let pageRendering = false;
-        let pageNumPending = null;
-        let scale = 1.0;
-        const zoomFactor = 1.2;
-        let isDrawing = false;
-        let lastX = 0;
-        let lastY = 0;
-        let currentColor = '#000000';
-        let lineWidth = 3;
-        let isAnalysisMode = true;
-        
-        // キャンバスサイズ調整
-        function resizeCanvases() {
-            const container = pdfCanvas.parentElement;
-            const width = container.clientWidth;
-            const height = container.clientHeight;
-            
-            [pdfCanvas, drawingCanvas, analysisCanvas].forEach(canvas => {
-                canvas.width = width;
-                canvas.height = height;
+    <div class="settings-panel">
+      <div class="settings-group">
+        <h3>線の太さ設定</h3>
+        <div class="slider-container">
+          <label for="thinThreshold">細い線の閾値</label>
+          <input type="range" id="thinThreshold" min="0.5" max="3" value="1" step="0.1">
+          <span id="thinThresholdValue">1.0</span>
+        </div>
+        <div class="slider-container">
+          <label for="mediumThreshold">中程度の線の閾値</label>
+          <input type="range" id="mediumThreshold" min="1" max="5" value="2" step="0.1">
+          <span id="mediumThresholdValue">2.0</span>
+        </div>
+        <div class="slider-container">
+          <label for="thickThreshold">太い線の閾値</label>
+          <input type="range" id="thickThreshold" min="2" max="10" value="3" step="0.1">
+          <span id="thickThresholdValue">3.0</span>
+        </div>
+      </div>
+
+      <div class="settings-group">
+        <h3>線種判定設定</h3>
+        <div class="slider-container">
+          <label for="dashGapThreshold">点線の間隔閾値</label>
+          <input type="range" id="dashGapThreshold" min="1" max="20" value="5" step="1">
+          <span id="dashGapThresholdValue">5</span>
+        </div>
+        <div class="slider-container">
+          <label for="dashLengthThreshold">点線の長さ閾値</label>
+          <input type="range" id="dashLengthThreshold" min="1" max="20" value="8" step="1">
+          <span id="dashLengthThresholdValue">8</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="toolbar">
+      <input type="file" id="pdfInput" accept=".pdf" />
+      <button id="analyzeBtn">配管を分析</button>
+      <button id="drawBtn">手書きモード</button>
+      <button id="clearDrawBtn">手書き消去</button>
+      <button id="zoomInBtn">ズームイン</button>
+      <button id="zoomOutBtn">ズームアウト</button>
+      <button id="resetZoomBtn">ズームリセット</button>
+      <button id="toggleOriginalBtn">原図表示切り替え</button>
+    </div>
+
+    <div class="canvas-container">
+      <canvas id="pdfCanvas"></canvas>
+      <canvas id="drawingCanvas" class="drawing-canvas"></canvas>
+      <canvas id="analysisCanvas" class="drawing-canvas"></canvas>
+    </div>
+
+    <div class="color-legend">
+      <div class="color-item">
+        <div class="color-box" style="background-color: #FF0000;"></div>
+        <span>太い実線</span>
+      </div>
+      <div class="color-item">
+        <div class="color-box" style="background-color: #FF7F00;"></div>
+        <span>中実線</span>
+      </div>
+      <div class="color-item">
+        <div class="color-box" style="background-color: #FFCC00;"></div>
+        <span>細い実線</span>
+      </div>
+      <div class="color-item">
+        <div class="color-box" style="background-color: #0000FF;"></div>
+        <span>太い点線</span>
+      </div>
+      <div class="color-item">
+        <div class="color-box" style="background-color: #0077FF;"></div>
+        <span>中点線</span>
+      </div>
+      <div class="color-item">
+        <div class="color-box" style="background-color: #00AAFF;"></div>
+        <span>細い点線</span>
+      </div>
+      <div class="color-item">
+        <div class="color-box" style="background-color: #00AA00;"></div>
+        <span>実線-点線-実線</span>
+      </div>
+      <div class="color-item">
+        <div class="color-box" style="background-color: #AA00AA;"></div>
+        <span>二重点線</span>
+      </div>
+      <div class="color-item">
+        <div class="color-box" style="background-color: #FFA500;"></div>
+        <span>その他の特殊パターン</span>
+      </div>
+    </div>
+
+    <div class="status" id="status">
+      ファイルを選択してください
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.min.js"></script>
+  <script>
+    // PDF.jsのworker設定
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.worker.min.js';
+
+    // DOM要素
+    const pdfInput = document.getElementById('pdfInput');
+    const pdfCanvas = document.getElementById('pdfCanvas');
+    const drawingCanvas = document.getElementById('drawingCanvas');
+    const analysisCanvas = document.getElementById('analysisCanvas');
+    const analyzeBtn = document.getElementById('analyzeBtn');
+    const drawBtn = document.getElementById('drawBtn');
+    const clearDrawBtn = document.getElementById('clearDrawBtn');
+    const zoomInBtn = document.getElementById('zoomInBtn');
+    const zoomOutBtn = document.getElementById('zoomOutBtn');
+    const resetZoomBtn = document.getElementById('resetZoomBtn');
+    const toggleOriginalBtn = document.getElementById('toggleOriginalBtn');
+    const thinThreshold = document.getElementById('thinThreshold');
+    const thinThresholdValue = document.getElementById('thinThresholdValue');
+    const mediumThreshold = document.getElementById('mediumThreshold');
+    const mediumThresholdValue = document.getElementById('mediumThresholdValue');
+    const thickThreshold = document.getElementById('thickThreshold');
+    const thickThresholdValue = document.getElementById('thickThresholdValue');
+    const dashGapThreshold = document.getElementById('dashGapThreshold');
+    const dashGapThresholdValue = document.getElementById('dashGapThresholdValue');
+    const dashLengthThreshold = document.getElementById('dashLengthThreshold');
+    const dashLengthThresholdValue = document.getElementById('dashLengthThresholdValue');
+    const statusDiv = document.getElementById('status');
+    const tabAnalysis = document.getElementById('tabAnalysis');
+    const tabManual = document.getElementById('tabManual');
+
+    // 変数
+    let pdfDoc = null;
+    let pageNum = 1;
+    let pageRendering = false;
+    let pageNumPending = null;
+    let scale = 1.0;
+    const zoomFactor = 1.2;
+    let isDrawing = false;
+    let lastX = 0;
+    let lastY = 0;
+    let currentColor = '#000000';
+    let lineWidth = 3;
+    let isAnalysisMode = true;
+    let showOriginal = true;
+
+    // キャンバスサイズ調整
+    function resizeCanvases() {
+      const container = pdfCanvas.parentElement;
+      const width = container.clientWidth;
+      const height = container.clientHeight;
+
+      [pdfCanvas, drawingCanvas, analysisCanvas].forEach(canvas => {
+        canvas.width = width;
+        canvas.height = height;
+      });
+    }
+
+    // PDFレンダリング
+    function renderPage(num) {
+      pageRendering = true;
+      statusDiv.textContent = `ページをレンダリング中... ${num}`;
+
+      pdfDoc.getPage(num).then(function (page) {
+        const viewport = page.getViewport({ scale: scale });
+
+        // キャンバスサイズをビューポートに合わせる
+        pdfCanvas.height = viewport.height;
+        pdfCanvas.width = viewport.width;
+        drawingCanvas.height = viewport.height;
+        drawingCanvas.width = viewport.width;
+        analysisCanvas.height = viewport.height;
+        analysisCanvas.width = viewport.width;
+
+        // PDFをレンダリング
+        const renderContext = {
+          canvasContext: pdfCanvas.getContext('2d'),
+          viewport: viewport
+        };
+
+        const renderTask = page.render(renderContext);
+
+        renderTask.promise.then(function () {
+          pageRendering = false;
+          statusDiv.textContent = `ページ ${num} を表示中`;
+
+          if (pageNumPending !== null) {
+            renderPage(pageNumPending);
+            pageNumPending = null;
+          }
+        });
+      });
+    }
+
+    // タブ切り替え
+    tabAnalysis.addEventListener('click', function () {
+      if (!isAnalysisMode) {
+        isAnalysisMode = true;
+        tabAnalysis.classList.add('active');
+        tabManual.classList.remove('active');
+        analysisCanvas.style.display = 'block';
+        drawingCanvas.style.display = 'none';
+      }
+    });
+
+    tabManual.addEventListener('click', function () {
+      if (isAnalysisMode) {
+        isAnalysisMode = false;
+        tabManual.classList.add('active');
+        tabAnalysis.classList.remove('active');
+        analysisCanvas.style.display = 'none';
+        drawingCanvas.style.display = 'block';
+      }
+    });
+
+    // PDFファイル読み込み
+    pdfInput.addEventListener('change', function (event) {
+      const file = event.target.files[0];
+      if (file.type !== 'application/pdf') {
+        statusDiv.textContent = 'PDFファイルを選択してください';
+        return;
+      }
+
+      const fileReader = new FileReader();
+
+      fileReader.onload = function () {
+        const typedarray = new Uint8Array(this.result);
+
+        pdfjsLib.getDocument(typedarray).promise.then(function (pdf) {
+          pdfDoc = pdf;
+          statusDiv.textContent = `PDFを読み込みました。総ページ数: ${pdf.numPages}`;
+          pageNum = 1;
+          renderPage(pageNum);
+        }).catch(function (error) {
+          statusDiv.textContent = 'PDFの読み込みに失敗しました: ' + error.message;
+        });
+      };
+
+      fileReader.readAsArrayBuffer(file);
+    });
+
+    // ズーム機能
+    zoomInBtn.addEventListener('click', function () {
+      scale *= zoomFactor;
+      renderPage(pageNum);
+    });
+
+    zoomOutBtn.addEventListener('click', function () {
+      scale /= zoomFactor;
+      renderPage(pageNum);
+    });
+
+    resetZoomBtn.addEventListener('click', function () {
+      scale = 1.0;
+      renderPage(pageNum);
+    });
+
+    // 原図表示切り替え
+    toggleOriginalBtn.addEventListener('click', function () {
+      showOriginal = !showOriginal;
+      pdfCanvas.style.opacity = showOriginal ? '1' : '0';
+      toggleOriginalBtn.textContent = showOriginal ? '原図非表示' : '原図表示';
+    });
+
+    // 閾値スライダー
+    thinThreshold.addEventListener('input', function () {
+      thinThresholdValue.textContent = this.value;
+    });
+
+    mediumThreshold.addEventListener('input', function () {
+      mediumThresholdValue.textContent = this.value;
+    });
+
+    thickThreshold.addEventListener('input', function () {
+      thickThresholdValue.textContent = this.value;
+    });
+
+    dashGapThreshold.addEventListener('input', function () {
+      dashGapThresholdValue.textContent = this.value;
+    });
+
+    dashLengthThreshold.addEventListener('input', function () {
+      dashLengthThresholdValue.textContent = this.value;
+    });
+
+    // 手描き機能
+    drawBtn.addEventListener('click', function () {
+      isDrawing = !isDrawing;
+      drawBtn.textContent = isDrawing ? '手書きモード (ON)' : '手書きモード';
+      drawBtn.style.backgroundColor = isDrawing ? '#f39c12' : '#4CAF50';
+
+      if (isDrawing) {
+        drawingCanvas.style.pointerEvents = 'auto';
+      } else {
+        drawingCanvas.style.pointerEvents = 'none';
+      }
+    });
+
+    clearDrawBtn.addEventListener('click', function () {
+      const ctx = drawingCanvas.getContext('2d');
+      ctx.clearRect(0, 0, drawingCanvas.width, drawingCanvas.height);
+    });
+
+    // 描画イベント
+    drawingCanvas.addEventListener('mousedown', startDrawing);
+    drawingCanvas.addEventListener('mousemove', draw);
+    drawingCanvas.addEventListener('mouseup', stopDrawing);
+    drawingCanvas.addEventListener('mouseout', stopDrawing);
+
+    function startDrawing(e) {
+      if (!isDrawing) return;
+
+      isDrawing = true;
+      const rect = drawingCanvas.getBoundingClientRect();
+      lastX = e.clientX - rect.left;
+      lastY = e.clientY - rect.top;
+    }
+
+    function draw(e) {
+      if (!isDrawing) return;
+
+      const ctx = drawingCanvas.getContext('2d');
+      const rect = drawingCanvas.getBoundingClientRect();
+      const currentX = e.clientX - rect.left;
+      const currentY = e.clientY - rect.top;
+
+      ctx.beginPath();
+      ctx.moveTo(lastX, lastY);
+      ctx.lineTo(currentX, currentY);
+      ctx.strokeStyle = currentColor;
+      ctx.lineWidth = lineWidth;
+      ctx.lineCap = 'round';
+      ctx.stroke();
+
+      lastX = currentX;
+      lastY = currentY;
+    }
+
+    function stopDrawing() {
+      isDrawing = false;
+    }
+
+    // 配管分析機能（線種と太さを考慮）
+    analyzeBtn.addEventListener('click', function () {
+      if (!pdfDoc) {
+        statusDiv.textContent = 'まずPDFを読み込んでください';
+        return;
+      }
+
+      statusDiv.textContent = '配管を分析中...（線種と太さをチェック）';
+
+      // 分析キャンバスをクリア
+      const analysisCtx = analysisCanvas.getContext('2d');
+      analysisCtx.clearRect(0, 0, analysisCanvas.width, analysisCanvas.height);
+
+      // PDFキャンバスから画像データを取得
+      const pdfCtx = pdfCanvas.getContext('2d');
+      const imageData = pdfCtx.getImageData(0, 0, pdfCanvas.width, pdfCanvas.height);
+      const data = imageData.data;
+
+      // 閾値の取得
+      const thinThresh = parseFloat(thinThreshold.value);
+      const mediumThresh = parseFloat(mediumThreshold.value);
+      const thickThresh = parseFloat(thickThreshold.value);
+      const dashGapThresh = parseInt(dashGapThreshold.value);
+      const dashLengthThresh = parseInt(dashLengthThreshold.value);
+
+      // 線の検出と分析のためのバッファ
+      const lineBuffer = [];
+      const visited = new Array(pdfCanvas.width * pdfCanvas.height).fill(false);
+
+      // 線を検出して分析
+      for (let y = 0; y < pdfCanvas.height; y++) {
+        for (let x = 0; x < pdfCanvas.width; x++) {
+          const idx = y * pdfCanvas.width + x;
+
+          // 未訪問で黒色のピクセルを検出
+          if (!visited[idx] && isBlackPixel(data, idx * 4)) {
+            const lineInfo = analyzeLineAt(x, y, data, pdfCanvas.width, pdfCanvas.height,
+              thinThresh, mediumThresh, thickThresh,
+              dashGapThresh, dashLengthThresh, visited);
+
+            if (lineInfo) {
+              lineBuffer.push(lineInfo);
+            }
+          }
+        }
+      }
+
+      // 分析結果に基づいて色分け
+      lineBuffer.forEach(line => {
+        drawLineSegment(analysisCtx, line);
+      });
+
+      statusDiv.textContent = '配管分析が完了しました（線種と太さで色分け）';
+    });
+
+    // 黒色ピクセル判定
+    function isBlackPixel(data, idx) {
+      return data[idx] < 50 && data[idx + 1] < 50 && data[idx + 2] < 50;
+    }
+
+    // 線の特徴を分析する関数
+    function analyzeLineAt(x, y, data, width, height,
+      thinThresh, mediumThresh, thickThresh,
+      dashGapThresh, dashLengthThresh, visited) {
+      // 線の太さと方向を測定
+      const widthInfo = measureLineWidth(x, y, data, width, height, visited);
+      if (widthInfo.avg < 0.5) return null;
+
+      // 線の種類を判定
+      const lineType = determineLineType(x, y, data, width, height, widthInfo,
+        dashGapThresh, dashLengthThresh, visited);
+
+      // 太さのカテゴリを判定
+      let widthCategory;
+      if (widthInfo.avg >= thickThresh) {
+        widthCategory = 'thick';
+      } else if (widthInfo.avg >= mediumThresh) {
+        widthCategory = 'medium';
+      } else if (widthInfo.avg >= thinThresh) {
+        widthCategory = 'thin';
+      } else {
+        widthCategory = 'very-thin';
+      }
+
+      return {
+        x: x,
+        y: y,
+        type: lineType,
+        widthCategory: widthCategory,
+        width: widthInfo.avg,
+        angle: widthInfo.angle,
+        points: widthInfo.points || [{ x, y }]
+      };
+    }
+
+    // 線の太さと方向を測定する関数
+    function measureLineWidth(x, y, data, width, height, visited) {
+      let maxWidth = 1;
+      let maxHeight = 1;
+      let angle = 0;
+      const points = [];
+
+      // 8方向の探索
+      const directions = [
+        { dx: 1, dy: 0 },   // 右
+        { dx: 0, dy: 1 },    // 下
+        { dx: 1, dy: 1 },    // 右下
+        { dx: 1, dy: -1 },    // 右上
+        { dx: -1, dy: 0 },    // 左
+        { dx: 0, dy: -1 },    // 上
+        { dx: -1, dy: -1 },   // 左上
+        { dx: -1, dy: 1 }     // 左下
+      ];
+
+      // 各方向の線の長さを測定
+      const lengths = directions.map(dir => {
+        let len = 0;
+        let cx = x;
+        let cy = y;
+
+        while (true) {
+          cx += dir.dx;
+          cy += dir.dy;
+
+          if (cx < 0 || cx >= width || cy < 0 || cy >= height) break;
+
+          const idx = cy * width + cx;
+          if (!isBlackPixel(data, idx * 4) || visited[idx]) break;
+
+          len++;
+          points.push({ x: cx, y: cy });
+          visited[idx] = true;
+        }
+
+        return len;
+      });
+
+      // 主要な方向を決定
+      const maxLen = Math.max(...lengths);
+      const mainDirIndex = lengths.indexOf(maxLen);
+      const mainDir = directions[mainDirIndex];
+
+      // 角度を計算 (度単位)
+      angle = Math.atan2(mainDir.dy, mainDir.dx) * 180 / Math.PI;
+
+      // 垂直方向の太さを測定
+      let perpDir;
+      if (mainDirIndex < 4) {
+        perpDir = directions[mainDirIndex + 4];
+      } else {
+        perpDir = directions[mainDirIndex - 4];
+      }
+
+      let perpWidth = 0;
+      let cx = x;
+      let cy = y;
+
+      while (true) {
+        cx += perpDir.dx;
+        cy += perpDir.dy;
+
+        if (cx < 0 || cx >= width || cy < 0 || cy >= height) break;
+
+        const idx = cy * width + cx;
+        if (!isBlackPixel(data, idx * 4)) break;
+
+        perpWidth++;
+      }
+
+      return {
+        width: maxLen,
+        height: perpWidth,
+        avg: (maxLen + perpWidth) / 2,
+        angle: angle,
+        points: points
+      };
+    }
+
+    // 線の種類を判定する関数
+    function determineLineType(x, y, data, width, height, widthInfo,
+      dashGapThresh, dashLengthThresh, visited) {
+      // 線に沿ってパターンをチェック
+      const pattern = checkLinePattern(x, y, data, width, height, widthInfo,
+        dashGapThresh, dashLengthThresh, visited);
+
+      // パターンに基づいて線種を判定
+      if (pattern.isSolid) {
+        return 'solid';
+      } else if (pattern.isDashed) {
+        return 'dashed';
+      } else if (pattern.isSolidDashedSolid) {
+        return 'solid-dashed-solid';
+      } else if (pattern.isDoubleDashed) {
+        return 'double-dashed';
+      } else {
+        return 'unknown';
+      }
+    }
+
+    // 線のパターンをチェックする関数
+    function checkLinePattern(x, y, data, width, height, widthInfo,
+      dashGapThresh, dashLengthThresh, visited) {
+      const result = {
+        isSolid: false,
+        isDashed: false,
+        isSolidDashedSolid: false,
+        isDoubleDashed: false
+      };
+
+      // チェックする方向 (角度から決定)
+      let dx = Math.cos(widthInfo.angle * Math.PI / 180);
+      let dy = Math.sin(widthInfo.angle * Math.PI / 180);
+
+      // 方向ベクトルの主要成分を決定
+      if (Math.abs(dx) > Math.abs(dy)) {
+        dy = 0;
+        dx = dx > 0 ? 1 : -1;
+      } else {
+        dx = 0;
+        dy = dy > 0 ? 1 : -1;
+      }
+
+      // チェックする距離 (線の長さに基づく)
+      const checkDistance = Math.min(widthInfo.width * 2, 200);
+      let currentX = x;
+      let currentY = y;
+      let solidCount = 0;
+      let gapCount = 0;
+      let pattern = [];
+
+      // 線に沿ってパターンをチェック
+      for (let i = 0; i < checkDistance; i++) {
+        currentX += dx;
+        currentY += dy;
+
+        if (currentX < 0 || currentX >= width || currentY < 0 || currentY >= height) break;
+
+        const idx = currentY * width + currentX;
+        const isLine = isBlackPixel(data, idx * 4) && !visited[idx];
+
+        if (isLine) {
+          if (gapCount > 0) {
+            pattern.push({ type: 'gap', length: gapCount });
+            gapCount = 0;
+          }
+          solidCount++;
+        } else {
+          if (solidCount > 0) {
+            pattern.push({ type: 'solid', length: solidCount });
+            solidCount = 0;
+          }
+          gapCount++;
+        }
+      }
+
+      // 最後のセグメントを追加
+      if (solidCount > 0) {
+        pattern.push({ type: 'solid', length: solidCount });
+      }
+      if (gapCount > 0) {
+        pattern.push({ type: 'gap', length: gapCount });
+      }
+
+      // パターン分析
+      if (pattern.length === 1 && pattern[0].type === 'solid') {
+        result.isSolid = true;
+      } else if (pattern.length >= 3) {
+        // 実線-点線-実線パターンのチェック
+        const firstSolid = pattern[0].type === 'solid' && pattern[0].length > dashLengthThresh;
+        const lastSolid = pattern[pattern.length - 1].type === 'solid' && pattern[pattern.length - 1].length > dashLengthThresh;
+        const middleDashed = pattern.slice(1, -1).some(seg =>
+          seg.type === 'gap' && seg.length < dashGapThresh);
+
+        if (firstSolid && lastSolid && middleDashed) {
+          result.isSolidDashedSolid = true;
+        } else {
+          // 二重点線パターンのチェック
+          const dashCount = pattern.filter(seg =>
+            seg.type === 'solid' && seg.length < dashLengthThresh).length;
+          const gapCount = pattern.filter(seg =>
+            seg.type === 'gap' && seg.length < dashGapThresh).length;
+
+          if (dashCount >= 2 && gapCount >= 1) {
+            result.isDoubleDashed = true;
+          } else if (dashCount >= 1 && gapCount >= 1) {
+            result.isDashed = true;
+          }
+        }
+      } else if (pattern.length >= 2) {
+        // 点線パターンのチェック
+        const hasShortSolids = pattern.filter(seg =>
+          seg.type === 'solid' && seg.length < dashLengthThresh).length > 0;
+        const hasShortGaps = pattern.filter(seg =>
+          seg.type === 'gap' && seg.length < dashGapThresh).length > 0;
+
+        if (hasShortSolids && hasShortGaps) {
+          result.isDashed = true;
+        }
+      }
+
+      return result;
+    }
+
+    // 線分を描画する関数
+    function drawLineSegment(ctx, line) {
+      let color;
+      const opacity = 0.8;
+
+      // 線種と太さに基づいて色を決定
+      switch (`${line.type}-${line.widthCategory}`) {
+        case 'solid-thick':
+          color = `rgba(255, 0, 0, ${opacity})`; // 赤
+          break;
+        case 'solid-medium':
+          color = `rgba(255, 127, 0, ${opacity})`; // オレンジ
+          break;
+        case 'solid-thin':
+          color = `rgba(255, 204, 0, ${opacity})`; // 黄色
+          break;
+        case 'dashed-thick':
+          color = `rgba(0, 0, 255, ${opacity})`; // 青
+          break;
+        case 'dashed-medium':
+          color = `rgba(0, 119, 255, ${opacity})`; // 明るい青
+          break;
+        case 'dashed-thin':
+          color = `rgba(0, 170, 255, ${opacity})`; // 水色
+          break;
+        case 'solid-dashed-solid-thick':
+        case 'solid-dashed-solid-medium':
+        case 'solid-dashed-solid-thin':
+          color = `rgba(0, 170, 0, ${opacity})`; // 緑
+          break;
+        case 'double-dashed-thick':
+        case 'double-dashed-medium':
+        case 'double-dashed-thin':
+          color = `rgba(170, 0, 170, ${opacity})`; // 紫
+          break;
+        default:
+          color = `rgba(255, 165, 0, ${opacity})`; // オレンジ（その他）
+      }
+
+      // 線を描画
+      ctx.fillStyle = color;
+      line.points.forEach(point => {
+        ctx.fillRect(point.x, point.y, 1, 1);
+      });
+
+      // 太い線の場合は周囲にも色を付ける
+      if (line.widthCategory === 'thick') {
+        const spread = Math.floor(line.width / 2);
+        for (let i = -spread; i <= spread; i++) {
+          for (let j = -spread; j <= spread; j++) {
+            if (i === 0 && j === 0) continue;
+            line.points.forEach(point => {
+              const nx = point.x + i;
+              const ny = point.y + j;
+              if (nx >= 0 && nx < ctx.canvas.width && ny >= 0 && ny < ctx.canvas.height) {
+                ctx.fillRect(nx, ny, 1, 1);
+              }
             });
+          }
         }
-        
-        // PDFレンダリング
-        function renderPage(num) {
-            pageRendering = true;
-            statusDiv.textContent = `ページをレンダリング中... ${num}`;
-            
-            pdfDoc.getPage(num).then(function(page) {
-                const viewport = page.getViewport({ scale: scale });
-                
-                // キャンバスサイズをビューポートに合わせる
-                pdfCanvas.height = viewport.height;
-                pdfCanvas.width = viewport.width;
-                drawingCanvas.height = viewport.height;
-                drawingCanvas.width = viewport.width;
-                analysisCanvas.height = viewport.height;
-                analysisCanvas.width = viewport.width;
-                
-                // PDFをレンダリング
-                const renderContext = {
-                    canvasContext: pdfCanvas.getContext('2d'),
-                    viewport: viewport
-                };
-                
-                const renderTask = page.render(renderContext);
-                
-                renderTask.promise.then(function() {
-                    pageRendering = false;
-                    statusDiv.textContent = `ページ ${num} を表示中`;
-                    
-                    if (pageNumPending !== null) {
-                        renderPage(pageNumPending);
-                        pageNumPending = null;
-                    }
-                });
-            });
-        }
-        
-        // タブ切り替え
-        tabAnalysis.addEventListener('click', function() {
-            if (!isAnalysisMode) {
-                isAnalysisMode = true;
-                tabAnalysis.classList.add('active');
-                tabManual.classList.remove('active');
-                analysisCanvas.style.display = 'block';
-                drawingCanvas.style.display = 'none';
-            }
-        });
-        
-        tabManual.addEventListener('click', function() {
-            if (isAnalysisMode) {
-                isAnalysisMode = false;
-                tabManual.classList.add('active');
-                tabAnalysis.classList.remove('active');
-                analysisCanvas.style.display = 'none';
-                drawingCanvas.style.display = 'block';
-            }
-        });
-        
-        // PDFファイル読み込み
-        pdfInput.addEventListener('change', function(event) {
-            const file = event.target.files[0];
-            if (file.type !== 'application/pdf') {
-                statusDiv.textContent = 'PDFファイルを選択してください';
-                return;
-            }
-            
-            const fileReader = new FileReader();
-            
-            fileReader.onload = function() {
-                const typedarray = new Uint8Array(this.result);
-                
-                pdfjsLib.getDocument(typedarray).promise.then(function(pdf) {
-                    pdfDoc = pdf;
-                    statusDiv.textContent = `PDFを読み込みました。総ページ数: ${pdf.numPages}`;
-                    pageNum = 1;
-                    renderPage(pageNum);
-                }).catch(function(error) {
-                    statusDiv.textContent = 'PDFの読み込みに失敗しました: ' + error.message;
-                });
-            };
-            
-            fileReader.readAsArrayBuffer(file);
-        });
-        
-        // ズーム機能
-        zoomInBtn.addEventListener('click', function() {
-            scale *= zoomFactor;
-            renderPage(pageNum);
-        });
-        
-        zoomOutBtn.addEventListener('click', function() {
-            scale /= zoomFactor;
-            renderPage(pageNum);
-        });
-        
-        resetZoomBtn.addEventListener('click', function() {
-            scale = 1.0;
-            renderPage(pageNum);
-        });
-        
-        // 閾値スライダー
-        lineWidthThreshold.addEventListener('input', function() {
-            thresholdValue.textContent = this.value;
-        });
-        
-        dashPatternThreshold.addEventListener('input', function() {
-            dashThresholdValue.textContent = this.value;
-        });
-        
-        // 手描き機能
-        drawBtn.addEventListener('click', function() {
-            isDrawing = !isDrawing;
-            drawBtn.textContent = isDrawing ? '手書きモード (ON)' : '手書きモード';
-            drawBtn.style.backgroundColor = isDrawing ? '#f39c12' : '#4CAF50';
-            
-            if (isDrawing) {
-                drawingCanvas.style.pointerEvents = 'auto';
-            } else {
-                drawingCanvas.style.pointerEvents = 'none';
-            }
-        });
-        
-        clearDrawBtn.addEventListener('click', function() {
-            const ctx = drawingCanvas.getContext('2d');
-            ctx.clearRect(0, 0, drawingCanvas.width, drawingCanvas.height);
-        });
-        
-        // 描画イベント
-        drawingCanvas.addEventListener('mousedown', startDrawing);
-        drawingCanvas.addEventListener('mousemove', draw);
-        drawingCanvas.addEventListener('mouseup', stopDrawing);
-        drawingCanvas.addEventListener('mouseout', stopDrawing);
-        
-        function startDrawing(e) {
-            if (!isDrawing) return;
-            
-            isDrawing = true;
-            const rect = drawingCanvas.getBoundingClientRect();
-            lastX = e.clientX - rect.left;
-            lastY = e.clientY - rect.top;
-        }
-        
-        function draw(e) {
-            if (!isDrawing) return;
-            
-            const ctx = drawingCanvas.getContext('2d');
-            const rect = drawingCanvas.getBoundingClientRect();
-            const currentX = e.clientX - rect.left;
-            const currentY = e.clientY - rect.top;
-            
-            ctx.beginPath();
-            ctx.moveTo(lastX, lastY);
-            ctx.lineTo(currentX, currentY);
-            ctx.strokeStyle = currentColor;
-            ctx.lineWidth = lineWidth;
-            ctx.lineCap = 'round';
-            ctx.stroke();
-            
-            lastX = currentX;
-            lastY = currentY;
-        }
-        
-        function stopDrawing() {
-            isDrawing = false;
-        }
-        
-        // 配管分析機能（線種と太さを考慮）
-        analyzeBtn.addEventListener('click', function() {
-            if (!pdfDoc) {
-                statusDiv.textContent = 'まずPDFを読み込んでください';
-                return;
-            }
-            
-            statusDiv.textContent = '配管を分析中...（線種と太さをチェック）';
-            
-            // 分析キャンバスをクリア
-            const analysisCtx = analysisCanvas.getContext('2d');
-            analysisCtx.clearRect(0, 0, analysisCanvas.width, analysisCanvas.height);
-            
-            // PDFキャンバスから画像データを取得
-            const pdfCtx = pdfCanvas.getContext('2d');
-            const imageData = pdfCtx.getImageData(0, 0, pdfCanvas.width, pdfCanvas.height);
-            const data = imageData.data;
-            
-            // 線の太さ閾値
-            const widthThreshold = parseFloat(lineWidthThreshold.value);
-            const dashThreshold = parseInt(dashPatternThreshold.value);
-            
-            // 線の種類を分析するためのバッファ
-            const lineBuffer = [];
-            
-            // まず全ての線を検出して特徴を分析
-            for (let y = 0; y < pdfCanvas.height; y++) {
-                for (let x = 0; x < pdfCanvas.width; x++) {
-                    const idx = (y * pdfCanvas.width + x) * 4;
-                    
-                    // 黒色のピクセルを検出
-                    if (data[idx] < 50 && data[idx+1] < 50 && data[idx+2] < 50) {
-                        const lineInfo = analyzeLineAt(x, y, data, pdfCanvas.width, pdfCanvas.height, widthThreshold, dashThreshold);
-                        
-                        if (lineInfo) {
-                            lineBuffer.push({
-                                x: x,
-                                y: y,
-                                type: lineInfo.type,
-                                width: lineInfo.width
-                            });
-                        }
-                    }
-                }
-            }
-            
-            // 分析結果に基づいて色分け
-            lineBuffer.forEach(line => {
-                let color;
-                let opacity = 0.7;
-                
-                switch(line.type) {
-                    case 'solid-thick':
-                        color = `rgba(255, 0, 0, ${opacity})`; // 赤
-                        break;
-                    case 'solid-medium':
-                        color = `rgba(255, 127, 127, ${opacity})`; // 薄い赤
-                        break;
-                    case 'solid-thin':
-                        color = `rgba(255, 204, 204, ${opacity})`; // 非常に薄い赤
-                        break;
-                    case 'dashed-thick':
-                        color = `rgba(0, 0, 255, ${opacity})`; // 青
-                        break;
-                    case 'dashed-medium':
-                        color = `rgba(127, 127, 255, ${opacity})`; // 薄い青
-                        break;
-                    case 'dashed-thin':
-                        color = `rgba(204, 204, 255, ${opacity})`; // 非常に薄い青
-                        break;
-                    case 'solid-dashed-solid':
-                        color = `rgba(0, 170, 0, ${opacity})`; // 緑
-                        break;
-                    default:
-                        color = `rgba(255, 165, 0, ${opacity})`; // オレンジ（その他）
-                }
-                
-                analysisCtx.fillStyle = color;
-                analysisCtx.fillRect(line.x, line.y, 1, 1);
-            });
-            
-            statusDiv.textContent = '配管分析が完了しました（線種と太さで色分け）';
-        });
-        
-        // 線の特徴を分析する関数
-        function analyzeLineAt(x, y, data, width, height, widthThreshold, dashThreshold) {
-            // 線の太さを測定
-            const widthInfo = measureLineWidth(x, y, data, width, height);
-            if (widthInfo.width < 1) return null;
-            
-            // 線の種類を判定
-            const lineType = determineLineType(x, y, data, width, height, widthInfo, dashThreshold);
-            
-            // 太さのカテゴリを判定
-            let widthCategory;
-            if (widthInfo.width > widthThreshold * 1.5) {
-                widthCategory = 'thick';
-            } else if (widthInfo.width > widthThreshold) {
-                widthCategory = 'medium';
-            } else {
-                widthCategory = 'thin';
-            }
-            
-            return {
-                type: `${lineType}-${widthCategory}`,
-                width: widthInfo.width
-            };
-        }
-        
-        // 線の太さを測定する関数
-        function measureLineWidth(x, y, data, width, height) {
-            let maxWidth = 1;
-            let maxHeight = 1;
-            
-            // 水平方向の太さを測定
-            for (let i = x + 1; i < Math.min(x + 20, width); i++) {
-                const idx = (y * width + i) * 4;
-                if (data[idx] < 50 && data[idx+1] < 50 && data[idx+2] < 50) {
-                    maxWidth++;
-                } else {
-                    break;
-                }
-            }
-            
-            // 垂直方向の太さを測定
-            for (let j = y + 1; j < Math.min(y + 20, height); j++) {
-                const idx = (j * width + x) * 4;
-                if (data[idx] < 50 && data[idx+1] < 50 && data[idx+2] < 50) {
-                    maxHeight++;
-                } else {
-                    break;
-                }
-            }
-            
-            return {
-                width: maxWidth,
-                height: maxHeight,
-                avg: (maxWidth + maxHeight) / 2
-            };
-        }
-        
-        // 線の種類を判定する関数
-        function determineLineType(x, y, data, width, height, widthInfo, dashThreshold) {
-            // 水平方向の線か垂直方向の線かを判断
-            const isHorizontal = widthInfo.width > widthInfo.height * 1.2;
-            const isVertical = widthInfo.height > widthInfo.width * 1.2;
-            
-            let checkDirection = 0; // 0=both, 1=horizontal, 2=vertical
-            if (isHorizontal) checkDirection = 1;
-            if (isVertical) checkDirection = 2;
-            
-            // 線に沿ってパターンをチェック
-            const pattern = checkLinePattern(x, y, data, width, height, checkDirection, dashThreshold);
-            
-            // パターンに基づいて線種を判定
-            if (pattern.isSolid) {
-                return 'solid';
-            } else if (pattern.isDashed) {
-                return 'dashed';
-            } else if (pattern.isSolidDashedSolid) {
-                return 'solid-dashed-solid';
-            } else {
-                return 'unknown';
-            }
-        }
-        
-        // 線のパターンをチェックする関数
-        function checkLinePattern(x, y, data, width, height, direction, dashThreshold) {
-            const result = {
-                isSolid: false,
-                isDashed: false,
-                isSolidDashedSolid: false
-            };
-            
-            // チェックする方向と距離
-            const checkDistance = 100; // パターンチェックする距離
-            let xStep = 0, yStep = 0;
-            
-            if (direction === 1 || direction === 0) { // 水平方向
-                xStep = 1;
-            }
-            if (direction === 2 || direction === 0) { // 垂直方向
-                yStep = 1;
-            }
-            
-            let currentX = x;
-            let currentY = y;
-            let solidCount = 0;
-            let gapCount = 0;
-            let pattern = [];
-            
-            for (let i = 0; i < checkDistance; i++) {
-                currentX += xStep;
-                currentY += yStep;
-                
-                if (currentX >= width || currentY >= height) break;
-                
-                const idx = (currentY * width + currentX) * 4;
-                const isLine = data[idx] < 50 && data[idx+1] < 50 && data[idx+2] < 50;
-                
-                if (isLine) {
-                    if (gapCount > 0) {
-                        pattern.push({type: 'gap', length: gapCount});
-                        gapCount = 0;
-                    }
-                    solidCount++;
-                } else {
-                    if (solidCount > 0) {
-                        pattern.push({type: 'solid', length: solidCount});
-                        solidCount = 0;
-                    }
-                    gapCount++;
-                }
-            }
-            
-            // 最後のセグメントを追加
-            if (solidCount > 0) {
-                pattern.push({type: 'solid', length: solidCount});
-            }
-            if (gapCount > 0) {
-                pattern.push({type: 'gap', length: gapCount});
-            }
-            
-            // パターン分析
-            if (pattern.length === 1 && pattern[0].type === 'solid') {
-                result.isSolid = true;
-            } else if (pattern.length >= 3) {
-                // 実線-点線-実線パターンのチェック
-                const firstSolid = pattern[0].type === 'solid' && pattern[0].length > dashThreshold/2;
-                const lastSolid = pattern[pattern.length-1].type === 'solid' && pattern[pattern.length-1].length > dashThreshold/2;
-                const middleDashed = pattern.slice(1, -1).some(seg => seg.type === 'gap' && seg.length < dashThreshold);
-                
-                if (firstSolid && lastSolid && middleDashed) {
-                    result.isSolidDashedSolid = true;
-                } else {
-                    // 点線パターンのチェック
-                    const hasShortSolids = pattern.filter(seg => seg.type === 'solid' && seg.length < dashThreshold).length > 1;
-                    const hasShortGaps = pattern.filter(seg => seg.type === 'gap' && seg.length < dashThreshold).length > 0;
-                    
-                    if (hasShortSolids && hasShortGaps) {
-                        result.isDashed = true;
-                    }
-                }
-            } else if (pattern.length >= 2) {
-                // 点線パターンのチェック
-                const hasShortSolids = pattern.filter(seg => seg.type === 'solid' && seg.length < dashThreshold).length > 0;
-                const hasShortGaps = pattern.filter(seg => seg.type === 'gap' && seg.length < dashThreshold).length > 0;
-                
-                if (hasShortSolids && hasShortGaps) {
-                    result.isDashed = true;
-                }
-            }
-            
-            return result;
-        }
-        
-        // 初期化
-        resizeCanvases();
-        window.addEventListener('resize', resizeCanvases);
-    </script>
+      }
+    }
+
+    // 初期化
+    resizeCanvases();
+    window.addEventListener('resize', resizeCanvases);
+  </script>
 </body>
+
 </html>
