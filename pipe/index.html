@@ -42,7 +42,9 @@
   <h2>📁 仕分け用ページ（仮）</h2>
 
   <div class="category-list">
-    <div class="category" onclick="goToCategory('electric')">壱の巻</div>
+
+    <div class="category" onclick="goToCategory('1')">壱の巻</div>
+
     <div class="category" onclick="goToCategory('water')">弐の巻</div>
     <div class="category" onclick="goToCategory('air')">参の巻</div>
     <div class="category" onclick="goToCategory('fire')">四の巻</div>
@@ -76,7 +78,7 @@
 
   <script>
     function goToCategory(category) {
-      window.location.href = `viewer.html?cat=${category}`;
+      window.location.href = category + '.html';
     }
   </script>
 
