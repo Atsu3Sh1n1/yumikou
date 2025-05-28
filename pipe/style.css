@@ -1,0 +1,347 @@
+    body {
+        margin: 0;
+        font-family: 'Helvetica Neue', sans-serif;
+        display: flex;
+        justify-content: center;
+        padding: 2rem 1rem;
+        min-height: 100vh;
+        box-sizing: border-box;
+    }
+
+    .button-wrapper {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+        width: 100%;
+        max-width: 360px;
+    }
+
+    .btn-art {
+        position: relative;
+        display: block;
+        padding: 1.2rem 2.5rem;
+        font-size: 1.2rem;
+        border: none;
+        border-radius: 999px;
+        color: #fff;
+        overflow: hidden;
+        backdrop-filter: blur(4px);
+        transition: all 0.3s ease;
+        text-decoration: none;
+        text-align: center;
+        user-select: none;
+        z-index: 0;
+        cursor: pointer;
+        box-shadow:
+            inset 0 1px 1px rgba(255, 255, 255, 0.05),
+            0 10px 20px rgba(0, 0, 0, 0.6),
+            0 0 0 1px rgba(255, 255, 255, 0.05);
+    }
+
+    .btn-art:hover {
+        transform: scale(1.05);
+        box-shadow:
+            inset 0 2px 3px rgba(255, 255, 255, 0.15),
+            0 12px 25px rgba(255, 255, 255, 0.2);
+    }
+
+    .btn-art:active {
+        transform: scale(0.95);
+        box-shadow:
+            inset 2px 2px 6px rgba(0, 0, 0, 0.5),
+            inset -2px -2px 6px rgba(255, 255, 255, 0.05);
+    }
+
+    .btn-text {
+        background: linear-gradient(90deg, #00f0ff, #ff00ff, #ffcc00);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        font-weight: bold;
+        letter-spacing: 1.2px;
+        font-size: 1.3rem;
+        user-select: none;
+        position: relative;
+        z-index: 2;
+    }
+
+    /* 1 Ripple */
+    .btn1 {
+        background: linear-gradient(145deg, #1f1f21, #2c2c2e);
+    }
+
+    .btn1::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 150%;
+        height: 150%;
+        background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 20%, transparent 70%);
+        transform: translate(-50%, -50%) scale(1);
+        animation: ripple 3s ease-out infinite;
+        z-index: 1;
+        border-radius: 50%;
+    }
+
+    /* 2 Light Line */
+    .btn2 {
+        background: linear-gradient(145deg, #2a1f3d, #3c2c5e);
+        box-shadow:
+            inset 0 1px 1px rgba(255, 255, 255, 0.1),
+            0 8px 15px rgba(60, 20, 90, 0.7),
+            0 0 0 1px rgba(180, 150, 255, 0.15);
+    }
+
+    .btn2::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -30%;
+        width: 60%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+        animation: lightmove 2.5s linear infinite;
+        z-index: 1;
+        border-radius: 999px;
+    }
+
+    /* 3 Stars */
+    .btn3 {
+        background: linear-gradient(145deg, #1f3d2c, #2c5e3c);
+        box-shadow:
+            inset 0 1px 2px rgba(255, 255, 255, 0.1),
+            0 12px 22px rgba(20, 90, 40, 0.8),
+            0 0 0 1px rgba(150, 255, 180, 0.15);
+    }
+
+    .btn3::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 200%;
+        height: 200%;
+        background:
+            radial-gradient(circle, rgba(255, 255, 255, 0.8) 2px, transparent 3px),
+            radial-gradient(circle, rgba(255, 255, 255, 0.5) 1px, transparent 2px);
+        background-position: 10px 20px, 40px 50px;
+        background-repeat: repeat;
+        animation: starsTwinkle 4s ease-in-out infinite alternate;
+        z-index: 1;
+        border-radius: 999px;
+    }
+
+    /* 4 Spiral */
+    .btn4 {
+        background: linear-gradient(145deg, #3d2c1f, #5e3c2c);
+        box-shadow:
+            inset 0 1px 1px rgba(255, 255, 255, 0.08),
+            0 9px 18px rgba(90, 40, 20, 0.7),
+            0 0 0 1px rgba(255, 180, 150, 0.15);
+    }
+
+    .btn4::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 300%;
+        height: 300%;
+        background: conic-gradient(from 0deg, rgba(255, 255, 255, 0.3), transparent 30%);
+        border-radius: 50%;
+        transform: translate(-50%, -50%) rotate(0deg);
+        animation: spin 8s linear infinite;
+        z-index: 1;
+    }
+
+    /* 5 Wave */
+    .btn5 {
+        background: linear-gradient(145deg, #3d1f3d, #5e2c5e);
+        box-shadow:
+            inset 0 1px 1px rgba(255, 255, 255, 0.12),
+            0 10px 20px rgba(130, 40, 130, 0.7),
+            0 0 0 1px rgba(255, 150, 255, 0.2);
+    }
+
+    .btn5::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 0;
+        width: 200%;
+        height: 200%;
+        background:
+            repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2) 5px, transparent 5px, transparent 10px);
+        border-radius: 50%;
+        transform: translateY(-50%);
+        animation: waveMove 6s linear infinite;
+        z-index: 1;
+    }
+
+    /* 6 Glow */
+    .btn6 {
+        background: linear-gradient(145deg, #1f3d5e, #2c5e8f);
+        box-shadow:
+            inset 0 1px 1px rgba(255, 255, 255, 0.1),
+            0 11px 22px rgba(40, 90, 130, 0.8),
+            0 0 0 1px rgba(150, 180, 255, 0.2);
+    }
+
+    .btn6::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 180%;
+        height: 180%;
+        background: radial-gradient(circle, rgba(255, 255, 255, 0.25), transparent 60%);
+        filter: blur(10px);
+        transform: translate(-50%, -50%);
+        animation: pulseGlow 3.5s ease-in-out infinite alternate;
+        z-index: 1;
+        border-radius: 50%;
+    }
+
+    /* 7 Lines */
+    .btn7 {
+        background: linear-gradient(145deg, #5e3d1f, #8f5e2c);
+        box-shadow:
+            inset 0 1px 1px rgba(255, 255, 255, 0.07),
+            0 9px 17px rgba(130, 90, 40, 0.7),
+            0 0 0 1px rgba(255, 210, 150, 0.15);
+    }
+
+    .btn7::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background:
+            repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.15) 0 2px, transparent 2px 4px);
+        animation: linesMove 5s linear infinite;
+        z-index: 1;
+        border-radius: 999px;
+    }
+
+    /* 8 Diagonal Glow */
+    .btn8 {
+        background: linear-gradient(145deg, #3d1f2c, #5e2c3c);
+        box-shadow:
+            inset 0 1px 1px rgba(255, 255, 255, 0.09),
+            0 10px 18px rgba(130, 40, 90, 0.75),
+            0 0 0 1px rgba(255, 150, 210, 0.18);
+    }
+
+    .btn8::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.25), transparent);
+        animation: diagonalGlow 4s ease-in-out infinite alternate;
+        z-index: 1;
+        border-radius: 999px;
+    }
+
+    /* アニメーション定義 */
+    @keyframes ripple {
+        0% {
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 0.4;
+        }
+
+        100% {
+            transform: translate(-50%, -50%) scale(1.8);
+            opacity: 0;
+        }
+    }
+
+    @keyframes lightmove {
+        0% {
+            left: -30%;
+        }
+
+        100% {
+            left: 130%;
+        }
+    }
+
+    @keyframes starsTwinkle {
+
+        0%,
+        100% {
+            opacity: 0.3;
+        }
+
+        50% {
+            opacity: 1;
+        }
+    }
+
+    @keyframes spin {
+        0% {
+            transform: translate(-50%, -50%) rotate(0deg);
+        }
+
+        100% {
+            transform: translate(-50%, -50%) rotate(360deg);
+        }
+    }
+
+    @keyframes waveMove {
+        0% {
+            background-position: 0 0;
+        }
+
+        100% {
+            background-position: 50px 50px;
+        }
+    }
+
+    @keyframes pulseGlow {
+        0% {
+            opacity: 0.5;
+        }
+
+        100% {
+            opacity: 1;
+        }
+    }
+
+    @keyframes linesMove {
+        0% {
+            background-position: 0 0;
+        }
+
+        100% {
+            background-position: 0 20px;
+        }
+    }
+
+    @keyframes diagonalGlow {
+        0% {
+            background-position: -50% 0;
+        }
+
+        100% {
+            background-position: 150% 0;
+        }
+    }
+
+    /* ほんのりグレインノイズ */
+    body::after {
+        content: "";
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: url('https://grainy-gradients.vercel.app/noise.svg');
+        opacity: 0.03;
+        pointer-events: none;
+        z-index: 9999;
+    }
