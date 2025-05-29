@@ -210,6 +210,12 @@
       animation: fadeInUp 6s forwards;
       animation-delay: 5.5s;
       /* h2のアニメーション後に開始 */
+      text-shadow:
+        0 8px 12px rgba(0, 0, 0, 0.4),
+        /* 浮き影 */
+        0 0 8px rgba(255, 255, 255, 0.1);
+      /* 微発光 */
+
     }
 
     .cta-button:hover {
@@ -219,7 +225,8 @@
 </head>
 
 <body>
-  <h2 id="typing-text" style="color: #333; margin-top: 26px; font-size: 2rem; text-align: center; line-height: 2.5em;"></h2>
+  <h2 id="typing-text" style="color: #333; margin-top: 26px; font-size: 2rem; text-align: center; line-height: 2.5em;">
+  </h2>
   <div style="
   font-family: Arial, sans-serif;
   line-height: 2.2rem;
@@ -247,6 +254,10 @@
     display: inline-block;
     margin-bottom: 1rem;
     padding: 12px 24px;
+    text-shadow:
+  0 8px 12px rgba(0, 0, 0, 0.4),    /* 浮き影 */
+  0 0 8px rgba(255, 255, 255, 0.1); /* 微発光 */
+
     background: linear-gradient(135deg,  #ff012b,#ffa0b0, #ff002b);
     color: white;
     text-decoration: none;
@@ -270,7 +281,7 @@
 
   <iframe id="app4" src="hi.html" loading="lazy"></iframe>
 
-  
+
   <iframe id="app6" src="tool.html" loading="lazy"></iframe>
 
   <iframe id="pipeForm" src="so.html" loading="lazy"></iframe>
