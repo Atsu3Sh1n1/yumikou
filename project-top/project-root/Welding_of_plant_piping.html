@@ -228,7 +228,7 @@
       padding: 15px 30px;
       font-size: 18px;
       color: white;
-      background: linear-gradient(135deg, #16eefa, #b8e3e6, #20d7e0,);
+      background: linear-gradient(135deg, #16eefa, #b8e3e6, #20d7e0);
       border: none;
       border-radius: 10px;
       cursor: pointer;
@@ -238,21 +238,23 @@
     .sparkle-button::before {
       content: '';
       position: absolute;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      background: radial-gradient(circle, rgba(255, 255, 255, 0.8) 0%, transparent 70%);
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.05) 50%, transparent 80%);
       animation: sparkle 2s infinite linear;
+      pointer-events: none;
+      transform: translate(-50%, -50%) scale(1.5);
     }
 
     @keyframes sparkle {
       0% {
-        transform: translate(-100%, 100%) rotate(0deg);
+        transform: translate(-150%, 150%) scale(1.5);
       }
 
       100% {
-        transform: translate(100%, -100%) rotate(360deg);
+        transform: translate(150%, -150%) scale(1.5);
       }
     }
   </style>
