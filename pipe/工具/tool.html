@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>減価償却費 計算ツール</title>
+  <style>
+    body { font-family: sans-serif; margin: 20px;  font-size: 12px; }
+    label { display: block; margin-top: 10px; }
+    input[type="number"] { width: 100px; text-align: right;}
+    .result { margin-top: 20px; font-size: 18px; font-weight: bold; color: #007700; }
+    
+  </style>
+</head>
+<body>
+
+  <h2>📊 減価償却費（定額法）計算ツール</h2>
+
+  <label>
+    工具の購入価格（円）：
+    <input type="number" id="price" pattern="[0-9]*" placeholder="100000">
+  </label>
+
+  <label>
+    耐用年数（年）：
+    <input type="number" id="years"pattern="[0-9]*" placeholder="5">
+  </label>
+
+  <div class="result" id="result">月間減価償却費：¥0</div>
+
+  <script>
+    const priceInput = document.getElementById('price');
+    const yearsInput = document.getElementById('years');
+    const resultDiv = document.getElementById('result');
+
+    function updateDepreciation() {
+      const price = parseFloat(priceInput.value);
+      const years = parseFloat(yearsInput.value);
+
+      if (!isNaN(price) && !isNaN(years) && years > 0) {
+       const monthly = Math.floor(price / years / 12);
+resultDiv.textContent = `月間減価償却費：¥${monthly.toLocaleString()}`;
+
+      }
+    }
+
+    priceInput.addEventListener('input', updateDepreciation);
+    yearsInput.addEventListener('input', updateDepreciation);
+
+    updateDepreciation(); // 初期表示
+  </script>
+
+</body>
+</html>
