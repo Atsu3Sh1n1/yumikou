@@ -3,215 +3,291 @@
 
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>日報</title>
   <style>
     body {
-      margin: 0;
-      padding: 0;
       font-family: sans-serif;
+      padding: 1em;
+      background: #f5f5f5;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 1em;
+    }
+
+    .control-bar {
       display: flex;
-      justify-content: center;
+      gap: 1em;
       align-items: center;
-      height: 100vh;
+      margin-bottom: 1em;
+      flex-wrap: wrap;
     }
 
-    .text-group {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      /* 2列に分ける */
-      gap: 55px;
-      justify-items: center;
-      /* 子要素を中央寄せ */
+    select,
+    button {
+      padding: 0.5em;
+      font-size: 1em;
     }
 
-    .text-link span {
-      font-size: 2.6em;
-      font-weight: bold;
-      display: inline-block;
-      background: linear-gradient(90deg, #00f0ff, #ff00ff, #ffcc00);
-      background-size: 600% 600%;
-      background-clip: text;
-      -webkit-background-clip: text;
-      color: transparent;
-      -webkit-text-fill-color: transparent;
-      transform-style: preserve-3d;
-      animation-name: spinText, gradientShift;
-      animation-timing-function: linear, ease;
-      animation-iteration-count: infinite, infinite;
-      text-shadow:
-        0 4px 6px rgba(0, 0, 0, 0.4),
-        /* 浮き影 */
-        0 0 8px rgba(255, 255, 255, 0.1);
-      /* 微発光 */
-
-    }
-
-    /* 回転速度は個別に */
-    .spin-slow {
-      animation-duration: 3s, 3s;
-    }
-
-    .spin-medium {
-      animation-duration: 4s, 4s;
-    }
-
-    .spin-fast {
-      animation-duration: 5s, 5s;
-    }
-
-    .spin-0 {
-      animation-duration: 6s, 6s;
-    }
-
-    .spin-1 {
-      animation-duration: 7s, 7s;
-    }
-
-    .spin-2 {
-      animation-duration: 8s, 8s;
-    }
-
-    /* グラデーション流れのフェーズをずらす */
-    .grad-delay-0 {
-      animation-delay: 0s, 0s;
-    }
-
-    .grad-delay-1 {
-      animation-delay: 0s, 1s;
-    }
-
-    .grad-delay-2 {
-      animation-delay: 0s, 2s;
-    }
-
-    .grad-delay-3 {
-      animation-delay: 0s, 3s;
-    }
-
-    .grad-delay-4 {
-      animation-delay: 0s, 4s;
-    }
-
-    .grad-delay-5 {
-      animation-delay: 0s, 5s;
-    }
-
-    @keyframes spinText {
-      0% {
-        transform: rotateY(0deg);
-      }
-
-      100% {
-        transform: rotateY(360deg);
-      }
-    }
-
-    @keyframes gradientShift {
-      0% {
-        background-position: 0% 50%;
-      }
-
-      50% {
-        background-position: 100% 50%;
-      }
-
-      100% {
-        background-position: 0% 50%;
-      }
-    }
-
-    a {
-      text-decoration: none;
-    }
-
-
-
-
-    .glitter-button {
-      background: transparent;
-      border: 2px solid #fff;
+    .person-block {
+      background: white;
       border-radius: 8px;
-      padding: 8px 16px;
-      font-size: 16px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      margin-bottom: 2em;
+      padding: 1em;
+    }
+
+    .person-header {
+      font-weight: bold;
+      margin-bottom: 0.5em;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .reports-container {
+      overflow-x: auto;
+      display: flex;
+      gap: 0.5em;
+    }
+
+    .day-form {
+      border: 1px solid #ccc;
+      padding: 0.5em;
+      border-radius: 4px;
+      min-width: 160px;
+      background: #fafafa;
+      flex-shrink: 0;
+    }
+
+    .day-form h4 {
+      margin: 0 0 0.5em 0;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    select {
+      width: 100%;
+      box-sizing: border-box;
+      margin-bottom: 0.5em;
+    }
+
+    .inline {
+      display: inline-block;
+      width: 48%;
+    }
+
+    .name-site-inputs {
+      display: flex;
+      gap: 1em;
+      margin-bottom: 0.5em;
+    }
+
+    .delete-btn {
+      background: #e55353;
       color: white;
-      position: relative;
-      overflow: hidden;
+      border: none;
+      border-radius: 4px;
+      padding: 0.3em 0.6em;
       cursor: pointer;
     }
-
-    .glitter-button::after {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -75%;
-      width: 50%;
-      height: 100%;
-      background: linear-gradient(120deg,
-          rgba(255, 255, 255, 0) 0%,
-          rgba(255, 255, 255, 0.6)30%,
-          rgba(255, 255, 255, 0) 100%);
-      transform: skewX(-20deg);
-      animation: shine 2s infinite;
-    }
-
-    @keyframes shine {
-      0% {
-        left: -75%;
-      }
-
-      100% {
-        left: 125%;
-      }
-    }
-
-  
   </style>
 </head>
 
 <body>
-  
+  <h1>日報/有限会社弓工</h1>
 
-  <div class="text-group">
-
-     <a href=""  rel="noopener noreferrer" class="text-link">
-      <span class="spin-slow grad-delay-0 sparkle-button">作業報告書</span>
-    </a>
-
-     <a href="日報/nippou.html" target="_blank" rel="noopener noreferrer" class="text-link">
-      <span class="spin-slow grad-delay-0 sparkle-button">日報</span>
-    </a>
-
-    <a href="工数/1.html" target="_blank" rel="noopener noreferrer" class="text-link">
-      <span class="spin-slow grad-delay-0 sparkle-button">工数</span>
-    </a>
-
-    <a href="足場/2.html" target="_blank" rel="noopener noreferrer" class="text-link">
-      <span class="spin-medium grad-delay-1 sparkle-button">足場</span>
-    </a>
-
-    <a href="配管/3.html" target="_blank" rel="noopener noreferrer" class="text-link">
-      <span class="spin-fast grad-delay-2 sparkle-button">配管</span>
-    </a>
-
-
-    <a href="溶接/4.html" target="_blank" rel="noopener noreferrer" class="text-link">
-      <span class="spin-1 grad-delay-3 sparkle-button">溶接</span>
-    </a>
-
-    <a href="工具/5.html" target="_blank" rel="noopener noreferrer" class="text-link">
-      <span class="spin-0 grad-delay-4 sparkle-button">工具</span>
-    </a>
-
-    <a href="重機/6.html" target="_blank" rel="noopener noreferrer" class="text-link">
-      <span class="spin-2 grad-delay-5 sparkle-button">重機</span>
-    </a>
-
-
-
-
-
+  <div class="control-bar">
+    <label>年：
+      <select id="yearSelect"></select>
+    </label>
+    <label>月：
+      <select id="monthSelect"></select>
+    </label>
+    <button id="addPersonBtn">＋人追加</button>
   </div>
 
+  <div id="formContainer"></div>
+  <script>
+    const yearSelect = document.getElementById('yearSelect');
+    const monthSelect = document.getElementById('monthSelect');
+    const formContainer = document.getElementById('formContainer');
+    const addPersonBtn = document.getElementById('addPersonBtn');
+
+    // 初期設定（現在の年月）
+    const now = new Date();
+    const defaultYear = now.getFullYear();
+    const defaultMonth = now.getMonth() + 1;
+
+    for (let y = defaultYear - 2; y <= defaultYear + 2; y++) {
+      const opt = document.createElement('option');
+      opt.value = y;
+      opt.textContent = y;
+      if (y === defaultYear) opt.selected = true;
+      yearSelect.appendChild(opt);
+    }
+
+    for (let m = 1; m <= 12; m++) {
+      const opt = document.createElement('option');
+      opt.value = m;
+      opt.textContent = m;
+      if (m === defaultMonth) opt.selected = true;
+      monthSelect.appendChild(opt);
+    }
+
+    // 保存と読み込み
+    function saveData(data) {
+      localStorage.setItem('nippouData', JSON.stringify(data));
+    }
+
+    function loadData() {
+      const saved = localStorage.getItem('nippouData');
+      if (saved) return JSON.parse(saved);
+      return {
+        year: defaultYear,
+        month: defaultMonth,
+        people: []
+      };
+    }
+
+    // 日付数を取得
+    function getDaysInMonth(year, month) {
+      return new Date(year, month, 0).getDate();
+    }
+
+    // 日報1日分フォーム
+    function createDayForm(dayIndex, dayData = {}) {
+      const div = document.createElement('div');
+      div.className = 'day-form';
+
+      const date = `${dayIndex + 1}日`;
+
+      div.innerHTML = `
+      <h4>${date}</h4>
+      <input type="text" placeholder="作業内容" value="${dayData.work || ''}" class="workInput"><br/>
+      <label>弁当：
+        <select class="bentoSelect">
+          <option value="">-</option>
+          <option value="○" ${dayData.bento === '○' ? 'selected' : ''}>○</option>
+          <option value="なし" ${dayData.bento === 'なし' ? 'selected' : ''}>なし</option>
+        </select>
+      </label><br/>
+      <input type="number" min="0" step="0.1" placeholder="残業(h)" value="${dayData.overtime || ''}" class="overtimeInput">
+    `;
+      return div;
+    }
+
+    // 1人分のフォーム作成
+    function createPersonForm(personIndex, personData, daysCount) {
+      const div = document.createElement('div');
+      div.className = 'person-block';
+      div.dataset.personIndex = personIndex;
+
+      // 名前・現場名入力
+      const header = document.createElement('div');
+      header.className = 'person-header';
+
+      const nameInput = document.createElement('input');
+      nameInput.placeholder = "氏名";
+      nameInput.value = personData.name || '';
+      nameInput.style.marginRight = '1em';
+
+      const siteInput = document.createElement('input');
+      siteInput.placeholder = "現場名";
+      siteInput.value = personData.site || '';
+
+      const deleteBtn = document.createElement('button');
+      deleteBtn.textContent = '削除';
+      deleteBtn.className = 'delete-btn';
+      deleteBtn.onclick = () => {
+        const data = loadData();
+        data.people.splice(personIndex, 1);
+        saveData(data);
+        refreshPeopleForms();
+      };
+
+      header.appendChild(nameInput);
+      header.appendChild(siteInput);
+      header.appendChild(deleteBtn);
+      div.appendChild(header);
+
+      // 日報コンテナ
+      const reportsContainer = document.createElement('div');
+      reportsContainer.className = 'reports-container';
+
+      for (let i = 0; i < daysCount; i++) {
+        const dayData = personData.days?.[i] || {};
+        const dayForm = createDayForm(i, dayData);
+        reportsContainer.appendChild(dayForm);
+      }
+
+      div.appendChild(reportsContainer);
+
+      // 入力イベントを保存に反映
+      div.addEventListener('input', () => {
+        const data = loadData();
+        const thisPerson = data.people[personIndex];
+        thisPerson.name = nameInput.value;
+        thisPerson.site = siteInput.value;
+        thisPerson.days = [];
+
+        const dayForms = div.querySelectorAll('.day-form');
+        dayForms.forEach((df, i) => {
+          const work = df.querySelector('.workInput').value;
+          const bento = df.querySelector('.bentoSelect').value;
+          const overtime = df.querySelector('.overtimeInput').value;
+          thisPerson.days[i] = { work, bento, overtime };
+        });
+
+        saveData(data);
+      });
+
+      return div;
+    }
+
+    // 全体描画
+    function refreshPeopleForms() {
+      const data = loadData();
+      formContainer.innerHTML = '';
+      const year = parseInt(yearSelect.value);
+      const month = parseInt(monthSelect.value);
+      const daysCount = getDaysInMonth(year, month);
+
+      data.year = year;
+      data.month = month;
+
+      data.people.forEach((person, index) => {
+        const form = createPersonForm(index, person, daysCount);
+        formContainer.appendChild(form);
+      });
+
+      saveData(data);
+    }
+
+    // 年月変更時の処理
+    yearSelect.addEventListener('change', refreshPeopleForms);
+    monthSelect.addEventListener('change', refreshPeopleForms);
+
+    // 人追加ボタン
+    addPersonBtn.addEventListener('click', () => {
+      const data = loadData();
+      const year = parseInt(yearSelect.value);
+      const month = parseInt(monthSelect.value);
+      const daysCount = getDaysInMonth(year, month);
+      const days = Array.from({ length: daysCount }, () => ({ work: "", bento: "", overtime: "" }));
+      data.people.push({ name: "", site: "", days });
+      saveData(data);
+      refreshPeopleForms();
+    });
+
+    // 初期読み込み
+    const saved = loadData();
+    yearSelect.value = saved.year;
+    monthSelect.value = saved.month;
+    refreshPeopleForms();
+  </script>
 </body>
 
 </html>
