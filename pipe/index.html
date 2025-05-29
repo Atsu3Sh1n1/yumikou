@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -38,24 +39,53 @@
     }
 
     /* 回転速度は個別に */
-    .spin-slow    { animation-duration: 6s, 15s; }
-    .spin-medium  { animation-duration: 3s, 12s; }
-    .spin-fast    { animation-duration: 4s, 9s; }
+    .spin-slow {
+      animation-duration: 6s, 15s;
+    }
+
+    .spin-medium {
+      animation-duration: 3s, 12s;
+    }
+
+    .spin-fast {
+      animation-duration: 4s, 9s;
+    }
 
     /* グラデーション流れのフェーズをずらす */
-    .grad-delay-0   { animation-delay: 0s, 0s; }
-    .grad-delay-1   { animation-delay: 0s, 5s; }
-    .grad-delay-2   { animation-delay: 0s, 10s; }
+    .grad-delay-0 {
+      animation-delay: 0s, 0s;
+    }
+
+    .grad-delay-1 {
+      animation-delay: 0s, 5s;
+    }
+
+    .grad-delay-2 {
+      animation-delay: 0s, 10s;
+    }
 
     @keyframes spinText {
-      0%   { transform: rotateY(0deg); }
-      100% { transform: rotateY(360deg); }
+      0% {
+        transform: rotateY(0deg);
+      }
+
+      100% {
+        transform: rotateY(360deg);
+      }
     }
 
     @keyframes gradientShift {
-      0%   { background-position: 0% 50%; }
-      50%  { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
+      0% {
+        background-position: 0% 50%;
+      }
+
+      50% {
+        background-position: 100% 50%;
+      }
+
+      100% {
+        background-position: 0% 50%;
+      }
     }
 
     a {
@@ -63,14 +93,15 @@
     }
   </style>
 </head>
+
 <body>
 
   <div class="text-group">
     <a href="1.html" target="_blank" rel="noopener noreferrer" class="text-link">
       <span class="spin-slow grad-delay-0">工数計算機</span>
     </a>
-    <a href="https://example.com/2" target="_blank" rel="noopener noreferrer" class="text-link">
-      <span class="spin-medium grad-delay-1">工程管理</span>
+    <a href="" target="_blank" rel="noopener noreferrer" class="text-link">
+      <span class="spin-medium grad-delay-1">足場施工費計算機</span>
     </a>
     <a href="https://example.com/3" target="_blank" rel="noopener noreferrer" class="text-link">
       <span class="spin-fast grad-delay-2">進捗確認</span>
@@ -78,4 +109,5 @@
   </div>
 
 </body>
+
 </html>
