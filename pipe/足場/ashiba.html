@@ -666,10 +666,15 @@
                 const manpower = calculateManpower(area, height, safetyFactor, conditionFactor);
 
                 const totalCost = manpower * laborCost;
-                const unitCost = totalCost / (area * (height > 0 ? height : 1));
+                
 
 
-                const sellingPrice = calculateSellingPrice(totalCost);
+                const volume = area * (height > 0 ? height : 1);
+                const unitCost = Math.round(totalCost / volume);
+                const totalCostRounded = unitCost * volume;
+
+                const sellingPrice = calculateSellingPrice(totalCostRounded);
+
                 const taxRate = 0.10; // 消費税率10%
                 const taxAmount = Math.floor(sellingPrice * taxRate);
                 let taxIncludedPrice = sellingPrice + taxAmount;
