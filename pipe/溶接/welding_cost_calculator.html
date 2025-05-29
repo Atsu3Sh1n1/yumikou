@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>配管溶接DB見積金額計算機｜有限会社弓工</title>
+  <meta name="robots" content="index, follow" />
+  <style>
+    body {
+      font-family: sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      margin-top: 50px;
+      padding-top: 0px;
+    }
+
+    .container {
+      padding: 10px 25px;
+      width: 100%;
+      max-width: 300px;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 2px;
+    }
+
+    label {
+      margin-top: 10px;
+      font-weight: bold;
+    }
+
+    select,
+    input[type="number"] {
+      width: 100px;
+      padding: 5px;
+      margin: 5px 0 10px;
+      font-size: 1em;
+      text-align: right;
+    }
+
+    .form-group {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 1.2rem;
+    }
+
+    .result {
+      margin-top: 25px;
+      font-size: 1.4em;
+      font-weight: bold;
+      color: green;
+      text-align: center;
+    }
+
+    .db-display {
+      font-size: 1em;
+      text-align: center;
+      margin-top: 10px;
+      color: #555;
+    }
+
+    .footer {
+      text-align: center;
+      font-size: 11px;
+      margin-top: 0;
+      padding: 0.5rem;
+    }
+
+    /* ボタンのスタイル追加 */
+    .schedule-btn {
+      margin-right: 5px;
+      padding: 5px 10px;
+      border: 1px solid #ccc;
+      background: #eee;
+      cursor: pointer;
+      border-radius: 4px;
+      font-size: 0.9em;
+    }
+
+    .schedule-btn.active {
+      background: #4CAF50;
+      color: white;
+      border-color: #4CAF50;
+    }
+
+    .additional-multiplier-btn {
+      margin-top: 5px;
+      padding: 5px 10px;
+      border: 1px solid #ccc;
+      background: #eee;
+      cursor: pointer;
+      border-radius: 4px;
+      font-size: 0.65em;
+    }
+
+    .additional-multiplier-btn.active {
+      background: #2196F3;
+      color: white;
+      border-color: #2196F3;
+    }
+  </style>
+</head>
+
+<body>
+  <script>
+    if (window === window.parent) {
+      document.body.innerHTML = 'このページは直接アクセスできません。';
+    }
+  </script>
+
+  <div class="container">
+    <h2>溶接コスト算出機</h2>
+    <div class="footer">
+      <a href="https://atsu3sh1n1.github.io/yumikou/" target="_blank">Created by YUMIKOU Inc.</a>
+    </div>
+    <div class="form-group">
+      <label for="pipeSize">サイズ:</label>
+      <select id="pipeSize">
+        <option value="25">25A</option>
+        <option value="32">32A</option>
+        <option value="40">40A</option>
+        <option value="50">50A</option>
+        <option value="65">65A</option>
+        <option value="80">80A</option>
+        <option value="100">100A</option>
+        <option value="125">125A</option>
+        <option value="150">150A</option>
+        <option value="200">200A</option>
+        <option value="250">250A</option>
+        <option value="300">300A</option>
+        <option value="350">350A</option>
+        <option value="400">400A</option>
+        <option value="450">450A</option>
+        <option value="500">500A</option>
+        <option value="600">600A</option>
+        <option value="700">700A</option>
+        <option value="750">750A</option>
+        <option value="800">800A</option>
+        <option value="900">900A</option>
+        <option value="1000">1000A</option>
+
+
+      </select>
+
+    </div>
+    <div class="form-group">
+      <label>ストレートBW:</label>
+      <input type="number" inputmode="numeric" pattern="[0-9]*" id="straightCount" placeholder="0" min="0" />
+    </div>
+    <div class="form-group">
+      <label>エルボBW:</label>
+      <input type="number" inputmode="numeric" pattern="[0-9]*" id="elbowCount" placeholder="0" min="0" />
+    </div>
+    <div class="form-group">
+      <label>フランジFL/T-BW:</label>
+      <input type="number" inputmode="numeric" pattern="[0-9]*" id="teeCount" placeholder="0" min="0" />
+    </div>
+    <div class="form-group">
+      <label>単価 (円/DB):</label>
+      <input type="number" inputmode="numeric" pattern="[0-9]*" id="unitPrice" placeholder="0" min="0" />
+    </div>
+    <div class="form-group">
+      <div id="scheduleButtons">
+        <button type="button" data-multiplier="0.65" class="schedule-btn">SGP/20</button>
+        <button type="button" data-multiplier="1" class="schedule-btn active">SCH40</button>
+        <button type="button" data-multiplier="1.55" class="schedule-btn">SCH80</button><br />
+        <button type="button" id="additionalMultiplierBtn" class="additional-multiplier-btn">ステンレス</button>
+        <button type="button" id="swMultiplierBtn" class="additional-multiplier-btn">SW</button>
+
+      </div>
+    </div>
+    <div class="result" id="totalPrice">小計(税抜き): ¥0</div>
+    <div class="db-display" id="totalDB">合計DB: 0</div><br><br>
+    *BW=突合せ溶接・SW=差し込み式
+  </div>
+
+  <script>
+    // DB換算テーブル（インチ×個数ごとのDB数）
+    const dbTable = {
+      "25": { straight: 1, elbow: 2, tee: 3 },
+      "32": { straight: 1.25, elbow: 2.5, tee: 3.75 },
+      "40": { straight: 1.5, elbow: 3, tee: 4.5 },
+      "50": { straight: 2, elbow: 4, tee: 6 },
+      "65": { straight: 2.5, elbow: 5, tee: 7.5 },
+      "80": { straight: 3, elbow: 6, tee: 9 },
+      "100": { straight: 4, elbow: 8, tee: 12 },
+      "125": { straight: 5, elbow: 10, tee: 15 },
+      "150": { straight: 6, elbow: 12, tee: 18 },
+      "200": { straight: 8, elbow: 16, tee: 24 },
+      "250": { straight: 10, elbow: 20, tee: 30 },
+      "300": { straight: 12, elbow: 24, tee: 36 },
+      "350": { straight: 14, elbow: 28, tee: 42 },
+      "400": { straight: 16, elbow: 32, tee: 48 },
+      "450": { straight: 18, elbow: 36, tee: 54 },
+      "500": { straight: 20, elbow: 40, tee: 60 },
+      "600": { straight: 24, elbow: 48, tee: 72 },
+      "700": { straight: 28, elbow: 56, tee: 84 },
+      "750": { straight: 30, elbow: 60, tee: 90 },
+      "800": { straight: 32, elbow: 64, tee: 96 },
+      "900": { straight: 36, elbow: 72, tee: 108 },
+      "1000": { straight: 40, elbow: 80, tee: 120 }
+
+
+
+
+    };
+
+    // スケジュール別単価倍率（単価にかける）
+    const scheduleMultipliers = {
+      "SGP": 0.65,
+      "SCH40": 1.0,
+      "SCH80": 1.55,
+    };
+
+    // 現在のスケジュール倍率（単価補正用）
+    let currentMultiplier = 1.0;
+
+    // ステンレス補正乗数（単価補正用）
+    const stainlessMultiplier = 1.5;
+    const swMultiplier = 0.75;
+
+
+    function calculate() {
+      const size = document.getElementById("pipeSize").value;
+      const straight = parseInt(document.getElementById("straightCount").value) || 0;
+      const elbow = parseInt(document.getElementById("elbowCount").value) || 0;
+      const tee = parseInt(document.getElementById("teeCount").value) || 0;
+      let baseUnitPrice = parseFloat(document.getElementById("unitPrice").value) || 0;
+
+      // DB数は補正なし
+      const totalDB =
+        (straight * dbTable[size].straight +
+          elbow * dbTable[size].elbow +
+          tee * dbTable[size].tee);
+
+      // 単価にスケジュール倍率とステンレス補正をかける
+      let effectiveUnitPrice = baseUnitPrice * currentMultiplier;
+
+      if (document.getElementById("additionalMultiplierBtn").classList.contains("active")) {
+        effectiveUnitPrice *= stainlessMultiplier;
+      }
+
+      if (document.getElementById("swMultiplierBtn").classList.contains("active")) {
+        effectiveUnitPrice *= swMultiplier;
+      }
+
+
+      const totalCost = Math.round(totalDB * effectiveUnitPrice);
+
+      document.getElementById("totalPrice").textContent = `小計(税抜き): ¥${totalCost.toLocaleString()}`;
+      document.getElementById("totalDB").textContent = `合計DB: ${totalDB.toFixed(1)}`;
+    }
+
+    document.getElementById("swMultiplierBtn").addEventListener("click", function () {
+      this.classList.toggle("active");
+      calculate();
+    });
+
+
+    // スケジュールボタンのイベント
+    document.querySelectorAll(".schedule-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".schedule-btn").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+
+        // ボタンのテキストで倍率を判別して設定
+        const text = btn.textContent.trim();
+        if (text.includes("SGP")) currentMultiplier = scheduleMultipliers["SGP"];
+        else if (text.includes("SCH40")) currentMultiplier = scheduleMultipliers["SCH40"];
+        else if (text.includes("SCH80")) currentMultiplier = scheduleMultipliers["SCH80"];
+        else currentMultiplier = 1.0;
+
+        calculate();
+      });
+    });
+
+    // ステンレスボタンのイベント
+    document.getElementById("additionalMultiplierBtn").addEventListener("click", function () {
+      this.classList.toggle("active");
+      calculate();
+    });
+
+    // 入力変化で計算更新
+    document.querySelectorAll("select, input").forEach(el => {
+      el.addEventListener("input", calculate);
+    });
+
+
+    // ページ読み込み時に初期計算＋スケジュール倍率設定
+    window.addEventListener('DOMContentLoaded', () => {
+      const activeBtn = document.querySelector(".schedule-btn.active");
+      if (activeBtn) {
+        const text = activeBtn.textContent.trim();
+        if (text.includes("SGP")) currentMultiplier = scheduleMultipliers["SGP"];
+        else if (text.includes("SCH40")) currentMultiplier = scheduleMultipliers["SCH40"];
+        else if (text.includes("SCH80")) currentMultiplier = scheduleMultipliers["SCH80"];
+        else currentMultiplier = 1.0;
+      }
+      calculate();
+    });
+
+    // 親ページ用のデータ取得関数
+    window.getEstimateData = function () {
+      const size = document.getElementById("pipeSize").value;
+      const straight = parseInt(document.getElementById("straightCount").value) || 0;
+      const elbow = parseInt(document.getElementById("elbowCount").value) || 0;
+      const tee = parseInt(document.getElementById("teeCount").value) || 0;
+      let baseUnitPrice = parseFloat(document.getElementById("unitPrice").value) || 0;
+
+      const totalDB =
+        (straight * dbTable[size].straight +
+          elbow * dbTable[size].elbow +
+          tee * dbTable[size].tee);
+
+      if (document.getElementById("additionalMultiplierBtn").classList.contains("active")) {
+        baseUnitPrice = Math.round(baseUnitPrice * stainlessMultiplier);
+      }
+      baseUnitPrice = Math.round(baseUnitPrice * currentMultiplier);
+
+      const totalCost = Math.round(totalDB * baseUnitPrice);
+
+      return {
+        appId: "welding-db",
+        subtotal: totalCost,
+        totalDB: totalDB
+      };
+    };
+  </script>
+</body>
+
+</html>
