@@ -115,37 +115,45 @@
 
 
 
-    .sparkle-button {
-      position: relative;
-      padding: 15px 30px;
-      font-size: 18px;
+    .glitter-button {
+      background: transparent;
+      border: 2px solid #fff;
+      border-radius: 8px;
+      padding: 8px 16px;
+      font-size: 16px;
       color: white;
-      background: linear-gradient(135deg, #ff69b4, #8a2be2);
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
+      position: relative;
       overflow: hidden;
+      cursor: pointer;
     }
 
-    .sparkle-button::before {
+    .glitter-button::after {
       content: '';
       position: absolute;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      background: radial-gradient(circle, rgba(255, 255, 255, 0.8) 0%, transparent 70%);
-      animation: sparkle 2s infinite linear;
+      top: 0;
+      left: -75%;
+      width: 50%;
+      height: 100%;
+      background: linear-gradient(120deg,
+          rgba(255, 255, 255, 0) 0%,
+          rgba(255, 255, 255, 0.6) 50%,
+          rgba(255, 255, 255, 0) 100%);
+      transform: skewX(-20deg);
+      animation: shine 2s infinite;
     }
 
-    @keyframes sparkle {
+    @keyframes shine {
       0% {
-        transform: translate(-100%, -100%) rotate(0deg);
+        left: -75%;
       }
 
       100% {
-        transform: translate(100%, 100%) rotate(360deg);
+        left: 125%;
       }
+    }
+
+    body {
+      background: #222;
     }
   </style>
 </head>
