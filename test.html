@@ -1,82 +1,89 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="UTF-8">
+  <title>星屑キラキラボタン</title>
   <style>
     body {
-      margin: 0;
-      padding: 0;
-      background: #f8f8f8;
-      font-family: sans-serif;
+      background: #111;
       display: flex;
       justify-content: center;
       align-items: center;
       height: 100vh;
     }
 
-    .text-group {
-      display: flex;
-      flex-direction: column;
-      gap: 40px;
-      align-items: center;
-    }
-
-    .text-link span {
-      font-size: 36px;
-      font-weight: bold;
+    .sparkle-container {
+      position: relative;
       display: inline-block;
-      background: linear-gradient(90deg, #00f0ff, #ff00ff, #ffcc00);
-      background-size: 600% 600%;
-      background-clip: text;
-      -webkit-background-clip: text;
-      color: transparent;
-      -webkit-text-fill-color: transparent;
-      transform-style: preserve-3d;
-      animation-name: spinText, gradientShift;
-      animation-timing-function: linear, ease;
-      animation-iteration-count: infinite, infinite;
     }
 
-    /* 回転速度は個別に */
-    .spin-slow    { animation-duration: 6s, 15s; }
-    .spin-medium  { animation-duration: 3s, 12s; }
-    .spin-fast    { animation-duration: 4s, 9s; }
-
-    /* グラデーション流れのフェーズをずらす */
-    .grad-delay-0   { animation-delay: 0s, 0s; }
-    .grad-delay-1   { animation-delay: 0s, 5s; }
-    .grad-delay-2   { animation-delay: 0s, 10s; }
-
-    @keyframes spinText {
-      0%   { transform: rotateY(0deg); }
-      100% { transform: rotateY(360deg); }
+    .sparkle-button {
+      background: transparent;
+      color: white;
+      border: 1px solid white;
+      padding: 10px 20px;
+      font-size: 18px;
+      border-radius: 8px;
+      cursor: pointer;
+      z-index: 1;
+      position: relative;
+      overflow: hidden;
     }
 
-    @keyframes gradientShift {
-      0%   { background-position: 0% 50%; }
-      50%  { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
+    .sparkle {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      background: white;
+      border-radius: 50%;
+      opacity: 0;
+      animation: sparkleAnim 1.5s infinite;
+      pointer-events: none;
     }
 
-    a {
-      text-decoration: none;
+    @keyframes sparkleAnim {
+      0% {
+        transform: scale(0.5);
+        opacity: 0;
+      }
+      50% {
+        transform: scale(1.5);
+        opacity: 1;
+      }
+      100% {
+        transform: scale(0.5);
+        opacity: 0;
+      }
     }
   </style>
 </head>
 <body>
-
-  <div class="text-group">
-    <a href="https://example.com/1" target="_blank" rel="noopener noreferrer" class="text-link">
-      <span class="spin-slow grad-delay-0">工数計算機</span>
-    </a>
-    <a href="https://example.com/2" target="_blank" rel="noopener noreferrer" class="text-link">
-      <span class="spin-medium grad-delay-1">工程管理</span>
-    </a>
-    <a href="https://example.com/3" target="_blank" rel="noopener noreferrer" class="text-link">
-      <span class="spin-fast grad-delay-2">進捗確認</span>
-    </a>
+  <div class="sparkle-container">
+    <button class="sparkle-button">キラキラ</button>
   </div>
 
+  <script>
+    const container = document.querySelector('.sparkle-container');
+
+    function createSparkle() {
+      const sparkle = document.createElement('div');
+      sparkle.classList.add('sparkle');
+      const size = Math.random() * 4 + 2;
+      sparkle.style.width = `${size}px`;
+      sparkle.style.height = `${size}px`;
+
+      sparkle.style.top = `${Math.random() * 100}%`;
+      sparkle.style.left = `${Math.random() * 100}%`;
+      sparkle.style.animationDuration = `${Math.random() * 1.5 + 1}s`;
+
+      container.appendChild(sparkle);
+
+      setTimeout(() => {
+        sparkle.remove();
+      }, 2000);
+    }
+
+    setInterval(createSparkle, 300);
+  </script>
 </body>
 </html>
