@@ -16,6 +16,24 @@
             -webkit-text-size-adjust: 100%;
         }
 
+        body::before {
+            content: "";
+            position: fixed;
+            top: -4%;
+            left: -60%;
+            width: 180vw;
+            height: 180vh;
+            background-image: url('yumikou.png');
+            background-repeat: repeat;
+            background-size: 200px 100px;
+            opacity: 0.03;
+            transform: rotate(-10deg);
+            transform-origin: center;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+
         p {
             font-size: 1em;
         }
@@ -431,8 +449,7 @@
 
     <button onclick="downloadEstimateAsPDF()">PDFとしてダウンロード</button>
 
-    (試作中/仮置き* )
-    <iframe id="materialFrame" src="ashiba7.html" title="資材計算" loading="lazy"></iframe>
+
 
     <script>
         const laborCostInput = document.getElementById('laborCost');
