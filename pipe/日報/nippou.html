@@ -6,6 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>日報</title>
     <style>
+        input,
+        select,
+        textarea {
+            font-size: 16px;
+            /* 👈 iOSのズーム防止 */
+        }
+
         body {
             font-family: sans-serif;
             padding: 1em;
@@ -151,7 +158,7 @@
             <select id="monthSelect"></select>
         </label>
         <button id="addPersonBtn">＋追加</button>
-    </div>
+    </div><br><br>
 
     <div class="footer">
         <a href="https://atsu3sh1n1.github.io/yumikou/" target="_blank">Created by YUMIKOU Inc.</a>
@@ -349,7 +356,7 @@
     </script>
 
     <!-- メール送信ボタン -->
-    <button onclick="sendEmail()">メール送信/有限会社弓工:事務</button>
+    <button onclick="sendEmail()">メール送信 / 有限会社弓工:事務</button>
 
     <script>
         function sendEmail() {
