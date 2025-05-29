@@ -111,6 +111,42 @@
     a {
       text-decoration: none;
     }
+
+
+
+
+    .sparkle-button {
+      position: relative;
+      padding: 15px 30px;
+      font-size: 18px;
+      color: white;
+      background: linear-gradient(135deg, #ff69b4, #8a2be2);
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      overflow: hidden;
+    }
+
+    .sparkle-button::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.8) 0%, transparent 70%);
+      animation: sparkle 2s infinite linear;
+    }
+
+    @keyframes sparkle {
+      0% {
+        transform: translate(-100%, -100%) rotate(0deg);
+      }
+
+      100% {
+        transform: translate(100%, 100%) rotate(360deg);
+      }
+    }
   </style>
 </head>
 
@@ -118,24 +154,24 @@
 
   <div class="text-group">
     <a href="工数/1.html" target="_blank" rel="noopener noreferrer" class="text-link">
-      <span class="spin-slow grad-delay-0">工数</span>
+      <span class="spin-slow grad-delay-0 sparkle-button">工数</span>
     </a>
 
     <a href="足場/2.html" target="_blank" rel="noopener noreferrer" class="text-link">
-      <span class="spin-medium grad-delay-1">足場</span>
+      <span class="spin-medium grad-delay-1 sparkle-button">足場</span>
     </a>
 
     <a href="配管/3.html" target="_blank" rel="noopener noreferrer" class="text-link">
-      <span class="spin-fast grad-delay-2">配管</span>
+      <span class="spin-fast grad-delay-2 sparkle-button">配管</span>
     </a>
 
 
     <a href="溶接/4.html" target="_blank" rel="noopener noreferrer" class="text-link">
-      <span class="spin-1 grad-delay-3">溶接</span>
+      <span class="spin-1 grad-delay-3 sparkle-button">溶接</span>
     </a>
 
     <a href="工具/5.html" target="_blank" rel="noopener noreferrer" class="text-link">
-      <span class="spin-0 grad-delay-0">工具</span>
+      <span class="spin-0 grad-delay-0 sparkle-button">工具</span>
     </a>
 
 
