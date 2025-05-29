@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>くさび足場施工係数・人工換算表</title>
+  <style>
+    body {
+      font-family: "Segoe UI", sans-serif;
+      margin: 40px;
+      line-height: 1.6;
+      color: #333;
+    }
+    h1 {
+      font-size: 1.8em;
+      color: #005aaa;
+    }
+    h2 {
+      font-size: 1.4em;
+      margin-top: 2em;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1em;
+    }
+    th, td {
+      border: 1px solid #aaa;
+      padding: 8px;
+      text-align: center;
+    }
+    th {
+      background-color: #f0f0f0;
+    }
+    code {
+      background-color: #f5f5f5;
+      padding: 2px 4px;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>くさび緊結式足場（手すり先行工法）における人工係数と施工面積計算</h1>
+
+  <p>
+    国土交通省が公表している歩掛り資料に基づき、<strong>500㎡と1000㎡規模</strong>の施工に対する人工係数から、
+    <strong>100㎡〜1000㎡</strong>までの人工係数と、1人工あたりの施工可能面積を算出しました。
+  </p>
+
+  <h2>1. 既知の人工係数（元データ）</h2>
+  <ul>
+    <li>500㎡規模：1人工あたり <strong>27.9㎡</strong> → 人工係数 = <strong>0.0358 人工／㎡</strong></li>
+    <li>1000㎡規模：1人工あたり <strong>30.8㎡</strong> → 人工係数 = <strong>0.0325 人工／㎡</strong></li>
+  </ul>
+
+  <h2>2. 補間計算（線形補間）</h2>
+  <p>
+    上記2点を基に、人工係数の差分 <code>0.0358 - 0.0325 = 0.0033</code> を500㎡間で5等分。
+    100㎡ごとに人工係数が <code>0.00066</code> ずつ減少すると仮定。
+  </p>
+
+  <h2>3. 面積別 人工係数・人工数・施工面積表</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>施工面積（㎡）</th>
+        <th>人工係数（人工/㎡）</th>
+        <th>100㎡あたりの人工数</th>
+        <th>1人工あたりの施工面積（㎡）</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>100</td><td>0.03834</td><td>3.83</td><td>26.09</td></tr>
+      <tr><td>200</td><td>0.03768</td><td>3.77</td><td>26.53</td></tr>
+      <tr><td>300</td><td>0.03702</td><td>3.70</td><td>27.01</td></tr>
+      <tr><td>400</td><td>0.03636</td><td>3.64</td><td>27.51</td></tr>
+      <tr><td>500</td><td>0.03580</td><td>3.58</td><td>27.93</td></tr>
+      <tr><td>600</td><td>0.03514</td><td>3.51</td><td>28.45</td></tr>
+      <tr><td>700</td><td>0.03448</td><td>3.45</td><td>29.00</td></tr>
+      <tr><td>800</td><td>0.03382</td><td>3.38</td><td>29.57</td></tr>
+      <tr><td>900</td><td>0.03316</td><td>3.32</td><td>30.16</td></tr>
+      <tr><td>1000</td><td>0.03250</td><td>3.25</td><td>30.77</td></tr>
+    </tbody>
+  </table>
+
+  <h2>4. 補足</h2>
+  <ul>
+    <li>上記は仮設工事の「施工効率」を基にした理論値です。</li>
+    <li>現場条件・人員構成・地形によって実際の効率は異なります。</li>
+    <li>この表は積算・見積の参考値としてください。</li>
+  </ul>
+
+</body>
+</html>
