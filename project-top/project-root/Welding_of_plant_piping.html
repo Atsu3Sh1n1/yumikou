@@ -222,7 +222,7 @@
       animation: fadeInUp 6s forwards;
       animation-delay: 5.5s;
       transition: background-color 0.3s ease;
-      
+
       box-shadow:
         0 0 10px rgba(235, 167, 216, 0.6),
         0 0 20px rgba(96, 235, 223, 0.5),
@@ -265,13 +265,22 @@
         background-position: 100% 50%;
       }
     }
+
+    .fixed-height {
+      min-height: 3em;
+      /* 行数に応じて調整（1行1em想定なら3em） */
+      line-height: 1.5em;
+      white-space: pre-line;
+    }
   </style>
 </head>
 
 <body>
 
-  <h2 id="typing-text" style="color: #333; margin-top: 15px; font-size: 2rem; text-align: center; line-height: 2.5em;">
+  <h2 id="typing-text"
+    style="color: #333; margin-top: 15px; font-size: 2rem; text-align: center; line-height: 2.5em; min-height: 7.5em;">
   </h2>
+
   <div style="
   font-family: Arial, sans-serif;
   line-height: 2.2rem;
