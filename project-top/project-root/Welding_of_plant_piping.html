@@ -240,12 +240,24 @@
     .button-text {
       position: relative;
       z-index: 1;
+
+      background: linear-gradient(270deg,
+          red, orange, yellow, green, cyan, blue, violet, red);
+      background-size: 200% 200%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+
+      animation: rainbowText 5s linear infinite alternate;
+      /* ↑ これでリターン動作に！ */
     }
 
-    @keyframes fadeInUp {
-      to {
-        opacity: 1;
-        transform: translateY(0);
+    @keyframes rainbowText {
+      0% {
+        background-position: 0% 50%;
+      }
+
+      100% {
+        background-position: 100% 50%;
       }
     }
   </style>
@@ -283,7 +295,7 @@
 
   <br><br><br><br><br><br><br><br><br>
 
-   <div style="text-align: center;">*調整中*</div><br><br>
+  <div style="text-align: center;">*調整中*</div><br><br>
   </div>
   <div class="manual-header" style="text-align: center; margin-top: 50px;">
     <a href="manual.html" style="
