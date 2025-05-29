@@ -5,28 +5,14 @@
     <meta charset="UTF-8">
     <title>作業日報フォーム</title>
     <style>
+        * {
+            box-sizing: border-box;
+        }
+
         body {
             font-family: "Yu Gothic", "Meiryo", sans-serif;
             margin: 40px;
             font-size: 12pt;
-        }
-
-        body::before {
-            content: "";
-            position: fixed;
-            top: -4%;
-            left: -60%;
-            width: 180vw;
-            height: 180vh;
-            background-image: url('yumikou.png');
-            background-repeat: repeat;
-            background-size: 200px 100px;
-            opacity: 0.03;
-            transform: rotate(-10deg);
-            transform-origin: center;
-            z-index: -1;
-            pointer-events: none;
-            background-attachment: fixed;
         }
 
         h1,
@@ -44,40 +30,36 @@
         td {
             border: 1px solid #333;
             padding: 6px;
+            vertical-align: top;
         }
 
         th {
+            background-color: #f0f0f0;
             text-align: left;
             width: 25%;
         }
 
-        textarea,
         input[type="text"],
         input[type="date"],
-        input[type="time"] {
-            width: 98%;
+        textarea {
+            width: 100%;
             font-size: 11pt;
         }
 
+        textarea {
+            resize: vertical;
+        }
+
         .section-title {
+            background-color: #ddd;
             font-weight: bold;
             padding: 4px;
             margin-top: 20px;
         }
 
-        .photo {
-            margin-top: 10px;
-        }
-
-        .footer {
-            text-align: right;
-            font-size: 10pt;
-            margin-top: 40px;
-        }
-
         .btn {
             display: inline-block;
-            padding: 8px 16px;
+            padding: 6px 12px;
             background: #007acc;
             color: white;
             border: none;
@@ -89,6 +71,20 @@
 
         .btn:hover {
             background: #005f99;
+        }
+
+        .footer {
+            text-align: right;
+            font-size: 10pt;
+            margin-top: 40px;
+        }
+
+        .worker-input {
+            width: 100%;
+        }
+
+        .worker-task {
+            width: 100%;
         }
 
         .footer {
@@ -110,6 +106,11 @@
         <div class="footer">
             <a href="https://atsu3sh1n1.github.io/yumikou/" target="_blank">Created by YUMIKOU Inc.</a>
         </div>
+        <div class="footer">
+            <label>提出先：<input type="text" name="receiver" style="width: 300px;"></label> <label>　作成者：<input type="text" name="author" style="width: 200px;"></label><br>
+           
+        </div>
+
 
         <table>
             <tr>
@@ -131,7 +132,7 @@
         </table>
 
         <div class="section-title">1. 作業内容</div>
-        <textarea rows="4" name="work_content"></textarea>
+        <textarea rows="5" name="work_content"></textarea>
 
         <div class="section-title">2. 進捗状況</div>
         <textarea rows="4" name="progress"></textarea>
@@ -142,15 +143,15 @@
         <div class="section-title">4. 作業写真・重機使用時間</div>
         <table>
             <tr>
-                <th>作業写真（URL or ファイル名）</th>
-                <td><input type="text" name="photo1" placeholder="photo1.jpg"></td>
+                <th>作業写真1</th>
+                <td><input type="text" name="photo1" placeholder="photo1.jpg or URL"></td>
             </tr>
             <tr>
-                <th>作業写真（URL or ファイル名）</th>
-                <td><input type="text" name="photo2" placeholder="photo2.jpg"></td>
+                <th>作業写真2</th>
+                <td><input type="text" name="photo2" placeholder="photo2.jpg or URL"></td>
             </tr>
             <tr>
-                <th>重機使用時間（例: クレーン）</th>
+                <th>重機使用時間</th>
                 <td><input type="text" name="machine_hours" placeholder="例：10:00〜14:30（クレーン）"></td>
             </tr>
         </table>
@@ -159,36 +160,36 @@
         <table id="workerTable">
             <thead>
                 <tr>
-                    <th>氏名</th>
-                    <th>所属</th>
-                    <th>作業内容</th>
-                    <th>操作</th>
+                    <th style="width: 25%;">氏名</th>
+                    <th style="width: 25%;">所属</th>
+                    <th style="width: 45%;">作業内容</th>
+                    <th style="width: 5%;"></th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td><input type="text" name="name[]"></td>
-                    <td><input type="text" name="company[]"></td>
-                    <td><input type="text" name="task[]"></td>
-                    <td><button type="button" class="btn" onclick="removeRow(this)">削除</button></td>
+                    <td><input type="text" name="name[]" class="worker-input"></td>
+                    <td><input type="text" name="company[]" class="worker-input"></td>
+                    <td><input type="text" name="task[]" class="worker-task"></td>
+                    <td><button type="button" class="btn" onclick="removeRow(this)">✕</button></td>
                 </tr>
                 <tr>
-                    <td><input type="text" name="name[]"></td>
-                    <td><input type="text" name="company[]"></td>
-                    <td><input type="text" name="task[]"></td>
-                    <td><button type="button" class="btn" onclick="removeRow(this)">削除</button></td>
+                    <td><input type="text" name="name[]" class="worker-input"></td>
+                    <td><input type="text" name="company[]" class="worker-input"></td>
+                    <td><input type="text" name="task[]" class="worker-task"></td>
+                    <td><button type="button" class="btn" onclick="removeRow(this)">✕</button></td>
                 </tr>
                 <tr>
-                    <td><input type="text" name="name[]"></td>
-                    <td><input type="text" name="company[]"></td>
-                    <td><input type="text" name="task[]"></td>
-                    <td><button type="button" class="btn" onclick="removeRow(this)">削除</button></td>
+                    <td><input type="text" name="name[]" class="worker-input"></td>
+                    <td><input type="text" name="company[]" class="worker-input"></td>
+                    <td><input type="text" name="task[]" class="worker-task"></td>
+                    <td><button type="button" class="btn" onclick="removeRow(this)">✕</button></td>
                 </tr>
             </tbody>
         </table>
         <button type="button" class="btn" onclick="addWorker()">＋ 作業者を追加</button>
 
-
+        
 
         <div style="text-align: center;">
             <button type="button" class="btn" onclick="window.print()">PDF出力</button>
@@ -201,10 +202,10 @@
             const table = document.getElementById("workerTable").getElementsByTagName("tbody")[0];
             const newRow = table.insertRow();
             newRow.innerHTML = `
-        <td><input type="text" name="name[]"></td>
-        <td><input type="text" name="company[]"></td>
-        <td><input type="text" name="task[]"></td>
-        <td><button type="button" class="btn" onclick="removeRow(this)">削除</button></td>
+        <td><input type="text" name="name[]" class="worker-input"></td>
+        <td><input type="text" name="company[]" class="worker-input"></td>
+        <td><input type="text" name="task[]" class="worker-task"></td>
+        <td><button type="button" class="btn" onclick="removeRow(this)">✕</button></td>
       `;
         }
 
