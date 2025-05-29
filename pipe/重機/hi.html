@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>レッカー・高所作業車 入力</title>
+    <style>
+        :root {
+
+            --text-color: #333;
+            --accent: #2c7be5;
+            --font: 'Noto Sans JP', sans-serif;
+        }
+
+        html,
+        body {
+            margin: 10px;
+            padding: 10px;
+            height: auto;
+            overflow: hidden;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            font-family: var(--font);
+            color: var(--text-color);
+        }
+
+        .center-box {
+            width: 100%;
+            max-width: 320px;
+            margin: 2rem auto;
+            background-color: var(--card-color);
+            padding: 1rem;
+        }
+
+        h2 {
+            text-align: center;
+            color: var(--accent);
+            margin-bottom: 1rem;
+        }
+
+        /* 2列固定のグリッド */
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem 2rem;
+            justify-content: center;
+        }
+
+        /* 各アイテム */
+        .item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.1rem;
+            
+        }
+
+        /* ラベルの幅を固定し、入力欄を縦に揃える */
+        .item label {
+            width: 60px;
+            white-space: nowrap;
+        }
+
+        .item input {
+            width: 80px;
+            font-size: 1.1rem;
+            padding: 0.3rem;
+            text-align: right;
+
+        }
+
+        .total {
+            text-align: center;
+            margin-top: 1.5rem;
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #2e7d32;
+        }
+
+        .footer {
+            text-align: center;
+            font-size: 11px;
+            margin-top: -30px;
+            padding: 25px;
+        }
+
+        /* スマホでも2列固定 */
+        @media (max-width: 400px) {
+            .center-box {
+                width: 100%;
+            }
+
+            .item label {
+                width: 50px;
+                font-size: 1rem;
+                
+            }
+
+            .item input {
+                width: 60px;
+                font-size: 1rem;
+                
+
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="center-box">
+        <h2>レッカー・高所作業車</h2>
+        <div class="footer">
+            <a href="https://atsu3sh1n1.github.io/yumikou/" target="_blank">Created by YUMIKOU Inc.</a>
+        </div>
+
+        <div class="form-grid">
+            <div class="item"><label>10t</label><input type="number" pattern="[0-9]*" min="0" placeholder="0"
+                    data-unit="65000" onchange="calc()" /></div>
+            <div class="item"><label>25t</label><input type="number" pattern="[0-9]*" min="0" placeholder="0"
+                    data-unit="90000" onchange="calc()" /></div>
+            <div class="item"><label>50t</label><input type="number" pattern="[0-9]*" min="0" placeholder="0"
+                    data-unit="130000" onchange="calc()" /></div>
+            <div class="item"><label>100t</label><input type="number" pattern="[0-9]*" min="0" placeholder="0"
+                    data-unit="250000" onchange="calc()" /></div>
+            <div class="item"><label>高車8</label><input type="number" pattern="[0-9]*" min="0" placeholder="0"
+                    data-unit="15000" onchange="calc()" /></div>
+            <div class="item"><label>高車17</label><input type="number" pattern="[0-9]*" min="0" placeholder="0"
+                    data-unit="35000" onchange="calc()" /></div>
+            <div class="item"><label>高車20</label><input type="number" pattern="[0-9]*" min="0" placeholder="0"
+                    data-unit="30000" onchange="calc()" /></div>
+            <div class="item"><label>高車27</label><input type="number" pattern="[0-9]*" min="0" placeholder="0"
+                    data-unit="50000" onchange="calc()" /></div>
+            <div class="item"><label>オペ</label><input type="number" pattern="[0-9]*" min="0" placeholder="0"
+                    data-unit="15000" onchange="calc()" /></div>
+            <div class="item"><label>回送</label><input type="number" pattern="[0-9]*" min="0" placeholder="0"
+                    data-unit="40000" onchange="calc()" /></div>
+            *数量＝日数/回数
+        </div>
+
+        <div class="item" style="margin-top: 1rem; justify-content: center;">
+            管理費%
+            <input type="number" id="overheadRate" min="0" pattern="[0-9]*" max="100" value="10" onchange="calc()" style="width: 45px;" />
+        </div>
+
+        <div class="total">
+            小計(税抜き): <span id="total">0</span> 円
+        </div>
+
+    </div>
+
+    <script>
+        function calc() {
+            let total = 0;
+            const inputs = document.querySelectorAll('input[type="number"][data-unit]');
+            inputs.forEach(input => {
+                const unit = parseInt(input.dataset.unit);
+                const val = parseInt(input.value) || 0;
+                total += unit * val;
+            });
+
+            const overheadInput = document.getElementById('overheadRate');
+            const overheadRate = parseFloat(overheadInput?.value || 0);
+            const totalWithOverhead = Math.round(total * (1 + overheadRate / 100));
+
+            // 管理費込み合計を1つの合計表示に反映
+            document.getElementById('total').textContent = totalWithOverhead.toLocaleString();
+
+            // 親ページに管理費込み合計を送信
+            if (window.parent && window.parent !== window) {
+                window.parent.postMessage({ type: 'reckerTotal', total: totalWithOverhead }, '*');
+            }
+        }
+
+        function getEstimateData() {
+            let subtotal = 0;
+            const inputs = document.querySelectorAll('input[type="number"][data-unit]');
+            inputs.forEach(input => {
+                const unit = parseInt(input.dataset.unit);
+                const val = parseInt(input.value) || 0;
+                subtotal += unit * val;
+            });
+
+            const overheadRate = parseFloat(document.getElementById('overheadRate')?.value || 0);
+            const subtotalWithOverhead = Math.round(subtotal * (1 + overheadRate / 100));
+
+            const roundedSubtotal = subtotalWithOverhead < 1000 ? subtotalWithOverhead : Math.floor(subtotalWithOverhead / 1000) * 1000;
+            const tax = Math.floor(roundedSubtotal * 0.1);
+            const totalWithTax = subtotalWithOverhead + tax;
+
+            return {
+                subtotal: subtotalWithOverhead,
+                totalWithTax: totalWithTax,
+                manhour: null
+            };
+        }
+
+        calc();
+        window.getEstimateData = getEstimateData;
+    </script>
+</body>
+
+</html>
