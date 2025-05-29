@@ -272,6 +272,39 @@
       line-height: 1.5em;
       white-space: pre-line;
     }
+
+     .sparkle-button { 
+      position: relative;
+      padding: 15px 30px;
+      font-size: 18px;
+      color: white;
+      background: linear-gradient(135deg, #16eefa, #b8e3e6, #20d7e0,);
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      overflow: hidden;
+    }
+
+    .sparkle-button::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.8) 0%, transparent 120%);
+      animation: sparkle 2s infinite linear;
+    }
+
+    @keyframes sparkle {
+      0% {
+        transform: translate(-2000%, 2000%) rotate(0deg);
+      }
+
+      100% {
+        transform: translate(2000%, -2000%) rotate(0deg);
+      }
+    }
   </style>
 </head>
 
@@ -320,7 +353,7 @@
   0 8px 12px rgba(0, 0, 0, 0.4),    /* 浮き影 */
   0 0 8px rgba(255, 255, 255, 0.1); /* 微発光 */
 
-    background: linear-gradient(135deg,  #33f8ff,#6afff8, #3eecff);
+    background: linear-gradient(130deg, #00f0ff, #ff00ff, #ffcc00);
     color: white;
     text-decoration: none;
     border-radius: 50px;
