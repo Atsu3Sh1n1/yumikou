@@ -334,7 +334,7 @@
                 message: "これはテスト送信です。内容はここに入ります。"
             };
 
-            emailjs.send("service_w62u2ko", "YOUR_TEMPLATE_ID", templateParams)
+            emailjs.send("service_w62u2ko", "template_a78gn8x", templateParams)
                 .then(() => alert("送信成功！"))
                 .catch(err => alert("送信失敗：" + JSON.stringify(err)));
         }
