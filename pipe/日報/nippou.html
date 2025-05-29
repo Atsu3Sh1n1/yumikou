@@ -49,7 +49,6 @@
         }
 
         .person-block {
-            background: white;
             border-radius: 8px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
             margin-bottom: 2em;
@@ -110,20 +109,32 @@
             padding: 0.3em 0.6em;
             cursor: pointer;
         }
+         .footer {
+            text-align: center;
+            font-size: 14px;
+            margin-bottom: -10px;
+            margin-top: -20px;
+            padding: 0.8rem;
+        }
+        
     </style>
 </head>
 
 <body>
-    <h1>日報/有限会社弓工</h1>
+    <h1>日報</h1>
 
     <div class="control-bar">
-        <label>年：
+        <label>
             <select id="yearSelect"></select>
         </label>
-        <label>月：
+        <label>
             <select id="monthSelect"></select>
         </label>
         <button id="addPersonBtn">＋人追加</button>
+    </div>
+
+    <div class="footer">
+        <a href="https://atsu3sh1n1.github.io/yumikou/" target="_blank">Created by YUMIKOU Inc.</a>
     </div>
 
     <div id="formContainer"></div>
