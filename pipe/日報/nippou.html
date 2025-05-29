@@ -3,13 +3,12 @@
 
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>建設業 1か月分 日報入力フォーム</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>日報</title>
     <style>
         body {
-            font-family: 'Arial', sans-serif;
-            margin: 1em;
-            background: #f5f7fa;
+            font-family: sans-serif;
+            padding: 1em;
         }
 
         h1 {
@@ -17,448 +16,295 @@
             margin-bottom: 1em;
         }
 
-        /* 固定入力欄 */
-        #fixed-info {
-            background: #fff;
-            padding: 1em;
+        body::before {
+            content: "";
+            position: fixed;
+            top: -4%;
+            left: -60%;
+            width: 180vw;
+            height: 180vh;
+            background-image: url('yumikou.png');
+            background-repeat: repeat;
+            background-size: 200px 100px;
+            opacity: 0.03;
+            transform: rotate(-10deg);
+            transform-origin: center;
+            z-index: -1;
+            pointer-events: none;
+            background-attachment: fixed;
+        }
+
+        .control-bar {
+            display: flex;
+            gap: 1em;
+            align-items: center;
             margin-bottom: 1em;
-            border-radius: 6px;
-            box-shadow: 0 0 8px #ccc;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
+            flex-wrap: wrap;
         }
 
-        #fixed-info label {
-            font-weight: bold;
-        }
-
-        #fixed-info input,
-        #fixed-info select {
-            width: 100%;
-            padding: 0.5em;
-            margin-top: 0.3em;
-            margin-bottom: 1em;
-            font-size: 1em;
-            box-sizing: border-box;
-        }
-
+        select,
         button {
-            background-color: #2d89ef;
-            border: none;
-            padding: 0.7em 1.5em;
-            color: white;
+            padding: 0.5em;
             font-size: 1em;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-
-        button:hover {
-            background-color: #1b66c9;
-        }
-
-        /* 横スクロールコンテナ */
-        .reports-container {
-            overflow-x: auto;
-            white-space: nowrap;
-            padding-bottom: 1em;
-        }
-
-        /* 1日分のフォーム */
-        .day-report {
-            display: inline-block;
-            vertical-align: top;
-            background: white;
-            border-radius: 6px;
-            box-shadow: 0 0 6px #ccc;
-            padding: 1em;
-            margin-right: 1em;
-            width: 280px;
-            box-sizing: border-box;
-        }
-
-        .day-report h3 {
-            text-align: center;
-            margin-top: 0;
-        }
-
-        .day-report label {
-            font-weight: bold;
-            display: block;
-            margin-top: 0.7em;
-            margin-bottom: 0.3em;
-        }
-
-        .day-report input[type="text"],
-        .day-report select,
-        .day-report textarea {
-            width: 100%;
-            padding: 0.4em;
-            font-size: 0.95em;
-            border-radius: 4px;
-            border: 1px solid #ccc;
-            box-sizing: border-box;
-        }
-
-        .day-report textarea {
-            height: 60px;
-            resize: vertical;
-        }
-
-        /* 複数人フォーム */
-        #people-container {
-            margin-top: 2em;
-            max-width: 98vw;
         }
 
         .person-block {
-            background: #e9f0ff;
-            padding: 1em;
+            background: white;
             border-radius: 8px;
-            margin-bottom: 1.5em;
-            box-shadow: 0 0 8px #a0b9ff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2em;
+            padding: 1em;
         }
 
         .person-header {
             font-weight: bold;
-            font-size: 1.1em;
-            margin-bottom: 0.7em;
+            margin-bottom: 0.5em;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        /* 追加ボタン */
-        #add-person-btn {
-            display: block;
-            margin: 2em auto;
+        .reports-container {
+            overflow-x: auto;
+            display: flex;
+            gap: 0.5em;
         }
 
-        /* 年月選択ラベル横並び */
-        #year-month-selectors {
+        .day-form {
+            border: 1px solid #ccc;
+            padding: 0.5em;
+            border-radius: 4px;
+            min-width: 160px;
+            background: #fafafa;
+            flex-shrink: 0;
+        }
+
+        .day-form h4 {
+            margin: 0 0 0.5em 0;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        select {
+            width: 100%;
+            box-sizing: border-box;
+            margin-bottom: 0.5em;
+        }
+
+        .inline {
+            display: inline-block;
+            width: 48%;
+        }
+
+        .name-site-inputs {
             display: flex;
             gap: 1em;
-            max-width: 600px;
-            margin: 0 auto 1em auto;
+            margin-bottom: 0.5em;
         }
 
-        #year-month-selectors label {
-            flex: 1 1 50%;
-            font-weight: bold;
-        }
-
-        #year-month-selectors select {
-            width: 100%;
+        .delete-btn {
+            background: #e55353;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 0.3em 0.6em;
+            cursor: pointer;
         }
     </style>
 </head>
 
 <body>
+    <h1>日報/有限会社弓工</h1>
 
-    <h1>建設業 1か月分 日報入力フォーム</h1>
-
-    <div id="fixed-info">
-        <label for="fixed-name">氏名（端末に固定）</label>
-        <input type="text" id="fixed-name" placeholder="例：山田 太郎" />
-        <label for="fixed-site">現場名（端末に固定）</label>
-        <input type="text" id="fixed-site" placeholder="例：○○ビル新築工事" />
-
-        <div id="year-month-selectors">
-            <label for="year-select">年
-                <select id="year-select"></select>
-            </label>
-            <label for="month-select">月
-                <select id="month-select"></select>
-            </label>
-        </div>
-
-        <button id="save-fixed-btn">名前・現場名・年月を保存</button>
+    <div class="control-bar">
+        <label>年：
+            <select id="yearSelect"></select>
+        </label>
+        <label>月：
+            <select id="monthSelect"></select>
+        </label>
+        <button id="addPersonBtn">＋人追加</button>
     </div>
 
-    <div id="people-container"></div>
-
-    <button id="add-person-btn">＋人追加</button>
-
+    <div id="formContainer"></div>
     <script>
-        // 1. 定数とキー設定
-        const STORAGE_KEY = "kensetsu_monthly_report";
+        const yearSelect = document.getElementById('yearSelect');
+        const monthSelect = document.getElementById('monthSelect');
+        const formContainer = document.getElementById('formContainer');
+        const addPersonBtn = document.getElementById('addPersonBtn');
 
-        // 要素取得
-        const fixedNameInput = document.getElementById('fixed-name');
-        const fixedSiteInput = document.getElementById('fixed-site');
-        const yearSelect = document.getElementById('year-select');
-        const monthSelect = document.getElementById('month-select');
-        const saveFixedBtn = document.getElementById('save-fixed-btn');
-        const peopleContainer = document.getElementById('people-container');
-        const addPersonBtn = document.getElementById('add-person-btn');
+        // 初期設定（現在の年月）
+        const now = new Date();
+        const defaultYear = now.getFullYear();
+        const defaultMonth = now.getMonth() + 1;
 
-        // 年月セレクト初期化（2020年～2030年くらいまで）
-        function initYearMonthSelectors() {
-            const currentYear = new Date().getFullYear();
-            for (let y = 2020; y <= 2030; y++) {
-                const opt = document.createElement('option');
-                opt.value = y;
-                opt.textContent = y + "年";
-                yearSelect.appendChild(opt);
-            }
-            yearSelect.value = currentYear;
-
-            for (let m = 1; m <= 12; m++) {
-                const opt = document.createElement('option');
-                opt.value = m;
-                opt.textContent = m + "月";
-                monthSelect.appendChild(opt);
-            }
-            monthSelect.value = new Date().getMonth() + 1;
+        for (let y = defaultYear - 2; y <= defaultYear + 2; y++) {
+            const opt = document.createElement('option');
+            opt.value = y;
+            opt.textContent = y;
+            if (y === defaultYear) opt.selected = true;
+            yearSelect.appendChild(opt);
         }
 
-        // 月の日数を求める関数
+        for (let m = 1; m <= 12; m++) {
+            const opt = document.createElement('option');
+            opt.value = m;
+            opt.textContent = m;
+            if (m === defaultMonth) opt.selected = true;
+            monthSelect.appendChild(opt);
+        }
+
+        // 保存と読み込み
+        function saveData(data) {
+            localStorage.setItem('nippouData', JSON.stringify(data));
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem('nippouData');
+            if (saved) return JSON.parse(saved);
+            return {
+                year: defaultYear,
+                month: defaultMonth,
+                people: []
+            };
+        }
+
+        // 日付数を取得
         function getDaysInMonth(year, month) {
             return new Date(year, month, 0).getDate();
         }
 
-        // 2. 固定情報の保存・読み込み
-        function loadData() {
-            const data = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
-            return data;
-        }
-        function saveData(data) {
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-        }
-
-        function loadFixedInfo() {
-            const data = loadData();
-            if (data.fixed) {
-                fixedNameInput.value = data.fixed.name || "";
-                fixedSiteInput.value = data.fixed.site || "";
-            }
-            if (data.year) {
-                yearSelect.value = data.year;
-            }
-            if (data.month) {
-                monthSelect.value = data.month;
-            }
-        }
-
-        // 3. 日報1日分フォーム作成
-        function createDayForm(dayIndex, savedData = {}) {
-            const day = dayIndex + 1;
+        // 日報1日分フォーム
+        function createDayForm(dayIndex, dayData = {}) {
             const div = document.createElement('div');
-            div.className = 'day-report';
-            div.dataset.day = day;
+            div.className = 'day-form';
+
+            const date = `${dayIndex + 1}日`;
 
             div.innerHTML = `
-      <h3>${day}日</h3>
-      <label>作業内容</label>
-      <textarea rows="3" placeholder="作業内容を入力">${savedData.work || ''}</textarea>
-      <label>残業時間（h）</label>
-      <input type="text" pattern="[0-9]*" inputmode="numeric" placeholder="例: 1.5" value="${savedData.overtime || ''}" />
-      <label>お弁当</label>
-      <select>
-        <option value="">選択してください</option>
-        <option value="〇" ${savedData.bento === '〇' ? 'selected' : ''}>〇</option>
-        <option value="なし" ${savedData.bento === 'なし' ? 'selected' : ''}>なし</option>
-      </select>
+      <h4>${date}</h4>
+      <input type="text" placeholder="作業内容" value="${dayData.work || ''}" class="workInput"><br/>
+      <label>弁当：
+        <select class="bentoSelect">
+          <option value="">-</option>
+          <option value="○" ${dayData.bento === '○' ? 'selected' : ''}>○</option>
+          <option value="なし" ${dayData.bento === 'なし' ? 'selected' : ''}>なし</option>
+        </select>
+      </label><br/>
+      <input type="number" min="0" step="0.1" placeholder="残業(h)" value="${dayData.overtime || ''}" class="overtimeInput">
     `;
             return div;
         }
 
-        // 4. 1人分の日報フォーム作成（横スライド）
-        function createPersonForm(personIndex, savedData = {}, daysCount) {
+        // 1人分のフォーム作成
+        function createPersonForm(personIndex, personData, daysCount) {
             const div = document.createElement('div');
             div.className = 'person-block';
             div.dataset.personIndex = personIndex;
 
-            const fixedName = fixedNameInput.value.trim();
-            const fixedSite = fixedSiteInput.value.trim();
-
-            // ヘッダーに名前・現場名表示
+            // 名前・現場名入力
             const header = document.createElement('div');
             header.className = 'person-header';
-            header.textContent = `氏名: ${fixedName || '(未設定)'}　現場名: ${fixedSite || '(未設定)'}`;
-            // 既存のヘッダー生成コードの直後に追加
 
-            const delBtn = document.createElement('button');
-            delBtn.textContent = "削除";
-            // スタイルやtitleなどの設定
-            delBtn.style.float = "right";
-            delBtn.style.backgroundColor = "#e55353";
-            delBtn.style.border = "none";
-            delBtn.style.color = "white";
-            delBtn.style.padding = "0.3em 0.8em";
-            delBtn.style.borderRadius = "4px";
-            delBtn.style.cursor = "pointer";
-            delBtn.title = "この人の日報を削除";
+            const nameInput = document.createElement('input');
+            nameInput.placeholder = "氏名";
+            nameInput.value = personData.name || '';
+            nameInput.style.marginRight = '1em';
 
-            // 削除処理イベント登録
-            delBtn.addEventListener('click', () => {
-                if (confirm(`この人の日報を削除してもよろしいですか？`)) {
-                    const data = loadData();
-                    if (data.people && data.people.length > personIndex) {
-                        data.people.splice(personIndex, 1);
-                        saveData(data);
-                        refreshPeopleForms();
-                    }
-                }
-            });
+            const siteInput = document.createElement('input');
+            siteInput.placeholder = "現場名";
+            siteInput.value = personData.site || '';
 
-            header.appendChild(delBtn);
+            const deleteBtn = document.createElement('button');
+            deleteBtn.textContent = '削除';
+            deleteBtn.className = 'delete-btn';
+            deleteBtn.onclick = () => {
+                const data = loadData();
+                data.people.splice(personIndex, 1);
+                saveData(data);
+                refreshPeopleForms();
+            };
+
+            header.appendChild(nameInput);
+            header.appendChild(siteInput);
+            header.appendChild(deleteBtn);
             div.appendChild(header);
 
-
-
-
-            // 横スクロール用コンテナ
+            // 日報コンテナ
             const reportsContainer = document.createElement('div');
             reportsContainer.className = 'reports-container';
 
-            // 1日ごとのフォームを作成（その月の日数分）
             for (let i = 0; i < daysCount; i++) {
-                const dayData = (savedData.days && savedData.days[i]) || {};
+                const dayData = personData.days?.[i] || {};
                 const dayForm = createDayForm(i, dayData);
                 reportsContainer.appendChild(dayForm);
             }
+
             div.appendChild(reportsContainer);
+
+            // 入力イベントを保存に反映
+            div.addEventListener('input', () => {
+                const data = loadData();
+                const thisPerson = data.people[personIndex];
+                thisPerson.name = nameInput.value;
+                thisPerson.site = siteInput.value;
+                thisPerson.days = [];
+
+                const dayForms = div.querySelectorAll('.day-form');
+                dayForms.forEach((df, i) => {
+                    const work = df.querySelector('.workInput').value;
+                    const bento = df.querySelector('.bentoSelect').value;
+                    const overtime = df.querySelector('.overtimeInput').value;
+                    thisPerson.days[i] = { work, bento, overtime };
+                });
+
+                saveData(data);
+            });
 
             return div;
         }
 
-        // 5. 全体のフォームを再描画
+        // 全体描画
         function refreshPeopleForms() {
             const data = loadData();
-            if (!data.fixed || !data.fixed.name || !data.fixed.site) {
-                peopleContainer.innerHTML = "<p>名前・現場名を保存してください。</p>";
-                return;
-            }
-            if (!data.year || !data.month) {
-                peopleContainer.innerHTML = "<p>年月を選択して保存してください。</p>";
-                return;
-            }
-            peopleContainer.innerHTML = "";
-
-            const daysCount = getDaysInMonth(data.year, data.month);
-
-            if (data.people && data.people.length > 0) {
-                data.people.forEach((personData, idx) => {
-                    peopleContainer.appendChild(createPersonForm(idx, personData, daysCount));
-                });
-            } else {
-                peopleContainer.appendChild(createPersonForm(0, {}, daysCount));
-            }
-        }
-
-        // 6. 「名前・現場名・年月を保存」ボタン処理
-        saveFixedBtn.addEventListener('click', () => {
-            const name = fixedNameInput.value.trim();
-            const site = fixedSiteInput.value.trim();
+            formContainer.innerHTML = '';
             const year = parseInt(yearSelect.value);
             const month = parseInt(monthSelect.value);
+            const daysCount = getDaysInMonth(year, month);
 
-            if (!name || !site) {
-                alert("氏名と現場名は必須です。");
-                return;
-            }
-            if (!(year > 0 && month >= 1 && month <= 12)) {
-                alert("正しい年月を選択してください。");
-                return;
-            }
-
-            const data = loadData();
-            data.fixed = { name, site };
             data.year = year;
             data.month = month;
 
-            // 年月変わったら日数が変わるのでpeopleの日報も初期化したほうが良いかも
-            if (data.people) {
-                // Optional: 年月変わった場合は日報をリセットする
-                // ここではユーザーに警告出してリセットも選べるようにしてもいい
-                // 今はそのまま残すが、不整合は発生するかも
-            }
-
-            saveData(data);
-            alert("名前・現場名・年月を保存しました。");
-            refreshPeopleForms();
-        });
-
-        // 7. 「＋人追加」ボタン処理
-        addPersonBtn.addEventListener('click', () => {
-            const data = loadData();
-            if (!data.fixed || !data.fixed.name || !data.fixed.site) {
-                alert("まず名前・現場名を保存してください。");
-                return;
-            }
-            if (!data.year || !data.month) {
-                alert("まず年月を保存してください。");
-                return;
-            }
-            if (!data.people) data.people = [];
-            data.people.push({ days: [] });
-            saveData(data);
-            refreshPeopleForms();
-        });
-
-        // 8. 入力内容をlocalStorageに保存する関数
-        function saveAllData() {
-            const data = loadData();
-            if (!data.fixed || !data.fixed.name || !data.fixed.site) return;
-            if (!data.year || !data.month) return;
-
-            data.people = [];
-
-            const personBlocks = peopleContainer.querySelectorAll('.person-block');
-            personBlocks.forEach(personDiv => {
-                const daysData = [];
-                const dayForms = personDiv.querySelectorAll('.day-report');
-                dayForms.forEach(dayDiv => {
-                    const work = dayDiv.querySelector('textarea').value.trim();
-                    const overtime = dayDiv.querySelector('input[type="text"]').value.trim();
-                    const bento = dayDiv.querySelector('select').value;
-
-                    daysData.push({ work, overtime, bento });
-                });
-                data.people.push({ days: daysData });
+            data.people.forEach((person, index) => {
+                const form = createPersonForm(index, person, daysCount);
+                formContainer.appendChild(form);
             });
 
             saveData(data);
         }
 
-        // 9. 入力変更を監視して自動保存
-        peopleContainer.addEventListener('input', () => {
-            saveAllData();
-        });
+        // 年月変更時の処理
+        yearSelect.addEventListener('change', refreshPeopleForms);
+        monthSelect.addEventListener('change', refreshPeopleForms);
 
-        fixedNameInput.addEventListener('input', () => {
-            // 端末固定の名前が変わったらフォームの表示も変える
-            saveAllData();
-            refreshPeopleForms();
-        });
-
-        fixedSiteInput.addEventListener('input', () => {
-            // 端末固定の現場名が変わったらフォームの表示も変える
-            saveAllData();
-            refreshPeopleForms();
-        });
-
-        yearSelect.addEventListener('change', () => {
-            // 年月変更時も保存してフォーム再生成
+        // 人追加ボタン
+        addPersonBtn.addEventListener('click', () => {
             const data = loadData();
-            data.year = parseInt(yearSelect.value);
+            const year = parseInt(yearSelect.value);
+            const month = parseInt(monthSelect.value);
+            const daysCount = getDaysInMonth(year, month);
+            const days = Array.from({ length: daysCount }, () => ({ work: "", bento: "", overtime: "" }));
+            data.people.push({ name: "", site: "", days });
             saveData(data);
             refreshPeopleForms();
         });
 
-        monthSelect.addEventListener('change', () => {
-            const data = loadData();
-            data.month = parseInt(monthSelect.value);
-            saveData(data);
-            refreshPeopleForms();
-        });
-
-        // 10. ページ読み込み時に初期化処理
-        window.addEventListener('load', () => {
-            initYearMonthSelectors();
-            loadFixedInfo();
-            refreshPeopleForms();
-        });
+        // 初期読み込み
+        const saved = loadData();
+        yearSelect.value = saved.year;
+        monthSelect.value = saved.month;
+        refreshPeopleForms();
     </script>
-
 </body>
 
 </html>
