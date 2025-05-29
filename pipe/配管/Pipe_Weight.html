@@ -7,16 +7,22 @@
   <link rel="icon" href="images/icon.webp" type="image/x-icon" />
 
   <style>
+    html,
     body {
-      font-family: sans-serif;
-      margin-top: 20px;
-margin-bottom: 20px;
-      min-height: auto;
+      height: 100%;
+      margin: 60px;
+     
+      /* 余白を含めてサイズ計算 */
+    }
+
+    body {
       display: flex;
       flex-direction: column;
       justify-content: center;
+      /* 垂直センター */
       align-items: center;
-      padding-top: 0px;
+      /* 水平センター */
+      font-family: sans-serif;
     }
 
     .forms-container {
@@ -37,6 +43,7 @@ margin-bottom: 20px;
       border-radius: 8px;
       box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
       position: relative;
+      
     }
 
     h1 {
@@ -68,7 +75,7 @@ margin-bottom: 20px;
       border-radius: 4px;
       box-sizing: border-box;
       transition: border-color 0.2s;
-      
+
     }
 
     select:focus,
@@ -163,6 +170,8 @@ margin-bottom: 20px;
       margin: 20px 0;
       transition: background-color 0.2s;
     }
+
+    
 
     .add-form-btn:hover {
       background: #218838;
