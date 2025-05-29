@@ -100,7 +100,7 @@
           <tr>
             <th>分類</th>
             <th>項目</th>
-            
+
             <th>数量</th>
             <th>金額</th>
           </tr>
@@ -132,7 +132,7 @@
             <td id="price-tig-welder">300</td>
           </tr>
 
-          
+
           <tr>
             <td>Tig用トーチ /月</td>
             <td><input type="number" pattern="[0-9]*" min="0"></td>
@@ -164,7 +164,7 @@
             <td id="price-tig-welder">800</td>
           </tr>
 
-          
+
 
           <tr>
             <td>ベベル加工用機器（開先加工機・やすり）/月</td>
@@ -184,7 +184,7 @@
             <td id="price-tig-welder">1,000</td>
           </tr>
 
-           <tr>
+          <tr>
             <td>ポータブルバンドソー /月</td>
             <td><input type="number" pattern="[0-9]*" min="0"></td>
             <td id="price-tig-welder">1,400</td>
@@ -273,7 +273,7 @@
               ．ワイヤーブラシJ型1本 ¥500<br>
               ．溶接用皮手袋1双組 ¥1,300<br>
               ．自動遮光面・手持ち面・安全面 ¥3,500<br>
-              <td><input type="number" pattern="[0-9]*" min="0"></td>
+            <td><input type="number" pattern="[0-9]*" min="0"></td>
             <td id="price-tig-welder">11,300</td>
           </tr>
 
@@ -287,7 +287,7 @@
               ．ステンレス用ブラシJ型1本 800円<br>
               ．溶接用皮手袋 ¥1,300<br>
               ．自動遮光面・手持ち面・安全面 ¥3,500<br>
-              <td><input type="number" pattern="[0-9]*" min="0"></td>
+            <td><input type="number" pattern="[0-9]*" min="0"></td>
             <td id="price-tig-welder">13,600</td>
           </tr>
 
@@ -356,7 +356,7 @@
             <td id="price-tig-welder">39,000</td>
           </tr>
 
-           <tr>
+          <tr>
             <td>アーク用ホルダー2.5mケーブル付き</td>
             <td><input type="number" pattern="[0-9]*" min="0"></td>
             <td id="price-tig-welder">19,000</td>
@@ -369,7 +369,7 @@
           </tr>
 
 
-        
+
           <tr>
             <td>ディスク砥石・フラップ・切断砥石 *10枚</td>
             <td><input type="number" pattern="[0-9]*" min="0"></td>
@@ -435,8 +435,8 @@
         const tds = row.querySelectorAll("td");
         if (tds.length < 3) return;
 
-        const priceText = tds[tds.length - 2].textContent.trim().replace(/,/g, '');
-        const input = tds[tds.length - 1].querySelector("input");
+        const input = tds[tds.length - 2].querySelector("input");
+        const priceText = tds[tds.length - 1].textContent.trim().replace(/,/g, '');
 
         const price = parseInt(priceText, 10);
         const quantity = parseInt(input?.value || 0, 10);
@@ -448,6 +448,7 @@
 
       document.getElementById("total").textContent = `合計: ${total.toLocaleString()} 円`;
     }
+
 
     // 見積もりデータを取得
     function getEstimateData() {
@@ -472,7 +473,7 @@
 
 
   </script>
-  
+
 </body>
 
 </html>
