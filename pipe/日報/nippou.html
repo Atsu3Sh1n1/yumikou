@@ -3,7 +3,8 @@
 
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
     <title>日報</title>
     <style>
         input,
@@ -359,16 +360,7 @@
     <button onclick="sendEmail()">メール送信 / 有限会社弓工:事務</button>
 
     <script>
-        function sendEmail() {
-            const templateParams = {
-                subject: "テスト日報",
-                message: "これはテスト送信です。内容はここに入ります。"
-            };
-
-            emailjs.send("service_w62u2ko", "template_a78gn8x", templateParams)
-                .then(() => alert("送信成功！"))
-                .catch(err => alert("送信失敗：" + JSON.stringify(err)));
-        }
+       
 
         function sendEmail() {
             const data = loadData(); // 保存されている日報データを取得
