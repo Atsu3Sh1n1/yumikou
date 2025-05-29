@@ -115,6 +115,28 @@
             margin-top: -20px;
             padding: 0.8rem;
         }
+
+        .narrow-input {
+            max-width: 140px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        @media (max-width: 600px) {
+            .person-header {
+                flex-wrap: wrap;
+                gap: 8px;
+            }
+
+            .person-header input {
+                flex: 1 1 auto;
+            }
+
+            .delete-btn {
+                flex-shrink: 0;
+            }
+        }
+    </style>
     </style>
 </head>
 
@@ -220,11 +242,13 @@
             const nameInput = document.createElement('input');
             nameInput.placeholder = "氏名";
             nameInput.value = personData.name || '';
+            nameInput.className = 'narrow-input';  // 👈 追加
             nameInput.style.marginRight = '1em';
 
             const siteInput = document.createElement('input');
             siteInput.placeholder = "現場名";
             siteInput.value = personData.site || '';
+            siteInput.className = 'narrow-input';  // 👈 追加
 
             const deleteBtn = document.createElement('button');
             deleteBtn.textContent = '削除';
@@ -325,7 +349,7 @@
     </script>
 
     <!-- メール送信ボタン -->
-    <button onclick="sendEmail()">メール送信</button>
+    <button onclick="sendEmail()">メール送信/有限会社弓工:事務</button>
 
     <script>
         function sendEmail() {
@@ -338,6 +362,39 @@
                 .then(() => alert("送信成功！"))
                 .catch(err => alert("送信失敗：" + JSON.stringify(err)));
         }
+
+        function sendEmail() {
+            const data = loadData(); // 保存されている日報データを取得
+            const year = data.year;
+            const month = data.month;
+
+            let message = `■ ${year}年${month}月 建設日報\n\n`;
+
+            data.people.forEach((person, i) => {
+                const name = person.name || '(氏名未入力)';
+                const site = person.site || '(現場名未入力)';
+                message += `---- ${i + 1}. ${site} / ${name} ----\n`;
+
+                person.days.forEach((day, d) => {
+                    const work = day.work || '-';
+                    const bento = day.bento || '-';
+                    const overtime = day.overtime || '0';
+                    message += `${d + 1}日: 作業=${work} / 弁当=${bento} / 残業=${overtime}h\n`;
+                });
+
+                message += '\n';
+            });
+
+            const templateParams = {
+                subject: `${year}年${month}月 建設日報`,
+                message: message
+            };
+
+            emailjs.send("service_w62u2ko", "template_a78gn8x", templateParams)
+                .then(() => alert("メール送信成功！"))
+                .catch(err => alert("送信失敗：" + JSON.stringify(err)));
+        }
+
     </script>
 
 </body>
