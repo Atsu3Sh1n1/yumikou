@@ -198,69 +198,61 @@
     }
 
 
-    .cta-button {
-      display: inline-block;
-      margin-top: -20px;
-      padding: 10px 20px;
-      background-color: #02d4df;
-      color: white;
-      text-decoration: none;
-      border-radius: 4px;
-      opacity: 0;
-      transform: translateY(20px);
-      animation: fadeInUp 6s forwards;
-      animation-delay: 5.5s;
-      /* h2のアニメーション後に開始 */
-      text-shadow:
-        0 4px 8px rgba(0, 0, 0, 0.4),
-        /* 浮き影 */
-        0 0 8px rgba(255, 255, 255, 0.1);
-      /* 微発光 */
-
-    }
-
-    .cta-button:hover {
-      background-color: #71ed8a;
-    }
-
     .sparkle-button {
+      margin: 0 auto;
       position: relative;
-      padding: 15px 30px;
+      width: 200px;
+      height: 60px;
       font-size: 18px;
       color: white;
-      background: linear-gradient(135deg, #16eefa, #2ee1ed, #20d7e0);
+      background: linear-gradient(135deg, #16eefa, #20d7e0);
       border: none;
       border-radius: 10px;
       cursor: pointer;
       overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      text-shadow:
+        0 4px 8px rgba(0, 0, 0, 0.4),
+        0 0 8px rgba(255, 255, 255, 0.1);
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeInUp 6s forwards;
+      animation-delay: 5.5s;
+      transition: background-color 0.3s ease;
     }
 
-    .sparkle-button::before {
-      content: '';
+    .sparkle-button:hover {
+      background-color: #71ed8a;
+    }
+
+    .bg-animation {
       position: absolute;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background: radial-gradient(circle, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.05) 50%, transparent 80%);
-      animation: sparkle 2s infinite linear;
-      pointer-events: none;
-      transform: translate(-50%, -50%) scale(1.5);
+      z-index: 0;
     }
 
-    @keyframes sparkle {
-      0% {
-        transform: translate(-150%, 150%) scale(1.5);
-      }
+    .button-text {
+      position: relative;
+      z-index: 1;
+    }
 
-      100% {
-        transform: translate(150%, -150%) scale(1.5);
+    @keyframes fadeInUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
       }
     }
   </style>
 </head>
 
 <body>
+
   <h2 id="typing-text" style="color: #333; margin-top: 26px; font-size: 2rem; text-align: center; line-height: 2.5em;">
   </h2>
   <div style="
@@ -280,10 +272,18 @@
 
 
     <p>見積もりから施工管理まで<br>弓工にお任せください。</p><br>
-    <a href="https://atsu3sh1n1.github.io/yumikou/mitsumori/index.html" class="cta-button sparkle-button">開発中/
-      弓工</a><br><br><br><br><br><br><br><br><br>
+    <div class="button-wrapper">
+      <a href="https://atsu3sh1n1.github.io/yumikou/mitsumori/index.html" class="sparkle-button cta-button">
+        <canvas class="bg-animation"></canvas>
+        <span class="button-text">開発中 / 弓工</span>
+      </a>
+    </div>
 
-    *調整中*<br><br>
+  </div>
+
+  <br><br><br><br><br><br><br><br><br>
+
+  *調整中*<br><br>
   </div>
   <div class="manual-header" style="text-align: center; margin-top: 50px;">
     <a href="manual.html" style="
@@ -333,8 +333,74 @@
   </footer>
 
 
+  <script>
+    const canvas = document.querySelector('.bg-animation');
+    const ctx = canvas.getContext('2d');
+
+    let particles = [];
+    const particleCount = 20;
+    const maxDist = 100;
+
+    canvas.width = canvas.offsetWidth;
+    canvas.height = canvas.offsetHeight;
+
+    for (let i = 0; i < particleCount; i++) {
+      particles.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        vx: (Math.random() - 0.5) * 1.5,
+        vy: (Math.random() - 0.5) * 1.5
+      });
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // 点を描画
+      for (let i = 0; i < particleCount; i++) {
+        const p = particles[i];
+        p.x += p.vx;
+        p.y += p.vy;
+
+        // 壁に当たったら反転
+        if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
+        if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, 2, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
+        ctx.fill();
+      }
+
+      // 線を描画
+      for (let i = 0; i < particleCount; i++) {
+        for (let j = i + 1; j < particleCount; j++) {
+          const a = particles[i];
+          const b = particles[j];
+          const dx = a.x - b.x;
+          const dy = a.y - b.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+
+          if (dist < maxDist) {
+            ctx.beginPath();
+            ctx.moveTo(a.x, a.y);
+            ctx.lineTo(b.x, b.y);
+            ctx.strokeStyle = `rgba(255, 255, 255, ${1 - dist / maxDist})`;
+            ctx.lineWidth = 1;
+            ctx.stroke();
+          }
+        }
+      }
+
+      requestAnimationFrame(animate);
+    }
+
+    animate();
+  </script>
 
   <script>
+
+
 
     const lines = [
       "毎回の見積もり作業",
