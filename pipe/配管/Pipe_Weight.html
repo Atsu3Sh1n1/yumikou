@@ -10,13 +10,15 @@
     html,
     body {
       height: 100%;
-      margin: 60px;
-     
+     display: flex;
+     width: 100%;
+     margin-top: 100px;
+     margin-bottom: 100px;
       /* 余白を含めてサイズ計算 */
     }
 
     body {
-      display: flex;
+      
       flex-direction: column;
       justify-content: center;
       /* 垂直センター */
@@ -43,7 +45,6 @@
       border-radius: 8px;
       box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
       position: relative;
-      
     }
 
     h1 {
@@ -170,8 +171,6 @@
       margin: 20px 0;
       transition: background-color 0.2s;
     }
-
-    
 
     .add-form-btn:hover {
       background: #218838;
