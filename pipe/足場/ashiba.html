@@ -378,13 +378,13 @@
 
                 <div class="sub-value">(0.00㎡/人工)</div>
             </div>
-            <div id="totalCost" class="main-value">原価小計: 0 円</div>
+
 
 
             <div id="manpowerCalc">
                 <div class="main-value">工数: 0.00 人日</div>
             </div>
-
+            <div id="totalCost" class="main-value">原価小計: 0 円</div>
             <div class="expense-label">諸経費(利益含む) <span id="displayOverhead">0</span> %</div>
 
 
@@ -417,7 +417,7 @@
 
 
         <div class="footnote">
-            ※ 諸経費は小計に加算されます。<br>
+            ※ 諸経費は原価小計に加算されます。<br>
             ※ 補正係数は全て歩掛へ差し引かれます。<br>
             <hr>
             ※ 足場施工費算出機(マコトくん)は、国土交通省「 <a href="https://www.mlit.go.jp/gobuild/content/001733127.pdf" target="_blank">
@@ -666,7 +666,8 @@
                 const manpower = calculateManpower(area, height, safetyFactor, conditionFactor);
 
                 const totalCost = manpower * laborCost;
-                const unitCost = totalCost / (area * height);
+                const unitCost = totalCost / (area * (height > 0 ? height : 1));
+
 
                 const sellingPrice = calculateSellingPrice(totalCost);
                 const taxRate = 0.10; // 消費税率10%
