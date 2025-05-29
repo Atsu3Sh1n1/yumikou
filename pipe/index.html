@@ -16,14 +16,16 @@
     }
 
     .text-group {
-      display: flex;
-      flex-direction: column;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      /* 2列に分ける */
       gap: 40px;
-      align-items: center;
+      justify-items: center;
+      /* 子要素を中央寄せ */
     }
 
     .text-link span {
-      font-size: 3.2em;
+      font-size: 2.6em;
       font-weight: bold;
       display: inline-block;
       background: linear-gradient(90deg, #00f0ff, #ff00ff, #ffcc00);
