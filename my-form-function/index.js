@@ -15,8 +15,10 @@ exports.submitForm = async (req, res) => {
     const data = req.body;
 
     const auth = new google.auth.GoogleAuth({
+      keyFile: 'service-account-key.json',  // ← ここにローカルパス指定
       scopes: ['https://www.googleapis.com/auth/spreadsheets'],
     });
+
     const client = await auth.getClient();
     const sheets = google.sheets({ version: 'v4', auth: client });
 
