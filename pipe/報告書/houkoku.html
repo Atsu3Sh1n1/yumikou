@@ -109,6 +109,37 @@
             margin-top: -30px;
             padding: 25px;
         }
+
+        input[type="text"],
+        input[type="date"],
+        input[type="number"],
+        textarea {
+            width: 100%;
+            font-size: 11pt;
+            border: none;
+            /* ← 追加：ボーダーを消して二重線防止 */
+            padding: 4px;
+            /* ← 追加：見た目の余白を整える */
+            background-color: transparent;
+            /* ← 追加：枠内に自然に見える */
+            box-sizing: border-box;
+        }
+
+        input:focus,
+        textarea:focus {
+            outline: none;
+            /* ← 不要なフォーカス枠も非表示に */
+        }
+
+        textarea {
+            background-color: #dffdff;
+            /* 明るいグレーっぽい白。完全な白(#fff)でもOK */
+            border: none;
+            padding: 6px;
+            font-size: 11pt;
+            resize: vertical;
+            box-sizing: border-box;
+        }
     </style>
 </head>
 
@@ -205,25 +236,25 @@
             </thead>
             <tbody>
                 <tr>
-                    <td><input type="text" name="role1"
+                    <td><input type="number" name="role1"
                             style="width: 90%; text-align: center; vertical-align: middle; padding: 5px;"></td>
-                    <td><input type="text" name="role2"
+                    <td><input type="number" name="role2"
                             style="width: 90%; text-align: center; vertical-align: middle; padding: 5px;"></td>
-                    <td><input type="text" name="role3"
+                    <td><input type="number" name="role3"
                             style="width: 90%; text-align: center; vertical-align: middle; padding: 5px;"></td>
-                    <td><input type="text" name="role4"
+                    <td><input type="number" name="role4"
                             style="width: 90%; text-align: center; vertical-align: middle; padding: 5px;"></td>
-                    <td><input type="text" name="role5"
+                    <td><input type="number" name="role5"
                             style="width: 90%; text-align: center; vertical-align: middle; padding: 5px;"></td>
-                    <td><input type="text" name="role6"
+                    <td><input type="number" name="role6"
                             style="width: 90%; text-align: center; vertical-align: middle; padding: 5px;"></td>
-                    <td><input type="text" name="role7"
+                    <td><input type="number" name="role7"
                             style="width: 90%; text-align: center; vertical-align: middle; padding: 5px;"></td>
-                    <td><input type="text" name="role8"
+                    <td><input type="number" name="role8"
                             style="width: 90%; text-align: center; vertical-align: middle; padding: 5px;"></td>
-                    <td><input type="text" name="role9"
+                    <td><input type="number" name="role9"
                             style="width: 90%; text-align: center; vertical-align: middle; padding: 5px;"></td>
-                    <td><input type="text" name="role10"
+                    <td><input type="number" name="role10"
                             style="width: 90%; text-align: center; vertical-align: middle; padding: 5px;"></td>
                 </tr>
             </tbody>
