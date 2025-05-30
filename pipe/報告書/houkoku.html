@@ -161,18 +161,19 @@
             vertical-align: middle;
             padding: 0;
         }
-        #workerTable th:last-child,
-#workerTable td:last-child {
-    border: none;
-    text-align: center;
-    vertical-align: middle;
-    padding: 0;
-}
-#workerTable td:last-child .btn {
-    padding: 4px 8px;
-    line-height: 1;
-}
 
+        #workerTable th:last-child,
+        #workerTable td:last-child {
+            border: none;
+            text-align: center;
+            vertical-align: middle;
+            padding: 0;
+        }
+
+        #workerTable td:last-child .btn {
+            padding: 4px 8px;
+            line-height: 1;
+        }
     </style>
 </head>
 
@@ -212,7 +213,7 @@
             </tr>
         </table>
 
-                <div class="section-title">1. 本日の作業人数</div>
+        <div class="section-title">1. 本日の作業人数</div>
         <table
             style="width: 100%; border-collapse: collapse; margin-bottom: 20px; table-layout: fixed; text-align: center;">
             <colgroup>
@@ -384,6 +385,70 @@
             const row = button.parentElement.parentElement;
             row.remove();
         }
+
+
+        const form = document.getElementById("reportForm");
+
+        // 保存関数
+        function saveFormData() {
+            const formData = new FormData(form);
+            const entries = {};
+
+            // 通常のフィールドを保存
+            for (const [key, value] of formData.entries()) {
+                if (!entries[key]) {
+                    entries[key] = value;
+                } else {
+                    // 配列の対応（例：name[]）
+                    if (!Array.isArray(entries[key])) {
+                        entries[key] = [entries[key]];
+                    }
+                    entries[key].push(value);
+                }
+            }
+
+            localStorage.setItem("dailyReportData", JSON.stringify(entries));
+        }
+
+        // 復元関数
+        function restoreFormData() {
+            const savedData = localStorage.getItem("dailyReportData");
+            if (!savedData) return;
+
+            const data = JSON.parse(savedData);
+
+            for (const key in data) {
+                const elements = form.elements[key];
+                if (!elements) continue;
+
+                if (Array.isArray(data[key])) {
+                    // 作業者入力などの配列項目に対応
+                    const values = data[key];
+                    const fieldGroup = form.querySelectorAll(`[name="${key}"]`);
+                    while (fieldGroup.length < values.length) {
+                        addWorker(); // 足りなければ行追加
+                    }
+                    form.querySelectorAll(`[name="${key}"]`).forEach((el, idx) => {
+                        el.value = values[idx] || "";
+                    });
+                } else {
+                    const el = form.elements[key];
+                    if (el) el.value = data[key];
+                }
+            }
+        }
+
+        // 初回読み込みで復元
+        window.addEventListener("DOMContentLoaded", () => {
+            restoreFormData();
+        });
+
+        // 入力イベントで自動保存
+        form.addEventListener("input", () => {
+            saveFormData();
+        });
+
+
     </script>
 
 </body>
