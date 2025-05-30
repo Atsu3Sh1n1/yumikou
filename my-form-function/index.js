@@ -1,53 +1,48 @@
 const { google } = require('googleapis');
+const express = require('express');
+const cors = require('cors');
+const app = express();
+const PORT = process.env.PORT || 8080;
 
-exports.submitForm = async (req, res) => {
-  // CORS対応
-  res.set('Access-Control-Allow-Origin', '*');
-  res.set('Access-Control-Allow-Methods', 'POST, OPTIONS');
-  res.set('Access-Control-Allow-Headers', 'Content-Type');
+app.use(cors());
+app.use(express.json());
 
-  if (req.method === 'OPTIONS') {
-    res.status(204).send('');
-    return;
-  }
+const sheets = google.sheets('v4');
 
+async function authorize() {
+  const auth = new google.auth.GoogleAuth({
+    keyFile: 'service-account-key.json',
+    scopes: ['https://www.googleapis.com/auth/spreadsheets'],
+  });
+  return await auth.getClient();
+}
+
+app.post('/submit', async (req, res) => {
   try {
-    const data = req.body;
-
-    const auth = new google.auth.GoogleAuth({
-      keyFile: 'service-account-key.json',  // ← ここにローカルパス指定
-      scopes: ['https://www.googleapis.com/auth/spreadsheets'],
-    });
-
-    const client = await auth.getClient();
-    const sheets = google.sheets({ version: 'v4', auth: client });
-
-    const spreadsheetId = '1lW7lVYXdFrgVaFF4j-YEbr2m17yQ7INtOVKrxwkOMss'; // ←あなたのID
-
+    const authClient = await authorize();
+    const spreadsheetId = 'steel-flare-461415-t2';
     const values = [
       [
-        data.receiver || '',
-        data.author || '',
-        data.project || '',
-        data.content || '',
-        data.environment || '',
-        data.result || '',
-        new Date().toISOString()
+        new Date().toISOString(),
+        req.body.name,
+        req.body.email,
+        req.body.message
       ],
     ];
-
     await sheets.spreadsheets.values.append({
+      auth: authClient,
       spreadsheetId,
-      range: 'Sheet1!A:G', // カラム範囲に合わせる
-      valueInputOption: 'USER_ENTERED',
-      requestBody: {
-        values: values,
-      },
+      range: 'Sheet1!A:D',
+      valueInputOption: 'RAW',
+      requestBody: { values },
     });
-
-    res.status(200).json({ message: 'データが保存されました！' });
+    res.status(200).send({ message: 'データ送信成功！' });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: '保存中にエラーが発生しました。' });
+    res.status(500).send({ error: '送信失敗' });
   }
-};
+});
+
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});
