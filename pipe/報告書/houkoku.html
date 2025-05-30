@@ -15,7 +15,7 @@
             font-size: 12pt;
         }
 
-         body::before {
+        body::before {
             content: "";
             position: fixed;
             top: -4%;
@@ -123,8 +123,9 @@
             <a href="https://atsu3sh1n1.github.io/yumikou/" target="_blank">Created by YUMIKOU Inc.</a>
         </div>
         <div class="footer">
-            <label>提出先：<input type="text" name="receiver" style="width: 300px;"></label> <label>　作成者：<input type="text" name="author" style="width: 200px;"></label><br>
-           
+            <label>提出先：<input type="text" name="receiver" style="width: 300px;"></label> <label>　作成者：<input type="text"
+                    name="author" style="width: 200px;"></label><br>
+
         </div>
 
 
@@ -156,23 +157,78 @@
         <div class="section-title">3. 安全管理・注意事項</div>
         <textarea rows="4" name="safety"></textarea>
 
-        <div class="section-title">4. 作業写真・重機使用時間</div>
+        <div class="section-title">4. 明日の予定</div>
         <table>
             <tr>
-                <th>本日、重機使用時間</th>
-                <td><input type="text" name="machine_hours" placeholder="例：10:00〜14:30（クレーン）"></td>
+                <th>重機使用希望時間</th>
+                <td><input type="text" name="photo1" placeholder="例：10:00〜14:30（クレーン）西側通路通行止め同じ"></td>
             </tr>
             <tr>
-                <th>明日、重機使用希望時間</th>
-                <td><input type="text" name="photo1" placeholder="例：10:00〜14:30（クレーン）"></td>
+                <th>足場組立予定箇所</th>
+                <td><input type="text" name="photo2" placeholder="例：10:00〜14:30（西側通路）"></td>
             </tr>
             <tr>
-                <th>明日、通行止め予定場所/時間
-                </th>
-                <td><input type="text" name="photo2" placeholder="例：10:00〜14:30（クレーン）"></td>
+                <th>その他</th>
+                <td><input type="text" name="machine_hours" placeholder="例：各所配管継続"></td>
             </tr>
-            
+
         </table>
+
+        <div class="section-title">職種と人数</div>
+        <table
+            style="width: 100%; border-collapse: collapse; margin-bottom: 20px; table-layout: fixed; text-align: center;">
+            <colgroup>
+                <col style="width: 10%;">
+                <col style="width: 10%;">
+                <col style="width: 10%;">
+                <col style="width: 10%;">
+                <col style="width: 10%;">
+                <col style="width: 10%;">
+                <col style="width: 10%;">
+                <col style="width: 10%;">
+                <col style="width: 10%;">
+                <col style="width: 10%;">
+            </colgroup>
+            <thead>
+                <tr>
+                    <th style="vertical-align: middle; height: 40px; text-align: center;">職種1</th>
+                    <th style="vertical-align: middle; text-align: center;">職種2</th>
+                    <th style="vertical-align: middle; text-align: center;">職種3</th>
+                    <th style="vertical-align: middle; text-align: center;">職種4</th>
+                    <th style="vertical-align: middle; text-align: center;">職種5</th>
+                    <th style="vertical-align: middle; text-align: center;">職種6</th>
+                    <th style="vertical-align: middle; text-align: center;">職種7</th>
+                    <th style="vertical-align: middle; text-align: center;">職種8</th>
+                    <th style="vertical-align: middle; text-align: center;">職種9</th>
+                    <th style="vertical-align: middle; text-align: center;">職種10</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><input type="text" name="role1"
+                            style="width: 90%; text-align: center; vertical-align: middle; padding: 5px;"></td>
+                    <td><input type="text" name="role2"
+                            style="width: 90%; text-align: center; vertical-align: middle; padding: 5px;"></td>
+                    <td><input type="text" name="role3"
+                            style="width: 90%; text-align: center; vertical-align: middle; padding: 5px;"></td>
+                    <td><input type="text" name="role4"
+                            style="width: 90%; text-align: center; vertical-align: middle; padding: 5px;"></td>
+                    <td><input type="text" name="role5"
+                            style="width: 90%; text-align: center; vertical-align: middle; padding: 5px;"></td>
+                    <td><input type="text" name="role6"
+                            style="width: 90%; text-align: center; vertical-align: middle; padding: 5px;"></td>
+                    <td><input type="text" name="role7"
+                            style="width: 90%; text-align: center; vertical-align: middle; padding: 5px;"></td>
+                    <td><input type="text" name="role8"
+                            style="width: 90%; text-align: center; vertical-align: middle; padding: 5px;"></td>
+                    <td><input type="text" name="role9"
+                            style="width: 90%; text-align: center; vertical-align: middle; padding: 5px;"></td>
+                    <td><input type="text" name="role10"
+                            style="width: 90%; text-align: center; vertical-align: middle; padding: 5px;"></td>
+                </tr>
+            </tbody>
+        </table>
+
 
         <div class="section-title">5. 作業者一覧</div>
         <table id="workerTable">
@@ -207,7 +263,7 @@
         </table>
         <button type="button" class="btn" onclick="addWorker()">＋ 作業者を追加</button>
 
-        
+
 
         <div style="text-align: center;">
             <button type="button" class="btn" onclick="window.print()">PDF出力</button>
