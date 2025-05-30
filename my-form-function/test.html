@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>送信フォーム</title>
+</head>
+<body>
+  <h1>お問い合わせフォーム</h1>
+  <form id="contactForm">
+    <label>お名前: <input type="text" name="name" required></label><br>
+    <label>メール: <input type="email" name="email" required></label><br>
+    <label>メッセージ:<br>
+      <textarea name="message" required></textarea>
+    </label><br>
+    <button type="submit">送信</button>
+  </form>
+
+  <div id="result"></div>
+
+  <script>
+    const form = document.getElementById('contactForm');
+    const resultDiv = document.getElementById('result');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const formData = new FormData(form);
+      const data = {
+        name: formData.get('name'),
+        email: formData.get('email'),
+        message: formData.get('message')
+      };
+
+      try {
+        const response = await fetch('https://submitform-703153819796.asia-northeast1.run.app/submit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+
+        if (response.ok) {
+          const resJson = await response.json();
+          resultDiv.textContent = resJson.message;
+        } else {
+          const error = await response.json();
+          resultDiv.textContent = 'エラー: ' + error.error;
+        }
+      } catch (err) {
+        console.error(err);
+        resultDiv.textContent = '送信時にエラーが発生しました。';
+      }
+    });
+  </script>
+</body>
+</html>
