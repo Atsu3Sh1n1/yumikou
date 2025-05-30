@@ -2,161 +2,109 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>作業日報フォーム</title>
+  <title>配管材料費 計算ツール</title>
   <style>
-    body {
-      font-family: "Yu Gothic", "Meiryo", sans-serif;
-      margin: 40px;
-      font-size: 12pt;
-    }
-    h1, h2 {
-      text-align: center;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-bottom: 20px;
-    }
-    th, td {
-      border: 1px solid #333;
-      padding: 6px;
-    }
-    th {
-      background-color: #f0f0f0;
-      text-align: left;
-      width: 25%;
-    }
-    textarea, input[type="text"], input[type="date"], input[type="time"] {
-      width: 98%;
-      font-size: 11pt;
-    }
-    .section-title {
-      background-color: #ddd;
-      font-weight: bold;
-      padding: 4px;
-      margin-top: 20px;
-    }
-    .photo {
-      margin-top: 10px;
-    }
-    .footer {
-      text-align: right;
-      font-size: 10pt;
-      margin-top: 40px;
-    }
-    .btn {
-      display: inline-block;
-      padding: 8px 16px;
-      background: #007acc;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      font-size: 12pt;
-      cursor: pointer;
-      margin-top: 10px;
-    }
-    .btn:hover {
-      background: #005f99;
-    }
+    body { font-family: sans-serif; margin: 30px; }
+    label, input, select { margin: 5px 0; display: block; }
+    input[type=number] { width: 100px; }
   </style>
 </head>
 <body>
 
-  <h1>作業日報フォーム</h1>
-  <h2>（プラント建設現場）</h2>
+  <h2>概算機２開発中</h2>
 
-  
+  <label>材質:
+    <select id="material">
+      <option value="500">鉄</option>
+      <option value="800">ステンレス</option>
+      <option value="1200">銅</option>
+    </select>
+  </label>
 
-  <form id="reportForm">
+  <label>材料（円/kg）:
+    <input type="number" id="unitPrice" value="500">
+  </label>
 
-    <table>
-      <tr><th>報告日</th><td><input type="date" name="date"></td></tr>
-      <tr><th>工事名</th><td><input type="text" name="project"></td></tr>
-      <tr><th>作業場所</th><td><input type="text" name="location"></td></tr>
-      <tr><th>作業責任者</th><td><input type="text" name="supervisor"></td></tr>
-    </table>
+  <label>口径（A）:
+    <select id="diameter">
+      <option value="1.00">25A</option>
+      <option value="1.32">32A</option>
+      <option value="1.68">40A</option>
+      <option value="2.29">50A</option>
+      <option value="3.24">65A</option>
+      <option value="4.10">80A</option>
+      <option value="6.02">100A</option>
+    </select>
+  </label>
 
-    <div class="section-title">1. 作業内容</div>
-    <textarea rows="4" name="work_content"></textarea>
+  <label>スケジュール
+    <select id="schedule">
+      <option value="1.00">Sch.40</option>
+      <option value="1.10">Sch.80</option>
+      <option value="1.25">Sch.160</option>
+    </select>
+  </label>
 
-    <div class="section-title">2. 進捗状況</div>
-    <textarea rows="4" name="progress"></textarea>
+  <label>配管長（m）:
+    <input type="number" id="length" value="10">
+  </label>
 
-    <div class="section-title">3. 安全管理・注意事項</div>
-    <textarea rows="4" name="safety"></textarea>
+  <label>エルボ個数:
+    <input type="number" id="elbow" value="4">
+  </label>
 
-    <div class="section-title">4. 作業写真・重機使用時間</div>
-    <table>
-      <tr>
-        <th>作業写真（URL or ファイル名）</th>
-        <td><input type="text" name="photo1" placeholder="photo1.jpg"></td>
-      </tr>
-      <tr>
-        <th>作業写真（URL or ファイル名）</th>
-        <td><input type="text" name="photo2" placeholder="photo2.jpg"></td>
-      </tr>
-      <tr>
-        <th>重機使用時間（例: クレーン）</th>
-        <td><input type="text" name="machine_hours" placeholder="例：10:00〜14:30（クレーン）"></td>
-      </tr>
-    </table>
+  <label>T字管個数:
+    <input type="number" id="tee" value="2">
+  </label>
 
-    <div class="section-title">5. 作業者一覧</div>
-    <table id="workerTable">
-      <thead>
-        <tr><th>氏名</th><th>所属</th><th>作業内容</th><th>操作</th></tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><input type="text" name="name[]"></td>
-          <td><input type="text" name="company[]"></td>
-          <td><input type="text" name="task[]"></td>
-          <td><button type="button" class="btn" onclick="removeRow(this)">削除</button></td>
-        </tr>
-        <tr>
-          <td><input type="text" name="name[]"></td>
-          <td><input type="text" name="company[]"></td>
-          <td><input type="text" name="task[]"></td>
-          <td><button type="button" class="btn" onclick="removeRow(this)">削除</button></td>
-        </tr>
-        <tr>
-          <td><input type="text" name="name[]"></td>
-          <td><input type="text" name="company[]"></td>
-          <td><input type="text" name="task[]"></td>
-          <td><button type="button" class="btn" onclick="removeRow(this)">削除</button></td>
-        </tr>
-      </tbody>
-    </table>
-    <button type="button" class="btn" onclick="addWorker()">＋ 作業者を追加</button>
+  <label>フランジ個数:
+    <input type="number" id="flange" value="2">
+  </label>
 
-    <div class="footer">
-      <label>作成者：<input type="text" name="author" style="width: 200px;"></label><br>
-      <label>提出先：<input type="text" name="receiver" style="width: 300px;"></label>
-    </div>
-
-    <div style="text-align: center;">
-      <button type="button" class="btn" onclick="window.print()">PDF出力</button>
-    </div>
-
-  </form>
+  <h3>🔍 計算結果</h3>
+  <p>総重量（kg）: <span id="totalWeight">0</span></p>
+  <p>材料費（円）: <strong><span id="totalCost">0</span></strong></p>
 
   <script>
-    function addWorker() {
-      const table = document.getElementById("workerTable").getElementsByTagName("tbody")[0];
-      const newRow = table.insertRow();
-      newRow.innerHTML = `
-        <td><input type="text" name="name[]"></td>
-        <td><input type="text" name="company[]"></td>
-        <td><input type="text" name="task[]"></td>
-        <td><button type="button" class="btn" onclick="removeRow(this)">削除</button></td>
-      `;
-    }
+    const unitPriceInput = document.getElementById("unitPrice");
+    const materialSelect = document.getElementById("material");
 
-    function removeRow(button) {
-      const row = button.parentElement.parentElement;
-      row.remove();
-    }
+    // 材質変更時に単価を自動更新
+    materialSelect.addEventListener("change", () => {
+      unitPriceInput.value = materialSelect.value;
+      update();
+    });
+
+    const update = () => {
+      const unitPrice = parseFloat(unitPriceInput.value);
+      const diaFactor = parseFloat(document.getElementById("diameter").value);
+      const schFactor = parseFloat(document.getElementById("schedule").value);
+      const length = parseFloat(document.getElementById("length").value);
+      const elbow = parseInt(document.getElementById("elbow").value) || 0;
+      const tee = parseInt(document.getElementById("tee").value) || 0;
+      const flange = parseInt(document.getElementById("flange").value) || 0;
+
+      const elbowWeight = 0.5;
+      const teeWeight = 0.8;
+      const flangeWeight = 1.2;
+
+      const pipeWeight = length * diaFactor * schFactor;
+      const fittingsWeight = diaFactor * (
+        elbow * elbowWeight + tee * teeWeight + flange * flangeWeight
+      );
+
+      const totalWeight = pipeWeight + fittingsWeight;
+      const totalCost = Math.round(totalWeight * unitPrice);
+
+      document.getElementById("totalWeight").textContent = totalWeight.toFixed(2);
+      document.getElementById("totalCost").textContent = totalCost.toLocaleString();
+    };
+
+    document.querySelectorAll("input, select").forEach(el => {
+      el.addEventListener("input", update);
+    });
+
+    update(); // 初期表示
   </script>
-
 </body>
 </html>

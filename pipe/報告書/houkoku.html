@@ -86,7 +86,7 @@
         }
 
         .btn:hover {
-            background: #dffdff;
+            background: #22d7e3;
         }
 
         .footer {
@@ -213,7 +213,7 @@
             </tr>
         </table>
 
-        <div class="section-title">1. 本日の作業人数</div>
+        <div class="section-title">1. 本日の作業人数(詳細工数提出可)</div>
         <table
             style="width: 100%; border-collapse: collapse; margin-bottom: 20px; table-layout: fixed; text-align: center;">
             <colgroup>
@@ -231,27 +231,27 @@
             <thead>
                 <tr>
                     <th style="vertical-align: middle; height: 40px; text-align: center;">
-                        <input type="text" name="role_name1" value="職種1"
+                        <input type="text" name="role_name1" value="事務"
                             style="width: 100%; text-align: center; border:none; background:transparent; font-weight:bold;">
                     </th>
                     <th style="vertical-align: middle; text-align: center;">
-                        <input type="text" name="role_name2" value="職種2"
+                        <input type="text" name="role_name2" value="監督"
                             style="width: 100%; text-align: center; border:none; background:transparent; font-weight:bold;">
                     </th>
                     <th style="vertical-align: middle; text-align: center;">
-                        <input type="text" name="role_name3" value="職種3"
+                        <input type="text" name="role_name3" value="鳶"
                             style="width: 100%; text-align: center; border:none; background:transparent; font-weight:bold;">
                     </th>
                     <th style="vertical-align: middle; text-align: center;">
-                        <input type="text" name="role_name4" value="職種4"
+                        <input type="text" name="role_name4" value="配管"
                             style="width: 100%; text-align: center; border:none; background:transparent; font-weight:bold;">
                     </th>
                     <th style="vertical-align: middle; text-align: center;">
-                        <input type="text" name="role_name5" value="職種5"
+                        <input type="text" name="role_name5" value="電気"
                             style="width: 100%; text-align: center; border:none; background:transparent; font-weight:bold;">
                     </th>
                     <th style="vertical-align: middle; text-align: center;">
-                        <input type="text" name="role_name6" value="職種6"
+                        <input type="text" name="role_name6" value="塗装"
                             style="width: 100%; text-align: center; border:none; background:transparent; font-weight:bold;">
                     </th>
                     <th style="vertical-align: middle; text-align: center;">
@@ -300,16 +300,16 @@
         </table>
 
 
-        <div class="section-title">2. 作業内容</div>
+        <div class="section-title">2. 本日の作業内容</div>
         <textarea rows="5" name="work_content"></textarea>
 
-        <div class="section-title">3. 進捗状況</div>
+        <div class="section-title">3. 進捗状況や変更</div>
         <textarea rows="4" name="progress"></textarea>
 
         <div class="section-title">4. 安全管理・注意事項</div>
         <textarea rows="4" name="safety"></textarea>
 
-        <div class="section-title">5. 重機・立ち入り区画の計画</div>
+        <div class="section-title">5. 明日の重機/通行止め予定</div>
         <table>
             <tr>
                 <th>重機使用希望時間</th>
@@ -317,11 +317,11 @@
             </tr>
             <tr>
                 <th>足場組立予定箇所</th>
-                <td><input type="text" name="photo2" placeholder="例：10:00〜14:30（西側通路）"></td>
+                <td><input type="text" name="photo2" placeholder="例：10:00〜14:30（北側通路）通行可（下部立ち入り禁止処置予定）"></td>
             </tr>
             <tr>
                 <th>その他</th>
-                <td><input type="text" name="machine_hours" placeholder="例：各所配管継続"></td>
+                <td><input type="text" name="machine_hours" placeholder="例：各所、配管継続"></td>
             </tr>
 
         </table>
