@@ -377,6 +377,7 @@
         <button type="button" class="btn" onclick="addWorker()">＋ 作業者を追加</button>
         <br> <br> <br>
         <div style="text-align: center; margin-top: 20px;">なるほど。問題はここですか。楽しそう。</div>
+        いいや。Googleフォームは逃げですね
         <div style="text-align: center; margin-top: 20px;">
             <button type="button" class="btn" onclick="submitFormToGoogleSheet()">Googleシートに送信</button>
         </div>
@@ -524,35 +525,40 @@
         });
 
 
-    </script>
-    <script>
 
-    function submitFormToGoogleSheet() {
-        const form = document.getElementById('reportForm');
-        const formData = new FormData(form);
-        const params = new URLSearchParams();
 
-        for (const [key, value] of formData.entries()) {
-            params.append(key, value);
-        }
+        function submitFormToGoogleSheet() {
+            const formData = new FormData(form);
+            const entries = {};
 
-        // 管理番号をランダム生成（例として6桁）
-        const randomCode = document.getElementById('randomCode').textContent;
-        params.append('randomCode', randomCode);
+            for (const [key, value] of formData.entries()) {
+                if (!entries[key]) {
+                    entries[key] = value;
+                } else {
+                    if (!Array.isArray(entries[key])) {
+                        entries[key] = [entries[key]];
+                    }
+                    entries[key].push(value);
+                }
+            }
 
-        // GETリクエストとして送信
-        fetch(`https://script.google.com/macros/s/AKfycbwwi0A86GHDZhYLuf-pHS-rsvIpaKLZwTuPe5h-mrlndHariTkpRpjZwsfnTJ2Km-NQ/exec?${params.toString()}`, {
-            method: 'GET'
-        })
-            .then(response => response.json())
-            .then(json => {
-                alert("送信が完了しました");
+            fetch("https://us-central1-steel-flare-461415-t2.cloudfunctions.net/submitForm", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(entries)
             })
-            .catch(error => {
-                alert("送信に失敗しました: " + error);
-            });
-    }
-
+                .then(response => response.json())
+                .then(result => {
+                    alert("送信が成功しました！");
+                    console.log(result);
+                })
+                .catch(error => {
+                    console.error(error);
+                    alert("送信に失敗しました。");
+                });
+        }
     </script>
 
 </body>
