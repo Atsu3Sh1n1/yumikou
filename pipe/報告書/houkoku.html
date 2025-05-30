@@ -205,11 +205,11 @@
             </tr>
             <tr>
                 <th>作業場所</th>
-                <td><input type="text" name="location" ></td>
+                <td><input type="text" name="location"></td>
             </tr>
             <tr>
                 <th>作業責任者</th>
-                <td><input type="text" name="supervisor" ></td>
+                <td><input type="text" name="supervisor"></td>
             </tr>
         </table>
 
@@ -298,6 +298,11 @@
                 </tr>
             </tbody>
         </table>
+<br>
+        <div id="totalWorkers" style="text-align: center; font-weight: bold; margin-bottom: 20px;">
+            総工数：0人
+        </div>
+
 
 
         <div class="section-title">2. 本日の作業内容</div>
@@ -385,6 +390,29 @@
             const row = button.parentElement.parentElement;
             row.remove();
         }
+
+
+        function updateTotalWorkers() {
+            let total = 0;
+            for (let i = 1; i <= 10; i++) {
+                const input = document.querySelector(`[name="role${i}"]`);
+                if (input && input.value) {
+                    total += parseInt(input.value) || 0;
+                }
+            }
+            document.getElementById("totalWorkers").textContent = `総工数：${total}人`;
+        }
+
+        // 初期表示用 + イベント登録
+        window.addEventListener("DOMContentLoaded", () => {
+            updateTotalWorkers();
+            for (let i = 1; i <= 10; i++) {
+                const input = document.querySelector(`[name="role${i}"]`);
+                if (input) {
+                    input.addEventListener("input", updateTotalWorkers);
+                }
+            }
+        });
 
 
         const form = document.getElementById("reportForm");
