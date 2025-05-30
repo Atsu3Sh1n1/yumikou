@@ -93,7 +93,7 @@
             text-align: right;
             font-size: 10pt;
             margin-top: 40px;
-            
+
         }
 
         .worker-input {
@@ -109,7 +109,7 @@
             font-size: 11px;
             margin-top: -30px;
             padding: 25px;
-            
+
         }
 
         .yumikou {
@@ -197,8 +197,8 @@
             <a href="https://atsu3sh1n1.github.io/yumikou/" target="_blank">Created by YUMIKOU Inc.</a>
         </div>
         <div class="footer">
-            <label>提出先：<input type="text" name="receiver" style="width: 300px;"></label> <label>　作成者：<input type="text"
-                    name="author" style="width: 200px;"></label><br>
+            <label>提出先：<input type="text" name="receiver" style="width: 300px;"></label> <label>作成者：<input type="text"
+                    name="author" style="width: 200px;"> 管理番号：<span id="randomCode"></span></label><br>
 
         </div>
 
@@ -307,7 +307,7 @@
                 </tr>
             </tbody>
         </table>
-<br>
+        <br>
         <div id="totalWorkers" style="text-align: center; font-weight: bold; margin-bottom: 20px;">
             総工数：0人日
         </div>
@@ -421,7 +421,22 @@
                     input.addEventListener("input", updateTotalWorkers);
                 }
             }
+
+            // 管理番号を生成して表示
+            const randomCode = generateRandomCode();
+            document.getElementById("randomCode").textContent = randomCode;
+
         });
+
+        function generateRandomCode(length = 6) {
+            const chars = '123456789';
+            let code = '';
+            for (let i = 0; i < length; i++) {
+                code += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return code;
+        }
+
 
 
         const form = document.getElementById("reportForm");
