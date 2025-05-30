@@ -318,7 +318,7 @@
         <textarea rows="5" name="work_content" placeholder="例：配管継続、2Fから3Fへ移動"></textarea>
 
         <div class="section-title">3. 進捗状況や変更</div>
-        <textarea rows="4" name="progress" placeholder="例：配管：250A・15ｍ/ 150A・20ｍ/ 一部図面のルート変更。別紙提出済み"></textarea>
+        <textarea rows="4" name="progress" placeholder="例：(304 SCH40s/250A/16.5ｍ/150DB)/ (STPG SCH40/150A/35.2ｍ/234DB) 一部図面のルート変更。別紙提出済み"></textarea>
 
         <div class="section-title">4. 安全・品質管理・注意事項</div>
         <textarea rows="4" name="safety"
@@ -501,7 +501,7 @@
             if (savedTotal !== null) {
                 document.getElementById("totalWorkers").textContent = `総工数：${savedTotal}人日`;
             }
-            
+
             updateTotalWorkers();
         }
 
