@@ -318,11 +318,11 @@
         <textarea rows="5" name="work_content" placeholder="例：配管継続、北側〇〇2Fから3Fへ移動"></textarea>
 
         <div class="section-title">3. 進捗状況や変更</div>
-        <textarea rows="4" name="progress" placeholder="例：現場配管施工(304 SCH40s/250A/16.5ｍ/150DB)/ 内作(STPG SCH40/150A/35.2ｍ/234DB) 一部図面のルート変更。別紙提出済み(管理番号:00000)"></textarea>
+        <textarea rows="4" name="progress"
+            placeholder="例：現場配管施工(304 SCH40s/250A/16.5ｍ/150DB)/ 内作(STPG SCH40/150A/35.2ｍ/234DB) 一部図面のルート変更。別紙提出済み(管理番号:00000)"></textarea>
 
         <div class="section-title">4. 安全・品質管理・注意事項</div>
-        <textarea rows="4" name="safety"
-            placeholder="例：資材仮置き場を他社合同での最適化提案。搬入口、重さ、大きさ、量などから計算し、効率の良い配置の指示"></textarea>
+        <textarea rows="4" name="safety" placeholder="例：資材仮置き場を他社合同での最適化提案。搬入口、重さ、大きさ、量などから計算し、効率の良い配置の指示"></textarea>
 
         <div class="section-title">5. 明日の重機/通行止め予定</div>
         <table>
@@ -375,13 +375,18 @@
             </tbody>
         </table>
         <button type="button" class="btn" onclick="addWorker()">＋ 作業者を追加</button>
+        <br>
+        <div style="text-align: center; margin-top: 20px;">
+            <button type="button" class="btn" onclick="submitFormToGoogleSheet()">Googleシートに送信</button>
+        </div>
+        <br>
 
 
 
         <div style="text-align: center;">
             <button type="button" class="btn" onclick="window.print()">PDF出力</button>
         </div>
-
+        <br>
     </form>
 
     <script>
@@ -518,6 +523,33 @@
         });
 
 
+    </script>
+    <script>
+        function submitFormToGoogleSheet() {
+            const form = document.getElementById('reportForm');
+            const formData = new FormData(form);
+            const params = new URLSearchParams();
+
+            for (const [key, value] of formData.entries()) {
+                params.append(key, value);
+            }
+
+            // 管理番号をランダム生成（例として6桁）
+            const randomCode = document.getElementById('randomCode').textContent;
+            params.append('randomCode', randomCode);
+
+            fetch("https://script.google.com/macros/s/AKfycbwwi0A86GHDZhYLuf-pHS-rsvIpaKLZwTuPe5h-mrlndHariTkpRpjZwsfnTJ2Km-NQ/exec", {
+                method: 'POST',
+                body: params,
+            })
+                .then(response => response.text())
+                .then(text => {
+                    alert("送信が完了しました");
+                })
+                .catch(error => {
+                    alert("送信に失敗しました: " + error);
+                });
+        }
     </script>
 
 </body>
