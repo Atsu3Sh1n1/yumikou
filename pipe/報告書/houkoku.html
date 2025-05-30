@@ -321,7 +321,8 @@
         <textarea rows="4" name="progress" placeholder="例：配管：250A・15ｍ/ 150A・20ｍ/ 一部図面のルート変更。別紙提出済み"></textarea>
 
         <div class="section-title">4. 安全・品質管理・注意事項</div>
-        <textarea rows="4" name="safety" placeholder="例：資材仮置き場を他社合同での最適化提案。搬入口、重さ、大きさ、量などから計算し、効率の良い資材・道具置き場の配置を定期的に行う。"></textarea>
+        <textarea rows="4" name="safety"
+            placeholder="例：資材仮置き場を他社合同での最適化提案。搬入口、重さ、大きさ、量などから計算し、効率の良い資材・道具置き場の配置を定期的に行う。"></textarea>
 
         <div class="section-title">5. 明日の重機/通行止め予定</div>
         <table>
@@ -400,7 +401,6 @@
             row.remove();
         }
 
-
         function updateTotalWorkers() {
             let total = 0;
             for (let i = 1; i <= 10; i++) {
@@ -409,11 +409,18 @@
                     total += parseInt(input.value) || 0;
                 }
             }
-            document.getElementById("totalWorkers").textContent = `総工数：${total}人`;
+
+            const display = `総工数：${total}人日`;
+            document.getElementById("totalWorkers").textContent = display;
+
+            // 保存処理追加
+            localStorage.setItem("totalWorkers", total);
         }
+
 
         // 初期表示用 + イベント登録
         window.addEventListener("DOMContentLoaded", () => {
+            restoreFormData(); //
             updateTotalWorkers();
             for (let i = 1; i <= 10; i++) {
                 const input = document.querySelector(`[name="role${i}"]`);
@@ -488,7 +495,17 @@
                     if (el) el.value = data[key];
                 }
             }
+
+            // 総工数の復元
+            const savedTotal = localStorage.getItem("totalWorkers");
+            if (savedTotal !== null) {
+                document.getElementById("totalWorkers").textContent = `総工数：${savedTotal}人日`;
+            }
+            
+            updateTotalWorkers();
         }
+
+
 
         // 初回読み込みで復元
         window.addEventListener("DOMContentLoaded", () => {
