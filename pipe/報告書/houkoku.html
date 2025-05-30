@@ -525,31 +525,33 @@
 
     </script>
     <script>
-        function submitFormToGoogleSheet() {
-            const form = document.getElementById('reportForm');
-            const formData = new FormData(form);
-            const params = new URLSearchParams();
 
-            for (const [key, value] of formData.entries()) {
-                params.append(key, value);
-            }
+    function submitFormToGoogleSheet() {
+        const form = document.getElementById('reportForm');
+        const formData = new FormData(form);
+        const params = new URLSearchParams();
 
-            // 管理番号をランダム生成（例として6桁）
-            const randomCode = document.getElementById('randomCode').textContent;
-            params.append('randomCode', randomCode);
-
-            fetch("https://script.google.com/macros/s/AKfycbwwi0A86GHDZhYLuf-pHS-rsvIpaKLZwTuPe5h-mrlndHariTkpRpjZwsfnTJ2Km-NQ/exec", {
-                method: 'POST',
-                body: params,
-            })
-                .then(response => response.text())
-                .then(text => {
-                    alert("送信が完了しました");
-                })
-                .catch(error => {
-                    alert("送信に失敗しました: " + error);
-                });
+        for (const [key, value] of formData.entries()) {
+            params.append(key, value);
         }
+
+        // 管理番号をランダム生成（例として6桁）
+        const randomCode = document.getElementById('randomCode').textContent;
+        params.append('randomCode', randomCode);
+
+        // GETリクエストとして送信
+        fetch(`https://script.google.com/macros/s/AKfycbwwi0A86GHDZhYLuf-pHS-rsvIpaKLZwTuPe5h-mrlndHariTkpRpjZwsfnTJ2Km-NQ/exec?${params.toString()}`, {
+            method: 'GET'
+        })
+            .then(response => response.json())
+            .then(json => {
+                alert("送信が完了しました");
+            })
+            .catch(error => {
+                alert("送信に失敗しました: " + error);
+            });
+    }
+
     </script>
 
 </body>
