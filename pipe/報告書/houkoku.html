@@ -318,11 +318,11 @@
         <textarea rows="5" name="work_content" placeholder="例：配管継続、北側〇〇2Fから3Fへ移動"></textarea>
 
         <div class="section-title">3. 進捗状況や変更</div>
-        <textarea rows="4" name="progress" placeholder="例：現場配管施工(304 SCH40s/250A/16.5ｍ/150DB)/ 内作(STPG SCH40/150A/35.2ｍ/234DB) 一部図面のルート変更。別紙提出済み(管理番号:00000)"></textarea>
+        <textarea rows="4" name="progress"
+            placeholder="例：現場配管施工(304 SCH40s/250A/16.5ｍ/150DB)/ 内作(STPG SCH40/150A/35.2ｍ/234DB) 一部図面のルート変更。別紙提出済み(管理番号:00000)"></textarea>
 
         <div class="section-title">4. 安全・品質管理・注意事項</div>
-        <textarea rows="4" name="safety"
-            placeholder="例：資材仮置き場を他社合同での最適化提案。搬入口、重さ、大きさ、量などから計算し、効率の良い配置の指示"></textarea>
+        <textarea rows="4" name="safety" placeholder="例：資材仮置き場を他社合同での最適化提案。搬入口、重さ、大きさ、量などから計算し、効率の良い配置の指示"></textarea>
 
         <div class="section-title">5. 明日の重機/通行止め予定</div>
         <table>
@@ -382,40 +382,49 @@
             <button type="button" class="btn" onclick="window.print()">PDF出力</button>
         </div>
 
+        <div style="text-align: center; margin-top: 20px;">
+            <button type="button" class="btn" onclick="sendToGoogleAppsScript()">Googleスプレッドシートに送信</button>
+        </div>
+
+
+
     </form>
 
     <script>
-        function addWorker() {
-            const table = document.getElementById("workerTable").getElementsByTagName("tbody")[0];
-            const newRow = table.insertRow();
-            newRow.innerHTML = `
-        <td><input type="text" name="name[]" class="worker-input"></td>
-        <td><input type="text" name="company[]" class="worker-input"></td>
-        <td><input type="text" name="task[]" class="worker-task"></td>
-        <td><button type="button" class="btn" onclick="removeRow(this)">✕</button></td>
-      `;
-        }
 
-        function removeRow(button) {
-            const row = button.parentElement.parentElement;
-            row.remove();
-        }
 
-        function updateTotalWorkers() {
-            let total = 0;
-            for (let i = 1; i <= 10; i++) {
-                const input = document.querySelector(`[name="role${i}"]`);
-                if (input && input.value) {
-                    total += parseInt(input.value) || 0;
+
+        function sendToGoogleAppsScript() {
+            const formData = new FormData(document.getElementById("reportForm"));
+            const jsonData = {};
+
+            for (const [key, value] of formData.entries()) {
+                if (jsonData[key]) {
+                    if (!Array.isArray(jsonData[key])) {
+                        jsonData[key] = [jsonData[key]];
+                    }
+                    jsonData[key].push(value);
+                } else {
+                    jsonData[key] = value;
                 }
             }
 
-            const display = `総工数：${total}人日`;
-            document.getElementById("totalWorkers").textContent = display;
-
-            // 保存処理追加
-            localStorage.setItem("totalWorkers", total);
+            fetch("https://script.google.com/macros/s/AKfycbwwi0A86GHDZhYLuf-pHS-rsvIpaKLZwTuPe5h-mrlndHariTkpRpjZwsfnTJ2Km-NQ/exec", {
+                method: "POST",
+                body: JSON.stringify(jsonData),
+                headers: { "Content-Type": "application/json" },
+            })
+                .then(response => response.json())
+                .then(data => {
+                    alert("送信完了！");
+                    localStorage.clear(); // 送信後に保存データを削除
+                    location.reload(); // フォーム初期化
+                })
+                .catch(error => {
+                    alert("送信失敗: " + error.message);
+                });
         }
+
 
 
         // 初期表示用 + イベント登録
