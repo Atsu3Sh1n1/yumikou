@@ -534,7 +534,9 @@
 
 
 
-        function submitFormToGoogleSheet() {
+        function submitFormToGoogleSheet(event) {
+            event.preventDefault(); // デフォルトの送信を止める
+
             const formData = new FormData(form);
             const entries = {};
 
@@ -549,7 +551,7 @@
                 }
             }
 
-            fetch("https://us-central1-steel-flare-461415-t2.cloudfunctions.net/submitForm", {
+            fetch("https://submitform-703153819796.asia-northeast1.run.app/submit", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
