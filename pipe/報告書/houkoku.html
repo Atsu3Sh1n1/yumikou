@@ -86,7 +86,7 @@
         }
 
         .btn:hover {
-            background: #005f99;
+            background: #dffdff;
         }
 
         .footer {
@@ -132,7 +132,7 @@
         }
 
         textarea {
-            background-color: #ecebeb;
+            background-color: #dffdff;
             /* 明るいグレーっぽい白。完全な白(#fff)でもOK */
             border: none;
             padding: 6px;
@@ -140,6 +140,39 @@
             resize: vertical;
             box-sizing: border-box;
         }
+
+        #workerTable tbody td:last-child {
+            text-align: center;
+            vertical-align: middle;
+            padding: 0;
+            /* もし上下の余白が気になれば */
+        }
+
+        #workerTable tbody td:last-child .btn {
+            padding: 4px 8px;
+            /* ボタンのサイズ調整 */
+            line-height: 1;
+        }
+
+        #workerTable tbody td:last-child {
+            border: none;
+            /* セルの枠線を消す */
+            text-align: center;
+            vertical-align: middle;
+            padding: 0;
+        }
+        #workerTable th:last-child,
+#workerTable td:last-child {
+    border: none;
+    text-align: center;
+    vertical-align: middle;
+    padding: 0;
+}
+#workerTable td:last-child .btn {
+    padding: 4px 8px;
+    line-height: 1;
+}
+
     </style>
 </head>
 
