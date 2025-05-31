@@ -1,7 +1,6 @@
 const functions = require('@google-cloud/functions-framework');
 const { google } = require('googleapis');
 const { SecretManagerServiceClient } = require('@google-cloud/secret-manager');
-const cors = require('cors')({ origin: true });
 
 const SPREADSHEET_ID = '1lW7lVYXdFrgVaFF4j-YEbr2m17yQ7INtOVKrxwkOMss';
 
@@ -16,37 +15,57 @@ async function getServiceAccountKey() {
 }
 
 functions.http('submitForm', async (req, res) => {
-  cors(req, res, async () => {
-    if (req.method !== 'POST') {
-      res.status(405).send('Method Not Allowed');
+  // CORSヘッダーを付与
+  res.set('Access-Control-Allow-Origin', '*');  // 必要なら特定オリジンだけ許可
+  res.set('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.set('Access-Control-Allow-Headers', 'Content-Type');
+
+  // プリフライトリクエストの処理
+  if (req.method === 'OPTIONS') {
+    res.status(204).send('');
+    return;
+  }
+
+  if (req.method !== 'POST') {
+    res.status(405).send('Method Not Allowed');
+    return;
+  }
+
+  try {
+    const key = await getServiceAccountKey();
+
+    const auth = new google.auth.GoogleAuth({
+      credentials: key,
+      scopes: ['https://www.googleapis.com/auth/spreadsheets'],
+    });
+    const client = await auth.getClient();
+    const sheets = google.sheets({ version: 'v4', auth: client });
+
+    const data = req.body.data;
+
+    if (!Array.isArray(data) || data.length === 0) {
+      res.status(400).send('Invalid data');
       return;
     }
 
-    try {
-      const key = await getServiceAccountKey();
+    const values = data.map(item => [
+      item.name || '',
+      item.email || '',
+      item.message || ''
+    ]);
 
-      const auth = new google.auth.GoogleAuth({
-        credentials: key,
-        scopes: ['https://www.googleapis.com/auth/spreadsheets'],
-      });
-      const client = await auth.getClient();
-      const sheets = google.sheets({ version: 'v4', auth: client });
+    await sheets.spreadsheets.values.append({
+      spreadsheetId: SPREADSHEET_ID,
+      range: 'シート1!A:C',
+      valueInputOption: 'USER_ENTERED',
+      requestBody: {
+        values: values,
+      },
+    });
 
-      const { name, email, message } = req.body;
-
-      await sheets.spreadsheets.values.append({
-        spreadsheetId: SPREADSHEET_ID,
-        range: 'シート1!A:C',
-        valueInputOption: 'USER_ENTERED',
-        requestBody: {
-          values: [[name, email, message]],
-        },
-      });
-
-      res.status(200).send('Success');
-    } catch (error) {
-      console.error(error);
-      res.status(500).send('Error');
-    }
-  });
+    res.status(200).send('Success');
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Error');
+  }
 });

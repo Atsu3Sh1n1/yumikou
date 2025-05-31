@@ -1,33 +1,58 @@
-<form id="myForm">
-  <input type="text" name="name" placeholder="Your Name" required>
-  <input type="email" name="email" placeholder="Your Email" required>
-  <textarea name="message" placeholder="Your Message"></textarea>
-  <button type="submit">Submit</button>
-</form>
+<!DOCTYPE html>
+<html lang="ja">
 
-<script>
-document.getElementById('myForm').addEventListener('submit', async (e) => {
-  e.preventDefault();
+<head>
+  <meta charset="UTF-8">
+  <title>大量データ送信テスト</title>
+</head>
 
-  const formData = new FormData(e.target);
-  const data = {
-    name: formData.get('name'),
-    email: formData.get('email'),
-    message: formData.get('message')
-  };
+<body>
+  <h1>大量データ送信テスト</h1>
 
-  const response = await fetch('https://yumikou-703153819796.asia-northeast1.run.app', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(data)
-  });
+  <form id="dataForm">
+    <label>名前: <input type="text" name="name"></label><br>
+    <label>メール: <input type="email" name="email"></label><br>
+    <label>メッセージ: <input type="text" name="message"></label><br>
+    <button type="button" onclick="sendData()">送信</button>
+  </form>
 
-  if (response.ok) {
-    alert('Submitted!');
-  } else {
-    alert('Error submitting form');
-  }
-});
-</script>
+  <script>
+    async function sendData() {
+      const form = document.getElementById('dataForm');
+      const name = form.name.value;
+      const email = form.email.value;
+      const message = form.message.value;
+
+      // 例として同じデータを10件送る
+      const data = [];
+      for (let i = 0; i < 10; i++) {
+        data.push({
+          name: `${name} (${i + 1})`,
+          email,
+          message: `${message} (${i + 1})`
+        });
+      }
+
+      try {
+        // Cloud Runバージョン
+        const response = await fetch('https://asia-northeast1-steel-flare-461415-t2.cloudfunctions.net/submitForm', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ data })
+        });
+
+
+        const text = await response.text();
+        alert(`送信結果: ${text}`);
+        form.reset();
+      } catch (error) {
+        console.error(error);
+        alert('送信失敗');
+      }
+    }
+  </script>
+</body>
+
+</html>

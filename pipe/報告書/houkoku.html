@@ -382,13 +382,8 @@
         </form>
         <button type="button" class="btn" onclick="addWorker()">＋ 作業者を追加</button>
         <br> <br> <br>
-        <div style="text-align: center; margin-top: 20px;">なるほど。問題はここですか。楽しそう。</div>
-        いいや。Googleフォームは逃げですね
-        <div style="text-align: center; margin-top: 20px;">
-            <button type="button" class="btn" onclick="submitFormToGoogleSheet()">Googleシートに送信</button>
-        </div>
-        <br>
-        いーや。Cloud Functionも甘えですね。
+    
+
 
 
         <div style="text-align: center;">
@@ -532,41 +527,6 @@
 
 
 
-
-function submitFormToGoogleSheet(event) {
-    event.preventDefault(); // デフォルトの送信を止める
-
-    const formData = new FormData(form);
-    const entries = {};
-
-    for (const [key, value] of formData.entries()) {
-        if (!entries[key]) {
-            entries[key] = value;
-        } else {
-            if (!Array.isArray(entries[key])) {
-                entries[key] = [entries[key]];
-            }
-            entries[key].push(value);
-        }
-    }
-
-    fetch("https://submitform-703153819796.asia-northeast1.run.app/submit", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(entries)
-    })
-        .then(response => response.json())
-        .then(result => {
-            alert("送信が成功しました！");
-            console.log(result);
-        })
-        .catch(error => {
-            console.error(error);
-            alert("送信に失敗しました。");
-        });
-}
     </script>
 
 </body>
