@@ -1,16 +1,35 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
   <meta charset="UTF-8">
   <title>減価償却費 計算ツール</title>
   <style>
-    body { font-family: sans-serif; margin: 20px;  font-size: 12px; }
-    label { display: block; margin-top: 10px; }
-    input[type="number"] { width: 100px; text-align: right;}
-    .result { margin-top: 20px; font-size: 18px; font-weight: bold; color: #007700; }
-    
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  font-family: sans-serif;
+  margin-bottom: 0px;
+  font-size: 12px;
+  /* min-height: 100vh; ← 削除！ */
+}
+
+
+    input[type="number"] {
+      width: 100px;
+    }
+
+    .result {
+      margin-top: 0px;
+      font-size: 18px;
+      font-weight: bold;
+      color: #007700;
+    }
   </style>
 </head>
+
 <body>
 
   <h2>📊 減価償却費（定額法）計算ツール</h2>
@@ -22,7 +41,7 @@
 
   <label>
     耐用年数（年）：
-    <input type="number" id="years"pattern="[0-9]*" placeholder="5">
+    <input type="number" id="years" pattern="[0-9]*" placeholder="5">
   </label>
 
   <div class="result" id="result">月間減価償却費：¥0</div>
@@ -37,8 +56,8 @@
       const years = parseFloat(yearsInput.value);
 
       if (!isNaN(price) && !isNaN(years) && years > 0) {
-       const monthly = Math.floor(price / years / 12);
-resultDiv.textContent = `月間減価償却費：¥${monthly.toLocaleString()}`;
+        const monthly = Math.floor(price / years / 12);
+        resultDiv.textContent = `月間減価償却費：¥${monthly.toLocaleString()}`;
 
       }
     }
@@ -50,4 +69,5 @@ resultDiv.textContent = `月間減価償却費：¥${monthly.toLocaleString()}`;
   </script>
 
 </body>
+
 </html>
