@@ -1,0 +1,14 @@
+{
+  "name": "sheet-form-function",
+  "version": "1.0.0",
+  "main": "index.js",
+  "dependencies": {
+    "@google-cloud/functions-framework": "^3.3.0",
+    "@google-cloud/secret-manager": "^4.7.0",
+    "cors": "^2.8.5",
+    "googleapis": "^135.0.0"
+  },
+  "scripts": {
+    "start": "functions-framework --target=submitForm"
+  }
+}
