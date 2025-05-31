@@ -534,40 +534,40 @@
 
 
 
-        function submitFormToGoogleSheet(event) {
-            event.preventDefault(); // デフォルトの送信を止める
+function submitFormToGoogleSheet(event) {
+    event.preventDefault(); // デフォルトの送信を止める
 
-            const formData = new FormData(form);
-            const entries = {};
+    const formData = new FormData(form);
+    const entries = {};
 
-            for (const [key, value] of formData.entries()) {
-                if (!entries[key]) {
-                    entries[key] = value;
-                } else {
-                    if (!Array.isArray(entries[key])) {
-                        entries[key] = [entries[key]];
-                    }
-                    entries[key].push(value);
-                }
+    for (const [key, value] of formData.entries()) {
+        if (!entries[key]) {
+            entries[key] = value;
+        } else {
+            if (!Array.isArray(entries[key])) {
+                entries[key] = [entries[key]];
             }
-
-            fetch("https://submitform-703153819796.asia-northeast1.run.app/submit", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(entries)
-            })
-                .then(response => response.json())
-                .then(result => {
-                    alert("送信が成功しました！");
-                    console.log(result);
-                })
-                .catch(error => {
-                    console.error(error);
-                    alert("送信に失敗しました。");
-                });
+            entries[key].push(value);
         }
+    }
+
+    fetch("https://submitform-703153819796.asia-northeast1.run.app/submit", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(entries)
+    })
+        .then(response => response.json())
+        .then(result => {
+            alert("送信が成功しました！");
+            console.log(result);
+        })
+        .catch(error => {
+            console.error(error);
+            alert("送信に失敗しました。");
+        });
+}
     </script>
 
 </body>
