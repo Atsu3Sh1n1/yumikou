@@ -175,15 +175,19 @@
       const group = document.createElement("div");
       group.className = "form-group";
       group.innerHTML = `
-<div class="form-row" style="font-size: 1.2em; margin-top: 2rem; font-weight: bold;">${label} ： <span style="color: red;">${factor}</span></div>
-  <div class="input-group">
-        <input type="number" inputmode="numeric" id="${id}" placeholder="人" min="0" />
-        <input type="number" inputmode="numeric" id="${id}d" placeholder="日" min="0" />
-      </div>
-      ${note ? `<span style="font-size: 0.8em; color: #02d4df">${note}</span>` : ""}
-    `;
+    <div class="form-row" style="font-size: 1.2em; margin-top: 2rem; font-weight: bold;">
+      ${label} ： 
+      <input type="number" id="${id}_factor" value="${factor}" step="0.1" style="width: 60px; font-size: 1em;" />
+    </div>
+    <div class="input-group">
+      <input type="number" inputmode="numeric" id="${id}" placeholder="人" min="0" />
+      <input type="number" inputmode="numeric" id="${id}d" placeholder="日" min="0" />
+    </div>
+    ${note ? `<span style="font-size: 0.8em; color: #02d4df">${note}</span>` : ""}
+  `;
       f.insertBefore(group, insertBeforeEl);
     });
+
 
     function g(id) {
       return Number(document.getElementById(id)?.value) || 0;
@@ -191,7 +195,7 @@
 
     function calc() {
       const unitPriceRaw = document.getElementById("sc").value;
-      const isZeroUnitPrice = unitPriceRaw === "0"; // 明示的に0を入力
+      const isZeroUnitPrice = unitPriceRaw === "0";
       const unitPrice = Number(unitPriceRaw) || 25000;
 
       let scaffold = g("s") * u.s;
@@ -202,11 +206,15 @@
       let total = 0;
       let manhour = 0;
 
-      workItems.forEach(({ id, factor }) => {
+      workItems.forEach(({ id }) => {
         const p = g(id);
         const d = g(id + "d");
         const hours = p * d;
         manhour += hours;
+
+        // ここで倍率を取得する
+        const factorInput = document.getElementById(`${id}_factor`);
+        const factor = factorInput ? parseFloat(factorInput.value) || 1 : 1;
 
         if (!isZeroUnitPrice) {
           let cost = hours * unitPrice * factor;
@@ -223,6 +231,7 @@
       manhourEl.textContent = `総工数: ${manhour}人日`;
       subEl.textContent = `小計: ¥${total.toLocaleString()}`;
     }
+
 
     f.addEventListener("input", calc);
     f.addEventListener("submit", e => {
