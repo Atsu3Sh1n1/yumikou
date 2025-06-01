@@ -185,221 +185,220 @@
         }
 
         #app7 {
-      width: 100%;
-      height: 100%;
-      margin-top: 0px;
-      margin-bottom: 0px;
-    }
+            width: 100%;
+            height: 100%;
+            margin-top: 0px;
+            margin-bottom: 0px;
+        }
     </style>
 </head>
 
 <body>
- 
 
 
 
-        <h1>作業報告書</h1>
+
+    <h1>作業報告書</h1>
 
 
-        <form id="reportForm">
+    <form id="reportForm">
 
-            <div class="yumikou">
-                <a href="https://atsu3sh1n1.github.io/yumikou/" target="_blank">Created by YUMIKOU Inc.</a>
-            </div>
-            <div class="footer">
-                <label>提出先：<input type="text" name="receiver" style="width: 300px;"></label> <label>作成者：<input
-                        type="text" name="author" style="width: 200px;"> 管理番号：<span id="randomCode"></span></label><br>
-
-            </div>
-
-
-            <table>
-                <tr>
-                    <th>報告日</th>
-                    <td><input type="date" name="date"></td>
-                </tr>
-                <tr>
-                    <th>工事名</th>
-                    <td><input type="text" name="project"></td>
-                </tr>
-                <tr>
-                    <th>作業場所</th>
-                    <td><input type="text" name="location"></td>
-                </tr>
-                <tr>
-                    <th>作業責任者</th>
-                    <td><input type="text" name="supervisor"></td>
-                </tr>
-            </table>
-
-            <div class="section-title">1. 本日の作業人数 (詳細別紙提出)</div>
-            <table
-                style="width: 100%; border-collapse: collapse; margin-bottom: 20px; table-layout: fixed; text-align: center;">
-                <colgroup>
-                    <col style="width: 10%;">
-                    <col style="width: 10%;">
-                    <col style="width: 10%;">
-                    <col style="width: 10%;">
-                    <col style="width: 10%;">
-                    <col style="width: 10%;">
-                    <col style="width: 10%;">
-                    <col style="width: 10%;">
-                    <col style="width: 10%;">
-                    <col style="width: 10%;">
-                </colgroup>
-                <thead>
-                    <tr>
-                        <th style="vertical-align: middle; height: 40px; text-align: center;">
-                            <input type="text" name="role_name1" value="事務"
-                                style="width: 100%; text-align: center; border:none; background:transparent; font-weight:bold;">
-                        </th>
-                        <th style="vertical-align: middle; text-align: center;">
-                            <input type="text" name="role_name2" value="監督"
-                                style="width: 100%; text-align: center; border:none; background:transparent; font-weight:bold;">
-                        </th>
-                        <th style="vertical-align: middle; text-align: center;">
-                            <input type="text" name="role_name3" value="足場"
-                                style="width: 100%; text-align: center; border:none; background:transparent; font-weight:bold;">
-                        </th>
-                        <th style="vertical-align: middle; text-align: center;">
-                            <input type="text" name="role_name4" value="配管"
-                                style="width: 100%; text-align: center; border:none; background:transparent; font-weight:bold;">
-                        </th>
-                        <th style="vertical-align: middle; text-align: center;">
-                            <input type="text" name="role_name5" value="溶接"
-                                style="width: 100%; text-align: center; border:none; background:transparent; font-weight:bold;">
-                        </th>
-                        <th style="vertical-align: middle; text-align: center;">
-                            <input type="text" name="role_name6" value="塗装"
-                                style="width: 100%; text-align: center; border:none; background:transparent; font-weight:bold;">
-                        </th>
-                        <th style="vertical-align: middle; text-align: center;">
-                            <input type="text" name="role_name7" value="保温"
-                                style="width: 100%; text-align: center; border:none; background:transparent; font-weight:bold;">
-                        </th>
-                        <th style="vertical-align: middle; text-align: center;">
-                            <input type="text" name="role_name8" value="電気"
-                                style="width: 100%; text-align: center; border:none; background:transparent; font-weight:bold;">
-                        </th>
-                        <th style="vertical-align: middle; text-align: center;">
-                            <input type="text" name="role_name9" value="据付"
-                                style="width: 100%; text-align: center; border:none; background:transparent; font-weight:bold;">
-                        </th>
-                        <th style="vertical-align: middle; text-align: center;">
-                            <input type="text" name="role_name10" value="仕上げ"
-                                style="width: 100%; text-align: center; border:none; background:transparent; font-weight:bold;">
-                        </th>
-                    </tr>
-                </thead>
-
-                <tbody>
-                    <tr>
-                        <td><input type="number" name="role1" min="0"
-                                style="width: 90%; text-align: center; vertical-align: middle; padding: 5px;"></td>
-                        <td><input type="number" name="role2" min="0"
-                                style="width: 90%; text-align: center; vertical-align: middle; padding: 5px;"></td>
-                        <td><input type="number" name="role3" min="0"
-                                style="width: 90%; text-align: center; vertical-align: middle; padding: 5px;"></td>
-                        <td><input type="number" name="role4" min="0"
-                                style="width: 90%; text-align: center; vertical-align: middle; padding: 5px;"></td>
-                        <td><input type="number" name="role5" min="0"
-                                style="width: 90%; text-align: center; vertical-align: middle; padding: 5px;"></td>
-                        <td><input type="number" name="role6" min="0"
-                                style="width: 90%; text-align: center; vertical-align: middle; padding: 5px;"></td>
-                        <td><input type="number" name="role7" min="0"
-                                style="width: 90%; text-align: center; vertical-align: middle; padding: 5px;"></td>
-                        <td><input type="number" name="role8" min="0"
-                                style="width: 90%; text-align: center; vertical-align: middle; padding: 5px;"></td>
-                        <td><input type="number" name="role9" min="0"
-                                style="width: 90%; text-align: center; vertical-align: middle; padding: 5px;"></td>
-                        <td><input type="number" name="role10" min="0"
-                                style="width: 90%; text-align: center; vertical-align: middle; padding: 5px;"></td>
-                    </tr>
-                </tbody>
-            </table>
-            <br>
-            <div id="totalWorkers" style="text-align: center; font-weight: bold; margin-bottom: 20px;">
-                総工数：0人日
-            </div>
-
-
-
-            <div class="section-title">2. 本日の作業内容</div>
-            <textarea rows="5" name="work_content" placeholder="例：配管継続、北側〇〇2Fから3Fへ移動"></textarea>
-
-            <div class="section-title">3. 進捗状況や変更</div>
-            <textarea rows="4" name="progress"
-                placeholder="例：現場配管施工(304 SCH40s/250A/16.5ｍ/150DB)/ 内作(STPG SCH40/150A/35.2ｍ/234DB) 一部図面のルート変更。別紙提出済み(管理番号:00000)"></textarea>
-
-            <div class="section-title">4. 安全・品質管理・注意事項</div>
-            <textarea rows="4" name="safety"
-                placeholder="例：資材仮置き場を他社合同での最適化提案。搬入口、重さ、大きさ、量などから計算し、効率の良い配置の指示"></textarea>
-
-            <div class="section-title">5. 明日の重機/通行止め予定</div>
-            <table>
-                <tr>
-                    <th>重機使用希望時間</th>
-                    <td><input type="text" name="photo1" placeholder="例：10:00〜14:30（クレーン）西側通路通行止め同じ"></td>
-                </tr>
-                <tr>
-                    <th>足場組立予定箇所</th>
-                    <td><input type="text" name="photo2" placeholder="例：10:00〜14:30（北側通路）通行可（下部立ち入り禁止処置予定）"></td>
-                </tr>
-                <tr>
-                    <th>その他</th>
-                    <td><input type="text" name="machine_hours" placeholder="例：各所、配管継続"></td>
-                </tr>
-
-            </table>
-
-
-
-            <div class="section-title">6. 明日の作業内容</div>
-            <table id="workerTable">
-                <thead>
-                    <tr>
-                        <th style="width: 25%; text-align: center;">班名</th>
-                        <th style="width: 25%; text-align: center;">場所</th>
-                        <th style="width: 45%; text-align: center;">作業内容</th>
-                        <th style="width: 3%; "></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><input type="text" name="name[]" class="worker-input"></td>
-                        <td><input type="text" name="company[]" class="worker-input"></td>
-                        <td><input type="text" name="task[]" class="worker-task"></td>
-                        <td><button type="button" class="btn" onclick="removeRow(this)">✕</button></td>
-                    </tr>
-                    <tr>
-                        <td><input type="text" name="name[]" class="worker-input"></td>
-                        <td><input type="text" name="company[]" class="worker-input"></td>
-                        <td><input type="text" name="task[]" class="worker-task"></td>
-                        <td><button type="button" class="btn" onclick="removeRow(this)">✕</button></td>
-                    </tr>
-                    <tr>
-                        <td><input type="text" name="name[]" class="worker-input"></td>
-                        <td><input type="text" name="company[]" class="worker-input"></td>
-                        <td><input type="text" name="task[]" class="worker-task"></td>
-                        <td><button type="button" class="btn" onclick="removeRow(this)">✕</button></td>
-                    </tr>
-                </tbody>
-            </table>
-
-        </form>
-        <button type="button" class="btn" onclick="addWorker()">＋ 作業者を追加</button>
-        <br> <br> <br>
-    
-
-
-
-        <div style="text-align: center;">
-            <button type="button" class="btn" onclick="window.print()">PDF出力/スマホ64％推薦</button>
+        <div class="yumikou">
+            <a href="https://atsu3sh1n1.github.io/yumikou/" target="_blank">Created by YUMIKOU Inc.</a>
         </div>
+        <div class="footer">
+            <label>提出先：<input type="text" name="receiver" style="width: 300px;"></label> <label>作成者：<input type="text"
+                    name="author" style="width: 200px;"> 管理番号：<span id="randomCode"></span></label><br>
+
+        </div>
+
+
+        <table>
+            <tr>
+                <th>報告日</th>
+                <td><input type="date" name="date"></td>
+            </tr>
+            <tr>
+                <th>工事名</th>
+                <td><input type="text" name="project"></td>
+            </tr>
+            <tr>
+                <th>作業場所</th>
+                <td><input type="text" name="location"></td>
+            </tr>
+            <tr>
+                <th>作業責任者</th>
+                <td><input type="text" name="supervisor"></td>
+            </tr>
+        </table>
+
+        <div class="section-title">1. 本日の作業人数 (詳細別紙提出)</div>
+        <table
+            style="width: 100%; border-collapse: collapse; margin-bottom: 20px; table-layout: fixed; text-align: center;">
+            <colgroup>
+                <col style="width: 10%;">
+                <col style="width: 10%;">
+                <col style="width: 10%;">
+                <col style="width: 10%;">
+                <col style="width: 10%;">
+                <col style="width: 10%;">
+                <col style="width: 10%;">
+                <col style="width: 10%;">
+                <col style="width: 10%;">
+                <col style="width: 10%;">
+            </colgroup>
+            <thead>
+                <tr>
+                    <th style="vertical-align: middle; height: 40px; text-align: center;">
+                        <input type="text" name="role_name1" value="事務"
+                            style="width: 100%; text-align: center; border:none; background:transparent; font-weight:bold;">
+                    </th>
+                    <th style="vertical-align: middle; text-align: center;">
+                        <input type="text" name="role_name2" value="監督"
+                            style="width: 100%; text-align: center; border:none; background:transparent; font-weight:bold;">
+                    </th>
+                    <th style="vertical-align: middle; text-align: center;">
+                        <input type="text" name="role_name3" value="足場"
+                            style="width: 100%; text-align: center; border:none; background:transparent; font-weight:bold;">
+                    </th>
+                    <th style="vertical-align: middle; text-align: center;">
+                        <input type="text" name="role_name4" value="配管"
+                            style="width: 100%; text-align: center; border:none; background:transparent; font-weight:bold;">
+                    </th>
+                    <th style="vertical-align: middle; text-align: center;">
+                        <input type="text" name="role_name5" value="溶接"
+                            style="width: 100%; text-align: center; border:none; background:transparent; font-weight:bold;">
+                    </th>
+                    <th style="vertical-align: middle; text-align: center;">
+                        <input type="text" name="role_name6" value="塗装"
+                            style="width: 100%; text-align: center; border:none; background:transparent; font-weight:bold;">
+                    </th>
+                    <th style="vertical-align: middle; text-align: center;">
+                        <input type="text" name="role_name7" value="保温"
+                            style="width: 100%; text-align: center; border:none; background:transparent; font-weight:bold;">
+                    </th>
+                    <th style="vertical-align: middle; text-align: center;">
+                        <input type="text" name="role_name8" value="電気"
+                            style="width: 100%; text-align: center; border:none; background:transparent; font-weight:bold;">
+                    </th>
+                    <th style="vertical-align: middle; text-align: center;">
+                        <input type="text" name="role_name9" value="据付"
+                            style="width: 100%; text-align: center; border:none; background:transparent; font-weight:bold;">
+                    </th>
+                    <th style="vertical-align: middle; text-align: center;">
+                        <input type="text" name="role_name10" value="仕上げ"
+                            style="width: 100%; text-align: center; border:none; background:transparent; font-weight:bold;">
+                    </th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr>
+                    <td><input type="number" name="role1" min="0"
+                            style="width: 90%; text-align: center; vertical-align: middle; padding: 5px;"></td>
+                    <td><input type="number" name="role2" min="0"
+                            style="width: 90%; text-align: center; vertical-align: middle; padding: 5px;"></td>
+                    <td><input type="number" name="role3" min="0"
+                            style="width: 90%; text-align: center; vertical-align: middle; padding: 5px;"></td>
+                    <td><input type="number" name="role4" min="0"
+                            style="width: 90%; text-align: center; vertical-align: middle; padding: 5px;"></td>
+                    <td><input type="number" name="role5" min="0"
+                            style="width: 90%; text-align: center; vertical-align: middle; padding: 5px;"></td>
+                    <td><input type="number" name="role6" min="0"
+                            style="width: 90%; text-align: center; vertical-align: middle; padding: 5px;"></td>
+                    <td><input type="number" name="role7" min="0"
+                            style="width: 90%; text-align: center; vertical-align: middle; padding: 5px;"></td>
+                    <td><input type="number" name="role8" min="0"
+                            style="width: 90%; text-align: center; vertical-align: middle; padding: 5px;"></td>
+                    <td><input type="number" name="role9" min="0"
+                            style="width: 90%; text-align: center; vertical-align: middle; padding: 5px;"></td>
+                    <td><input type="number" name="role10" min="0"
+                            style="width: 90%; text-align: center; vertical-align: middle; padding: 5px;"></td>
+                </tr>
+            </tbody>
+        </table>
         <br>
+        <div id="totalWorkers" style="text-align: center; font-weight: bold; margin-bottom: 20px;">
+            総工数：0人日
+        </div>
 
 
-   
+
+        <div class="section-title">2. 本日の作業内容</div>
+        <textarea rows="5" name="work_content" placeholder="例：配管継続、北側〇〇2Fから3Fへ移動"></textarea>
+
+        <div class="section-title">3. 進捗状況や変更</div>
+        <textarea rows="4" name="progress"
+            placeholder="例：現場配管施工(304 SCH40s/250A/16.5ｍ/150DB)/ 内作(STPG SCH40/150A/35.2ｍ/234DB) 一部図面のルート変更。別紙提出済み(管理番号:00000)"></textarea>
+
+        <div class="section-title">4. 安全・品質管理・注意事項</div>
+        <textarea rows="4" name="safety" placeholder="例：資材仮置き場を他社合同での最適化提案。搬入口、重さ、大きさ、量などから計算し、効率の良い配置の指示"></textarea>
+
+        <div class="section-title">5. 明日の重機/通行止め予定</div>
+        <table>
+            <tr>
+                <th>重機使用希望時間</th>
+                <td><input type="text" name="photo1" placeholder="例：10:00〜14:30（クレーン）西側通路通行止め同じ"></td>
+            </tr>
+            <tr>
+                <th>足場組立予定箇所</th>
+                <td><input type="text" name="photo2" placeholder="例：10:00〜14:30（北側通路）通行可（下部立ち入り禁止処置予定）"></td>
+            </tr>
+            <tr>
+                <th>その他</th>
+                <td><input type="text" name="machine_hours" placeholder="例：各所、配管継続"></td>
+            </tr>
+
+        </table>
+
+
+
+        <div class="section-title">6. 明日の作業内容</div>
+        <table id="workerTable">
+            <thead>
+                <tr>
+                    <th style="width: 25%; text-align: center;">班名</th>
+                    <th style="width: 25%; text-align: center;">場所</th>
+                    <th style="width: 45%; text-align: center;">作業内容</th>
+                    <th style="width: 3%; "></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><input type="text" name="name[]" class="worker-input"></td>
+                    <td><input type="text" name="company[]" class="worker-input"></td>
+                    <td><input type="text" name="task[]" class="worker-task"></td>
+                    <td><button type="button" class="btn" onclick="removeRow(this)">✕</button></td>
+                </tr>
+                <tr>
+                    <td><input type="text" name="name[]" class="worker-input"></td>
+                    <td><input type="text" name="company[]" class="worker-input"></td>
+                    <td><input type="text" name="task[]" class="worker-task"></td>
+                    <td><button type="button" class="btn" onclick="removeRow(this)">✕</button></td>
+                </tr>
+                <tr>
+                    <td><input type="text" name="name[]" class="worker-input"></td>
+                    <td><input type="text" name="company[]" class="worker-input"></td>
+                    <td><input type="text" name="task[]" class="worker-task"></td>
+                    <td><button type="button" class="btn" onclick="removeRow(this)">✕</button></td>
+                </tr>
+            </tbody>
+        </table>
+
+    </form>
+    <button type="button" class="btn" onclick="addWorker()">＋ 作業者を追加</button>
+    <br> <br> <br>
+
+
+
+
+    <div style="text-align: center;">
+        <button type="button" class="btn" onclick="window.print()">PDF出力/スマホ64％推薦</button>
+    </div>
+    <br>
+
+
+
 
     <script>
         function addWorker() {
@@ -487,6 +486,7 @@
         }
 
         // 復元関数
+        // 復元関数
         function restoreFormData() {
             const savedData = localStorage.getItem("dailyReportData");
             if (!savedData) return;
@@ -494,11 +494,12 @@
             const data = JSON.parse(savedData);
 
             for (const key in data) {
+                if (key === "date") continue;  // ← 日付フィールドは復元しない
+
                 const elements = form.elements[key];
                 if (!elements) continue;
 
                 if (Array.isArray(data[key])) {
-                    // 作業者入力などの配列項目に対応
                     const values = data[key];
                     const fieldGroup = form.querySelectorAll(`[name="${key}"]`);
                     while (fieldGroup.length < values.length) {
@@ -522,6 +523,32 @@
             updateTotalWorkers();
         }
 
+        window.addEventListener("DOMContentLoaded", () => {
+            restoreFormData();
+            updateTotalWorkers();
+
+            // 日付を自動セット
+            const dateInput = form.elements["date"];
+            if (dateInput && !dateInput.value) {  // データが復元されていない場合だけセット
+                const today = new Date();
+                const yyyy = today.getFullYear();
+                const mm = String(today.getMonth() + 1).padStart(2, '0');
+                const dd = String(today.getDate()).padStart(2, '0');
+                dateInput.value = `${yyyy}-${mm}-${dd}`;
+            }
+
+            // 管理番号を生成して表示
+            const randomCode = generateRandomCode();
+            document.getElementById("randomCode").textContent = randomCode;
+
+            // 総工数のイベント登録
+            for (let i = 1; i <= 10; i++) {
+                const input = document.querySelector(`[name="role${i}"]`);
+                if (input) {
+                    input.addEventListener("input", updateTotalWorkers);
+                }
+            }
+        });
 
 
         // 初回読み込みで復元
