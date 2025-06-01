@@ -232,7 +232,7 @@
             </tr>
         </table>
 
-        <div class="section-title">1. 本日の作業人数 (詳細別紙提出)</div>
+        <div class="section-title">1. 本日の作業人数</div>
         <table
             style="width: 100%; border-collapse: collapse; margin-bottom: 20px; table-layout: fixed; text-align: center;">
             <colgroup>
@@ -485,7 +485,6 @@
             localStorage.setItem("dailyReportData", JSON.stringify(entries));
         }
 
-        // 復元関数
         // 復元関数
         function restoreFormData() {
             const savedData = localStorage.getItem("dailyReportData");
