@@ -11,7 +11,6 @@
       margin: 0;
       padding: 20px;
       background-color: #f9f9f9;
-
     }
 
     h1 {
@@ -22,24 +21,62 @@
 
     .button-grid {
       display: grid;
-
       grid-template-columns: 1fr 1fr;
       gap: 30px;
     }
 
     .button-link {
+      position: relative;
       display: block;
       text-align: center;
-      padding: 15px;
-      background-color: #3498db;
+      padding: 50px 15px;
       color: white;
       text-decoration: none;
       border-radius: 8px;
-      transition: background-color 0.3s;
+      font-weight: bold;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      transition: opacity 0.3s;
+      overflow: hidden;
+    }
+
+    .button-link::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.4); /* ここで暗さを調整 */
+      z-index: 0;
+    }
+
+    .button-link span {
+      position: relative;
+      z-index: 1;
     }
 
     .button-link:hover {
-      background-color: #2980b9;
+      opacity: 0.8;
+    }
+
+    /* 個別背景設定 */
+    .btn-kagami {
+      background-image: url('鏡.jpg');
+    }
+
+    .btn-ken {
+      background-image: url('https://example.com/image_ken.jpg');
+    }
+
+    .btn-magatama {
+      background-image: url('https://example.com/image_magatama.jpg');
+    }
+
+    /* デフォルト背景（画像がない場合の予備） */
+    .button-link {
+      background-color: #3498db;
     }
   </style>
 </head>
@@ -49,18 +86,24 @@
   <br><br>
   <div class="button-grid">
     <a href="https://script.google.com/macros/s/AKfycbz9KITcZ4S2FaJQLY56oC_5SVlnaZBY-CbB_Np-4j9SOhPlykQ2LQazezBntsTLxZbUmg/exec"
-      target="_blank" class="button-link">足場 鏡班</a>
+      target="_blank" class="button-link btn-kagami">
+      <span>足場 鏡</span>
+    </a>
     <a href="https://script.google.com/macros/s/AKfycbyezptnPb7PT-_LIwVt_iX0IYWVxERnYNhvF3Mibpr4EmelROBPe_vvdZwQNd3QhHYbVw/exec"
-      target="_blank" class="button-link">足場 剣班</a>
+      target="_blank" class="button-link btn-ken">
+      <span>足場 剣</span>
+    </a>
     <a href="https://script.google.com/macros/s/AKfycbwD_vXOZhAPhIHN68XNVqjpJKXJM83SNlizz1Ct-NuKa_ysbVJVEt5o2R0so1Z0imjF/exec"
-      target="_blank" class="button-link">足場 勾玉班</a>
-    <a href="#" class="button-link">配管 天班</a>
-    <a href="#" class="button-link">配管 地班</a>
-    <a href="#" class="button-link">配管 東班</a>
-    <a href="#" class="button-link">配管 西班</a>
-    <a href="#" class="button-link">配管 南班</a>
-    <a href="#" class="button-link">配管 北班</a>
-    <a href="#" class="button-link">塗装 巴班</a>
+      target="_blank" class="button-link btn-magatama">
+      <span>足場 勾玉</span>
+    </a>
+    <a href="#" class="button-link">配管 天</a>
+    <a href="#" class="button-link">配管 地</a>
+    <a href="#" class="button-link">配管 東</a>
+    <a href="#" class="button-link">配管 西</a>
+    <a href="#" class="button-link">配管 南</a>
+    <a href="#" class="button-link">配管 北</a>
+    <a href="#" class="button-link">塗装 巴</a>
     <a href="#" class="button-link">事務</a>
     <a href="#" class="button-link">監督</a>
   </div>
