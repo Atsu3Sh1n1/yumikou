@@ -48,16 +48,16 @@
         th,
         td {
             border: 1px solid #333;
-           font-size: 22px;
-           margin: 0;
-           padding: 0;
+            font-size: 22px;
+            margin: 0;
+            padding: 0;
 
-           
-           
+
+
         }
 
         th {
-            
+
             width: 25%;
         }
 
@@ -66,7 +66,7 @@
         textarea {
             width: 100%;
             font-size: 22px;
-            text-align: center; 
+            text-align: center;
         }
 
         textarea {
@@ -133,8 +133,8 @@
             font-size: 24px;
             border: none;
             /* ← 追加：ボーダーを消して二重線防止 */
-          
-          
+
+
             background-color: transparent;
             /* ← 追加：枠内に自然に見える */
             box-sizing: border-box;
@@ -200,8 +200,6 @@
         #randomCode {
             font-weight: bold;
         }
-
-        
     </style>
 </head>
 
@@ -220,7 +218,7 @@
         </div>
         <div class="footer">
             <label>提出先：<input type="text" name="receiver" style="width: 300px;"></label> <label>作成者：<input type="text"
-                    name="author" style="width: 150px;"> 管理番号：<span id="randomCode"></span></label><br>
+                    name="author" style="width: 150px;"> <span id="randomCode"></span></label><br>
 
         </div>
 
@@ -357,7 +355,7 @@
             </tr>
             <tr>
                 <th>その他</th>
-                <td><input type="text" name="machine_hours" ></td>
+                <td><input type="text" name="machine_hours"></td>
             </tr>
 
         </table>
@@ -388,7 +386,7 @@
                     <td><button type="button" class="btn" onclick="removeRow(this)">✕</button></td>
                 </tr>
                 <tr>
-                    <td><input type="text" name="name[]" class="worker-input" ></td>
+                    <td><input type="text" name="name[]" class="worker-input"></td>
                     <td><input type="text" name="company[]" class="worker-input"></td>
                     <td><input type="text" name="task[]" class="worker-task"></td>
                     <td><button type="button" class="btn" onclick="removeRow(this)">✕</button></td>
@@ -547,9 +545,9 @@
                 dateInput.value = `${yyyy}-${mm}-${dd}`;
             }
 
-            // 管理番号を生成して表示
-            const randomCode = generateRandomCode();
-            document.getElementById("randomCode").textContent = randomCode;
+            // 管理番号を生成して表示（ミリ秒付き）
+            const serialNumber = generateSerialNumber();
+            document.getElementById("randomCode").textContent = serialNumber;
 
             // 総工数のイベント登録
             for (let i = 1; i <= 10; i++) {
@@ -559,6 +557,20 @@
                 }
             }
         });
+
+        // 管理番号生成（ミリ秒付き）
+        function generateSerialNumber() {
+            const now = new Date();
+            const yyyy = now.getFullYear();
+            const mm = String(now.getMonth() + 1).padStart(2, '0');
+            const dd = String(now.getDate()).padStart(2, '0');
+            const HH = String(now.getHours()).padStart(2, '0');
+            const MM = String(now.getMinutes()).padStart(2, '0');
+            const SS = String(now.getSeconds()).padStart(2, '0');
+            const mmm = String(now.getMilliseconds()).padStart(3, '0');
+            return `No.${yyyy}${mm}${dd}-${HH}${MM}${SS}${mmm}`;
+        }
+
 
 
         // 初回読み込みで復元
