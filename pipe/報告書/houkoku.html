@@ -42,34 +42,44 @@
             width: 100%;
             border-collapse: collapse;
             margin-bottom: 20px;
-
         }
 
         th,
         td {
             border: 1px solid #333;
             font-size: 22px;
-            margin: 0;
-            padding: 0;
-
-
-
+            padding: 4px;
+            text-align: left;
+            /* 左寄せ */
+            vertical-align: middle;
         }
 
         th {
-
             width: 25%;
+            background-color: #f0f0f0;
         }
 
         input[type="text"],
         input[type="date"],
+        input[type="number"],
         textarea {
             width: 100%;
             font-size: 22px;
-            text-align: center;
+            text-align: left;
+            /* 左寄せ */
+            border: none;
+            background-color: transparent;
+            box-sizing: border-box;
+            padding: 4px;
+        }
+
+        input:focus,
+        textarea:focus {
+            outline: none;
         }
 
         textarea {
+            background-color: #dffdff;
             resize: vertical;
         }
 
@@ -92,22 +102,7 @@
         }
 
         .btn:hover {
-            background: #22d7e3;
-        }
-
-        .footer {
-            text-align: right;
-            font-size: 10pt;
-            margin-top: 40px;
-
-        }
-
-        .worker-input {
-            width: 100%;
-        }
-
-        .worker-task {
-            width: 100%;
+            background: #1bc0cf;
         }
 
         .footer {
@@ -115,7 +110,6 @@
             font-size: 16px;
             margin-top: -30px;
             padding: 10px;
-
         }
 
         .yumikou {
@@ -125,63 +119,28 @@
             padding: 25px;
         }
 
-        input[type="text"],
-        input[type="date"],
-        input[type="number"],
-        textarea {
-            width: 100%;
-            font-size: 24px;
-            border: none;
-            /* ← 追加：ボーダーを消して二重線防止 */
-
-
-            background-color: transparent;
-            /* ← 追加：枠内に自然に見える */
-            box-sizing: border-box;
+        /* 特殊: 本日の作業人数のヘッダー行 */
+        #workerTable th {
+            text-align: center;
         }
 
-        input:focus,
-        textarea:focus {
-            outline: none;
-            /* ← 不要なフォーカス枠も非表示に */
+        /* 本日の作業人数の人数欄 */
+        #workerTable td input[type="number"] {
+            width: 90%;
+            text-align: center;
+            padding: 5px;
         }
 
+        /* 本日の作業内容等のテキストエリア */
         textarea {
-            background-color: #dffdff;
-            /* 明るいグレーっぽい白。完全な白(#fff)でもOK */
-            border: none;
-            padding: 6px;
             font-size: 20px;
-            resize: vertical;
-            box-sizing: border-box;
+            line-height: 1.5;
         }
 
-        #workerTable tbody td:last-child {
-            text-align: center;
-            vertical-align: middle;
-            padding: 0;
-            /* もし上下の余白が気になれば */
-        }
-
-        #workerTable tbody td:last-child .btn {
-            padding: 4px 8px;
-            /* ボタンのサイズ調整 */
-            line-height: 1;
-        }
-
+        /* workerTable操作欄 */
         #workerTable tbody td:last-child {
             border: none;
-            /* セルの枠線を消す */
             text-align: center;
-            vertical-align: middle;
-            padding: 0;
-        }
-
-        #workerTable th:last-child,
-        #workerTable td:last-child {
-            border: none;
-            text-align: center;
-            vertical-align: middle;
             padding: 0;
         }
 
@@ -193,18 +152,33 @@
         #app7 {
             width: 100%;
             height: 100%;
-            margin-top: 0px;
-            margin-bottom: 0px;
+            margin: 0;
         }
 
         #randomCode {
             font-size: 16px;
         }
+
+        .section-title {
+            font-weight: bold;
+            padding: 4px;
+            margin-top: 20px;
+            font-size: 20pt;
+            /* ← お好みのサイズに調整してください */
+        }
+
+        #totalWorkers {
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 20px;
+            font-size: 22pt;
+            /* ← お好みのサイズに調整してください */
+        }
     </style>
 </head>
 
 <body>
- <span id="randomCode"></span></label><br>
+    <span id="randomCode"></span></label><br>
 
 
 
@@ -216,7 +190,7 @@
         <div class="yumikou">
             <a href="https://atsu3sh1n1.github.io/yumikou/" target="_blank">Created by YUMIKOU Inc.</a>
         </div>
-       
+
         <table>
             <tr>
                 <th>報告日</th>
@@ -404,22 +378,27 @@
 
 
     <script>
+        const form = document.getElementById("reportForm");
+
+        // 作業者行追加
         function addWorker() {
             const table = document.getElementById("workerTable").getElementsByTagName("tbody")[0];
             const newRow = table.insertRow();
             newRow.innerHTML = `
-        <td><input type="text" name="name[]" class="worker-input"></td>
-        <td><input type="text" name="company[]" class="worker-input"></td>
-        <td><input type="text" name="task[]" class="worker-task"></td>
-        <td><button type="button" class="btn" onclick="removeRow(this)">✕</button></td>
-      `;
+            <td><input type="text" name="name[]" class="worker-input"></td>
+            <td><input type="text" name="company[]" class="worker-input"></td>
+            <td><input type="text" name="task[]" class="worker-task"></td>
+            <td><button type="button" class="btn" onclick="removeRow(this)">✕</button></td>
+        `;
         }
 
+        // 作業者行削除
         function removeRow(button) {
             const row = button.parentElement.parentElement;
             row.remove();
         }
 
+        // 総工数更新
         function updateTotalWorkers() {
             let total = 0;
             for (let i = 1; i <= 10; i++) {
@@ -428,75 +407,50 @@
                     total += parseInt(input.value) || 0;
                 }
             }
-
             const display = `総工数：${total}人日`;
             document.getElementById("totalWorkers").textContent = display;
 
-            // 保存処理追加
+            // 保存
             localStorage.setItem("totalWorkers", total);
         }
 
-
-        // 初期表示用 + イベント登録
-        window.addEventListener("DOMContentLoaded", () => {
-            restoreFormData(); //
-            updateTotalWorkers();
-            for (let i = 1; i <= 10; i++) {
-                const input = document.querySelector(`[name="role${i}"]`);
-                if (input) {
-                    input.addEventListener("input", updateTotalWorkers);
-                }
-            }
-
-            // 管理番号を生成して表示
-            const randomCode = generateRandomCode();
-            document.getElementById("randomCode").textContent = randomCode;
-
-        });
-
-        function generateRandomCode(length = 6) {
-            const chars = '123456789';
-            let code = '';
-            for (let i = 0; i < length; i++) {
-                code += chars.charAt(Math.floor(Math.random() * chars.length));
-            }
-            return code;
+        // 管理番号生成（秒まで）
+        function generateSerialNumber() {
+            const now = new Date();
+            const yyyy = now.getFullYear();
+            const mm = String(now.getMonth() + 1).padStart(2, '0');
+            const dd = String(now.getDate()).padStart(2, '0');
+            const HH = String(now.getHours()).padStart(2, '0');
+            const MM = String(now.getMinutes()).padStart(2, '0');
+            const SS = String(now.getSeconds()).padStart(2, '0');
+            return `No.${yyyy}${mm}${dd}-${HH}${MM}${SS}`;
         }
 
-
-
-        const form = document.getElementById("reportForm");
-
-        // 保存関数
+        // フォームデータ保存
         function saveFormData() {
             const formData = new FormData(form);
             const entries = {};
-
-            // 通常のフィールドを保存
             for (const [key, value] of formData.entries()) {
                 if (!entries[key]) {
                     entries[key] = value;
                 } else {
-                    // 配列の対応（例：name[]）
                     if (!Array.isArray(entries[key])) {
                         entries[key] = [entries[key]];
                     }
                     entries[key].push(value);
                 }
             }
-
             localStorage.setItem("dailyReportData", JSON.stringify(entries));
         }
 
-        // 復元関数
+        // フォームデータ復元
         function restoreFormData() {
             const savedData = localStorage.getItem("dailyReportData");
             if (!savedData) return;
 
             const data = JSON.parse(savedData);
-
             for (const key in data) {
-                if (key === "date") continue;  // ← 日付フィールドは復元しない
+                if (key === "date") continue;  // 日付は復元しない
 
                 const elements = form.elements[key];
                 if (!elements) continue;
@@ -505,7 +459,7 @@
                     const values = data[key];
                     const fieldGroup = form.querySelectorAll(`[name="${key}"]`);
                     while (fieldGroup.length < values.length) {
-                        addWorker(); // 足りなければ行追加
+                        addWorker();
                     }
                     form.querySelectorAll(`[name="${key}"]`).forEach((el, idx) => {
                         el.value = values[idx] || "";
@@ -525,13 +479,14 @@
             updateTotalWorkers();
         }
 
+        // 初期化
         window.addEventListener("DOMContentLoaded", () => {
             restoreFormData();
             updateTotalWorkers();
 
-            // 日付を自動セット
+            // 日付自動セット
             const dateInput = form.elements["date"];
-            if (dateInput && !dateInput.value) {  // データが復元されていない場合だけセット
+            if (dateInput && !dateInput.value) {
                 const today = new Date();
                 const yyyy = today.getFullYear();
                 const mm = String(today.getMonth() + 1).padStart(2, '0');
@@ -539,11 +494,11 @@
                 dateInput.value = `${yyyy}-${mm}-${dd}`;
             }
 
-            // 管理番号を生成して表示（ミリ秒付き）
+            // 管理番号生成
             const serialNumber = generateSerialNumber();
             document.getElementById("randomCode").textContent = serialNumber;
 
-            // 総工数のイベント登録
+            // 総工数イベント登録（10行）
             for (let i = 1; i <= 10; i++) {
                 const input = document.querySelector(`[name="role${i}"]`);
                 if (input) {
@@ -552,33 +507,10 @@
             }
         });
 
-        // 管理番号生成（ミリ秒付き）
-        function generateSerialNumber() {
-            const now = new Date();
-            const yyyy = now.getFullYear();
-            const mm = String(now.getMonth() + 1).padStart(2, '0');
-            const dd = String(now.getDate()).padStart(2, '0');
-            const HH = String(now.getHours()).padStart(2, '0');
-            const MM = String(now.getMinutes()).padStart(2, '0');
-            const SS = String(now.getSeconds()).padStart(2, '0');
-            const mmm = String(now.getMilliseconds()).padStart(3, '0');
-            return `No.${yyyy}${mm}${dd}-${HH}${MM}${SS}${mmm}`;
-        }
-
-
-
-        // 初回読み込みで復元
-        window.addEventListener("DOMContentLoaded", () => {
-            restoreFormData();
-        });
-
         // 入力イベントで自動保存
         form.addEventListener("input", () => {
             saveFormData();
         });
-
-
-
     </script>
 
 </body>
