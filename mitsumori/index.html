@@ -4,6 +4,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="format-detection" content="telephone=no">
+
   <title>概算見積もり・有限会社弓工</title>
   <style>
     /* あなたのスタイルはそのまま */
@@ -26,7 +28,7 @@
     body {
       overflow-y: auto;
       /* hiddenからautoに変更 */
-     
+
       display: flex;
       justify-content: center;
       align-items: center;
@@ -77,7 +79,7 @@
     }
 
     button {
-      background: white;
+      background: #ffffff;
       border: none;
       padding: 0.75em 1.5em;
       font-size: 1.25em;
@@ -89,10 +91,29 @@
       transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
 
+
     button:hover {
       transform: translateY(-0.2em);
       box-shadow: 0 0.6em 1.4em rgba(0, 0, 0, 0.2);
     }
+
+    button,
+    p,
+    span,
+    div {
+      color: black;
+      /* リンク色を黒に上書き */
+      text-decoration: none;
+      /* 下線を消す */
+    }
+
+    a {
+      color: inherit;
+      /* リンク色を親要素から継承 */
+      text-decoration: none;
+      /* 下線を消す */
+    }
+
 
     @keyframes fadeIn {
       from {
