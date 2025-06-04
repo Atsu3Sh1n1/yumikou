@@ -105,11 +105,7 @@
 </head>
 
 <body>
-  <script>
-    if (window === window.parent) {
-      document.body.innerHTML = 'このページは直接アクセスできません。';
-    }
-  </script>
+
 
   <div class="container">
     <h2>溶接コスト算出機</h2>
@@ -141,11 +137,9 @@
         <option value="800">800A</option>
         <option value="900">900A</option>
         <option value="1000">1000A</option>
-
-
       </select>
-
     </div>
+
     <div class="form-group">
       <label>ストレートBW:</label>
       <input type="number" inputmode="numeric" pattern="[0-9]*" id="straightCount" placeholder="0" min="0" />
@@ -162,16 +156,19 @@
       <label>単価 (円/DB):</label>
       <input type="number" inputmode="numeric" pattern="[0-9]*" id="unitPrice" placeholder="0" min="0" />
     </div>
+
     <div class="form-group">
       <div id="scheduleButtons">
-        <button type="button" data-multiplier="0.65" class="schedule-btn">SGP/20</button>
-        <button type="button" data-multiplier="1" class="schedule-btn active">SCH40</button>
-        <button type="button" data-multiplier="1.55" class="schedule-btn">SCH80</button><br />
+        <button type="button" data-multiplier="0.94" class="schedule-btn">SGP</button>
+        <button type="button" data-multiplier="0.90" class="schedule-btn">20S</button>
+        <button type="button" data-multiplier="1.0" class="schedule-btn active">SCH40</button>
+        <button type="button" data-multiplier="1.3" class="schedule-btn">SCH80</button>
+        <br />
         <button type="button" id="additionalMultiplierBtn" class="additional-multiplier-btn">ステンレス</button>
         <button type="button" id="swMultiplierBtn" class="additional-multiplier-btn">SW</button>
-
       </div>
     </div>
+
     <div class="result" id="totalPrice">小計(税抜き): ¥0</div>
     <div class="db-display" id="totalDB">合計DB: 0</div><br><br>
     *BW=突合せ溶接・SW=差し込み式
@@ -180,54 +177,43 @@
   <script>
     // DB換算テーブル（インチ×個数ごとのDB数）
     const dbTable = {
-      "25": { base: 1, double: 2, triple: 3 },
-      "32": { base: 1.28, double: 2.56, triple: 3.84 },
-      "40": { base: 1.6, double: 3.2, triple: 4.8 },
-      "50": { base: 2, double: 4, triple: 6 },
-      "65": { base: 2.6, double: 5.2, triple: 7.8 },
-      "80": { base: 3.2, double: 6.4, triple: 9.6 },
-      "100": { base: 4, double: 8, triple: 12 },
-      "125": { base: 5, double: 10, triple: 15 },
-      "150": { base: 6, double: 12, triple: 18 },
-      "200": { base: 8, double: 16, triple: 24 },
-      "250": { base: 10, double: 20, triple: 30 },
-      "300": { base: 12, double: 24, triple: 36 },
-      "350": { base: 14, double: 28, triple: 42 },
-      "400": { base: 16, double: 32, triple: 48 },
-      "450": { base: 18, double: 36, triple: 54 },
-      "500": { base: 20, double: 40, triple: 60 },
-      "600": { base: 24, double: 48, triple: 72 },
-      "700": { base: 28, double: 56, triple: 84 },
-      "750": { base: 30, double: 60, triple: 90 },
-      "800": { base: 32, double: 64, triple: 96 },
-      "900": { base: 36, double: 72, triple: 108 },
-      "1000": { base: 40, double: 80, triple: 120 }
+      "25": { straight: 1, elbow: 2, tee: 3 },
+      "32": { straight: 1.28, elbow: 2.56, tee: 3.84 },
+      "40": { straight: 1.6, elbow: 3.2, tee: 4.8 },
+      "50": { straight: 2, elbow: 4, tee: 6 },
+      "65": { straight: 2.6, elbow: 5.2, tee: 7.8 },
+      "80": { straight: 3.2, elbow: 6.4, tee: 9.6 },
+      "100": { straight: 4, elbow: 8, tee: 12 },
+      "125": { straight: 5, elbow: 10, tee: 15 },
+      "150": { straight: 6, elbow: 12, tee: 18 },
+      "200": { straight: 8, elbow: 16, tee: 24 },
+      "250": { straight: 10, elbow: 20, tee: 30 },
+      "300": { straight: 12, elbow: 24, tee: 36 },
+      "350": { straight: 14, elbow: 28, tee: 42 },
+      "400": { straight: 16, elbow: 32, tee: 48 },
+      "450": { straight: 18, elbow: 36, tee: 54 },
+      "500": { straight: 20, elbow: 40, tee: 60 },
+      "600": { straight: 24, elbow: 48, tee: 72 },
+      "700": { straight: 28, elbow: 56, tee: 84 },
+      "750": { straight: 30, elbow: 60, tee: 90 },
+      "800": { straight: 32, elbow: 64, tee: 96 },
+      "900": { straight: 36, elbow: 72, tee: 108 },
+      "1000": { straight: 40, elbow: 80, tee: 120 }
     };
 
-
-    // スケジュール別単価倍率（単価にかける）
-    const scheduleMultipliers = {
-      "SGP": 0.65,
-      "SCH40": 1.0,
-      "SCH80": 1.55,
-    };
-
-    // 現在のスケジュール倍率（単価補正用）
+    // 初期のスケジュール倍率
     let currentMultiplier = 1.0;
-
-    // ステンレス補正乗数（単価補正用）
     const stainlessMultiplier = 1.5;
     const swMultiplier = 0.75;
-
 
     function calculate() {
       const size = document.getElementById("pipeSize").value;
       const straight = parseInt(document.getElementById("straightCount").value) || 0;
       const elbow = parseInt(document.getElementById("elbowCount").value) || 0;
       const tee = parseInt(document.getElementById("teeCount").value) || 0;
-      let baseUnitPrice = parseFloat(document.getElementById("unitPrice").value) || 0;
+      const baseUnitPrice = parseFloat(document.getElementById("unitPrice").value) || 0;
 
-      // DB数は補正なし
+      // DB数（補正なし）
       const totalDB =
         (straight * dbTable[size].straight +
           elbow * dbTable[size].elbow +
@@ -244,18 +230,11 @@
         effectiveUnitPrice *= swMultiplier;
       }
 
-
       const totalCost = Math.round(totalDB * effectiveUnitPrice);
 
       document.getElementById("totalPrice").textContent = `小計(税抜き): ¥${totalCost.toLocaleString()}`;
       document.getElementById("totalDB").textContent = `合計DB: ${totalDB.toFixed(1)}`;
     }
-
-    document.getElementById("swMultiplierBtn").addEventListener("click", function () {
-      this.classList.toggle("active");
-      calculate();
-    });
-
 
     // スケジュールボタンのイベント
     document.querySelectorAll(".schedule-btn").forEach(btn => {
@@ -263,13 +242,8 @@
         document.querySelectorAll(".schedule-btn").forEach(b => b.classList.remove("active"));
         btn.classList.add("active");
 
-        // ボタンのテキストで倍率を判別して設定
-        const text = btn.textContent.trim();
-        if (text.includes("SGP")) currentMultiplier = scheduleMultipliers["SGP"];
-        else if (text.includes("SCH40")) currentMultiplier = scheduleMultipliers["SCH40"];
-        else if (text.includes("SCH80")) currentMultiplier = scheduleMultipliers["SCH80"];
-        else currentMultiplier = 1.0;
-
+        // data-multiplierから倍率を取得
+        currentMultiplier = parseFloat(btn.getAttribute("data-multiplier")) || 1.0;
         calculate();
       });
     });
@@ -280,22 +254,19 @@
       calculate();
     });
 
+    // SWボタンのイベント
+    document.getElementById("swMultiplierBtn").addEventListener("click", function () {
+      this.classList.toggle("active");
+      calculate();
+    });
+
     // 入力変化で計算更新
     document.querySelectorAll("select, input").forEach(el => {
       el.addEventListener("input", calculate);
     });
 
-
-    // ページ読み込み時に初期計算＋スケジュール倍率設定
+    // ページ読み込み時に初期計算
     window.addEventListener('DOMContentLoaded', () => {
-      const activeBtn = document.querySelector(".schedule-btn.active");
-      if (activeBtn) {
-        const text = activeBtn.textContent.trim();
-        if (text.includes("SGP")) currentMultiplier = scheduleMultipliers["SGP"];
-        else if (text.includes("SCH40")) currentMultiplier = scheduleMultipliers["SCH40"];
-        else if (text.includes("SCH80")) currentMultiplier = scheduleMultipliers["SCH80"];
-        else currentMultiplier = 1.0;
-      }
       calculate();
     });
 
@@ -313,9 +284,9 @@
           tee * dbTable[size].tee);
 
       if (document.getElementById("additionalMultiplierBtn").classList.contains("active")) {
-        baseUnitPrice = Math.round(baseUnitPrice * stainlessMultiplier);
+        baseUnitPrice *= stainlessMultiplier;
       }
-      baseUnitPrice = Math.round(baseUnitPrice * currentMultiplier);
+      baseUnitPrice *= currentMultiplier;
 
       const totalCost = Math.round(totalDB * baseUnitPrice);
 
