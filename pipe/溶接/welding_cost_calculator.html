@@ -37,7 +37,7 @@
       padding: 5px;
       margin: 5px 0 10px;
       font-size: 1em;
-      
+
     }
 
     .form-group {
@@ -180,33 +180,30 @@
   <script>
     // DB換算テーブル（インチ×個数ごとのDB数）
     const dbTable = {
-      "25": { straight: 1, elbow: 2, tee: 3 },
-      "32": { straight: 1.25, elbow: 2.5, tee: 3.75 },
-      "40": { straight: 1.5, elbow: 3, tee: 4.5 },
-      "50": { straight: 2, elbow: 4, tee: 6 },
-      "65": { straight: 2.5, elbow: 5, tee: 7.5 },
-      "80": { straight: 3, elbow: 6, tee: 9 },
-      "100": { straight: 4, elbow: 8, tee: 12 },
-      "125": { straight: 5, elbow: 10, tee: 15 },
-      "150": { straight: 6, elbow: 12, tee: 18 },
-      "200": { straight: 8, elbow: 16, tee: 24 },
-      "250": { straight: 10, elbow: 20, tee: 30 },
-      "300": { straight: 12, elbow: 24, tee: 36 },
-      "350": { straight: 14, elbow: 28, tee: 42 },
-      "400": { straight: 16, elbow: 32, tee: 48 },
-      "450": { straight: 18, elbow: 36, tee: 54 },
-      "500": { straight: 20, elbow: 40, tee: 60 },
-      "600": { straight: 24, elbow: 48, tee: 72 },
-      "700": { straight: 28, elbow: 56, tee: 84 },
-      "750": { straight: 30, elbow: 60, tee: 90 },
-      "800": { straight: 32, elbow: 64, tee: 96 },
-      "900": { straight: 36, elbow: 72, tee: 108 },
-      "1000": { straight: 40, elbow: 80, tee: 120 }
-
-
-
-
+      "25": { base: 1, double: 2, triple: 3 },
+      "32": { base: 1.28, double: 2.56, triple: 3.84 },
+      "40": { base: 1.6, double: 3.2, triple: 4.8 },
+      "50": { base: 2, double: 4, triple: 6 },
+      "65": { base: 2.6, double: 5.2, triple: 7.8 },
+      "80": { base: 3.2, double: 6.4, triple: 9.6 },
+      "100": { base: 4, double: 8, triple: 12 },
+      "125": { base: 5, double: 10, triple: 15 },
+      "150": { base: 6, double: 12, triple: 18 },
+      "200": { base: 8, double: 16, triple: 24 },
+      "250": { base: 10, double: 20, triple: 30 },
+      "300": { base: 12, double: 24, triple: 36 },
+      "350": { base: 14, double: 28, triple: 42 },
+      "400": { base: 16, double: 32, triple: 48 },
+      "450": { base: 18, double: 36, triple: 54 },
+      "500": { base: 20, double: 40, triple: 60 },
+      "600": { base: 24, double: 48, triple: 72 },
+      "700": { base: 28, double: 56, triple: 84 },
+      "750": { base: 30, double: 60, triple: 90 },
+      "800": { base: 32, double: 64, triple: 96 },
+      "900": { base: 36, double: 72, triple: 108 },
+      "1000": { base: 40, double: 80, triple: 120 }
     };
+
 
     // スケジュール別単価倍率（単価にかける）
     const scheduleMultipliers = {
