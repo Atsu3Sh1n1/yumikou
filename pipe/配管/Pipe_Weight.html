@@ -434,8 +434,8 @@
       const sizeStep = Math.max(0, sizeIndex - baseIndex);
 
       let discountFactor = 1.0;
-      if (parseInt(size) >= 350) {
-        discountFactor = Math.pow(1 / 1.01, sizeStep);
+      if (parseInt(size) >= 32) {
+        discountFactor = Math.pow(1 / 1.05, sizeStep);
       }
 
       const lengthDiscount = getLengthDiscount(length, size, formData.schedule);
