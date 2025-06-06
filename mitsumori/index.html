@@ -196,7 +196,7 @@
     setViewportHeight();
 
     const questions = [
-      { key: "material", text: "配管の種類を選んでください", options: ["鉄", "ステンレス"] },
+      { key: "material", text: "配管の材質を選んでください", options: ["鉄", "ステンレス"] },
       { key: "connection", text: "接続方法を選んでください", options: ["溶接", "ネジ"] },
       { key: "size", text: "サイズを選んでください", options: ["15", "20", "25", "32", "40", "50", "65", "80", "100", "125", "150", "200", "250", "300", "350", "400", "450", "500"] },
       { key: "schedule", text: "スケジュールを選んでください", options: ["sch5", "sch10", "sch20", "SGP", "sch40", "sch80", "sch120", "sch160"] },
@@ -260,7 +260,7 @@
         questionEl.textContent = "計算中…";
         buttonsDiv.innerHTML = "";
 
-        const unitPrice = 750;
+        const unitPrice = 660;
         const materialMap = { "鉄": "steel", "ステンレス": "stainless" };
 
         const postData = {
@@ -289,9 +289,9 @@
           let unitPriceMultiplier = 1;
           if (connection === "ネジ") {
             if (material === "鉄") {
-              unitPriceMultiplier = 0.6;
+              unitPriceMultiplier = 0.79;
             } else if (material === "ステンレス") {
-              unitPriceMultiplier = 0.67;
+              unitPriceMultiplier = 0.6;
             }
           }
 
