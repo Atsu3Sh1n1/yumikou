@@ -184,7 +184,6 @@
     <div id="buttons"></div>
   </div>
 
-  <!-- 計算用iframeを非表示で読み込み -->
   <iframe id="calcIframe" src="test2.html" style="display:none;"></iframe>
 
   <script>
@@ -196,14 +195,13 @@
     window.addEventListener('orientationchange', setViewportHeight);
     setViewportHeight();
 
-    // 質問と選択肢
     const questions = [
-      { key: "material", text: "種類を選んでください", options: ["配管", "ダクト", "機器据付", "架台・支持構造物",] },
-      { key: "material", text: "配管の種類を選んでください", options: ["鉄(溶接)", "ステンレス(溶接)", "塩ビ", "鉄(ネジ)", "ステンレス(ネジ)",] },
+      { key: "material", text: "配管の種類を選んでください", options: ["鉄", "ステンレス"] },
+      { key: "connection", text: "接続方法を選んでください", options: ["溶接", "ネジ"] },
       { key: "size", text: "サイズを選んでください", options: ["15", "20", "25", "32", "40", "50", "65", "80", "100", "125", "150", "200", "250", "300", "350", "400", "450", "500"] },
-      { key: "schedule", text: "スケジュールを選んでください", options: ["sch5", "sch10", "sch20", "SGP", "sch40", "sch80", "sch120", "sch160",] },
-      { key: "length", text: "長さを入力してください", options: null }, // 入力式
-      { key: "food", text: "好きな食べ物は？", options: ["焼肉", "お寿司", "カレー", "中華", "洋食", "和食",] }
+      { key: "schedule", text: "スケジュールを選んでください", options: ["sch5", "sch10", "sch20", "SGP", "sch40", "sch80", "sch120", "sch160"] },
+      { key: "length", text: "長さを入力してください", options: null },
+      { key: "food", text: "好きな食べ物は？", options: ["焼肉", "お寿司", "カレー", "中華", "洋食", "和食"] }
     ];
 
     const answers = {};
@@ -219,7 +217,6 @@
       buttonsDiv.innerHTML = "";
 
       if (q.options) {
-        // ボタンで選択
         q.options.forEach(option => {
           const btn = document.createElement("button");
           btn.textContent = option;
@@ -229,15 +226,12 @@
           };
           buttonsDiv.appendChild(btn);
         });
-
       } else {
-
-        // 入力フォーム（長さ）
         const input = document.createElement("input");
         input.type = "number";
         input.min = "1";
-        input.inputMode = "numeric";   // 追加
-        input.pattern = "[0-9]*";      // 追加
+        input.inputMode = "numeric";
+        input.pattern = "[0-9]*";
         input.placeholder = "例: 10（メートル）";
         input.style.fontSize = "16px";
         input.style.padding = "1em";
@@ -263,15 +257,11 @@
       if (currentQuestion < questions.length) {
         showQuestion();
       } else {
-        // すべての回答が揃ったら計算を依頼
         questionEl.textContent = "計算中…";
         buttonsDiv.innerHTML = "";
 
-        // 単価は固定で550円
         const unitPrice = 750;
-
-        // material を英語に変換して iframeへ送る例
-        const materialMap = { "鉄(溶接)": "steel", "ステンレス(溶接)": "stainless", "塩ビ": "PVC" };
+        const materialMap = { "鉄": "steel", "ステンレス": "stainless" };
 
         const postData = {
           size: answers.size,
@@ -288,69 +278,61 @@
       }
     }
 
-    // 子ページ（iframe）からの計算結果受信
     window.addEventListener("message", (e) => {
       if (e.data.action === "calculationResult") {
         if (e.data.result.success) {
           const r = e.data.result;
+          const connection = answers.connection;
+          const material = answers.material;
+          let displayMaterial = `${material}(${connection})`;
 
-          // iframeから受け取った単価（mあたり単価）を取得
-          let baseUnitPricePerMeter = r.unitPricePerMeter;
-
-          // iframeから受け取った重量やサイズも使いたければ使える
-          const totalLength = Number(answers.length);
-
-          // 親ページで計算（単価 × 長さ）
-          let totalCost = baseUnitPricePerMeter * totalLength;
-
-          // ネジ用だけ親ページで掛率補正する
-          if (answers.material === "鉄(ネジ)") {
-            totalCost *= 1;
-            baseUnitPricePerMeter *= 1;
-          } else if (answers.material === "ステンレス(ネジ)") {
-            totalCost *= 1;
-            baseUnitPricePerMeter *= 1;
+          let unitPriceMultiplier = 1;
+          if (connection === "ネジ") {
+            if (material === "鉄") {
+              unitPriceMultiplier = 0.6;
+            } else if (material === "ステンレス") {
+              unitPriceMultiplier = 0.67;
+            }
           }
 
-          // 小数点以下切り捨て
-          totalCost = Math.floor(totalCost);
-          baseUnitPricePerMeter = Math.floor(baseUnitPricePerMeter);
+          // 単価 × 係数
+          const adjustedUnitPrice = r.unitPricePerMeter * unitPriceMultiplier;
 
+          // 単価 × 係数 × 長さ = 概算金額
+          const pipeCost = adjustedUnitPrice * Number(answers.length);
 
           questionEl.innerHTML = `<a href="https://atsu3sh1n1.github.io/yumikou/" target="_blank" style="text-decoration: none; color: inherit;">有限会社弓工</a>`;
 
           buttonsDiv.innerHTML = `
-      <div class="result-card">
-        <div class="result-item"><span class="result-label">概算: </span><span class="result-value">¥${totalCost.toLocaleString()}円</span></div>
-        <div class="result-item"><span class="result-label">重量 : </span><span class="result-value">${r.pipeWeight}kg</span></div>
-        <div class="result-item"><span class="result-label">m/単価: </span><span class="result-value">${baseUnitPricePerMeter.toLocaleString()}円</span></div>
-        <div class="result-item"><span class="result-label">サイズ: </span><span class="result-value">${r.size}A</span></div>
-        <div class="result-item"><span class="result-label">材料: </span><span class="result-value">${answers.material}</span></div>
-        <div class="result-item"><span class="result-label">スケジュール: </span><span class="result-value">${answers.schedule}</span></div>
-        <div class="result-item"><span class="result-label">長さ: </span><span class="result-value">${answers.length}m</span></div>
-        <div class="result-item"><span class="result-label">打合せ時の食事: </span><span class="result-value">${answers.food}屋さん</span></div>
-      </div>
+            <div class="result-card">
+              <div class="result-item"><span class="result-label">概算: </span><span class="result-value">¥${Math.round(pipeCost).toLocaleString()}円</span></div>
+              <div class="result-item"><span class="result-label">重量 : </span><span class="result-value">${r.pipeWeight}kg</span></div>
+              <div class="result-item"><span class="result-label">m/単価: </span><span class="result-value">${Math.round(adjustedUnitPrice).toLocaleString()}円</span></div>
+              <div class="result-item"><span class="result-label">サイズ: </span><span class="result-value">${r.size}A</span></div>
+              <div class="result-item"><span class="result-label">材料: </span><span class="result-value">${displayMaterial}</span></div>
+              <div class="result-item"><span class="result-label">スケジュール: </span><span class="result-value">${answers.schedule}</span></div>
+              <div class="result-item"><span class="result-label">長さ: </span><span class="result-value">${answers.length}m</span></div>
+              <div class="result-item"><span class="result-label">打合せ時の食事: </span><span class="result-value">${answers.food}屋さん</span></div>
+            </div>
 
-      <div class="comment-section" style="margin-top:20px; font-size: 0.8rem;">
-        <label for="comment">*内作・現場・高所・室内・野外、材料費などにより、金額は変動します。詳しくはお問い合わせください</label><br>
-      </div>
-      <br><br><br>
+            <div class="comment-section" style="margin-top:20px; font-size: 0.8rem;">
+              <label>*内作・現場・高所・室内・野外、材料費などにより、金額は変動します。詳しくはお問い合わせください</label><br>
+            </div>
+            <br><br><br>
 
-      <button onclick="window.location.href='https://atsu3sh1n1.github.io/yumikou/'" style="
-        position: fixed;
-        bottom: 20px;
-        right: 20px;
-        padding: 6px 6px;
-        font-size: 16px;
-        background-color: #007bff;
-        color: white;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-      ">
-        戻る
-      </button>
-      `;
+            <button onclick="window.location.href='https://atsu3sh1n1.github.io/yumikou/'" style="
+              position: fixed;
+              bottom: 20px;
+              right: 20px;
+              padding: 6px 6px;
+              font-size: 16px;
+              background-color: #007bff;
+              color: white;
+              border: none;
+              border-radius: 4px;
+              cursor: pointer;
+            ">戻る</button>
+          `;
         } else {
           questionEl.textContent = "計算エラー";
           buttonsDiv.textContent = e.data.result.message || "不明なエラー";
@@ -358,10 +340,8 @@
       }
     });
 
-
     showQuestion();
   </script>
-
 </body>
 
 </html>
