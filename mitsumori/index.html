@@ -302,36 +302,17 @@
           // 単価 × 係数 × 長さ = 概算金額
           const pipeCost = adjustedUnitPrice * Number(answers.length);
 
-          // ★ 歩掛計算（鉄・ステンレス分けて、さらにスケジュールやサイズでも補正）
-          let baseWorkRate = 1; // 鉄(STPG Sch40)基準10m/人工
-          let factor = 1;
+          // 材料費（半分）
+          const halfMaterialCost = pipeCost / 2;
 
-          // 材質補正
-          if (material === "ステンレス") {
-            factor *= 1.25; // ステンレスは1.3で割る
-          }
+          // 人工単価（固定）
+          const laborUnitPrice = 25000;
 
-          // ネジ補正
-          if (connection === "ネジ") {
-            if (material === "鉄") {
-              factor *= 0.79;
-            } else if (material === "ステンレス") {
-              factor *= 0.6;
-            }
-          }
+          // 人工数（材料費の半分 ÷ 人工単価）
+          const laborCount = halfMaterialCost / laborUnitPrice;
 
-          // スケジュール補正（例：sch80は1.2）
-          if (answers.schedule === "sch80") {
-            factor *= 1.2;
-          }
-
-          // サイズ補正（例：サイズ50A以上で1.1）
-          if (Number(answers.size) >= 50) {
-            factor *= 1.1;
-          }
-
-          // 歩掛（補正後）
-          const workRate = baseWorkRate / factor;
+          // ★歩掛計算（長さ ÷ 人工数 = m/人工）
+          const workRate = Number(answers.length) / laborCount;
 
           questionEl.innerHTML = `<a href="https://atsu3sh1n1.github.io/yumikou/" target="_blank" style="text-decoration: none; color: inherit;">有限会社弓工</a>`;
 
@@ -339,8 +320,7 @@
         <div class="result-card">
           <div class="result-item"><span class="result-label">概算: </span><span class="result-value">¥${Math.round(pipeCost).toLocaleString()}円</span></div>
           <div class="result-item"><span class="result-label">重量 : </span><span class="result-value">${r.pipeWeight}kg</span></div>
-          <div class="result-item"><span class="result-label">歩掛（m/人工）: </span><span class="result-value">${workRate.toFixed(2)}</span></div>
-          <div class="result-item"><span class="result-label">m/単価: </span><span class="result-value">${Math.round(adjustedUnitPrice).toLocaleString()}円</span></div>
+          <div class="result-item"><span class="result-label">歩掛（m/人工）: </span><span class="result-value">${workRate.toFixed(2)}</span></div>          <div class="result-item"><span class="result-label">m/単価: </span><span class="result-value">${Math.round(adjustedUnitPrice).toLocaleString()}円</span></div>
           <div class="result-item"><span class="result-label">サイズ: </span><span class="result-value">${r.size}A</span></div>
           <div class="result-item"><span class="result-label">材料: </span><span class="result-value">${displayMaterial}</span></div>
           <div class="result-item"><span class="result-label">スケジュール: </span><span class="result-value">${answers.schedule}</span></div>
