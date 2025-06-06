@@ -260,7 +260,7 @@
         questionEl.textContent = "計算中…";
         buttonsDiv.innerHTML = "";
 
-        const unitPrice = 1200;
+        const unitPrice = 1000;
         const materialMap = { "鉄": "steel", "ステンレス": "stainless" };
 
         const postData = {
@@ -290,9 +290,9 @@
           let unitPriceMultiplier = 1;
           if (connection === "ネジ") {
             if (material === "鉄") {
-              unitPriceMultiplier = 0.79;
+              unitPriceMultiplier = 0.85;
             } else if (material === "ステンレス") {
-              unitPriceMultiplier = 0.6;
+              unitPriceMultiplier = 0.85;
             }
           }
 
