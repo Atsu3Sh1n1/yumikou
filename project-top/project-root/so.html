@@ -331,7 +331,7 @@
                     const material = card.querySelector('select[name="material[]"]').value;  // ← 追加
 
                     if (unit === 'メーター' && shape === 'pipe' && quantity > 0) {
-                        const divisor = (material === 'SUS304' || material === 'SUS316') ? 5 : 5.5;  // ← 条件で分岐
+                        const divisor = (material === 'SUS304' || material === 'SUS316') ? 4 : 5.5;  // ← 条件で分岐
                         const count = Math.ceil(quantity / divisor);  // ← 動的に割る
                         cutLengthDisplay.textContent = `${count} 本`;
                         cutLengthGroup.style.display = 'block';
