@@ -300,7 +300,7 @@
           const pipeCost = adjustedUnitPrice * Number(answers.length);
 
           // 材料費（半分）
-          const halfMaterialCost = pipeCost / 2.5;
+          const halfMaterialCost = pipeCost / 4;
 
           // 人工単価（固定）
           const laborUnitPrice = 27000;
@@ -363,7 +363,7 @@
           <div class="result-item"><span class="result-label">人工数: </span><span class="result-value">${laborCount.toFixed(2)}人日</span></div>
           ${laborBreakdownHTML}
 
-          <div class="result-item"><span class="result-label">m/単価: </span><span class="result-value">${Math.round(adjustedUnitPrice).toLocaleString()}円</span></div>
+          <div class="result-item"><span class="result-label">m/原価単価: </span><span class="result-value">${Math.round(adjustedUnitPrice / 2).toLocaleString()}円</span></div>
 
 
           <div class="result-item"><span class="result-label">打合せ時の食事: </span><span class="result-value">${answers.food}屋さん</span></div>
