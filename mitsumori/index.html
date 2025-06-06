@@ -260,7 +260,7 @@
         questionEl.textContent = "計算中…";
         buttonsDiv.innerHTML = "";
 
-        const unitPrice = 800;
+        const unitPrice = 900;
         const materialMap = { "鉄": "steel", "ステンレス": "stainless" };
 
         const postData = {
@@ -286,6 +286,7 @@
           const material = answers.material;
           let displayMaterial = `${material}(${connection})`;
 
+          // 単価調整
           let unitPriceMultiplier = 1;
           if (connection === "ネジ") {
             if (material === "鉄") {
@@ -301,38 +302,70 @@
           // 単価 × 係数 × 長さ = 概算金額
           const pipeCost = adjustedUnitPrice * Number(answers.length);
 
+          // ★ 歩掛計算（鉄・ステンレス分けて、さらにスケジュールやサイズでも補正）
+          let baseWorkRate = 1; // 鉄(STPG Sch40)基準10m/人工
+          let factor = 1;
+
+          // 材質補正
+          if (material === "ステンレス") {
+            factor *= 1.25; // ステンレスは1.3で割る
+          }
+
+          // ネジ補正
+          if (connection === "ネジ") {
+            if (material === "鉄") {
+              factor *= 0.79;
+            } else if (material === "ステンレス") {
+              factor *= 0.6;
+            }
+          }
+
+          // スケジュール補正（例：sch80は1.2）
+          if (answers.schedule === "sch80") {
+            factor *= 1.2;
+          }
+
+          // サイズ補正（例：サイズ50A以上で1.1）
+          if (Number(answers.size) >= 50) {
+            factor *= 1.1;
+          }
+
+          // 歩掛（補正後）
+          const workRate = baseWorkRate / factor;
+
           questionEl.innerHTML = `<a href="https://atsu3sh1n1.github.io/yumikou/" target="_blank" style="text-decoration: none; color: inherit;">有限会社弓工</a>`;
 
           buttonsDiv.innerHTML = `
-            <div class="result-card">
-              <div class="result-item"><span class="result-label">概算: </span><span class="result-value">¥${Math.round(pipeCost).toLocaleString()}円</span></div>
-              <div class="result-item"><span class="result-label">重量 : </span><span class="result-value">${r.pipeWeight}kg</span></div>
-              <div class="result-item"><span class="result-label">m/単価: </span><span class="result-value">${Math.round(adjustedUnitPrice).toLocaleString()}円</span></div>
-              <div class="result-item"><span class="result-label">サイズ: </span><span class="result-value">${r.size}A</span></div>
-              <div class="result-item"><span class="result-label">材料: </span><span class="result-value">${displayMaterial}</span></div>
-              <div class="result-item"><span class="result-label">スケジュール: </span><span class="result-value">${answers.schedule}</span></div>
-              <div class="result-item"><span class="result-label">長さ: </span><span class="result-value">${answers.length}m</span></div>
-              <div class="result-item"><span class="result-label">打合せ時の食事: </span><span class="result-value">${answers.food}屋さん</span></div>
-            </div>
+        <div class="result-card">
+          <div class="result-item"><span class="result-label">概算: </span><span class="result-value">¥${Math.round(pipeCost).toLocaleString()}円</span></div>
+          <div class="result-item"><span class="result-label">重量 : </span><span class="result-value">${r.pipeWeight}kg</span></div>
+          <div class="result-item"><span class="result-label">歩掛（m/人工）: </span><span class="result-value">${workRate.toFixed(2)}</span></div>
+          <div class="result-item"><span class="result-label">m/単価: </span><span class="result-value">${Math.round(adjustedUnitPrice).toLocaleString()}円</span></div>
+          <div class="result-item"><span class="result-label">サイズ: </span><span class="result-value">${r.size}A</span></div>
+          <div class="result-item"><span class="result-label">材料: </span><span class="result-value">${displayMaterial}</span></div>
+          <div class="result-item"><span class="result-label">スケジュール: </span><span class="result-value">${answers.schedule}</span></div>
+          <div class="result-item"><span class="result-label">長さ: </span><span class="result-value">${answers.length}m</span></div>
+          <div class="result-item"><span class="result-label">打合せ時の食事: </span><span class="result-value">${answers.food}屋さん</span></div>
+        </div>
 
-            <div class="comment-section" style="margin-top:20px; font-size: 0.8rem;">
-              <label>*内作・現場・高所・室内・野外、材料費などにより、金額は変動します。詳しくはお問い合わせください</label><br>
-            </div>
-            <br><br><br>
+        <div class="comment-section" style="margin-top:20px; font-size: 0.8rem;">
+          <label>*内作・現場・高所・室内・野外、材料費などにより、金額は変動します。詳しくはお問い合わせください</label><br>
+        </div>
+        <br><br><br>
 
-            <button onclick="window.location.href='https://atsu3sh1n1.github.io/yumikou/'" style="
-              position: fixed;
-              bottom: 20px;
-              right: 20px;
-              padding: 6px 6px;
-              font-size: 16px;
-              background-color: #007bff;
-              color: white;
-              border: none;
-              border-radius: 4px;
-              cursor: pointer;
-            ">戻る</button>
-          `;
+        <button onclick="window.location.href='https://atsu3sh1n1.github.io/yumikou/'" style="
+          position: fixed;
+          bottom: 20px;
+          right: 20px;
+          padding: 6px 6px;
+          font-size: 16px;
+          background-color: #007bff;
+          color: white;
+          border: none;
+          border-radius: 4px;
+          cursor: pointer;
+        ">戻る</button>
+      `;
         } else {
           questionEl.textContent = "計算エラー";
           buttonsDiv.textContent = e.data.result.message || "不明なエラー";

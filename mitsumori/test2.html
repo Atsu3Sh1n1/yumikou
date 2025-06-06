@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <title>配管計算機 iframe版</title>
   <script>
     // 親ウィンドウから呼び出す計算関数
     function calculatePipeCost(params) {
       const { size, length, unitPrice, schedule, material } = params;
-      
+
       // 重量データ
       const weightPerMeter = {
         "6": { sgp: 0.419, sch40: 0.369, sch60: 0.450, sch80: 0.479, sus5s: 0.237, sus10s: 0.278, sus20: 0.336, sus40: 0.373, sus80: 0.484 },
@@ -36,18 +37,17 @@
 
       // 小口径補正係数
       const diameterCorrectionFactors = {
-        "6": 15.5, "8": 11.5, "10": 9.1, "15": 6, "20": 4.8, "25": 3.9, "32": 3.2, 
-        "40": 2.8, "50": 2.5, "65": 2.2, "80": 2.0, "90": 1.9, "100": 1.7, 
+        "6": 15.5, "8": 11.5, "10": 9.1, "15": 6, "20": 4.8, "25": 3.9, "32": 3.2,
+        "40": 2.8, "50": 2.5, "65": 2.2, "80": 2.0, "90": 1.9, "100": 1.7,
         "125": 1.5, "150": 1.3, "200": 1.2, "250": 1.1, "300": 1.0
       };
 
       const pipeSizes = ["6", "8", "10", "15", "20", "25", "32", "40", "50", "65", "80", "90", "100", "125", "150", "175", "200", "250", "300", "350", "400", "450", "500"];
 
-      // スケジュールキーを決定
+      // スケジュールキー
       const schKey = schedule.toLowerCase();
       const materialKey = material === 'steel' ? schKey : 'sus' + schKey.slice(3);
 
-      // 重量を取得
       const actualWeight = weightPerMeter[size]?.[materialKey];
       if (actualWeight === undefined) {
         return {
@@ -69,7 +69,7 @@
         discountFactor = Math.pow(1 / 1.01, sizeStep);
       }
 
-      // 長さによる割引 (100mで最大20%割引)
+      // 長さによる割引
       function getLengthDiscount(len, sz, sch) {
         if (sz === "25" && sch.toLowerCase() === "sch40" && len === 1) {
           return 1;
@@ -79,7 +79,6 @@
         const discountRate = Math.min((len / discountLengthThreshold) * maxDiscountRate, maxDiscountRate);
         return 1 - discountRate;
       }
-
       const lengthDiscount = getLengthDiscount(length, size, schedule);
       const diameterCorrection = diameterCorrectionFactors[size] || 1.0;
 
@@ -87,28 +86,31 @@
       let cost = weight * unitPrice * lengthDiscount * diameterCorrection * discountFactor;
       if (material === 'stainless') cost *= 1.3;
 
-      // メートル単価
       const unitPricePerMeter = length > 0 ? cost / length : 0;
+
+      // ----------- ここから歩掛計算 -----------
+      // 基準重量: sch40=2.56kg/m
+      const standardWeight = 2.56;
+      let workAmount = 0;
+      if (actualWeight > 0) {
+        workAmount = (standardWeight / actualWeight).toFixed(2); // 小数点2桁
+      }
 
       return {
         success: true,
         pipeWeight: weight.toFixed(1),
         pipeCost: cost.toFixed(0),
-
         unitPricePerMeter: Math.round(unitPricePerMeter),
         size: size,
-      
-       
         schedule: schedule,
-        material: material
+        material: material,
+        workAmount: workAmount // ← 追加！
       };
     }
 
-    // 親ウィンドウからのメッセージを受け取る
-    window.addEventListener('message', function(event) {
+    window.addEventListener('message', function (event) {
       if (event.data.action === 'calculate') {
         const result = calculatePipeCost(event.data.params);
-        // 親ウィンドウに結果を返す
         event.source.postMessage({
           action: 'calculationResult',
           result: result
@@ -117,9 +119,9 @@
     });
   </script>
 </head>
+
 <body style="margin:0;padding:0;">
   <!-- このiframeは計算専用で表示は不要 -->
 </body>
+
 </html>
-
-
