@@ -260,7 +260,7 @@
         questionEl.textContent = "計算中…";
         buttonsDiv.innerHTML = "";
 
-        const unitPrice = 980;
+        const unitPrice = 1000;
         const materialMap = { "鉄": "steel", "ステンレス": "stainless" };
 
         const postData = {
@@ -320,7 +320,9 @@
         <div class="result-card">
           <div class="result-item"><span class="result-label">概算: </span><span class="result-value">¥${Math.round(pipeCost).toLocaleString()}円</span></div>
           <div class="result-item"><span class="result-label">重量 : </span><span class="result-value">${r.pipeWeight}kg</span></div>
-          <div class="result-item"><span class="result-label">歩掛（m/人工）: </span><span class="result-value">${workRate.toFixed(2)}</span></div>          
+          <div class="result-item"><span class="result-label">歩掛（m/人工）: </span><span class="result-value">${workRate.toFixed(2)}</span></div>
+          <div class="result-item"><span class="result-label">人工数: </span><span class="result-value">${laborCount.toFixed(2)}人日</span></div>
+          
           <div class="result-item"><span class="result-label">m/単価: </span><span class="result-value">${Math.round(adjustedUnitPrice).toLocaleString()}円</span></div>
           <div class="result-item"><span class="result-label">サイズ: </span><span class="result-value">${r.size}A</span></div>
           <div class="result-item"><span class="result-label">材料: </span><span class="result-value">${displayMaterial}</span></div>
