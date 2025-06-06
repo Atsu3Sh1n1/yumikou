@@ -443,10 +443,10 @@
 
       let cost = weight * price * lengthDiscount * diameterCorrection * discountFactor;
 
-      if (formData.material === 'stainless') cost *= 1.5;
+      if (formData.material === 'stainless') cost *= 1.25;
 
       const unitPricePerMeter = length > 0 ? cost / length : 0;
-      document.getElementById(`pipeWeight-${formId}`).textContent = `配管重量: ${weight.toFixed(3)} kg`;
+      document.getElementById(`pipeWeight-${formId}`).textContent = `配管重量: ${weight.toFixed(2)} kg`;
       document.getElementById(`pipeCost-${formId}`).textContent = `金額: ¥${Math.round(cost).toLocaleString()}`;
       document.getElementById(`perMeterUnitPrice-${formId}`).textContent = `メートル単価: ¥${Math.round(unitPricePerMeter).toLocaleString()} /m`;
 
@@ -491,7 +491,7 @@
         // 補正係数適用
         const diameterCorrection = diameterCorrectionFactors[size] || 1.0;
         let subtotal = weight * price * diameterCorrection;
-        if (material === 'stainless') subtotal *= 1.5;
+        if (material === 'stainless') subtotal *= 1.3;
         subtotal = Math.round(subtotal);
 
         allFormData.push({
