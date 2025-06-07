@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="format-detection" content="telephone=no">
+
+    <title>概算見積もり・有限会社弓工</title>
+    <style>
+        /* あなたのスタイルはそのまま */
+        html {
+            font-size: 4vw;
+        }
+
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: sans-serif;
+
+            color: black;
+            text-align: center;
+            overflow: hidden;
+            height: 100%;
+        }
+
+        body {
+            overflow-y: auto;
+            /* hiddenからautoに変更 */
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 1em;
+            /* 余白を追加 */
+            box-sizing: border-box;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            top: -4%;
+            left: -60%;
+            width: 180vw;
+            height: 180vh;
+            background-image: url('yumikou.png');
+            background-repeat: repeat;
+            background-size: 200px 100px;
+            opacity: 0.03;
+            transform: rotate(-10deg);
+            transform-origin: center;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+
+        #main {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #question {
+            font-weight: bold;
+            font-size: 1.5em;
+            opacity: 0;
+            animation: fadeIn 1s forwards;
+        }
+
+        #buttons {
+            margin-top: 1em;
+            opacity: 0;
+            animation: fadeIn 1s forwards;
+            animation-delay: 1s;
+            animation-fill-mode: forwards;
+        }
+
+        button {
+            background: #ffffff;
+            border: none;
+            padding: 0.75em 1.5em;
+            font-size: 1.25em;
+            margin: 0.5em;
+            cursor: pointer;
+            font-weight: normal;
+            border-radius: 999px;
+            box-shadow: 0 0.4em 1em rgba(0, 0, 0, 0.15);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+
+        button:hover {
+            transform: translateY(-0.2em);
+            box-shadow: 0 0.6em 1.4em rgba(0, 0, 0, 0.2);
+        }
+
+        button,
+        p,
+        span,
+        div {
+            color: black;
+            /* リンク色を黒に上書き */
+            text-decoration: none;
+            /* 下線を消す */
+        }
+
+        a {
+            color: inherit;
+            /* リンク色を親要素から継承 */
+            text-decoration: none;
+            /* 下線を消す */
+        }
+
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(0.5em);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (min-width: 600px) {
+            html {
+                font-size: 20px;
+            }
+        }
+
+        @media (min-width: 1200px) {
+            html {
+                font-size: 20px;
+            }
+        }
+
+        .result-card {
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            padding: 1.5em 2em;
+            max-width: 320px;
+            margin: auto;
+            text-align: left;
+            font-size: 1rem;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .result-card h2 {
+            margin-top: 0;
+            font-weight: 700;
+            color: #2c3e50;
+            text-align: center;
+        }
+
+        .result-item {
+            margin: 0.5em 0;
+            display: flex;
+            justify-content: space-between;
+
+        }
+
+        .result-label {
+            color: #555;
+            margin-right: 1.2em;
+            /* お好みの幅に調整してください */
+        }
+
+        .result-value {
+            color: #222;
+            font-weight: 700;
+        }
+
+        #main a {
+            font-size: 0.8em;
+            color: #333;
+
+        }
+
+        .result-card {
+            position: relative;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            padding: 1.5em 2em;
+            max-width: 320px;
+            margin: auto;
+            text-align: left;
+            font-size: 1rem;
+            color: #333;
+            font-weight: 600;
+            overflow: hidden;
+            /* iframe はみ出さないように */
+            background: transparent;
+            /* 背景はiframeに任せる */
+        }
+
+        .result-card iframe#backgroundIframe {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 120%;
+            /* 少し余裕持たせて広げる */
+            height: 120%;
+            border: none;
+            opacity: 0.3;
+            pointer-events: none;
+            z-index: 0;
+
+            transform: translate(-50%, -50%) scale(0.75);
+            /* 中央に寄せて90%に縮小 */
+            transform-origin: center;
+        }
+
+
+        .result-card .result-content {
+            position: relative;
+            z-index: 1;
+            /* iframeより前面に表示 */
+        }
+    </style>
+</head>
+
+<body>
+    <div id="main">
+        <p id="question">面積を入力してください（m²）</p>
+        <div id="buttons">
+            <input id="areaInput" type="number" min="0" step="0.01" placeholder="例: 100"
+                style="font-size:16px; padding:8px;">
+            <button id="toHeight" style="margin-left:8px;">次へ</button>
+        </div>
+    </div>
+
+    <iframe id="calcIframe" src="ashiba2.html" style="display:none;"></iframe>
+
+    <script>
+        // ビューポート高さ調整（元のまま）
+        function setViewportHeight() {
+            const vh = window.innerHeight * 0.01;
+            document.documentElement.style.setProperty('--vh', `${vh}px`);
+        }
+        window.addEventListener('resize', setViewportHeight);
+        window.addEventListener('orientationchange', setViewportHeight);
+        setViewportHeight();
+
+        const questionEl = document.getElementById("question");
+        const buttonsDiv = document.getElementById("buttons");
+        const iframe = document.getElementById("calcIframe");
+
+        // 変数保持
+        const answers = {};
+
+        // 最初は面積入力のみ
+        const areaInput = document.getElementById("areaInput");
+        const toHeightBtn = document.getElementById("toHeight");
+
+        toHeightBtn.onclick = () => {
+            const val = areaInput.value.trim();
+            if (val === "" || isNaN(val) || Number(val) < 0) {
+                alert("正しい面積を入力してください");
+                return;
+            }
+            answers.area = Number(val);
+            askHeight();
+        };
+
+        // 次は高さを聞く
+        function askHeight() {
+            questionEl.textContent = "高さを入力してください（m）";
+            buttonsDiv.innerHTML = `
+        <input id="heightInput" type="number" min="0" step="0.01" placeholder="例: 15" style="font-size:16px; padding:8px;">
+        <button id="toSafetyType" style="margin-left:8px;">次へ</button>
+      `;
+            const heightInput = document.getElementById("heightInput");
+            const toSafetyTypeBtn = document.getElementById("toSafetyType");
+            toSafetyTypeBtn.onclick = () => {
+                const val = heightInput.value.trim();
+                if (val === "" || isNaN(val) || Number(val) < 0) {
+                    alert("正しい高さを入力してください");
+                    return;
+                }
+                answers.height = Number(val);
+                askSafetyType();
+            };
+        }
+
+        // 次に安全係数のタイプ選択
+        function askSafetyType() {
+            questionEl.textContent = "足場の種類を選んでください";
+            buttonsDiv.innerHTML = "";
+
+            const types = ["くさび式足場", "枠組足場", "単管足場", "吊り足場", "移動式足場"];
+            types.forEach(type => {
+                const btn = document.createElement("button");
+                btn.textContent = type;
+                btn.onclick = () => {
+                    answers.safetyType = type;
+                    askConditions();
+                };
+                buttonsDiv.appendChild(btn);
+            });
+        }
+
+        // 条件因子（複数選択可）
+        function askConditions() {
+            questionEl.textContent = "条件を選んでください（複数選択可）";
+            buttonsDiv.innerHTML = "";
+
+            const conditionsList = [
+                "シート養生",
+                "組立・解体セット",
+                "足場盛替え",
+                "解体",
+                "急工期対応",
+                "雨天",
+                "夜間",
+                "深夜"
+            ];
+
+            const selected = new Set();
+
+            conditionsList.forEach(cond => {
+                const label = document.createElement("label");
+                label.style.display = "block";
+                label.style.marginBottom = "6px";
+
+                const checkbox = document.createElement("input");
+                checkbox.type = "checkbox";
+                checkbox.value = cond;
+                checkbox.onchange = () => {
+                    if (checkbox.checked) {
+                        selected.add(cond);
+                    } else {
+                        selected.delete(cond);
+                    }
+                };
+
+                label.appendChild(checkbox);
+                label.appendChild(document.createTextNode(" " + cond));
+                buttonsDiv.appendChild(label);
+            });
+
+            const btn = document.createElement("button");
+            btn.textContent = "計算開始";
+            btn.style.marginTop = "12px";
+            btn.onclick = () => {
+                answers.conditions = Array.from(selected);
+                startCalculation();
+            };
+            buttonsDiv.appendChild(btn);
+        }
+
+        // 計算開始
+        function startCalculation() {
+            questionEl.textContent = "計算中...";
+            buttonsDiv.innerHTML = "";
+
+            iframe.contentWindow.postMessage({
+                action: "calculate",
+                params: answers
+            }, "*");
+        }
+
+        // 結果受信
+        window.addEventListener("message", (e) => {
+            if (e.data.action === "calculationResult") {
+                const r = e.data.result;
+                questionEl.textContent = "計算結果";
+
+                buttonsDiv.innerHTML = `
+          <div class="result-card">
+            <div class="result-content">
+              <div class="result-item"><strong>人員数 (manpower):</strong> ${r.manpower}</div>
+              <div class="result-item"><strong>原価 (cost):</strong> ¥${r.cost.toLocaleString()}</div>
+              <div class="result-item"><strong>経費込み (costWithOverhead):</strong> ¥${r.costWithOverhead.toLocaleString()}</div>
+              <div class="result-item"><strong>消費税 (tax):</strong> ¥${r.tax.toLocaleString()}</div>
+              <div class="result-item"><strong>合計 (total):</strong> ¥${r.total.toLocaleString()}</div>
+            </div>
+          </div>
+          <br>
+          <button id="restartBtn" style="
+            padding: 8px 16px;
+            font-size: 16px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+          ">最初からやり直す</button>
+        `;
+
+                document.getElementById("restartBtn").onclick = () => {
+                    location.reload();
+                };
+            }
+        });
+    </script>
+</body>

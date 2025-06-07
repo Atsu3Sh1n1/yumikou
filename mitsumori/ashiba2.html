@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<title>計算子ページ</title>
+</head>
+<body>
+<script>
+const laborCost = 25000; // 固定
+const overheadRate = 20; // 固定
+
+function getSafetyFactor(type) {
+  const map = {
+    "くさび式足場": 1.00,
+    "枠組足場": 1.15,
+    "単管足場": 1.30,
+    "吊り足場": 1.50,
+    "移動式足場": 0.85
+  };
+  return map[type] || 1.00;
+}
+
+function getConditionFactor(conditions) {
+  // conditions は ['シート養生', '雨天'...] の配列想定
+  const map = {
+    "シート養生": 1.1,
+    "組立・解体セット": 1.8,
+    "足場盛替え": 1.6,
+    "解体": 0.9,
+    "急工期対応": 1.3,
+    "雨天": 1.3,
+    "夜間": 1.25,
+    "深夜": 1.5
+  };
+  let factor = 1.0;
+  conditions.forEach(cond => {
+    if(map[cond]) factor *= map[cond];
+  });
+  return factor;
+}
+
+function getHeightCoefficient(height) {
+  const table = [
+    { height: 0, coefficient: 1.00 },
+    { height: 10, coefficient: 1.34 },
+    { height: 20, coefficient: 1.71 },
+    { height: 30, coefficient: 2.04 },
+    { height: 60, coefficient: 3.24 },
+    { height: 100, coefficient: 5.26 },
+    { height: 150, coefficient: 7.16 },
+    { height: 200, coefficient: 8.00 },
+  ];
+  if (height <= 0) return 1.0;
+  if (height >= 200) return 8.0;
+  for (let i = 0; i < table.length - 1; i++) {
+    const h1 = table[i].height, h2 = table[i + 1].height;
+    if (height >= h1 && height <= h2) {
+      const c1 = table[i].coefficient, c2 = table[i + 1].coefficient;
+      const ratio = (height - h1) / (h2 - h1);
+      return parseFloat((c1 + (c2 - c1) * ratio).toFixed(2));
+    }
+  }
+  return 1.0;
+}
+
+function getEfficiency(area) {
+  const table = [
+    { area: 0, coefficient: 0.04, efficiency: 25.0 },
+    { area: 500, coefficient: 0.0358, efficiency: 27.93 },
+    { area: 1000, coefficient: 0.0325, efficiency: 30.77 },
+  ];
+  if (area <= 0) return 25.0;
+  if (area <= 1000) {
+    for (let i = 0; i < table.length - 1; i++) {
+      const lower = table[i], upper = table[i + 1];
+      if (area >= lower.area && area < upper.area) {
+        const ratio = (area - lower.area) / (upper.area - lower.area);
+        return lower.efficiency + (upper.efficiency - lower.efficiency) * ratio;
+      }
+    }
+    return table[table.length - 1].efficiency;
+  } else {
+    const baseEfficiency = 30.77;
+    const steps = Math.floor((area - 1000) / 500);
+    return baseEfficiency / Math.pow(0.98, steps);
+  }
+}
+
+function calculate(params) {
+  const area = parseFloat(params.area) || 0;
+  const height = parseFloat(params.height) || 0;
+  const safetyFactor = getSafetyFactor(params.safetyType);
+  const conditionFactor = getConditionFactor(params.conditions || []);
+  const heightCoefficient = getHeightCoefficient(height);
+  const efficiency = getEfficiency(area);
+
+  const adjustedEfficiency = efficiency / safetyFactor / conditionFactor / heightCoefficient;
+  const volume = area * (height > 0 ? height : 1);
+  const manpower = volume / adjustedEfficiency;
+  const cost = manpower * laborCost;
+  const costWithOverhead = cost * (1 + overheadRate / 100);
+  const tax = Math.floor(costWithOverhead * 0.1);
+  const total = Math.floor((costWithOverhead + tax) / 100) * 100;
+
+  return {
+    manpower: manpower.toFixed(2),
+    cost: Math.floor(cost),
+    costWithOverhead: Math.floor(costWithOverhead),
+    tax: tax,
+    total: total
+  };
+}
+
+// 親からのメッセージ受信
+window.addEventListener("message", (e) => {
+  if(e.data.action === "calculate"){
+    const result = calculate(e.data.params);
+    e.source.postMessage({ action: "calculationResult", result }, e.origin);
+  }
+});
+</script>
+</body>
+</html>
+ 
