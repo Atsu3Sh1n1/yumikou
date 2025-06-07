@@ -382,7 +382,7 @@
               <div class="result-item"><strong>足場種類:</strong> ${answers.safetyType}</div>
               <div class="result-item"><strong>条件:</strong> ${answers.conditions.length > 0 ? answers.conditions.join(", ") : "なし"}</div>
               <hr>
-              <div class="result-item"><strong>工数:</strong> ${r.manpower}</div>
+              <div class="result-item"><strong>工数:</strong> ${r.manpower}人日</div>
               <div class="result-item"><strong>原価:</strong> ¥${r.cost.toLocaleString()}</div>
               <div class="result-item"><strong>利益含む経費込み:</strong> ¥${r.costWithOverhead.toLocaleString()}</div>
               <div class="result-item"><strong>材料費込む小計:</strong> ¥${costWithMaterial.toLocaleString()}</div>
@@ -391,7 +391,7 @@
             </div>
           </div>
           <br>
-         搬入経路や周囲の環境（機器密集・閉所・暗所・粉塵）などにより、金額は変動します。詳しくはお問い合わせください。
+         搬入経路や周囲の環境（機器密集・閉所・暗所・粉塵）などにより、金額は変動します。詳しくはお問い合わせください。<br>
           <button id="restartBtn" style="
             padding: 8px 16px;
             font-size: 16px;
