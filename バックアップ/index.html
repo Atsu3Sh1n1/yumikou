@@ -28,7 +28,7 @@
     body {
       overflow-y: auto;
       /* hiddenからautoに変更 */
-
+      height: 100%;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -140,12 +140,11 @@
     }
 
     .result-card {
-      background: #f8f9fa;
       border-radius: 12px;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
       padding: 1.5em 2em;
       max-width: 320px;
-      margin: 1em auto;
+      margin: auto;
       text-align: left;
       font-size: 1rem;
       color: #333;
@@ -163,6 +162,7 @@
       margin: 0.5em 0;
       display: flex;
       justify-content: space-between;
+
     }
 
     .result-label {
@@ -174,6 +174,53 @@
     .result-value {
       color: #222;
       font-weight: 700;
+    }
+
+    #main a {
+      font-size: 0.8em;
+      color: #333;
+
+    }
+
+    .result-card {
+      position: relative;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      padding: 1.5em 2em;
+      max-width: 320px;
+      margin: auto;
+      text-align: left;
+      font-size: 1rem;
+      color: #333;
+      font-weight: 600;
+      overflow: hidden;
+      /* iframe はみ出さないように */
+      background: transparent;
+      /* 背景はiframeに任せる */
+    }
+
+    .result-card iframe#backgroundIframe {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 120%;
+      /* 少し余裕持たせて広げる */
+      height: 120%;
+      border: none;
+      opacity: 0.3;
+      pointer-events: none;
+      z-index: 0;
+
+      transform: translate(-50%, -50%) scale(0.75);
+      /* 中央に寄せて90%に縮小 */
+      transform-origin: center;
+    }
+
+
+    .result-card .result-content {
+      position: relative;
+      z-index: 1;
+      /* iframeより前面に表示 */
     }
   </style>
 </head>
@@ -196,6 +243,7 @@
     setViewportHeight();
 
     const questions = [
+      { key: "jobType", text: "作業内容を選んでください", options: ["足場", "配管", "鍛冶"] },
       { key: "material", text: "配管の材質を選んでください", options: ["鉄", "ステンレス"] },
       { key: "connection", text: "接続方法を選んでください", options: ["溶接", "ネジ"] },
       { key: "size", text: "サイズを選んでください", options: ["15", "20", "25", "32", "40", "50", "65", "80", "100", "125", "150", "200", "250", "300", "350", "400", "450", "500"] },
@@ -222,6 +270,20 @@
           btn.textContent = option;
           btn.onclick = () => {
             answers[q.key] = option;
+
+            // ここで足場なら即ジャンプ
+            if (q.key === "jobType" && option === "足場") {
+              window.location.href = "ashiba.html"; // ←複製ページのURL
+              return;
+            }
+
+            // ここで足場なら即ジャンプ
+            if (q.key === "jobType" && option === "鍛冶") {
+              window.location.href = "test3.html"; // ←複製ページのURL
+              return;
+            }
+
+
             nextQuestion();
           };
           buttonsDiv.appendChild(btn);
@@ -257,10 +319,10 @@
       if (currentQuestion < questions.length) {
         showQuestion();
       } else {
-        questionEl.textContent = "計算中…";
+        questionEl.textContent = "";
         buttonsDiv.innerHTML = "";
 
-        const unitPrice = 1000;
+        const unitPrice = 1026;
         const materialMap = { "鉄": "steel", "ステンレス": "stainless" };
 
         const postData = {
@@ -300,11 +362,39 @@
           // 単価 × 係数 × 長さ = 概算金額
           const pipeCost = adjustedUnitPrice * Number(answers.length);
 
-          // 材料費（半分）
-          const halfMaterialCost = pipeCost / 2.5;
+
+          // 総額（材料費+人件費+諸経費）としてpipeCostを使う
+          const totalCost = pipeCost;
+
+          // 割合（例：47% 材料費、38% 人件費、15% 諸経費）
+          const materialRate = 0.47;
+          const laborRate = 0.38;
+          const expenseRate = 0.15;
+
+          // 振り分け計算
+          const materialCost = totalCost * materialRate;
+          const laborCost = totalCost * laborRate;
+          const expenseCost = totalCost * expenseRate;
+
+          // 税率
+const taxRate = 0.1;  // 10%の場合
+
+// 小計・消費税・総額
+const subtotal = materialCost + laborCost + expenseCost;
+const tax = subtotal * taxRate;
+const totalAmount = subtotal + tax;
+
+          // 出力例（コンソール）
+          console.log(`材料費: ${Math.round(materialCost)}円`);
+          console.log(`人件費: ${Math.round(laborCost)}円`);
+          console.log(`諸経費: ${Math.round(expenseCost)}円`);
+
 
           // 人工単価（固定）
           const laborUnitPrice = 27000;
+
+          // 材料費の半分
+          const halfMaterialCost = materialCost / 2;
 
           // 人工数（材料費の半分 ÷ 人工単価）
           const laborCount = halfMaterialCost / laborUnitPrice;
@@ -341,31 +431,78 @@
         `;
           }
 
-          questionEl.innerHTML = `<a href="https://atsu3sh1n1.github.io/yumikou/" target="_blank" style="text-decoration: none; color: inherit;">有限会社弓工</a>`;
 
           buttonsDiv.innerHTML = `
-        <div class="result-card">
-          <div class="result-item"><span class="result-label">概算: </span><span class="result-value">¥${Math.round(pipeCost).toLocaleString()}円</span></div>
-          <div class="result-item"><span class="result-label">重量: </span><span class="result-value">${r.pipeWeight}kg</span></div>
-          <div class="result-item"><span class="result-label">歩掛（m/人工）: </span><span class="result-value">${workRate.toFixed(2)}</span></div>
-          <div class="result-item"><span class="result-label">人工数: </span><span class="result-value">${laborCount.toFixed(2)}人日</span></div>
-          ${laborBreakdownHTML}
-          <div class="result-item"><span class="result-label">m/単価: </span><span class="result-value">${Math.round(adjustedUnitPrice).toLocaleString()}円</span></div>
-          <div class="result-item"><span class="result-label">サイズ: </span><span class="result-value">${r.size}A</span></div>
+           <div style="text-align:center; margin-bottom:1em;">
+    <a href="https://atsu3sh1n1.github.io/yumikou/" target="_blank" style="text-decoration: none; color: inherit;">Created by YUMIKOU Inc.</a>
+  </div>
+
+         <div class="result-card">
+  <iframe id="backgroundIframe" src="cost.html" frameborder="0"></iframe>
+
+  <!-- ここに結果の内容 -->
+  <div class="result-content">
+
+
           <div class="result-item"><span class="result-label">材料: </span><span class="result-value">${displayMaterial}</span></div>
+
+          <div class="result-item"><span class="result-label">サイズ: </span><span class="result-value">${r.size}A</span></div>
+
           <div class="result-item"><span class="result-label">スケジュール: </span><span class="result-value">${answers.schedule}</span></div>
+
+
+
           <div class="result-item"><span class="result-label">長さ: </span><span class="result-value">${answers.length}m</span></div>
+
+          <div class="result-item"><span class="result-label">重量: </span><span class="result-value">${r.pipeWeight}kg</span></div>
+
+          <div class="result-item"><span class="result-label">歩掛: </span><span class="result-value">${workRate.toFixed(2)}m/人工</span></div>
+
+          <div class="result-item"><span class="result-label">工数: </span><span class="result-value">${laborCount.toFixed(2)}人日</span></div>
+          ${laborBreakdownHTML}
+
+          <div class="result-item">
+  <span class="result-label">材料費: </span>
+  <span class="result-value">${Math.round(materialCost).toLocaleString()}円</span>
+</div>
+<div class="result-item">
+  <span class="result-label">人件費: </span>
+  <span class="result-value">${Math.round(laborCost).toLocaleString()}円</span>
+</div>
+<div class="result-item">
+  <span class="result-label">諸経費: </span>
+  <span class="result-value">${Math.round(expenseCost).toLocaleString()}円</span>
+</div>
+
+<div class="result-item">
+  <span class="result-label">小計: </span>
+  <span class="result-value">${Math.round(subtotal).toLocaleString()}円</span>
+</div>
+<div class="result-item">
+  <span class="result-label">消費税 (${(taxRate * 100).toFixed(0)}%): </span>
+  <span class="result-value">${Math.round(tax).toLocaleString()}円</span>
+</div>
+<div class="result-item">
+  <span class="result-label">総額: </span>
+  <span class="result-value" style="color:red;">¥${Math.round(totalAmount).toLocaleString()}円</span>
+</div>
+
+
+
           <div class="result-item"><span class="result-label">打合せ時の食事: </span><span class="result-value">${answers.food}屋さん</span></div>
-        </div>
+
+        </div></div><br>
 
         <div class="comment-section" style="margin-top:20px; font-size: 0.8rem;">
-          <label>*内作・現場・高所・室内・野外、材料費などにより、金額は変動します。詳しくはお問い合わせください</label><br>
+          <label>*内作・現場・高所・室内・野外、継手数量、材料費などにより、金額は変動します。詳しくはお問い合わせください</label><br>
         </div>
-        <br><br><br>
+        <br>
+        
+        
 
         <button onclick="window.location.href='https://atsu3sh1n1.github.io/yumikou/'" style="
           position: fixed;
-          bottom: 20px;
+          bottom: 0px;
           right: 20px;
           padding: 6px 6px;
           font-size: 16px;
@@ -375,6 +512,8 @@
           border-radius: 4px;
           cursor: pointer;
         ">戻る</button>
+        <br>
+
       `;
         } else {
           questionEl.textContent = "計算エラー";
@@ -384,6 +523,8 @@
     });
 
     showQuestion();
+
+
   </script>
 </body>
 

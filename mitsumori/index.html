@@ -277,6 +277,13 @@
               return;
             }
 
+            // ここで足場なら即ジャンプ
+            if (q.key === "jobType" && option === "鍛冶") {
+              window.location.href = "test3.html"; // ←複製ページのURL
+              return;
+            }
+
+
             nextQuestion();
           };
           buttonsDiv.appendChild(btn);
@@ -315,7 +322,7 @@
         questionEl.textContent = "";
         buttonsDiv.innerHTML = "";
 
-        const unitPrice = 1026;
+        const unitPrice = 860;
         const materialMap = { "鉄": "steel", "ステンレス": "stainless" };
 
         const postData = {
@@ -355,11 +362,39 @@
           // 単価 × 係数 × 長さ = 概算金額
           const pipeCost = adjustedUnitPrice * Number(answers.length);
 
-          // 材料費（半分）
-          const halfMaterialCost = pipeCost / 4;
+
+          // 総額（材料費+人件費+諸経費）としてpipeCostを使う
+          const totalCost = pipeCost;
+
+          // 割合（例：47% 材料費、38% 人件費、15% 諸経費）
+          const materialRate = 0.47;
+          const laborRate = 0.38;
+          const expenseRate = 0.15;
+
+          // 振り分け計算
+          const materialCost = totalCost * materialRate;
+          const laborCost = totalCost * laborRate;
+          const expenseCost = totalCost * expenseRate;
+
+          // 税率
+          const taxRate = 0.1;  // 10%の場合
+
+          // 小計・消費税・総額
+          const subtotal = materialCost + laborCost + expenseCost;
+          const tax = subtotal * taxRate;
+          const totalAmount = subtotal + tax;
+
+          // 出力例（コンソール）
+          console.log(`材料費: ${Math.round(materialCost)}円`);
+          console.log(`人件費: ${Math.round(laborCost)}円`);
+          console.log(`諸経費: ${Math.round(expenseCost)}円`);
+
 
           // 人工単価（固定）
           const laborUnitPrice = 27000;
+
+          // 材料費の半分
+          const halfMaterialCost = materialCost / 2;
 
           // 人工数（材料費の半分 ÷ 人工単価）
           const laborCount = halfMaterialCost / laborUnitPrice;
@@ -408,7 +443,6 @@
   <!-- ここに結果の内容 -->
   <div class="result-content">
 
-          <div class="result-item"><span class="result-label">概算: </span><span class="result-value" style="color:red;">¥${Math.round(pipeCost).toLocaleString()}円</span></div>
 
           <div class="result-item"><span class="result-label">材料: </span><span class="result-value">${displayMaterial}</span></div>
 
@@ -427,7 +461,32 @@
           <div class="result-item"><span class="result-label">工数: </span><span class="result-value">${laborCount.toFixed(2)}人日</span></div>
           ${laborBreakdownHTML}
 
-          <div class="result-item" style="font-size: 0.8rem;"><span class="result-label">材料＋施工一式：m/単価: </span><span class="result-value">${Math.round(adjustedUnitPrice).toLocaleString()}円</span></div>
+          <div class="result-item">
+  <span class="result-label">材料費: </span>
+  <span class="result-value">${Math.round(materialCost).toLocaleString()}円</span>
+</div>
+<div class="result-item">
+  <span class="result-label">人件費: </span>
+  <span class="result-value">${Math.round(laborCost).toLocaleString()}円</span>
+</div>
+<div class="result-item">
+  <span class="result-label">諸経費: </span>
+  <span class="result-value">${Math.round(expenseCost).toLocaleString()}円</span>
+</div>
+
+<div class="result-item">
+  <span class="result-label">小計: </span>
+  <span class="result-value">${Math.round(subtotal).toLocaleString()}円</span>
+</div>
+<div class="result-item">
+  <span class="result-label">消費税 (${(taxRate * 100).toFixed(0)}%): </span>
+  <span class="result-value">${Math.round(tax).toLocaleString()}円</span>
+</div>
+<div class="result-item">
+  <span class="result-label">総額: </span>
+  <span class="result-value" style="color:red;">¥${Math.round(totalAmount).toLocaleString()}円</span>
+</div>
+
 
 
           <div class="result-item"><span class="result-label">打合せ時の食事: </span><span class="result-value">${answers.food}屋さん</span></div>

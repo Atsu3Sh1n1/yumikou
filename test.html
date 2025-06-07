@@ -1,103 +1,91 @@
 <!DOCTYPE html>
 <html lang="ja">
-
 <head>
-  <meta charset="UTF-8">
-  <title>配管工事コスト比率グラフ</title>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      text-align: center;
-      margin-top: 50px;
-    }
-
-    #chart-container {
-      width: 400px;
-      margin: 0 auto;
-    }
-
-    .created-by {
-      font-size: 14px;
-      color: #555;
-      text-align: center;
-      margin-top: 0;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <title>鍛冶工 工事見積もり計算（詳細版）</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        label { display: block; margin-top: 10px; }
+        input[type="number"] { width: 120px; }
+        .result { margin-top: 20px; font-weight: bold; }
+    </style>
 </head>
-
 <body>
-  <h2>配管工事コスト比率</h2>
-  <p class="created-by">
-    <a href="https://atsu3sh1n1.github.io/yumikou/" target="_blank">Created by YUMIKOU Inc.</a>
-  </p>
+    <h1>鍛冶工 工事見積もり計算（詳細版）</h1>
+    
+    <label>重量（t）:
+        <input type="number" id="weight" step="0.1">
+    </label>
 
-  <div id="chart-container">
-    <canvas id="costPieChart"></canvas>
-  </div>
+    <label>基準人工（人日/t）:
+        <input type="number" id="standardLabor" step="0.01">
+    </label>
 
-  <script>
-    const costData = [
-      { label: "パイプ", value: 35 },
-      { label: "継手", value: 12 },
-      { label: "人件費", value: 38 },
-      { label: "諸経費", value: 15 }
-    ];
+    <label>溶接長さ（m）:
+        <input type="number" id="weldingLength" step="0.1">
+    </label>
 
-    const labels = costData.map(item => item.label);
-    const values = costData.map(item => item.value);
+    <label>溶接歩掛り（人日/m）:
+        <input type="number" id="weldingLabor" step="0.01">
+    </label>
 
-    const backgroundColors = [
-      "#2E86AB",
-      "#F6AA1C",
-      "#6AB187",
-      "#A0A0A0"
-    ];
+    <label>人工単価（円/人日）:
+        <input type="number" id="laborUnitPrice">
+    </label>
 
-    const ctx = document.getElementById('costPieChart').getContext('2d');
-    const costPieChart = new Chart(ctx, {
-      type: 'pie',
-      data: {
-        labels: labels,
-        datasets: [{
-          data: values,
-          backgroundColor: backgroundColors
-        }]
-      },
-      options: {
-        responsive: true,
-        plugins: {
-          legend: {
-            display: false
-          },
-          tooltip: {
-            callbacks: {
-              label: function (context) {
-                const label = context.label || '';
-                const value = context.parsed || 0;
-                return `${label}: ${value}%`;
-              }
-            }
-          },
-          datalabels: {
-            color: '#fff',
-            font: {
-              weight: 'bold',
-              size: 25
-            },
-            formatter: function (value, context) {
-              return `${context.chart.data.labels[context.dataIndex]}\n${value}%`;
-            },
-            align: 'end',    // ラベルの位置調整（例：外側に寄せる）
-            anchor: 'outer', // ラベルの基準位置
-            offset: -15     // ラベルの微調整（ピクセル単位でずらす）
-          }
+    <h2>補正係数</h2>
+    <label>安全係数:
+        <input type="number" id="safetyFactor" step="0.1" value="1.0">
+    </label>
+    <label>環境係数:
+        <input type="number" id="environmentFactor" step="0.1" value="1.0">
+    </label>
+    <label>材質係数:
+        <input type="number" id="materialFactor" step="0.1" value="1.0">
+    </label>
+    <label>現場条件係数:
+        <input type="number" id="siteConditionFactor" step="0.1" value="1.0">
+    </label>
+
+    <button onclick="calculate()">計算する</button>
+
+    <div class="result" id="estimatedLabor"></div>
+    <div class="result" id="totalCost"></div>
+
+    <script>
+        function calculate() {
+            const weight = parseFloat(document.getElementById("weight").value);
+            const standardLabor = parseFloat(document.getElementById("standardLabor").value);
+
+            const weldingLength = parseFloat(document.getElementById("weldingLength").value);
+            const weldingLabor = parseFloat(document.getElementById("weldingLabor").value);
+
+            const laborUnitPrice = parseFloat(document.getElementById("laborUnitPrice").value);
+
+            const safetyFactor = parseFloat(document.getElementById("safetyFactor").value);
+            const environmentFactor = parseFloat(document.getElementById("environmentFactor").value);
+            const materialFactor = parseFloat(document.getElementById("materialFactor").value);
+            const siteConditionFactor = parseFloat(document.getElementById("siteConditionFactor").value);
+
+            // 総補正係数
+            const correctionFactor = safetyFactor * environmentFactor * materialFactor * siteConditionFactor;
+
+            // 本体作業工数（鉄骨組立）
+            const structureLabor = weight * standardLabor;
+
+            // 溶接作業工数
+            const weldingTotalLabor = weldingLength * weldingLabor;
+
+            // 合計工数（人日）
+            const totalLabor = (structureLabor + weldingTotalLabor) * correctionFactor;
+
+            // 工事金額（円）
+            const totalCost = totalLabor * laborUnitPrice;
+
+            // 結果表示
+            document.getElementById("estimatedLabor").innerText = `必要工数（人日）: ${totalLabor.toFixed(2)} 人日`;
+            document.getElementById("totalCost").innerText = `工事金額: ${totalCost.toLocaleString()} 円`;
         }
-      },
-      plugins: [ChartDataLabels]
-    });
-  </script>
+    </script>
 </body>
-
 </html>
