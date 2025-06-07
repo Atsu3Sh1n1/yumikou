@@ -388,6 +388,7 @@
       <div class="result-item"><strong>条件:</strong> ${answers.conditions.length > 0 ? answers.conditions.join(", ") : "なし"}</div>
       <hr>
       <div class="result-item"><strong>工数:</strong> ${r.manpower}人日</div>
+      <div class="result-item"><strong>単価:</strong> ¥${r.laborCost.toLocaleString()}/h</div>
       <div class="result-item"><strong>原価:</strong> ¥${r.cost.toLocaleString()}</div>
       <div class="result-item"><strong>原価＋材料費 30%:</strong> ¥${Math.round(totalBeforeOverhead).toLocaleString()}</div>
       <div class="result-item"><strong>＋利益含む諸経費 20%:</strong> ¥${costWithOverhead.toLocaleString()}</div>
