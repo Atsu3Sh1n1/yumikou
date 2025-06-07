@@ -447,9 +447,7 @@
           <div class="result-item"><span class="result-label">長さ: </span><span class="result-value">${answers.length}m</span></div>
           <div class="result-item"><span class="result-label">重量: </span><span class="result-value">${r.pipeWeight}kg</span></div>
           <div class="result-item"><span class="result-label">歩掛: </span><span class="result-value">${workRate.toFixed(2)}m/人工</span></div>
-          <div class="result-item"><span class="result-label">工数: </span><span class="result-value">${laborCount.toFixed(2)}人日</span></div>
-          ${laborBreakdownHTML}
-
+         
           <div class="result-item">
             <span class="result-label">材料費: </span>
             <span class="result-value">${Math.round(materialCost).toLocaleString()}円</span>
@@ -462,6 +460,9 @@
             <span class="result-label">諸経費: </span>
             <span class="result-value">${Math.round(expenseCost).toLocaleString()}円</span>
           </div>
+
+           <div class="result-item"><span class="result-label">工数: </span><span class="result-value">${laborCount.toFixed(2)}人日</span></div>
+          ${laborBreakdownHTML}
 
           <div class="result-item">
             <span class="result-label">小計: </span>
