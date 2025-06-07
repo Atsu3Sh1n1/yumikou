@@ -390,9 +390,9 @@
       <div class="result-item"><strong>工数:</strong> ${r.manpower}人日</div>
       <div class="result-item"><strong>単価:</strong> ¥${r.laborCost.toLocaleString()}/h</div>
       <div class="result-item"><strong>原価:</strong> ¥${r.cost.toLocaleString()}</div>
-      <div class="result-item"><strong>＋材料費 30%:</strong> ¥${Math.round(totalBeforeOverhead).toLocaleString()}</div>
-      <div class="result-item"><strong>＋諸経費 20%:</strong> ¥${costWithOverhead.toLocaleString()}</div>
-      <div class="result-item"><strong>＋消費税 10%:</strong> ¥${tax.toLocaleString()}</div>
+      <div class="result-item"><strong>材料費 30%:</strong> ¥${Math.round(totalBeforeOverhead).toLocaleString()}</div>
+      <div class="result-item"><strong>諸経費 20%:</strong> ¥${costWithOverhead.toLocaleString()}</div>
+      <div class="result-item"><strong>消費税 10%:</strong> ¥${tax.toLocaleString()}</div>
 
       <div class="result-item"><strong>工事一式（概算）:</strong><span style="color: red;">¥${grandTotal.toLocaleString()}</span></div>
     </div>
