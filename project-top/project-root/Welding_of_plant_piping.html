@@ -55,7 +55,7 @@
         opacity: 0;
       }
     }
-     
+
 
     p {
       opacity: 0;
@@ -65,7 +65,7 @@
       animation-delay: 4.2s;
       /* h2のアニメーション後に開始 */
 
-       
+
     }
 
     @keyframes fadeInUp {
@@ -79,10 +79,35 @@
     iframe {
       display: block;
       width: 100%;
-      max-width: 800px;
+      max-width: 1000px;
       margin: 20px auto;
       border: none;
-      min-height: 600px;
+      min-height: 750px;
+    }
+
+    #vertical {
+      width: 100vw;
+      /* 画面幅いっぱい */
+      height: 600px;
+      /* 必要に応じて調整 */
+      margin-top: 0;
+      margin-bottom: 300px;
+      overflow: hidden;
+      /* 横スクロールを出さない */
+      position: relative;
+    }
+
+    /* iframe自体に縮小をかけて全体表示 */
+    #vertical iframe {
+      width: 100%;
+      /* iframeを親幅に合わせる */
+      height: 100%;
+      /* iframeを親の高さに合わせる */
+      border: none;
+      transform-origin: top left;
+      transform: scale(0.6);
+      /* 子ページ全体を縮小 */
+      display: block;
     }
 
     #app1 {
@@ -147,13 +172,13 @@
       width: 100%;
       height: 100%;
       margin-top: 0px;
-      margin-bottom: 200px;
+      margin-bottom: 0px;
       align-items: center;
     }
 
     #app11 {
       width: 100vw;
-      height:1500px;
+      height: 1500px;
       margin-top: -200px;
       margin-bottom: 0px;
       align-items: center;
@@ -188,7 +213,7 @@
         margin-bottom: 0px;
       }
 
-      
+
     }
 
 
@@ -370,6 +395,8 @@
         left: 125%;
       }
     }
+
+    
   </style>
 </head>
 
@@ -418,7 +445,11 @@
   </div>
   <iframe id="app10" src="https://atsu3sh1n1.github.io/yumikou/pipe/index.html" loading="lazy"></iframe>
 
+  <iframe id="vertical" src="vertical-text.html"></iframe>
+
   <iframe id="app11" src="https://atsu3sh1n1.github.io/yumikou/pipe/作業内容/index.html" loading="lazy"></iframe>
+
+
 
   <iframe id="app7" src="time.html" loading="lazy"></iframe>
 

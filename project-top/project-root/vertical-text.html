@@ -1,38 +1,48 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>古事記風テキスト（縦書き）</title>
   <style>
+    /* フォントや画面中央寄せ */
     body {
-      background-color: #f9f9f9;
       font-family: "Yu Mincho", "Hiragino Mincho Pro", serif;
       margin: 0;
       display: flex;
       justify-content: center;
       align-items: center;
-      min-height: 100vh;
-      padding: 20px;
+      
+      padding: 0;
+      overflow: hidden;
     }
+
+    /* 縦書きテキストエリア */
     #container {
-      writing-mode: vertical-rl; /* 右から左の縦書き */
+      writing-mode: vertical-rl;
       text-orientation: upright;
       font-size: 20px;
-      line-height: 1.5;
+      line-height: 1.8;
       white-space: pre-wrap;
-      background-color: #fff;
-      padding: 20px;
-      border: 1px solid #ccc;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-      text-align: start;
+      padding: 0px;
       display: inline-block;
+      max-width: 100vw;
+      height: 90vh;
+      overflow-y: auto;
+      box-sizing: border-box;
+      text-align: start;
+      -webkit-overflow-scrolling: touch; /* スマホのスクロールを滑らかに */
     }
+
+    /* 最初は透明＆少し上にずらしておく */
     .char {
       opacity: 0;
       transform: translateY(-10px);
       transition: opacity 0.8s ease, transform 0.8s ease;
       display: inline;
+      white-space: pre-wrap;
     }
+
+    /* 表示時 */
     .char.visible {
       opacity: 1;
       transform: translateY(0);
@@ -50,12 +60,13 @@
 国土、未だ脂（あぶら）のごとく漂へる時、\n 葦牙（あしかび）の如く萌え騰がる物より、\n  宇摩志阿斯訶備比古遅神（うましあしかびひこぢのかみ）現れ坐す。\n
 その後、天之常立神（あめのとこたちのかみ）現れ坐す。\n
 此の二柱の神も、独り神と成り坐して、身を隠しき。\n
-斯くして、上の五柱の神は、別天津神（ことあまつかみ）と申すなり。\n
+斯くして、此の五柱の神は、別天津神（ことあまつかみ）と申すなり。\n
 `;
+
 
     const container = document.getElementById('container');
 
-    // テキストを1文字ずつ<span>で包んで入れる
+    // 1文字ずつspanに入れる
     for (let char of text) {
       const span = document.createElement('span');
       span.textContent = char;
@@ -70,7 +81,7 @@
       if (index < spans.length) {
         spans[index].classList.add('visible');
         index++;
-        setTimeout(revealNextChar, 200); // ゆっくりふわっと（表示速度調整）
+        setTimeout(revealNextChar, 125);
       }
     }
 
