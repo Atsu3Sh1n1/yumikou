@@ -356,7 +356,7 @@
 
         // 計算開始
         function startCalculation() {
-            questionEl.textContent = "計算中...";
+            questionEl.textContent = "";
             buttonsDiv.innerHTML = "";
 
             iframe.contentWindow.postMessage({
@@ -368,7 +368,7 @@
         window.addEventListener("message", (e) => {
             if (e.data.action === "calculationResult") {
                 const r = e.data.result;
-                questionEl.textContent = "計算結果";
+                questionEl.textContent = "";
 
                 // 正しい計算フロー
                 const baseCost = r.cost; // 原価
