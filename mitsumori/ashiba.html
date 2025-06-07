@@ -356,9 +356,7 @@
 
         // 計算開始
         function startCalculation() {
-            questionEl.textContent = "";
-            buttonsDiv.innerHTML = "";
-
+           
             iframe.contentWindow.postMessage({
                 action: "calculate",
                 params: answers
@@ -391,10 +389,10 @@
       <hr>
       <div class="result-item"><strong>工数:</strong> ${r.manpower}人日</div>
       <div class="result-item"><strong>原価:</strong> ¥${r.cost.toLocaleString()}</div>
-      <div class="result-item"><strong>原価＋材料費（30%）:</strong> ¥${Math.round(totalBeforeOverhead).toLocaleString()}</div>
-      <div class="result-item"><strong>＋利益含む諸経費（20%）:</strong> ¥${costWithOverhead.toLocaleString()}</div>
+      <div class="result-item"><strong>原価＋材料費30%:</strong> ¥${Math.round(totalBeforeOverhead).toLocaleString()}</div>
+      <div class="result-item"><strong>＋利益含む諸経費20%:</strong> ¥${costWithOverhead.toLocaleString()}</div>
       <div class="result-item"><strong>消費税:</strong> ¥${r.tax.toLocaleString()}</div>
-      <div class="result-item"><strong>概算・工事一式:</strong>¥${grandTotal.toLocaleString()}</div>
+      <div class="result-item"><strong>工事一式（概算）:</strong>¥${grandTotal.toLocaleString()}</div>
     </div>
   </div>
   <br>
