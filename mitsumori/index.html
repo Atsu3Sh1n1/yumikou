@@ -28,7 +28,7 @@
     body {
       overflow-y: auto;
       /* hiddenからautoに変更 */
-
+      height: 100%;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -179,7 +179,48 @@
     #main a {
       font-size: 0.8em;
       color: #333;
-      
+
+    }
+
+    .result-card {
+      position: relative;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      padding: 1.5em 2em;
+      max-width: 320px;
+      margin: auto;
+      text-align: left;
+      font-size: 1rem;
+      color: #333;
+      font-weight: 600;
+      overflow: hidden;
+      /* iframe はみ出さないように */
+      background: transparent;
+      /* 背景はiframeに任せる */
+    }
+
+    .result-card iframe#backgroundIframe {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 120%;
+      /* 少し余裕持たせて広げる */
+      height: 120%;
+      border: none;
+      opacity: 0.3;
+      pointer-events: none;
+      z-index: 0;
+
+      transform: translate(-50%, -50%) scale(0.9);
+      /* 中央に寄せて90%に縮小 */
+      transform-origin: center;
+    }
+
+
+    .result-card .result-content {
+      position: relative;
+      z-index: 1;
+      /* iframeより前面に表示 */
     }
   </style>
 </head>
@@ -266,7 +307,7 @@
         questionEl.textContent = "";
         buttonsDiv.innerHTML = "";
 
-        const unitPrice = 1000;
+        const unitPrice = 1026;
         const materialMap = { "鉄": "steel", "ステンレス": "stainless" };
 
         const postData = {
@@ -352,7 +393,12 @@
            <div style="text-align:center; margin-bottom:1em;">
     <a href="https://atsu3sh1n1.github.io/yumikou/" target="_blank" style="text-decoration: none; color: inherit;">Created by YUMIKOU Inc.</a>
   </div>
+
          <div class="result-card">
+  <iframe id="backgroundIframe" src="cost.html" frameborder="0"></iframe>
+
+  <!-- ここに結果の内容 -->
+  <div class="result-content">
 
           <div class="result-item"><span class="result-label">概算: </span><span class="result-value" style="color:red;">¥${Math.round(pipeCost).toLocaleString()}円</span></div>
 
@@ -378,12 +424,14 @@
 
           <div class="result-item"><span class="result-label">打合せ時の食事: </span><span class="result-value">${answers.food}屋さん</span></div>
 
-        </div>
+        </div><br>
 
         <div class="comment-section" style="margin-top:20px; font-size: 0.8rem;">
           <label>*内作・現場・高所・室内・野外、継ぎ手の数量、材料費などにより、金額は変動します。詳しくはお問い合わせください</label><br>
         </div>
-        <br><br><br>
+        <br>
+        
+        
 
         <button onclick="window.location.href='https://atsu3sh1n1.github.io/yumikou/'" style="
           position: fixed;
@@ -397,6 +445,8 @@
           border-radius: 4px;
           cursor: pointer;
         ">戻る</button>
+        <br>
+
       `;
         } else {
           questionEl.textContent = "計算エラー";
@@ -406,6 +456,14 @@
     });
 
     showQuestion();
+
+    window.addEventListener("message", function (event) {
+      if (event.data.action === "resizeIframe" && event.data.id === "app7") {
+        const iframe = document.getElementById("app7");
+        iframe.style.height = event.data.height + "px";
+      }
+    });
+
   </script>
 </body>
 

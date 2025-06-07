@@ -11,6 +11,7 @@
       font-family: Arial, sans-serif;
       text-align: center;
       margin-top: 50px;
+      height: 100%;
     }
 
     #chart-container {
@@ -28,10 +29,8 @@
 </head>
 
 <body>
-  <h2>配管工事コスト比率</h2>
-  <p class="created-by">
-    <a href="https://atsu3sh1n1.github.io/yumikou/" target="_blank">Created by YUMIKOU Inc.</a>
-  </p>
+  <h2></h2>
+  
 
   <div id="chart-container">
     <canvas id="costPieChart"></canvas>
@@ -91,13 +90,24 @@
             },
             align: 'end',    // ラベルの位置調整（例：外側に寄せる）
             anchor: 'outer', // ラベルの基準位置
-            offset: -15     // ラベルの微調整（ピクセル単位でずらす）
+            offset: -60     // ラベルの微調整（ピクセル単位でずらす）
           }
         }
       },
       plugins: [ChartDataLabels]
     });
   </script>
+  <script>
+    window.addEventListener('load', function () {
+      const height = document.body.scrollHeight;
+      window.parent.postMessage({
+        action: "resizeIframe",
+        id: "app7",
+        height: height
+      }, "*");
+    });
+  </script>
+
 </body>
 
 </html>
