@@ -229,7 +229,7 @@
     <div id="main">
         <p id="question">面積を入力してください（m²）</p>
         <div id="buttons">
-            <input id="areaInput" type="number" min="0" step="0.01" placeholder="例: 100"
+            <input id="areaInput" type="number" min="0" step="0.1" placeholder="例: 100"
                 style="font-size:16px; padding:8px;">
             <button id="toHeight" style="margin-left:8px;">次へ</button>
         </div>
@@ -272,7 +272,7 @@
         function askHeight() {
             questionEl.textContent = "高さを入力してください（m）";
             buttonsDiv.innerHTML = `
-        <input id="heightInput" type="number" min="0" step="0.01" placeholder="例: 15" style="font-size:16px; padding:8px;">
+        <input id="heightInput" type="number" min="0" step="0.1" placeholder="例: 15" style="font-size:16px; padding:8px;">
         <button id="toSafetyType" style="margin-left:8px;">次へ</button>
       `;
             const heightInput = document.getElementById("heightInput");
@@ -311,11 +311,11 @@
             buttonsDiv.innerHTML = "";
 
             const conditionsList = [
-                "シート養生",
                 "組立・解体セット",
+                "シート養生込み",
+                "急工期対応",
                 "足場盛替え",
                 "解体",
-                "急工期対応",
                 "雨天",
                 "夜間",
                 "深夜"
@@ -374,14 +374,15 @@
                 buttonsDiv.innerHTML = `
           <div class="result-card">
             <div class="result-content">
-              <div class="result-item"><strong>人員数 (manpower):</strong> ${r.manpower}</div>
-              <div class="result-item"><strong>原価 (cost):</strong> ¥${r.cost.toLocaleString()}</div>
-              <div class="result-item"><strong>経費込み (costWithOverhead):</strong> ¥${r.costWithOverhead.toLocaleString()}</div>
-              <div class="result-item"><strong>消費税 (tax):</strong> ¥${r.tax.toLocaleString()}</div>
-              <div class="result-item"><strong>合計 (total):</strong> ¥${r.total.toLocaleString()}</div>
+              <div class="result-item"><strong>工数:</strong> ${r.manpower}</div>
+              <div class="result-item"><strong>原価:</strong> ¥${r.cost.toLocaleString()}</div>
+              <div class="result-item"><strong>利益含む経費込み:</strong> ¥${r.costWithOverhead.toLocaleString()}</div>
+              <div class="result-item"><strong>消費税:</strong> ¥${r.tax.toLocaleString()}</div>
+              <div class="result-item"><strong>概算（材料費別） (total):</strong> ¥${r.total.toLocaleString()}</div>
             </div>
           </div>
           <br>
+          *材料費別（自動組み込み予定）搬入経路や周囲の環境（機器密集・閉所・暗所）などにより、金額は変動します。詳しくはお問い合わせください。
           <button id="restartBtn" style="
             padding: 8px 16px;
             font-size: 16px;
