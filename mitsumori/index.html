@@ -322,7 +322,7 @@
         questionEl.textContent = "";
         buttonsDiv.innerHTML = "";
 
-        const unitPrice = 1000;
+        const unitPrice = 600;
         const materialMap = { "鉄": "steel", "ステンレス": "stainless" };
 
         const postData = {
@@ -359,19 +359,17 @@
           // 単価 × 係数
           const adjustedUnitPrice = r.unitPricePerMeter * unitPriceMultiplier;
 
-          // 単価 × 係数 × 長さ = 概算金額
+          // 単価 × 係数 × 長さ = 材料費ベース
           const pipeCost = adjustedUnitPrice * Number(answers.length);
 
-          // 総額（材料費+人件費+諸経費）としてpipeCostを使う
-          const totalCost = pipeCost;
-
           // 割合（例：47% 材料費、38% 人件費、15% 諸経費）
-          const materialRate = 0.47;
           const laborRate = 0.38;
           const expenseRate = 0.15;
 
-          // 振り分け計算
-          const materialCost = totalCost * materialRate;
+          // --- 人件費逆算ロジック ---
+          // 人件費は総額の38%なので、材料費だけで算出したpipeCostを総額に逆算
+          const totalCost = pipeCost / (1 - laborRate);  // 総額 = 材料費ベース ÷ (1 - 人件費率)
+          const materialCost = pipeCost;
           const laborCost = totalCost * laborRate;
           const expenseCost = totalCost * expenseRate;
 
@@ -383,11 +381,6 @@
           const tax = subtotal * taxRate;
           const totalAmount = subtotal + tax;
 
-          // 出力例（コンソール）
-          console.log(`材料費: ${Math.round(materialCost)}円`);
-          console.log(`人件費: ${Math.round(laborCost)}円`);
-          console.log(`諸経費: ${Math.round(expenseCost)}円`);
-
           // 人工単価（配管工と溶接工の加重平均単価）
           const pipeFitterRatio = 0.6;
           const welderRatio = 0.4;
@@ -395,10 +388,10 @@
           const welderUnitPrice = 35100;
           const weightedLaborUnitPrice = pipeFitterUnitPrice * pipeFitterRatio + welderUnitPrice * welderRatio; // 約30240円
 
-          // 人件費から人工数計算
+          // 工数計算（逆算）
           const laborCount = laborCost / weightedLaborUnitPrice;
 
-          // 歩掛計算（長さ ÷ 人工数 = m/人工）
+          // 歩掛計算（長さ ÷ 工数 = m/人工）
           const workRate = Number(answers.length) / laborCount;
 
           // 人工内訳（溶接のみ）
@@ -420,87 +413,87 @@
             const welderCount = laborCount * welderRatioDetail;
 
             laborBreakdownHTML = `
-        <div class="result-item" style="font-size: 0.85rem;">
-          <span class="result-label">（内訳）: </span>
-          <span class="result-value">
-            配管工 ${pipeFitterCount.toFixed(2)}人日 (${Math.round(pipeFitterRatioDetail * 100)}%)<br>
-            溶接工 ${welderCount.toFixed(2)}人日 (${Math.round(welderRatioDetail * 100)}%)
-          </span>
-        </div>
-        `;
+      <div class="result-item" style="font-size: 0.85rem;">
+        <span class="result-label">（内訳）: </span>
+        <span class="result-value">
+          配管工 ${pipeFitterCount.toFixed(2)}人日 (${Math.round(pipeFitterRatioDetail * 100)}%)<br>
+          溶接工 ${welderCount.toFixed(2)}人日 (${Math.round(welderRatioDetail * 100)}%)
+        </span>
+      </div>
+      `;
           }
 
           buttonsDiv.innerHTML = `
-      <div style="text-align:center; margin-bottom:0.8em; margin-top:5em;">
-        <a href="https://atsu3sh1n1.github.io/yumikou/" target="_blank" style="text-decoration: none; color: inherit;">Created by YUMIKOU Inc.</a>
-      </div>
+    <div style="text-align:center; margin-bottom:0.8em; margin-top:5em;">
+      <a href="https://atsu3sh1n1.github.io/yumikou/" target="_blank" style="text-decoration: none; color: inherit;">Created by YUMIKOU Inc.</a>
+    </div>
 
-      <div class="result-card">
-        <iframe id="backgroundIframe" src="cost.html" frameborder="0"></iframe>
+    <div class="result-card">
+      <iframe id="backgroundIframe" src="cost.html" frameborder="0"></iframe>
 
-        <!-- ここに結果の内容 -->
-        <div class="result-content">
+      <!-- ここに結果の内容 -->
+      <div class="result-content">
 
-          <div class="result-item"><span class="result-label">材料: </span><span class="result-value">${displayMaterial}</span></div>
-          <div class="result-item"><span class="result-label">サイズ: </span><span class="result-value">${r.size}A</span></div>
-          <div class="result-item"><span class="result-label">スケジュール: </span><span class="result-value">${answers.schedule}</span></div>
-          <div class="result-item"><span class="result-label">長さ: </span><span class="result-value">${answers.length}m</span></div>
-          <div class="result-item"><span class="result-label">重量: </span><span class="result-value">${r.pipeWeight}kg</span></div>
-          <div class="result-item"><span class="result-label">歩掛: </span><span class="result-value">${workRate.toFixed(2)}m/人工</span></div>
-         
-          <div class="result-item">
-            <span class="result-label">材料費: </span>
-            <span class="result-value">${Math.round(materialCost).toLocaleString()}円</span>
-          </div>
-          <div class="result-item">
-            <span class="result-label">人件費: </span>
-            <span class="result-value">${Math.round(laborCost).toLocaleString()}円</span>
-          </div>
-          <div class="result-item">
-            <span class="result-label">諸経費: </span>
-            <span class="result-value">${Math.round(expenseCost).toLocaleString()}円</span>
-          </div>
-
-           <div class="result-item"><span class="result-label">工数: </span><span class="result-value">${laborCount.toFixed(2)}人日</span></div>
-          ${laborBreakdownHTML}
-
-          <div class="result-item">
-            <span class="result-label">小計: </span>
-            <span class="result-value">${Math.round(subtotal).toLocaleString()}円</span>
-          </div>
-          <div class="result-item">
-            <span class="result-label">消費税 (${(taxRate * 100).toFixed(0)}%): </span>
-            <span class="result-value">${Math.round(tax).toLocaleString()}円</span>
-          </div>
-          <div class="result-item">
-            <span class="result-label">工事一式（概算）: </span>
-            <span class="result-value" style="color:red;">¥${Math.round(totalAmount).toLocaleString()}円</span>
-          </div>
-
-          <div class="result-item"><span class="result-label">打合せ時の食事: </span><span class="result-value">${answers.food}屋さん</span></div>
-
+        <div class="result-item"><span class="result-label">材料: </span><span class="result-value">${displayMaterial}</span></div>
+        <div class="result-item"><span class="result-label">サイズ: </span><span class="result-value">${r.size}A</span></div>
+        <div class="result-item"><span class="result-label">スケジュール: </span><span class="result-value">${answers.schedule}</span></div>
+        <div class="result-item"><span class="result-label">長さ: </span><span class="result-value">${answers.length}m</span></div>
+        <div class="result-item"><span class="result-label">重量: </span><span class="result-value">${r.pipeWeight}kg</span></div>
+        <div class="result-item"><span class="result-label">歩掛: </span><span class="result-value">${workRate.toFixed(2)}m/人工</span></div>
+       
+        <div class="result-item">
+          <span class="result-label">材料費: </span>
+          <span class="result-value">${Math.round(materialCost).toLocaleString()}円</span>
         </div>
-      </div><br>
+        <div class="result-item">
+          <span class="result-label">人件費: </span>
+          <span class="result-value">${Math.round(laborCost).toLocaleString()}円</span>
+        </div>
+        <div class="result-item">
+          <span class="result-label">諸経費: </span>
+          <span class="result-value">${Math.round(expenseCost).toLocaleString()}円</span>
+        </div>
 
-      <div class="comment-section" style="margin-top:20px; font-size: 0.8rem;">
-        <label>*内作・現場・高所・室内・野外、継手数量、材料費などにより、金額は変動します。詳しくはお問い合わせください</label><br>
+        <div class="result-item"><span class="result-label">工数: </span><span class="result-value">${laborCount.toFixed(2)}人日</span></div>
+        ${laborBreakdownHTML}
+
+        <div class="result-item">
+          <span class="result-label">小計: </span>
+          <span class="result-value">${Math.round(subtotal).toLocaleString()}円</span>
+        </div>
+        <div class="result-item">
+          <span class="result-label">消費税 (${(taxRate * 100).toFixed(0)}%): </span>
+          <span class="result-value">${Math.round(tax).toLocaleString()}円</span>
+        </div>
+        <div class="result-item">
+          <span class="result-label">工事一式（概算）: </span>
+          <span class="result-value" style="color:red;">¥${Math.round(totalAmount).toLocaleString()}円</span>
+        </div>
+
+        <div class="result-item"><span class="result-label">打合せ時の食事: </span><span class="result-value">${answers.food}屋さん</span></div>
+
       </div>
-      <br>
+    </div><br>
 
-      <button onclick="window.location.href='https://atsu3sh1n1.github.io/yumikou/'" style="
-        position: fixed;
-        bottom: 0px;
-        right: 20px;
-        padding: 6px 6px;
-        font-size: 16px;
-        background-color: #007bff;
-        color: white;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-      ">戻る</button>
-      <br>
-      `;
+    <div class="comment-section" style="margin-top:20px; font-size: 0.8rem;">
+      <label>*内作・現場・高所・室内・野外、継手数量、材料費などにより、金額は変動します。詳しくはお問い合わせください</label><br>
+    </div>
+    <br>
+
+    <button onclick="window.location.href='https://atsu3sh1n1.github.io/yumikou/'" style="
+      position: fixed;
+      bottom: 0px;
+      right: 20px;
+      padding: 6px 6px;
+      font-size: 16px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    ">戻る</button>
+    <br>
+    `;
         } else {
           questionEl.textContent = "計算エラー";
           buttonsDiv.textContent = e.data.result.message || "不明なエラー";
