@@ -371,18 +371,27 @@
                 const r = e.data.result;
                 questionEl.textContent = "計算結果";
 
+                // 材料費概算（30%加算）
+                const costWithMaterial = Math.round(r.costWithOverhead * 1.3);
+
                 buttonsDiv.innerHTML = `
           <div class="result-card">
             <div class="result-content">
+              <div class="result-item"><strong>面積:</strong> ${answers.area} m²</div>
+              <div class="result-item"><strong>高さ:</strong> ${answers.height} m</div>
+              <div class="result-item"><strong>足場種類:</strong> ${answers.safetyType}</div>
+              <div class="result-item"><strong>条件:</strong> ${answers.conditions.length > 0 ? answers.conditions.join(", ") : "なし"}</div>
+              <hr>
               <div class="result-item"><strong>工数:</strong> ${r.manpower}</div>
               <div class="result-item"><strong>原価:</strong> ¥${r.cost.toLocaleString()}</div>
               <div class="result-item"><strong>利益含む経費込み:</strong> ¥${r.costWithOverhead.toLocaleString()}</div>
+              <div class="result-item"><strong>材料費込む小計:</strong> ¥${costWithMaterial.toLocaleString()}</div>
               <div class="result-item"><strong>消費税:</strong> ¥${r.tax.toLocaleString()}</div>
-              <div class="result-item"><strong>概算（材料費別） (total):</strong> ¥${r.total.toLocaleString()}</div>
+              <div class="result-item"><strong>工事一式・概算:</strong> ¥${r.total.toLocaleString()}</div>
             </div>
           </div>
           <br>
-          *材料費別（自動組み込み予定）搬入経路や周囲の環境（機器密集・閉所・暗所）などにより、金額は変動します。詳しくはお問い合わせください。
+         搬入経路や周囲の環境（機器密集・閉所・暗所・粉塵）などにより、金額は変動します。詳しくはお問い合わせください。
           <button id="restartBtn" style="
             padding: 8px 16px;
             font-size: 16px;
@@ -399,5 +408,6 @@
                 };
             }
         });
+
     </script>
 </body>
