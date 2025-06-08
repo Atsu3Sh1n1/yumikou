@@ -152,20 +152,30 @@
   <h1></h1>
 
   <!-- 古事記風進捗フォーム（縦書き・個別スタイル） -->
+  <!-- 古事記風進捗フォーム（縦書き・個別スタイル修正版） -->
   <div id="kojiki-progress" class="kojiki-progress-container">
     <div class="kojiki-text">
-      <ruby>かくて</ruby>、<ruby>各班<rt>かくはん</rt></ruby>の<ruby>進捗<rt>すすみのほど</rt></ruby>を<ruby>問<rt>と</rt>
-        </ruby>ひ<ruby>知らせ<rt>しらせ</rt></ruby>むと<ruby>欲<rt>ほっ</rt></ruby>して、<ruby>進捗<rt>すすみ</rt></ruby>の<ruby>御帳<rt>みとばり
-        </rt></ruby>を<ruby>設<rt>まう</rt></ruby>く。<br><br>
-      すなはち其の<ruby>御帳<rt>みとばり</rt></ruby>を「<ruby>進捗<rt>すすみ</rt></ruby><ruby>フォーム<rt>ふぉーむ</rt></ruby>」と<ruby>称<rt>たた</rt>
-        </ruby>へ<ruby>奉<rt>たてまつ</rt></ruby>る。<br><br>
-      ここに於いて、<ruby>班々<rt>はんばん</rt></ruby>の<ruby>神々<rt>かみがみ</rt></ruby><ruby>進捗<rt>すすみ</rt></ruby>の<ruby>様<rt>さま</rt>
-        </ruby>を<ruby>御帳<rt>みとばり</rt></ruby>に<ruby>記<rt>しる</rt></ruby>し<ruby>奉<rt>たてまつ</rt></ruby>り、<br>
-      その<ruby>進<rt>すす</rt></ruby>み<ruby>行<rt>ゆ</rt></ruby>き、<ruby>果<rt>は</rt></ruby>たすべき<ruby>事<rt>こと</rt>
-        </ruby>の<ruby>道程<rt>みちのほど</rt></ruby>を<ruby>明<rt>あき</rt></ruby>らかに<ruby>示<rt>しめ</rt></ruby>さむ。<br><br>
-      斯くして、<ruby>全体<rt>ぜんたい</rt></ruby>の<ruby>道<rt>みち</rt></ruby>は<ruby>整<rt>ととの</rt></ruby>ひて、<ruby>班々<rt>はんばん</rt>
-        </ruby>の<ruby>進<rt>すす</rt></ruby>み<ruby>行<rt>ゆ</rt></ruby>きの<ruby>道<rt>みち</rt></ruby>しるべとなり、<br>
-      <ruby>神々<rt>かみがみ</rt></ruby>の<ruby>和<rt>やはら</rt></ruby>ぎ<ruby>保<rt>たも</rt></ruby>たれむとぞ。
+      <p>
+        <ruby>かくて</ruby>、<ruby>各班<rt>かくはん</rt></ruby>の<ruby>進捗<rt>すすみのほど</rt></ruby>を<ruby>問<rt>と</rt>
+          </ruby>ひ<ruby>知らせ</ruby>むと<ruby>欲<rt>ほっ</rt></ruby>して、<ruby>進捗<rt>すすみ</rt></ruby>の<ruby>御帳<rt>みとばり</rt>
+          </ruby>を<ruby>設<rt>まう</rt></ruby>く。
+      </p>
+      <p>
+        すなはち其の<ruby>御帳<rt>みとばり</rt></ruby>を「<ruby>進捗<rt>すすみ</rt></ruby><ruby>フォーム<rt>ふぉーむ</rt></ruby>」と<ruby>称<rt>たた
+          </rt></ruby>へ<ruby>奉<rt>たてまつ</rt></ruby>る。
+      </p>
+      <p>
+        ここに<ruby>於<rt>お</rt></ruby>いて、<ruby>班々<rt>はんばん</rt></ruby>の<ruby>神々<rt>かみがみ</rt></ruby><ruby>進捗<rt>すすみ</rt>
+          </ruby>の<ruby>様<rt>さま</rt></ruby>を<ruby>御帳<rt>みとばり</rt></ruby>に<ruby>記<rt>しる</rt></ruby>し<ruby>奉<rt>たてまつ</rt>
+          </ruby>り、<ruby>進<rt>すす</rt></ruby>み<ruby>行<rt>ゆ</rt></ruby>き、<ruby>果<rt>は</rt></ruby>たすべき<ruby>事<rt>こと</rt>
+          </ruby>の<ruby>道程<rt>みちのほど</rt></ruby>を<ruby>明<rt>あき</rt></ruby>らかに<ruby>示<rt>しめ</rt></ruby>さむ。
+      </p>
+      <p>
+        斯くして、<ruby>全体<rt>ぜんたい</rt></ruby>の<ruby>道<rt>みち</rt></ruby>は<ruby>整<rt>ととの</rt></ruby>ひて、<ruby>班々<rt>はんばん</rt>
+          </ruby>の<ruby>進<rt>すす</rt></ruby>み<ruby>行<rt>ゆ</rt></ruby>きの<ruby>道<rt>みち</rt></ruby>しるべとなり、<ruby>神々<rt>かみがみ
+          </rt></ruby>の<ruby>和<rt>やはら</rt></ruby>ぎ<ruby>保<rt>たも</rt></ruby>たれむとぞ。
+      </p>
+
     </div>
   </div>
 
@@ -175,14 +185,19 @@
       text-orientation: upright;
       font-family: "Yu Mincho", "Hiragino Mincho Pro", serif;
       font-size: 20px;
-      line-height: 1.5;
+      line-height: 50px;
       background: #fffaf0;
       border: 2px solid #d4af37;
       padding: 20px;
       margin: 20px auto;
-      max-width: 90vw;
+      max-width: 100vw;
       overflow-y: auto;
       box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.2);
+      height: 650px;
+    }
+
+    .kojiki-text p {
+      margin: 0 0 1em 0;
     }
 
     .kojiki-text ruby {
@@ -190,10 +205,11 @@
     }
 
     .kojiki-text rt {
-      font-size: 12px;
+      font-size: 8px;
       color: #555;
     }
   </style>
+
 
   <br><br>
   <div class="button-grid">
