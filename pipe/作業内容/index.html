@@ -16,7 +16,7 @@
       text-align: center;
       margin-bottom: 20px;
       font-size: 16px;
-      
+
     }
 
     .button-grid {
@@ -41,8 +41,8 @@
       overflow: hidden;
     }
 
-   
-    
+
+
 
     .button-link::before {
       content: "";
@@ -55,7 +55,7 @@
       /* ここで暗さを調整 */
       z-index: 0;
 
-      
+
     }
 
     .button-link span {
@@ -132,18 +132,31 @@
     .button-link {
       background-color: #3498db;
     }
+
+    /* オーバーレイを外す */
+    .no-overlay::before {
+      background: none;
+
+    }
+
+    .btn-kami12.no-overlay {
+      color: white !important;
+      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
+      font-weight: bold;
+      margin-top: -12px;
+    }
   </style>
 </head>
 
 <body>
   <h1>かくて、各班の進捗（すすみのほど）を問ひ知らせむと欲（ほっ）して、進捗の御帳（みとばり）を設（まう）く。
-すなはち其の御帳を「進捗フォーム」と称（たた）へ奉（たてまつ）る。
+    すなはち其の御帳を「進捗フォーム」と称（たた）へ奉（たてまつ）る。
 
-ここに於（おい）て、班々（はんばん）の神々（かみがみ）進捗の様（さま）を御帳に記し奉り、
-その進み行き、果たすべき事の道程（みちのほど）を明らかに示さむ。
+    ここに於（おい）て、班々（はんばん）の神々（かみがみ）進捗の様（さま）を御帳に記し奉り、
+    その進み行き、果たすべき事の道程（みちのほど）を明らかに示さむ。
 
-斯（か）くして、全体の道（みち）は整（ととの）ひて、班々の進み行きの道しるべとなり、
-神々（かみがみ）の和（やはら）ぎ保たれむとぞ。</h1>
+    斯（か）くして、全体の道（みち）は整（ととの）ひて、班々の進み行きの道しるべとなり、
+    神々（かみがみ）の和（やはら）ぎ保たれむとぞ。</h1>
   <br><br>
   <div class="button-grid">
 
@@ -213,7 +226,7 @@
   </div>
   <br>
   <a href="https://docs.google.com/spreadsheets/d/1KXrKhp5MWu95it1IpUdQRiOgvdVuvj404QqbuFwF_p8/edit?usp=sharing"
-    target="_blank" class="button-link btn-kami12">工程表・進捗</a>
+    target="_blank" class="button-link btn-kami12 no-overlay">工程表・進捗</a>
 </body>
 
 </html>
