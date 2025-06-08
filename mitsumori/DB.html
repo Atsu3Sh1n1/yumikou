@@ -375,10 +375,11 @@
                 <div><strong>管サイズ(A):</strong> ${answers.pipeSize}</div>
                 <div><strong>エルボ:</strong> ${answers.elbow} 個</div>
                 <div><strong>チーズ:</strong> ${answers.tee} 個</div>
-                <div><strong>単価:</strong> 2500 円</div>
+                <div><strong>DB/単価:</strong> 2500 円</div>
                 <div><strong>材質:</strong> ${answers.material}</div>
                 <div><strong>合計DB:</strong> ${r.totalDB}</div>
-                <div><strong>小計:</strong> ${r.subtotal} 円</div>
+               <strong>溶接費概算:</strong> ${r.subtotal.toLocaleString()} 円</div>
+
               </div>
             </div>
             <br>
