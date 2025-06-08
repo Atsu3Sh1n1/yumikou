@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="format-detection" content="telephone=no">
+
+  <title>概算見積もり・有限会社弓工</title>
+  <style>
+    /* あなたのスタイルはそのまま */
+    html {
+      font-size: 4vw;
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: sans-serif;
+
+      color: black;
+      text-align: center;
+      overflow: hidden;
+      height: 100%;
+    }
+
+    body {
+      overflow-y: auto;
+      /* hiddenからautoに変更 */
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 1em;
+      /* 余白を追加 */
+      box-sizing: border-box;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      top: -4%;
+      left: -60%;
+      width: 180vw;
+      height: 180vh;
+      background-image: url('yumikou.png');
+      background-repeat: repeat;
+      background-size: 200px 100px;
+      opacity: 0.03;
+      transform: rotate(-10deg);
+      transform-origin: center;
+      z-index: -1;
+      pointer-events: none;
+    }
+
+
+    #main {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    #question {
+      font-weight: bold;
+      font-size: 1.5em;
+      opacity: 0;
+      animation: fadeIn 1s forwards;
+    }
+
+    #buttons {
+      margin-top: 1em;
+      opacity: 0;
+      animation: fadeIn 1s forwards;
+      animation-delay: 1s;
+      animation-fill-mode: forwards;
+    }
+
+    button {
+      background: #ffffff;
+      border: none;
+      padding: 0.75em 1.5em;
+      font-size: 1.25em;
+      margin: 0.5em;
+      cursor: pointer;
+      font-weight: normal;
+      border-radius: 999px;
+      box-shadow: 0 0.4em 1em rgba(0, 0, 0, 0.15);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+
+    button:hover {
+      transform: translateY(-0.2em);
+      box-shadow: 0 0.6em 1.4em rgba(0, 0, 0, 0.2);
+    }
+
+    button,
+    p,
+    span,
+    div {
+      color: black;
+      /* リンク色を黒に上書き */
+      text-decoration: none;
+      /* 下線を消す */
+    }
+
+    a {
+      color: inherit;
+      /* リンク色を親要素から継承 */
+      text-decoration: none;
+      /* 下線を消す */
+    }
+
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(0.5em);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (min-width: 600px) {
+      html {
+        font-size: 20px;
+      }
+    }
+
+    @media (min-width: 1200px) {
+      html {
+        font-size: 20px;
+      }
+    }
+
+    .result-card {
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      padding: 1.5em 2em;
+      max-width: 320px;
+      margin: auto;
+      text-align: left;
+      font-size: 1rem;
+      color: #333;
+      font-weight: 600;
+    }
+
+    .result-card h2 {
+      margin-top: 0;
+      font-weight: 700;
+      color: #2c3e50;
+      text-align: center;
+    }
+
+    .result-item {
+      margin: 0.5em 0;
+      display: flex;
+      justify-content: space-between;
+
+    }
+
+    .result-label {
+      color: #555;
+      margin-right: 1.2em;
+      /* お好みの幅に調整してください */
+    }
+
+    .result-value {
+      color: #222;
+      font-weight: 700;
+    }
+
+    #main a {
+      font-size: 0.8em;
+      color: #333;
+
+    }
+
+    .result-card {
+      position: relative;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      padding: 1.5em 2em;
+      max-width: 320px;
+      margin: auto;
+      text-align: left;
+      font-size: 1rem;
+      color: #333;
+      font-weight: 600;
+      overflow: hidden;
+      /* iframe はみ出さないように */
+      background: transparent;
+      /* 背景はiframeに任せる */
+    }
+
+    .result-card iframe#backgroundIframe {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 120%;
+      /* 少し余裕持たせて広げる */
+      height: 120%;
+      border: none;
+      opacity: 0.3;
+      pointer-events: none;
+      z-index: 0;
+
+      transform: translate(-50%, -50%) scale(0.75);
+      /* 中央に寄せて90%に縮小 */
+      transform-origin: center;
+    }
+
+
+    .result-card .result-content {
+      position: relative;
+      z-index: 1;
+      /* iframeより前面に表示 */
+    }
+  </style>
+</head>
+
+
+<body>
+  <div id="main">
+    <p id="question">質問を選んでください</p>
+    <div id="buttons"></div>
+  </div>
+
+<body> 
+  <!-- iframeは非表示のまま計算用 -->
+  <iframe id="calcIframe" src="DB2.html" style="display:none;"></iframe>
+
+  <div id="question" style="font-size:18px; margin-bottom:16px;"></div>
+  <div id="buttons"></div>
+
+  <script>
+    // ビューポート高さ調整（元のまま）
+    function setViewportHeight() {
+      const vh = window.innerHeight * 0.01;
+      document.documentElement.style.setProperty('--vh', `${vh}px`);
+    }
+    window.addEventListener('resize', setViewportHeight);
+    window.addEventListener('orientationchange', setViewportHeight);
+    setViewportHeight();
+
+    // 子ページ仕様の質問（単価とスケジュール倍率は省く）
+    const questions = [
+      { key: "pipeSize", text: "管のサイズ（A）を選んでください", options: ["25", "32", "40", "50", "65", "80", "100", "125", "150", "200"] },
+      { key: "material", text: "材質を選んでください", options: ["スチール", "ステンレス", "SW"] },
+      { key: "elbow", text: "エルボの個数を入力してください", options: null },
+      { key: "tee", text: "チーズの個数を入力してください", options: null }
+     
+    ];
+
+    const answers = {};
+    let currentQuestion = 0;
+
+    const questionEl = document.getElementById("question");
+    const buttonsDiv = document.getElementById("buttons");
+    const iframe = document.getElementById("calcIframe");
+
+    // 質問表示関数
+    function showQuestion() {
+      const q = questions[currentQuestion];
+      questionEl.textContent = q.text;
+      buttonsDiv.innerHTML = "";
+
+      if (q.options) {
+        q.options.forEach(option => {
+          const btn = document.createElement("button");
+          btn.textContent = option;
+          btn.style.margin = "4px";
+          btn.onclick = () => {
+            answers[q.key] = option;
+            nextQuestion();
+          };
+          buttonsDiv.appendChild(btn);
+        });
+      } else {
+        // 入力タイプ（数値のみ）
+        const input = document.createElement("input");
+        input.type = "number";
+        input.min = "0";
+        input.inputMode = "numeric";
+        input.pattern = "[0-9]*";
+        input.placeholder = "例: 10";
+        input.style.fontSize = "16px";
+        input.style.padding = "1em";
+        input.style.marginRight = "8px";
+        buttonsDiv.appendChild(input);
+
+        const btn = document.createElement("button");
+        btn.textContent = "次へ";
+        btn.style.padding = "8px 16px";
+        btn.style.fontSize = "16px";
+        btn.onclick = () => {
+          const val = input.value.trim();
+          if (val === "" || isNaN(val) || Number(val) < 0) {
+            alert("正しい数値を入力してください");
+            return;
+          }
+          answers[q.key] = val;
+          nextQuestion();
+        };
+        buttonsDiv.appendChild(btn);
+      }
+    }
+
+    // 次の質問へ or iframeへデータ送信
+    function nextQuestion() {
+      currentQuestion++;
+      if (currentQuestion < questions.length) {
+        showQuestion();
+      } else {
+        questionEl.textContent = "計算中...";
+        buttonsDiv.innerHTML = "";
+
+        // 固定単価2500、固定スケジュール倍率1.0にして送信
+        const postData = {
+          pipeSize: answers.pipeSize,
+          straight: Number(answers.straight) || 0,
+          elbow: Number(answers.elbow) || 0,
+          tee: Number(answers.tee) || 0,
+          unitPrice: 2500,
+          scheduleMultiplier: 1.0,
+          isStainless: answers.material === "ステンレス",
+          isSW: answers.material === "SW"
+        };
+
+        iframe.contentWindow.postMessage({
+          action: "calculateWeldingCost",
+          params: postData
+        }, "*");
+      }
+    }
+
+    // iframeからの計算結果受信
+    window.addEventListener("message", (e) => {
+      if (e.data.action === "weldingCostResult") {
+        if (e.data.result.success) {
+          const r = e.data.result;
+
+          buttonsDiv.innerHTML = `
+            <div class="result-card" style="padding:16px; border:1px solid #ccc; border-radius:8px; background:#f9f9f9;">
+              <div class="result-content" style="font-size:16px;">
+                <div><strong>管サイズ(A):</strong> ${answers.pipeSize}</div>
+                
+                <div><strong>エルボ:</strong> ${answers.elbow} 個</div>
+                <div><strong>チーズ:</strong> ${answers.tee} 個</div>
+                <div><strong>単価:</strong> 2500 円（固定）</div>
+                <div><strong>スケジュール倍率:</strong> 1.0（固定）</div>
+                <div><strong>材質:</strong> ${answers.material}</div>
+                <div><strong>合計DB:</strong> ${r.totalDB}</div>
+                <div><strong>小計:</strong> ${r.subtotal} 円</div>
+              </div>
+            </div>
+            <br>
+            <button onclick="location.reload()" style="
+              padding: 8px 16px;
+              font-size: 16px;
+              background-color: #007bff;
+              color: white;
+              border: none;
+              border-radius: 4px;
+              cursor: pointer;
+            ">最初からやり直す</button>
+          `;
+          questionEl.textContent = "";
+        } else {
+          questionEl.textContent = "計算エラー";
+          buttonsDiv.textContent = e.data.result.message || "不明なエラー";
+        }
+      }
+    });
+
+    showQuestion();
+  </script>
+</body>
