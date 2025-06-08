@@ -242,6 +242,19 @@
     window.addEventListener('orientationchange', setViewportHeight);
     setViewportHeight();
 
+    // URLのクエリパラメータからsizeを取得してanswersにセット
+    function getQueryParam(param) {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get(param);
+    }
+
+    // ページ読み込み時にsizeをセット
+    const initialSize = getQueryParam("size");
+    if (initialSize) {
+      answers.size = initialSize;
+    }
+
+
     const questions = [
       { key: "jobType", text: "作業内容を選んでください", options: ["足場", "配管", "鍛冶"] },
       { key: "material", text: "配管の材質を選んでください", options: ["鉄", "ステンレス"] },
