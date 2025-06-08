@@ -351,6 +351,7 @@
           <div id="perMeterUnitPrice-${formId}"></div>
           <div id="pipeWeight-${formId}"></div>
           <div id="pipeCost-${formId}" class="pipeCost"></div>
+          <div id="workAmount-${formId}"></div>
           <br>
         </div>
       `;
@@ -435,7 +436,7 @@
 
       let discountFactor = 1.0;
       if (parseInt(size) >= 32) {
-        discountFactor = Math.pow(1 / 1.05, sizeStep);
+        discountFactor = Math.pow(1 / 1.02, sizeStep);
       }
 
       const lengthDiscount = getLengthDiscount(length, size, formData.schedule);
@@ -443,7 +444,7 @@
 
       let cost = weight * price * lengthDiscount * diameterCorrection * discountFactor;
 
-      if (formData.material === 'stainless') cost *= 1.25;
+      if (formData.material === 'stainless') cost *= 1.35;
 
       const unitPricePerMeter = length > 0 ? cost / length : 0;
       document.getElementById(`pipeWeight-${formId}`).textContent = `配管重量: ${weight.toFixed(2)} kg`;
