@@ -507,12 +507,14 @@
 
   </script>
 
- <script>
-  function goBack() {
-    const selectedSize = (typeof answers !== 'undefined' && answers.pipeSize) ? answers.pipeSize : "";
-    window.location.href = `DB.html?size=${encodeURIComponent(selectedSize)}`;
-  }
-</script>
+  <script>
+    function goBack() {
+      const selectedSize = (typeof answers !== 'undefined' && answers.size) ? answers.size : "";
+      window.location.href = `DB.html?size=${encodeURIComponent(selectedSize)}`;
+    }
+
+
+  </script>
 
 </body>
 
