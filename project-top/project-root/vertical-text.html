@@ -4,19 +4,17 @@
   <meta charset="UTF-8" />
   <title>古事記風テキスト（縦書き）</title>
   <style>
-    /* フォントや画面中央寄せ */
     body {
       font-family: "Yu Mincho", "Hiragino Mincho Pro", serif;
       margin: 0;
       display: flex;
       justify-content: center;
       align-items: center;
-      
       padding: 0;
       overflow: hidden;
+      background: none;
     }
 
-    /* 縦書きテキストエリア */
     #container {
       writing-mode: vertical-rl;
       text-orientation: upright;
@@ -30,22 +28,24 @@
       overflow-y: auto;
       box-sizing: border-box;
       text-align: start;
-      -webkit-overflow-scrolling: touch; /* スマホのスクロールを滑らかに */
+      -webkit-overflow-scrolling: touch;
     }
 
-    /* 最初は透明＆少し上にずらしておく */
     .char {
-      opacity: 0;
-      transform: translateY(-10px);
-      transition: opacity 0.8s ease, transform 0.8s ease;
+      opacity: 1; /* すぐ表示 */
+      transform: none;
+      transition: none; /* アニメーション無し */
       display: inline;
       white-space: pre-wrap;
     }
 
-    /* 表示時 */
-    .char.visible {
-      opacity: 1;
-      transform: translateY(0);
+    ruby {
+      ruby-position: over;
+    }
+
+    rt {
+      font-size: 0.5em;
+      color: #555;
     }
   </style>
 </head>
@@ -54,38 +54,45 @@
 
   <script>
     const text = `
-天地初めて発（おこ）りし時、高天原に成れる神の名は、\n 天之御中主神（あめのみなかぬしのかみ）。\n
-続きて、高御産巣日神（たかみむすひのかみ）、\n 神産巣日神（かみむすひのかみ）現れ坐（ま）す。\n
-此の三柱の神、独り神と成り坐して、身を隠しき。\n
-国土、未だ脂（あぶら）のごとく漂へる時、\n 葦牙（あしかび）の如く萌え騰がる物より、\n宇摩志阿斯訶備比古遅神（うましあしかびひこぢのかみ）現れ坐す。\n
-その後、天之常立神（あめのとこたちのかみ）現れ坐す。\n
-此の二柱の神も、独り神と成り坐して、身を隠しき。\n
-斯くして、此の五柱の神は、別天津神（ことあまつかみ）と申すなり。\n
+<ruby>天地<rt>あめつち</rt></ruby><ruby>初<rt>はじ</rt></ruby>めて<ruby>発<rt>おこ</rt></ruby>りし<ruby>時<rt>とき</rt></ruby>、<ruby>高天原<rt>たかまがはら</rt></ruby>に<ruby>成<rt>な</rt></ruby>れる<ruby>神<rt>かみ</rt></ruby>の<ruby>名<rt>な</rt></ruby>は、\n <ruby>天之御中主神<rt>あめのみなかぬしのかみ</rt></ruby>。\n
+<ruby>続<rt>つづ</rt></ruby>きて、<ruby>高御産巣日神<rt>たかみむすひのかみ</rt></ruby>、\n <ruby>神産巣日神<rt>かみむすひのかみ</rt></ruby><ruby>現<rt>あらわ</rt></ruby>れ<ruby>坐<rt>ま</rt></ruby>す。\n
+<ruby>此<rt>こ</rt></ruby>の<ruby>三柱<rt>みはしら</rt></ruby>の<ruby>神<rt>かみ</rt></ruby>、<ruby>独<rt>ひと</rt></ruby>り<ruby>神<rt>かみ</rt></ruby>と<ruby>成<rt>な</rt></ruby>り<ruby>坐<rt>ま</rt></ruby>して、<ruby>身<rt>み</rt></ruby>を<ruby>隠<rt>かく</rt></ruby>しき。\n
+<ruby>国土<rt>くにつち</rt></ruby>、<ruby>未<rt>いま</rt></ruby>だ<ruby>脂<rt>あぶら</rt></ruby>のごとく<ruby>漂<rt>ただよ</rt></ruby>へる<ruby>時<rt>とき</rt></ruby>、\n <ruby>葦牙<rt>あしかび</rt></ruby>の<ruby>如<rt>ごと</rt></ruby>く<ruby>萌<rt>も</rt></ruby>え<ruby>騰<rt>あが</rt></ruby>がる<ruby>物<rt>もの</rt></ruby>より、\n<ruby>宇摩志阿斯訶備比古遅神<rt>うましあしかびひこぢのかみ</rt></ruby><ruby>現<rt>あらわ</rt></ruby>れ<ruby>坐<rt>ま</rt></ruby>す。\n
+<ruby>其<rt>そ</rt></ruby>の<ruby>後<rt>のち</rt></ruby>、<ruby>天之常立神<rt>あめのとこたちのかみ</rt></ruby><ruby>現<rt>あらわ</rt></ruby>れ<ruby>坐<rt>ま</rt></ruby>す。\n
+<ruby>此<rt>こ</rt></ruby>の<ruby>二柱<rt>ふたはしら</rt></ruby>の<ruby>神<rt>かみ</rt></ruby>も、<ruby>独<rt>ひと</rt></ruby>り<ruby>神<rt>かみ</rt></ruby>と<ruby>成<rt>な</rt></ruby>り<ruby>坐<rt>ま</rt></ruby>して、<ruby>身<rt>み</rt></ruby>を<ruby>隠<rt>かく</rt></ruby>しき。\n
+<ruby>斯<rt>か</rt></ruby>くして、<ruby>此<rt>こ</rt></ruby>の<ruby>五柱<rt>いつはしら</rt></ruby>の<ruby>神<rt>かみ</rt></ruby>は、<ruby>別天津神<rt>ことあまつかみ</rt></ruby>と<ruby>申<rt>もう</rt></ruby>すなり。\n
 `;
 
-
     const container = document.getElementById('container');
+    container.innerHTML = text;
 
-    // 1文字ずつspanに入れる
-    for (let char of text) {
-      const span = document.createElement('span');
-      span.textContent = char;
-      span.classList.add('char');
-      container.appendChild(span);
-    }
-
-    const spans = container.querySelectorAll('.char');
-    let index = 0;
-
-    function revealNextChar() {
-      if (index < spans.length) {
-        spans[index].classList.add('visible');
-        index++;
-        setTimeout(revealNextChar, 125);
+    const walker = document.createTreeWalker(container, NodeFilter.SHOW_TEXT, null, false);
+    const textNodes = [];
+    let node;
+    while(node = walker.nextNode()) {
+      if (node.nodeValue.trim()) {
+        textNodes.push(node);
       }
     }
 
-    revealNextChar();
+    for (const node of textNodes) {
+      const parent = node.parentNode;
+      if (parent.nodeName === 'RUBY') continue;
+
+      const text = node.nodeValue;
+      const fragment = document.createDocumentFragment();
+      
+      for (let i = 0; i < text.length; i++) {
+        const span = document.createElement('span');
+        span.className = 'char';
+        span.textContent = text[i];
+        fragment.appendChild(span);
+      }
+      
+      parent.replaceChild(fragment, node);
+    }
+
+    // アニメーションは削除
   </script>
 </body>
 </html>
