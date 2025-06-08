@@ -41,44 +41,38 @@
       "200": { straight: 8, elbow: 16, tee: 24 }
     };
 
-    const STAINLESS_MULTIPLIER = 1.35;  // ステンレス係数
-    const SW_MULTIPLIER = 0.75;         // ネジ係数
+    const STAINLESS_MULTIPLIER = 1.35;
+    const SW_MULTIPLIER = 0.75;
 
     function calculateAndSendResult(params) {
-      const size = params.size;
-      const straight = Number(params.length) || 0;
-      const elbow = Number(params.elbowCount) || 0;
-      const tee = Number(params.teeCount) || 0;
-      const unitPrice = 2500;  // 基本単価（仮）
+      const size = params.pipeSize;  // ← 親と同じ変数名に合わせた
+      const straight = Number(params.straight) || 0;
+      const elbow = Number(params.elbow) || 0;
+      const tee = Number(params.tee) || 0;
+      const unitPrice = params.unitPrice || 2500;
 
       if (!dbTable[size]) {
         sendResult(false, 0, 0, "サイズ情報が無効です");
         return;
       }
 
-      // 基本DB計算
       let totalDB = (straight * dbTable[size].straight) +
                     (elbow * dbTable[size].elbow) +
                     (tee * dbTable[size].tee);
 
-      // 材質補正
-      if (params.material === "ステンレス") {
+      if (params.isStainless) {
         totalDB *= STAINLESS_MULTIPLIER;
       }
 
-      // 接続補正
-      if (params.connection === "ネジ") {
+      if (params.isSW) {
         totalDB *= SW_MULTIPLIER;
       }
 
-      // 小計計算
       const subtotal = Math.round(totalDB * unitPrice);
 
-      // 表示更新
       document.getElementById("totalPrice").textContent = `小計(税抜き): ¥${subtotal.toLocaleString()}`;
       document.getElementById("totalDB").textContent = `合計DB: ${totalDB.toFixed(1)}`;
 
-      // 結果送信
       sendResult(true, totalDB.toFixed(1), subtotal, "");
     }
 
@@ -89,7 +83,6 @@
       }, "*");
     }
 
-    // 親からメッセージを受け取る
     window.addEventListener("message", (event) => {
       const data = event.data;
       if (data && typeof data === "object" && data.action === "calculateWeldingCost" && data.params) {
