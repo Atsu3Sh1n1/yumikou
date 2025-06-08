@@ -232,170 +232,170 @@
         <div id="buttons"></div>
     </div>
 
-    <iframe id="calcIframe" src="DB2.html" style="display:none;"></iframe>
+    <body>
+        <!-- iframeは非表示のまま計算用 -->
+        <iframe id="calcIframe" src="DB2.html" style="display:none;"></iframe>
 
-    <script>
-        function setViewportHeight() {
-            const vh = window.innerHeight * 0.01;
-            document.documentElement.style.setProperty('--vh', `${vh}px`);
-        }
-        window.addEventListener('resize', setViewportHeight);
-        window.addEventListener('orientationchange', setViewportHeight);
-        setViewportHeight();
+        <div id="question" style="font-size:18px; margin-bottom:16px;"></div>
+        <div id="buttons"></div>
 
-        function getQueryParam(param) {
-            const urlParams = new URLSearchParams(window.location.search);
-            return urlParams.get(param);
-        }
+        <script>
+            // ビューポート高さ調整（元のまま）
+            // URLパラメータ取得用関数
+            function getQueryParam(param) {
+                const urlParams = new URLSearchParams(window.location.search);
+                return urlParams.get(param);
+            }
 
-        const questions = [
-            {
-                key: "backSeal",
-                text: "バックシールの有無を選択してください",
-                options: ["あり", "なし"]
-            },
-            { key: "elbow", text: "エルボの個数を入力してください", options: null },
-            { key: "tee", text: "チーズの個数を入力してください", options: null },
-            { key: "flange", text: "フランジの枚数を入力してください", options: null }
-        ];
+            // バックシール有無の質問を最初に追加
+            const questions = [
+                { key: "backSeal", text: "バックシールはありますか？", options: ["あり", "なし"] },
+                { key: "elbow", text: "エルボの個数を入力してください", options: null },
+                { key: "tee", text: "チーズの個数を入力してください", options: null },
+                { key: "flange", text: "フランジの枚数を入力してください", options: null }
+            ];
 
-        const answers = {};
-        let currentQuestion = 0;
+            const answers = {};
+            let currentQuestion = 0;
 
-        const questionEl = document.getElementById("question");
-        const buttonsDiv = document.getElementById("buttons");
-        const iframe = document.getElementById("calcIframe");
+            const questionEl = document.getElementById("question");
+            const buttonsDiv = document.getElementById("buttons");
+            const iframe = document.getElementById("calcIframe");
 
-        // pipeSizeはURLから取得
-        const sizeFromUrl = getQueryParam('size');
-        if (sizeFromUrl) {
-            answers.pipeSize = sizeFromUrl;
-        }
+            // 最初にURLパラメータからpipeSizeを受け取ってセット（変更なし）
+            const sizeFromUrl = getQueryParam('size');
+            if (sizeFromUrl) {
+                answers.pipeSize = sizeFromUrl;
+            }
 
-        function showQuestion() {
-            const q = questions[currentQuestion];
-            questionEl.textContent = q.text;
-            buttonsDiv.innerHTML = "";
+            // 質問表示関数
+            function showQuestion() {
+                const q = questions[currentQuestion];
+                questionEl.textContent = q.text;
+                buttonsDiv.innerHTML = "";
 
-            if (q.options) {
-                q.options.forEach(option => {
-                    const btn = document.createElement("button");
-                    btn.textContent = option;
-                    btn.style.margin = "4px";
+                if (q.options) {
+                    q.options.forEach(option => {
+                        const btn = document.createElement("button");
+                        btn.textContent = option;
+                        btn.style.margin = "4px";
 
-                    if (answers[q.key] === option) {
-                        btn.style.backgroundColor = "#007bff";
-                        btn.style.color = "white";
+                        if (answers[q.key] === option) {
+                            btn.style.backgroundColor = "#007bff";
+                            btn.style.color = "white";
+                        }
+
+                        btn.onclick = () => {
+                            answers[q.key] = option;
+                            nextQuestion();
+                        };
+                        buttonsDiv.appendChild(btn);
+                    });
+                } else {
+                    const input = document.createElement("input");
+                    input.type = "number";
+                    input.min = "0";
+                    input.inputMode = "numeric";
+                    input.pattern = "[0-9]*";
+                    input.placeholder = "例: 10";
+                    input.style.fontSize = "16px";
+                    input.style.padding = "1em";
+                    input.style.marginRight = "8px";
+
+                    if (answers[q.key]) {
+                        input.value = answers[q.key];
                     }
 
+                    buttonsDiv.appendChild(input);
+
+                    const btn = document.createElement("button");
+                    btn.textContent = "次へ";
+                    btn.style.padding = "8px 16px";
+                    btn.style.fontSize = "16px";
                     btn.onclick = () => {
-                        answers[q.key] = option;
+                        const val = input.value.trim();
+                        if (val === "" || isNaN(val) || Number(val) < 0) {
+                            alert("正しい数値を入力してください");
+                            return;
+                        }
+                        answers[q.key] = val;
                         nextQuestion();
                     };
                     buttonsDiv.appendChild(btn);
-                });
-            } else {
-                const input = document.createElement("input");
-                input.type = "number";
-                input.min = "0";
-                input.inputMode = "numeric";
-                input.placeholder = "例: 10";
-                input.style.fontSize = "16px";
-                input.style.padding = "1em";
-                input.style.marginRight = "8px";
-
-                if (answers[q.key]) {
-                    input.value = answers[q.key];
                 }
-
-                buttonsDiv.appendChild(input);
-
-                const btn = document.createElement("button");
-                btn.textContent = "次へ";
-                btn.style.padding = "8px 16px";
-                btn.style.fontSize = "16px";
-                btn.onclick = () => {
-                    const val = input.value.trim();
-                    if (val === "" || isNaN(val) || Number(val) < 0) {
-                        alert("正しい数値を入力してください");
-                        return;
-                    }
-                    answers[q.key] = val;
-                    nextQuestion();
-                };
-                buttonsDiv.appendChild(btn);
             }
-        }
 
-        function nextQuestion() {
-            currentQuestion++;
-            if (currentQuestion < questions.length) {
-                showQuestion();
-            } else {
-                questionEl.textContent = "計算中...";
-                buttonsDiv.innerHTML = "";
-
-                // バックシール単価の分岐
-                let unitPrice = 3800;
-                if (answers.backSeal === "あり") {
-                    unitPrice = 5000;
-                }
-
-                const postData = {
-                    pipeSize: answers.pipeSize,
-                    straight: 0, // 直管は質問にないので0固定
-                    elbow: Number(answers.elbow) || 0,
-                    tee: Number(answers.tee) || 0,
-                    flange: Number(answers.flange) || 0,
-                    unitPrice: unitPrice,
-                    scheduleMultiplier: 1.0,
-                    isStainless: false, // 材質の選択は今のところなし
-                    isSW: false
-                };
-
-                iframe.contentWindow.postMessage({
-                    action: "calculateWeldingCost",
-                    params: postData
-                }, "*");
-            }
-        }
-
-        window.addEventListener("message", (e) => {
-            if (e.data.action === "weldingCostResult") {
-                if (e.data.result.success) {
-                    const r = e.data.result;
-                    buttonsDiv.innerHTML = `
-                    <div class="result-card" style="padding:16px; border:1px solid #ccc; border-radius:8px; background:#f9f9f9;">
-                        <div class="result-content" style="font-size:16px;">
-                            <div><strong>管サイズ(A):</strong> ${answers.pipeSize}</div>
-                            <div><strong>エルボ:</strong> ${answers.elbow} 個</div>
-                            <div><strong>チーズ:</strong> ${answers.tee} 個</div>
-                            <div><strong>フランジ:</strong> ${answers.flange} 個</div>
-                            <div><strong>DB/単価:</strong> ${postData.unitPrice}円</div>
-                            <div><strong>バックシール:</strong> ${answers.backSeal}</div>
-                            <div><strong>合計DB:</strong> ${r.totalDB}</div>
-                            <strong>溶接費概算:</strong> ${r.subtotal.toLocaleString()} 円
-                        </div>
-                    </div>
-                    <br>
-                    <button onclick="window.location.href='https://atsu3sh1n1.github.io/yumikou/'" style="
-                        padding: 8px 16px;
-                        font-size: 16px;
-                        background-color: #007bff;
-                        color: white;
-                        border: none;
-                        border-radius: 4px;
-                        cursor: pointer;
-                    ">戻る</button>
-                    `;
-                    questionEl.textContent = "";
+            // 次の質問へ or iframeへデータ送信
+            function nextQuestion() {
+                currentQuestion++;
+                if (currentQuestion < questions.length) {
+                    showQuestion();
                 } else {
-                    questionEl.textContent = "計算エラー";
-                    buttonsDiv.textContent = e.data.result.message || "不明なエラー";
+                    questionEl.textContent = "計算中...";
+                    buttonsDiv.innerHTML = "";
+
+                    // バックシール有無によって単価を変更
+                    const unitPrice = (answers.backSeal === "あり") ? 5000 : 3600;
+
+                    const postData = {
+                        pipeSize: answers.pipeSize,
+                        straight: Number(answers.straight) || 0,
+                        elbow: Number(answers.elbow) || 0,
+                        tee: Number(answers.tee) || 0,
+                        flange: Number(answers.flange) || 0,
+                        unitPrice: unitPrice,
+                        scheduleMultiplier: 1.0,
+                        isStainless: answers.material === "ステンレス",
+                        isSW: answers.material === "SW"
+                    };
+
+                    iframe.contentWindow.postMessage({
+                        action: "calculateWeldingCost",
+                        params: postData
+                    }, "*");
                 }
             }
-        });
 
-        showQuestion();
-    </script>
-</body>
+            // iframeからの計算結果受信
+            window.addEventListener("message", (e) => {
+                if (e.data.action === "weldingCostResult") {
+                    if (e.data.result.success) {
+                        const r = e.data.result;
+
+                        buttonsDiv.innerHTML = `
+                <div class="result-card" style="padding:16px; border:1px solid #ccc; border-radius:8px; background:#f9f9f9;">
+                  <div class="result-content" style="font-size:16px;">
+                    <div><strong>管サイズ(A):</strong> ${answers.pipeSize}</div>
+                    <div><strong>エルボ:</strong> ${answers.elbow} 個</div>
+                    <div><strong>チーズ:</strong> ${answers.tee} 個</div>
+                    <div><strong>フランジ:</strong> ${answers.flange} 枚</div>
+                    <div><strong>バックシール:</strong> ${answers.backSeal}</div>
+                    <div><strong>単価:</strong> ${(answers.backSeal === "あり" ? 5000 : 3600)} 円</div>
+                    <div><strong>材質:</strong> ${answers.material || "指定なし"}</div>
+                    <div><strong>合計DB:</strong> ${r.totalDB}</div>
+                    <strong>溶接費概算:</strong> ${r.subtotal.toLocaleString()} 円
+                  </div>
+                </div>
+                <br>
+                <button onclick="window.location.href='https://atsu3sh1n1.github.io/yumikou/'" style="
+                  padding: 8px 16px;
+                  font-size: 16px;
+                  background-color: #007bff;
+                  color: white;
+                  border: none;
+                  border-radius: 4px;
+                  cursor: pointer;
+                ">戻る</button>
+            `;
+                        questionEl.textContent = "";
+                    } else {
+                        questionEl.textContent = "計算エラー";
+                        buttonsDiv.textContent = e.data.result.message || "不明なエラー";
+                    }
+                }
+            });
+
+            // 最初の質問を表示
+            showQuestion();
+        </script>
+    </body>
