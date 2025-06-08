@@ -353,79 +353,83 @@
       }
     }
 
-    window.addEventListener("message", (e) => {
-      if (e.data.action === "calculationResult") {
-        if (e.data.result.success) {
-          const r = e.data.result;
-          const connection = answers.connection;
-          const material = answers.material;
-          let displayMaterial = `${material}(${connection})`;
+window.addEventListener("message", (e) => {
+  if (e.data.action === "calculationResult") {
+    if (e.data.result.success) {
+      const r = e.data.result;
+      const connection = answers.connection;
+      const material = answers.material;
+      let displayMaterial = `${material}(${connection})`;
 
-          // 単価調整
-          let unitPriceMultiplier = 1;
-          if (connection === "ネジ") {
-            if (material === "鉄" || material === "ステンレス") {
-              unitPriceMultiplier = 0.85;
-            }
-          }
+      // 単価調整
+      let unitPriceMultiplier = 1;
+      if (connection === "ネジ") {
+        if (material === "鉄" || material === "ステンレス") {
+          unitPriceMultiplier = 0.85;
+        }
+      }
 
-          // 単価 × 係数
-          const adjustedUnitPrice = r.unitPricePerMeter * unitPriceMultiplier;
+      // 単価 × 係数
+      const adjustedUnitPrice = r.unitPricePerMeter * unitPriceMultiplier;
 
-          // 単価 × 係数 × 長さ = 材料費ベース
-          const pipeCost = adjustedUnitPrice * Number(answers.length);
+      // 単価 × 係数 × 長さ = 材料費ベース（参考値）
+      const pipeCost = adjustedUnitPrice * Number(answers.length);
 
-          // 割合（例：47% 材料費、38% 人件費、15% 諸経費）
-          const laborRate = 0.38;
-          const expenseRate = 0.15;
+      // 税率
+      const taxRate = 0.1;  // 10%の場合
 
-          // --- 人件費逆算ロジック ---
-          // 人件費は総額の38%なので、材料費だけで算出したpipeCostを総額に逆算
-          const totalCost = pipeCost / (1 - laborRate);  // 総額 = 材料費ベース ÷ (1 - 人件費率)
-          const materialCost = pipeCost;
-          const laborCost = totalCost * laborRate;
-          const expenseCost = totalCost * expenseRate;
+      // 総額（ここは仮に pipeCost * 2 など、外部から渡される場合に置き換えてOK）
+      let totalAmount = Number(answers.totalAmount); // ← ここに「総額」を外部から受け取るイメージ
+      if (!totalAmount || totalAmount === 0) {
+        totalAmount = pipeCost * 2; // 仮に材料費の2倍を総額に設定
+      }
 
-          // 税率
-          const taxRate = 0.1;  // 10%の場合
+      // 税抜きにする
+      const subtotal = totalAmount / (1 + taxRate);
 
-          // 小計・消費税・総額
-          const subtotal = materialCost + laborCost + expenseCost;
-          const tax = subtotal * taxRate;
-          const totalAmount = subtotal + tax;
+      // 割合（例：47% 材料費、38% 人件費、15% 諸経費）
+      const materialRate = 0.47;
+      const laborRate = 0.38;
+      const expenseRate = 0.15;
 
-          // 人工単価（配管工と溶接工の加重平均単価）
-          const pipeFitterRatio = 0.6;
-          const welderRatio = 0.4;
-          const pipeFitterUnitPrice = 27000;
-          const welderUnitPrice = 35100;
-          const weightedLaborUnitPrice = pipeFitterUnitPrice * pipeFitterRatio + welderUnitPrice * welderRatio; // 約30240円
+      const materialCost = subtotal * materialRate;
+      const laborCost = subtotal * laborRate;
+      const expenseCost = subtotal * expenseRate;
 
-          // 工数計算（逆算）
-          const laborCount = laborCost / weightedLaborUnitPrice;
+      const tax = subtotal * taxRate;
 
-          // 歩掛計算（長さ ÷ 工数 = m/人工）
-          const workRate = Number(answers.length) / laborCount;
+      // 人工単価（配管工と溶接工の加重平均単価）
+      const pipeFitterRatio = 0.6;
+      const welderRatio = 0.4;
+      const pipeFitterUnitPrice = 27000;
+      const welderUnitPrice = 35100;
+      const weightedLaborUnitPrice = pipeFitterUnitPrice * pipeFitterRatio + welderUnitPrice * welderRatio;
 
-          // 人工内訳（溶接のみ）
-          let laborBreakdownHTML = "";
-          if (connection === "溶接") {
-            let pipeFitterRatioDetail, welderRatioDetail;
-            if (Number(r.size) <= 25) {
-              pipeFitterRatioDetail = 0.6;
-              welderRatioDetail = 0.4;
-            } else if (Number(r.size) <= 150) {
-              pipeFitterRatioDetail = 0.55;
-              welderRatioDetail = 0.45;
-            } else {
-              pipeFitterRatioDetail = 0.45;
-              welderRatioDetail = 0.55;
-            }
+      // 工数計算（逆算）
+      const laborCount = laborCost / weightedLaborUnitPrice;
 
-            const pipeFitterCount = laborCount * pipeFitterRatioDetail;
-            const welderCount = laborCount * welderRatioDetail;
+      // 歩掛計算（長さ ÷ 工数 = m/人工）
+      const workRate = Number(answers.length) / laborCount;
 
-            laborBreakdownHTML = `
+      // 人工内訳（溶接のみ）
+      let laborBreakdownHTML = "";
+      if (connection === "溶接") {
+        let pipeFitterRatioDetail, welderRatioDetail;
+        if (Number(r.size) <= 25) {
+          pipeFitterRatioDetail = 0.6;
+          welderRatioDetail = 0.4;
+        } else if (Number(r.size) <= 150) {
+          pipeFitterRatioDetail = 0.55;
+          welderRatioDetail = 0.45;
+        } else {
+          pipeFitterRatioDetail = 0.45;
+          welderRatioDetail = 0.55;
+        }
+
+        const pipeFitterCount = laborCount * pipeFitterRatioDetail;
+        const welderCount = laborCount * welderRatioDetail;
+
+        laborBreakdownHTML = `
       <div class="result-item" style="font-size: 0.85rem;">
         <span class="result-label">（内訳）: </span>
         <span class="result-value">
@@ -434,9 +438,9 @@
         </span>
       </div>
       `;
-          }
+      }
 
-          buttonsDiv.innerHTML = `
+      buttonsDiv.innerHTML = `
     <div style="text-align:center; margin-bottom:0.8em; margin-top:5em;">
       <a href="https://atsu3sh1n1.github.io/yumikou/" target="_blank" style="text-decoration: none; color: inherit;">Created by YUMIKOU Inc.</a>
     </div>
