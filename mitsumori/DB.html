@@ -159,22 +159,24 @@
         }
 
         .result-item {
-            margin: 0.5em 0;
             display: flex;
             justify-content: space-between;
-
+            margin: 0.2em 0;
         }
 
         .result-label {
             color: #555;
-            margin-right: 1.2em;
-            /* お好みの幅に調整してください */
+            margin-right: 1em;
+            flex: 1;
         }
 
         .result-value {
             color: #222;
             font-weight: 700;
+            text-align: right;
+            flex: 1;
         }
+
 
         #main a {
             font-size: 0.8em;
@@ -190,7 +192,7 @@
             max-width: 320px;
             margin: auto;
             text-align: left;
-            font-size: 1rem;
+            font-size: 0.9em;
             color: #333;
             font-weight: 600;
             overflow: hidden;
@@ -347,7 +349,7 @@
                 (tee * COEF_TEE * diameterFactor) +
                 (flange * COEF_FLANGE * diameterFactor);
 
-            const unitPrice = (answers.backSeal === "オール") ? 1000 : 1300;
+            const unitPrice = (answers.backSeal === "オール") ? 1300 : 1000;
             let subtotal = Math.round(totalDB * unitPrice);
 
             // SWの場合は0.85倍
@@ -356,29 +358,61 @@
             }
 
             buttonsDiv.innerHTML = `
-                <div style="padding:16px; border:1px solid #ccc; border-radius:8px; background:#f9f9f9;">
-                    <div><strong>管サイズ(A):</strong> ${answers.pipeSize}</div>
-                    <div><strong>エルボ:</strong> ${elbow} 個</div>
-                    <div><strong>チーズ:</strong> ${tee} 個</div>
-                    <div><strong>フランジ:</strong> ${flange} 枚</div>
-                    <div><strong>バックシール:</strong> ${answers.backSeal}</div>
-                    <div><strong>溶接方法:</strong> ${answers.weldType}</div>
-                    <div><strong>単価:</strong> ${unitPrice} 円</div>
-                    <div><strong>合計DB:</strong> ${totalDB.toFixed(1)}</div>
-                    <strong>溶接費概算:</strong> ${subtotal.toLocaleString()} 円
-                    ${answers.weldType === "SW" ? "<div style='color:red;'>※SWのため0.85倍補正済</div>" : ""}
-                </div>
-                <br>
-                <button onclick="window.location.href='https://atsu3sh1n1.github.io/yumikou/'" style="
-                    padding:8px 16px;
-                    font-size:16px;
-                    background-color:#007bff;
-                    color:white;
-                    border:none;
-                    border-radius:4px;
-                    cursor:pointer;
-                ">戻る</button>
-            `;
+    <div style="text-align:center; margin-bottom:0.8em; margin-top:0;">
+      <a href="https://atsu3sh1n1.github.io/yumikou/" target="_blank" style="text-decoration: none; color: inherit;">Created by YUMIKOU Inc.</a>
+    </div>
+
+    <div class="result-card">
+      <div class="result-content">
+        <div class="result-item">
+          <span class="result-label">サイズ:</span>
+          <span class="result-value">${answers.pipeSize}A</span>
+        </div>
+        <div class="result-item">
+          <span class="result-label">エルボ:</span>
+          <span class="result-value">${elbow} 個</span>
+        </div>
+        <div class="result-item">
+          <span class="result-label">チーズ:</span>
+          <span class="result-value">${tee} 個</span>
+        </div>
+        <div class="result-item">
+          <span class="result-label">フランジ:</span>
+          <span class="result-value">${flange} 枚</span>
+        </div>
+        <div class="result-item">
+          <span class="result-label">バックシール:</span>
+          <span class="result-value">${answers.backSeal}</span>
+        </div>
+        <div class="result-item">
+          <span class="result-label">溶接方法:</span>
+          <span class="result-value">${answers.weldType}</span>
+        </div>
+        <div class="result-item">
+          <span class="result-label">DB単価:</span>
+          <span class="result-value">${unitPrice} 円</span>
+        </div>
+        <div class="result-item">
+          <span class="result-label">合計DB:</span>
+          <span class="result-value">${totalDB.toFixed(1)}</span>
+        </div>
+        <div class="result-item">
+          <strong class="result-label">溶接費概算:</strong>
+          <strong class="result-value">${subtotal.toLocaleString()} 円</strong>
+        </div>
+        ${answers.weldType === "SW" ? "<div style='color:red;'>※SW補正済</div>" : ""}
+      </div>
+    </div><br>
+    <button onclick="window.location.href='https://atsu3sh1n1.github.io/yumikou/'" style="
+      padding:8px 16px;
+      font-size:16px;
+      background-color:#007bff;
+      color:white;
+      border:none;
+      border-radius:4px;
+      cursor:pointer;
+    ">戻る</button>
+`;
             questionEl.textContent = "";
         }
 
