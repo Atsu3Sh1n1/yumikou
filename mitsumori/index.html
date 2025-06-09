@@ -379,18 +379,25 @@
           const taxRate = 0.1;  // 10%の場合
 
           // 総額（ここは仮に pipeCost * 2 など、外部から渡される場合に置き換えてOK）
-          let totalAmount = Number(answers.totalAmount); // ← ここに「総額」を外部から受け取るイメージ
+          let totalAmount = Number(answers.totalAmount);
           if (!totalAmount || totalAmount === 0) {
-            totalAmount = pipeCost * 2; // 仮に材料費の2倍を総額に設定
+            totalAmount = pipeCost * 2;
           }
 
           // 税抜きにする
           const subtotal = totalAmount / (1 + taxRate);
 
           // 割合（例：47% 材料費、38% 人件費、15% 諸経費）
-          const materialRate = 0.47;
-          const laborRate = 0.38;
-          const expenseRate = 0.15;
+          let materialRate = 0.47;
+          let laborRate = 0.38;
+          let expenseRate = 0.15;
+
+          // ステンレスの場合だけ割合を変更
+          if (material === "ステンレス") {
+            materialRate = 0.60;
+            laborRate = 0.25;
+            expenseRate = 0.15;
+          }
 
           const materialCost = subtotal * materialRate;
           const laborCost = subtotal * laborRate;
@@ -405,8 +412,9 @@
           const welderUnitPrice = 35100;
           const weightedLaborUnitPrice = pipeFitterUnitPrice * pipeFitterRatio + welderUnitPrice * welderRatio;
 
-          // 工数計算（逆算）
-          const laborCount = laborCost / weightedLaborUnitPrice;
+          // 工数計算（重量ベース）
+          const standardWeightRate = 64; // kg/人工（例）
+          const laborCount = r.pipeWeight / standardWeightRate;
 
           // 歩掛計算（長さ ÷ 工数 = m/人工）
           const workRate = Number(answers.length) / laborCount;
@@ -430,69 +438,69 @@
             const welderCount = laborCount * welderRatioDetail;
 
             laborBreakdownHTML = `
-      <div class="result-item" style="font-size: 0.85rem;">
-        <span class="result-label">（内訳）: </span>
-        <span class="result-value">
-          配管工 ${pipeFitterCount.toFixed(2)}人日 (${Math.round(pipeFitterRatioDetail * 100)}%)<br>
-          溶接工 ${welderCount.toFixed(2)}人日 (${Math.round(welderRatioDetail * 100)}%)
-        </span>
-      </div>
-      `;
+  <div class="result-item" style="font-size: 0.85rem;">
+    <span class="result-label">（内訳）: </span>
+    <span class="result-value">
+      配管工 ${pipeFitterCount.toFixed(2)}人日 (${Math.round(pipeFitterRatioDetail * 100)}%)<br>
+      溶接工 ${welderCount.toFixed(2)}人日 (${Math.round(welderRatioDetail * 100)}%)
+    </span>
+  </div>
+  `;
           }
 
           buttonsDiv.innerHTML = `
-    <div style="text-align:center; margin-bottom:0.8em; margin-top:5em;">
-      <a href="https://atsu3sh1n1.github.io/yumikou/" target="_blank" style="text-decoration: none; color: inherit;">Created by YUMIKOU Inc.</a>
-    </div>
+  <div style="text-align:center; margin-bottom:0.8em; margin-top:5em;">
+    <a href="https://atsu3sh1n1.github.io/yumikou/" target="_blank" style="text-decoration: none; color: inherit;">Created by YUMIKOU Inc.</a>
+  </div>
 
-    <div class="result-card">
-      <iframe id="backgroundIframe" src="cost.html" frameborder="0"></iframe>
+  <div class="result-card">
+    <iframe id="backgroundIframe" src="cost.html" frameborder="0"></iframe>
 
-      <!-- ここに結果の内容 -->
-      <div class="result-content">
+    <!-- ここに結果の内容 -->
+    <div class="result-content">
 
-        <div class="result-item"><span class="result-label">材料: </span><span class="result-value">${displayMaterial}</span></div>
-        <div class="result-item"><span class="result-label">サイズ: </span><span class="result-value">${r.size}A</span></div>
-        <div class="result-item"><span class="result-label">スケジュール: </span><span class="result-value">${answers.schedule}</span></div>
-        <div class="result-item"><span class="result-label">長さ: </span><span class="result-value">${answers.length}m</span></div>
-        <div class="result-item"><span class="result-label">重量: </span><span class="result-value">${r.pipeWeight}kg</span></div>
-        <div class="result-item"><span class="result-label">歩掛: </span><span class="result-value">${workRate.toFixed(2)}m/人工</span></div>
-       
-        <div class="result-item">
-          <span class="result-label">材料費: </span>
-          <span class="result-value">${Math.round(materialCost).toLocaleString()}円</span>
-        </div>
-        <div class="result-item">
-          <span class="result-label">人件費: </span>
-          <span class="result-value">${Math.round(laborCost).toLocaleString()}円</span>
-        </div>
-        <div class="result-item">
-          <span class="result-label">諸経費: </span>
-          <span class="result-value">${Math.round(expenseCost).toLocaleString()}円</span>
-        </div>
-
-        <div class="result-item"><span class="result-label">工数: </span><span class="result-value">${laborCount.toFixed(2)}人日</span></div>
-        ${laborBreakdownHTML}
-
-        <div class="result-item">
-          <span class="result-label">小計: </span>
-          <span class="result-value">${Math.round(subtotal).toLocaleString()}円</span>
-        </div>
-        <div class="result-item">
-          <span class="result-label">消費税 (${(taxRate * 100).toFixed(0)}%): </span>
-          <span class="result-value">${Math.round(tax).toLocaleString()}円</span>
-        </div>
-        <div class="result-item">
-          <span class="result-label">概算(継手溶接費用別): </span>
-          <span class="result-value" style="color:red;">¥${Math.round(totalAmount).toLocaleString()}円</span>
-        </div>
-
-        <div class="result-item"><span class="result-label">打合せ時の食事: </span><span class="result-value">${answers.food}屋さん</span></div>
-
+      <div class="result-item"><span class="result-label">材料: </span><span class="result-value">${displayMaterial}</span></div>
+      <div class="result-item"><span class="result-label">サイズ: </span><span class="result-value">${r.size}A</span></div>
+      <div class="result-item"><span class="result-label">スケジュール: </span><span class="result-value">${answers.schedule}</span></div>
+      <div class="result-item"><span class="result-label">長さ: </span><span class="result-value">${answers.length}m</span></div>
+      <div class="result-item"><span class="result-label">重量: </span><span class="result-value">${r.pipeWeight}kg</span></div>
+      <div class="result-item"><span class="result-label">歩掛: </span><span class="result-value">${workRate.toFixed(2)}m/人工</span></div>
+     
+      <div class="result-item">
+        <span class="result-label">材料費: </span>
+        <span class="result-value">${Math.round(materialCost).toLocaleString()}円</span>
       </div>
+      <div class="result-item">
+        <span class="result-label">人件費: </span>
+        <span class="result-value">${Math.round(laborCost).toLocaleString()}円</span>
+      </div>
+      <div class="result-item">
+        <span class="result-label">諸経費: </span>
+        <span class="result-value">${Math.round(expenseCost).toLocaleString()}円</span>
+      </div>
+
+      <div class="result-item"><span class="result-label">工数: </span><span class="result-value">${laborCount.toFixed(2)}人日</span></div>
+      ${laborBreakdownHTML}
+
+      <div class="result-item">
+        <span class="result-label">小計: </span>
+        <span class="result-value">${Math.round(subtotal).toLocaleString()}円</span>
+      </div>
+      <div class="result-item">
+        <span class="result-label">消費税 (${(taxRate * 100).toFixed(0)}%): </span>
+        <span class="result-value">${Math.round(tax).toLocaleString()}円</span>
+      </div>
+      <div class="result-item">
+        <span class="result-label">概算(継手溶接費用別): </span>
+        <span class="result-value" style="color:red;">¥${Math.round(totalAmount).toLocaleString()}円</span>
+      </div>
+
+      <div class="result-item"><span class="result-label">打合せ時の食事: </span><span class="result-value">${answers.food}屋さん</span></div>
+
     </div>
-    
- <div style="text-align: center; margin-top: 1em;">
+  </div>
+
+  <div style="text-align: center; margin-top: 1em;">
     <button onclick="goBack()" style="
       padding: 6px 12px;
       font-size: 16px;
@@ -505,9 +513,8 @@
     ">続けて、継手溶接費用の見積もり</button>
   </div>
 
-
-    <br>
-    `;
+  <br>
+  `;
         } else {
           questionEl.textContent = "計算エラー";
           buttonsDiv.textContent = e.data.result.message || "不明なエラー";
