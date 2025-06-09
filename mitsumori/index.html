@@ -412,12 +412,12 @@
           const welderUnitPrice = 35100;
           const weightedLaborUnitPrice = pipeFitterUnitPrice * pipeFitterRatio + welderUnitPrice * welderRatio;
 
-          // 工数計算（重量ベース）
-          const standardWeightRate = 64; // kg/人工（例）
-          const laborCount = r.pipeWeight / standardWeightRate;
+          // 工数計算（人件費から逆算）
+          const laborCount = laborCost / weightedLaborUnitPrice;
 
           // 歩掛計算（長さ ÷ 工数 = m/人工）
           const workRate = Number(answers.length) / laborCount;
+
 
           // 人工内訳（溶接のみ）
           let laborBreakdownHTML = "";
