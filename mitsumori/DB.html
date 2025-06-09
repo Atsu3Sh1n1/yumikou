@@ -347,7 +347,7 @@
                 (tee * COEF_TEE * diameterFactor) +
                 (flange * COEF_FLANGE * diameterFactor);
 
-            const unitPrice = (answers.backSeal === "オール") ? 3000 : 2000;
+            const unitPrice = (answers.backSeal === "オール") ? 1000 : 2400;
             let subtotal = Math.round(totalDB * unitPrice);
 
             // SWの場合は0.85倍
