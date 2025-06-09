@@ -347,89 +347,85 @@
                 (tee * COEF_TEE * diameterFactor) +
                 (flange * COEF_FLANGE * diameterFactor);
 
-            const unitPrice = (answers.backSeal === "オール") ? 1750 : 1500;
-            let subtotal = Math.round(totalDB * unitPrice);
+            // 単価計算
+            let baseUnitPrice = (answers.backSeal === "オール") ? 1750 : 1500;
 
-            // SWの場合は0.85倍
-            if (answers.weldType === "SW") {
-                subtotal = Math.round(subtotal * 0.85);
+            // SWの場合は単価に0.85係数を掛ける（表示にも反映）
+            if (answers.weldType === "SW(差込み)") {
+                baseUnitPrice = Math.round(baseUnitPrice * 0.85);
             }
 
-
+            // 小計（合計DB × 単価）
+            let subtotal = Math.round(totalDB * baseUnitPrice);
 
             // 税率
             const TAX_RATE = 0.10;
-
-            // 小計はsubtotal（既に計算済み）
             const tax = Math.round(subtotal * TAX_RATE);
             const total = subtotal + tax;
 
-            buttonsDiv.innerHTML = `  
-  <div style="text-align:center; margin-bottom:0.8em; margin-top: 5em;">
-    <a href="https://atsu3sh1n1.github.io/yumikou/" target="_blank" style="text-decoration: none; color: inherit;">Created by YUMIKOU Inc.</a>
-  </div>
-
-  <div class="result-card">
-    <div class="result-content">
-      <div class="result-item"><span class="result-label">サイズ: </span><span class="result-value">${answers.pipeSize}A</span></div>
-      <div class="result-item"><span class="result-label">エルボ: </span><span class="result-value">${elbow} 個</span></div>
-      <div class="result-item"><span class="result-label">チーズ: </span><span class="result-value">${tee} 個</span></div>
-      <div class="result-item"><span class="result-label">フランジ: </span><span class="result-value">${flange} 枚</span></div>
-      <div class="result-item"><span class="result-label">バックシール: </span><span class="result-value">${answers.backSeal}</span></div>
-      <div class="result-item"><span class="result-label">継手タイプ: </span><span class="result-value">${answers.weldType}</span></div>
-      <div class="result-item"><span class="result-label">単価/DB: </span><span class="result-value">${unitPrice} 円</span></div>
-      <div class="result-item"><span class="result-label">合計DB: </span><span class="result-value">${totalDB.toFixed(1)}</span></div>
-
-      <div class="result-item">
-        <strong class="result-label">小計: </strong>
-        <strong class="result-value">${subtotal.toLocaleString()} 円</strong>  
-        ${answers.weldType === "SW" ? `<div style="color:red;">※SW補正済</div>` : ""}
+            // 結果表示
+            buttonsDiv.innerHTML = `
+      <div style="text-align:center; margin-bottom:0.8em; margin-top: 5em;">
+        <a href="https://atsu3sh1n1.github.io/yumikou/" target="_blank" style="text-decoration: none; color: inherit;">Created by YUMIKOU Inc.</a>
       </div>
 
-      <div class="result-item">
-        <strong class="result-label">消費税（10%）: </strong>
-        <strong class="result-value">${tax.toLocaleString()} 円</strong>
+      <div class="result-card">
+        <div class="result-content">
+          <div class="result-item"><span class="result-label">サイズ: </span><span class="result-value">${answers.pipeSize}A</span></div>
+          <div class="result-item"><span class="result-label">エルボ: </span><span class="result-value">${elbow} 個</span></div>
+          <div class="result-item"><span class="result-label">チーズ: </span><span class="result-value">${tee} 個</span></div>
+          <div class="result-item"><span class="result-label">フランジ: </span><span class="result-value">${flange} 枚</span></div>
+          <div class="result-item"><span class="result-label">バックシール: </span><span class="result-value">${answers.backSeal}</span></div>
+          <div class="result-item"><span class="result-label">継手タイプ: </span><span class="result-value">${answers.weldType}</span></div>
+          <div class="result-item"><span class="result-label">単価/DB: </span><span class="result-value">${baseUnitPrice} 円</span></div>
+          <div class="result-item"><span class="result-label">合計DB: </span><span class="result-value">${totalDB.toFixed(1)}</span></div>
+
+          <div class="result-item">
+            <strong class="result-label">小計: </strong>
+            <strong class="result-value">${subtotal.toLocaleString()} 円</strong>  
+          </div>
+
+          <div class="result-item">
+            <strong class="result-label">消費税（10%）: </strong>
+            <strong class="result-value">${tax.toLocaleString()} 円</strong>
+          </div>
+
+          <div class="result-item">
+            <strong class="result-label">税込概算: </strong>
+            <strong class="result-value" style="color:red;">${total.toLocaleString()} 円</strong>
+          </div>
+        </div>
+      </div>
+      
+      <div class="comment-section" style="margin-top: 20px; margin-bottom: 10px; font-size: 0.7em;">
+        <div style="text-align: center;">
+          【詳細見積もり作成費用】
+        </div>
+        <div style="text-align: left;">
+          ・現地調査・寸法確認・仕様確認：10,000円～20,000円（税別）<br>
+          ・部材拾い出し・積算・詳細見積書作成：10,000円～30,000円（税別）<br>
+          ・総額（目安）：20,000円～50,000円（税別）<br>
+          ※大規模・特殊案件は積算外注費や図面作成費が別途必要。<br>
+          ※正式発注後、詳細見積もり費用は工事代金に充当または相殺。<br>
+        </div>
+        <div style="text-align: center; margin-top: 10px;">
+          詳しくはお問い合わせください
+        </div>
       </div>
 
-      <div class="result-item">
-        <strong class="result-label">税込概算: </strong>
-        <strong class="result-value" style="color:red;">${total.toLocaleString()} 円</strong>
-      </div>
-    </div>
-  </div>
-  
+      <button onclick="window.location.href='https://atsu3sh1n1.github.io/yumikou/'" style="
+        padding:8px 16px;
+        font-size:16px;
+        background-color:#007bff;
+        color:white;
+        border:none;
+        border-radius:4px;
+        cursor:pointer;
+      ">戻る</button>
 
-<div class="comment-section" style="margin-top: 20px; margin-bottom: 10px; font-size: 0.7em;">
-  <div style="text-align: center;">
-    【詳細見積もり作成費用】
-  </div>
-  <div style="text-align: left;">
-    ・現地調査・寸法確認・仕様確認：10,000円～20,000円（税別）<br>
-    ・部材拾い出し・積算・詳細見積書作成：10,000円～30,000円（税別）<br>
-    ・総額（目安）：20,000円～50,000円（税別）<br>
-    ※大規模・特殊案件は積算外注費や図面作成費が別途必要。<br>
-    ※正式発注後、詳細見積もり費用は工事代金に充当または相殺。<br>
-  </div>
-  <div style="text-align: center; margin-top: 10px;">
-    詳しくはお問い合わせください
-  </div>
-</div>
+      <br>
+      `;
 
-
-  
-
-  <button onclick="window.location.href='https://atsu3sh1n1.github.io/yumikou/'" style="
-    padding:8px 16px;
-    font-size:16px;
-    background-color:#007bff;
-    color:white;
-    border:none;
-    border-radius:4px;
-    cursor:pointer;
-  ">戻る</button>
-
-  <br>
-`;
             questionEl.textContent = "";
         }
 
