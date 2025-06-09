@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <title>配管工事コスト比率グラフ</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin-top: 50px;
+      height: 100%;
+    }
+
+    #chart-container {
+      width: 400px;
+      margin: 0 auto;
+    }
+
+    .created-by {
+      font-size: 14px;
+      color: #555;
+      text-align: center;
+      margin-top: 0;
+    }
+  </style>
+</head>
+
+<body>
+  <h2></h2>
+  
+
+  <div id="chart-container">
+    <canvas id="costPieChart"></canvas>
+  </div>
+
+  <script>
+   const costData = [
+  { label: "パイプ", value: 45 },   // ステンレスは材料費が大きいので
+  { label: "継手", value: 15 },
+  { label: "人件費", value: 25 },
+  { label: "諸経費", value: 15 }
+];
+
+
+    const labels = costData.map(item => item.label);
+    const values = costData.map(item => item.value);
+
+    const backgroundColors = [
+      "#2E86AB",
+      "#F6AA1C",
+      "#6AB187",
+      "#A0A0A0"
+    ];
+
+    const ctx = document.getElementById('costPieChart').getContext('2d');
+    const costPieChart = new Chart(ctx, {
+      type: 'pie',
+      data: {
+        labels: labels,
+        datasets: [{
+          data: values,
+          backgroundColor: backgroundColors
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            display: false
+          },
+          tooltip: {
+            callbacks: {
+              label: function (context) {
+                const label = context.label || '';
+                const value = context.parsed || 0;
+                return `${label}: ${value}%`;
+              }
+            }
+          },
+          datalabels: {
+            color: '#fff',
+            font: {
+              weight: 'bold',
+              size: 25
+            },
+            formatter: function (value, context) {
+              return `${context.chart.data.labels[context.dataIndex]}\n${value}%`;
+            },
+            align: 'end',    // ラベルの位置調整（例：外側に寄せる）
+            anchor: 'outer', // ラベルの基準位置
+            offset: -80     // ラベルの微調整（ピクセル単位でずらす）
+          }
+        }
+      },
+      plugins: [ChartDataLabels]
+    });
+  </script>
+  <script>
+    window.addEventListener('load', function () {
+      const height = document.body.scrollHeight;
+      window.parent.postMessage({
+        action: "resizeIframe",
+        id: "app7",
+        height: height
+      }, "*");
+    });
+  </script>
+
+</body>
+
+</html>

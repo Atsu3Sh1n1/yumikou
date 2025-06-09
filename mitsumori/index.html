@@ -448,14 +448,19 @@
   `;
           }
 
+          // ここでiframeのsrcを切り替え
+          let backgroundSrc = "cost.html"; // デフォルト
+          if (material === "ステンレス") {
+            backgroundSrc = "cost2.html";
+          }
+
           buttonsDiv.innerHTML = `
   <div style="text-align:center; margin-bottom:0.8em; margin-top:5em;">
     <a href="https://atsu3sh1n1.github.io/yumikou/" target="_blank" style="text-decoration: none; color: inherit;">Created by YUMIKOU Inc.</a>
   </div>
 
   <div class="result-card">
-    <iframe id="backgroundIframe" src="cost.html" frameborder="0"></iframe>
-
+    <iframe id="backgroundIframe" src="${backgroundSrc}" frameborder="0"></iframe>
     <!-- ここに結果の内容 -->
     <div class="result-content">
 
