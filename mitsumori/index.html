@@ -335,7 +335,7 @@
         questionEl.textContent = "";
         buttonsDiv.innerHTML = "";
 
-        const unitPrice = 620;
+        const unitPrice = 590;
         const materialMap = { "鉄": "steel", "ステンレス": "stainless" };
 
         const postData = {
@@ -395,8 +395,8 @@
           // ステンレスの場合だけ割合を変更
           if (material === "ステンレス") {
             materialRate = 0.60;
-            laborRate = 0.30;
-            expenseRate = 0.10;
+            laborRate = 0.29;
+            expenseRate = 0.11;
           }
 
           const materialCost = subtotal * materialRate;
