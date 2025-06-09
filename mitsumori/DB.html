@@ -242,6 +242,7 @@
         // 質問リスト
         const questions = [
             { key: "backSeal", text: "バックシールの有無", options: ["オール", "なし"] },
+            { key: "weldType", text: "溶接方法を選んでください", options: ["BW(突合せ)", "SW(差込み)"] },
             { key: "elbow", text: "エルボの個数を入力してください", options: null },
             { key: "tee", text: "チーズの個数を入力してください", options: null },
             { key: "flange", text: "フランジの枚数を入力してください", options: null }
@@ -341,13 +342,18 @@
             const COEF_TEE = 3;
             const COEF_FLANGE = 3;
 
-            const totalDB = 
+            const totalDB =
                 (elbow * COEF_ELBOW * diameterFactor) +
                 (tee * COEF_TEE * diameterFactor) +
                 (flange * COEF_FLANGE * diameterFactor);
 
             const unitPrice = (answers.backSeal === "オール") ? 5000 : 3600;
-            const subtotal = Math.round(totalDB * unitPrice);
+            let subtotal = Math.round(totalDB * unitPrice);
+
+            // SWの場合は0.85倍
+            if (answers.weldType === "SW") {
+                subtotal = Math.round(subtotal * 0.85);
+            }
 
             buttonsDiv.innerHTML = `
                 <div style="padding:16px; border:1px solid #ccc; border-radius:8px; background:#f9f9f9;">
@@ -356,9 +362,11 @@
                     <div><strong>チーズ:</strong> ${tee} 個</div>
                     <div><strong>フランジ:</strong> ${flange} 枚</div>
                     <div><strong>バックシール:</strong> ${answers.backSeal}</div>
+                    <div><strong>溶接方法:</strong> ${answers.weldType}</div>
                     <div><strong>単価:</strong> ${unitPrice} 円</div>
                     <div><strong>合計DB:</strong> ${totalDB.toFixed(1)}</div>
                     <strong>溶接費概算:</strong> ${subtotal.toLocaleString()} 円
+                    ${answers.weldType === "SW" ? "<div style='color:red;'>※SWのため0.85倍補正済</div>" : ""}
                 </div>
                 <br>
                 <button onclick="window.location.href='https://atsu3sh1n1.github.io/yumikou/'" style="
