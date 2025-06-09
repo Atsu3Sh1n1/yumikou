@@ -83,14 +83,14 @@
             color: '#fff',
             font: {
               weight: 'bold',
-              size: 25
+              size: 30
             },
             formatter: function (value, context) {
               return `${context.chart.data.labels[context.dataIndex]}\n${value}%`;
             },
             align: 'end',    // ラベルの位置調整（例：外側に寄せる）
             anchor: 'outer', // ラベルの基準位置
-            offset: -80     // ラベルの微調整（ピクセル単位でずらす）
+            offset: -50     // ラベルの微調整（ピクセル単位でずらす）
           }
         }
       },
