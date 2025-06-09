@@ -353,83 +353,83 @@
       }
     }
 
-window.addEventListener("message", (e) => {
-  if (e.data.action === "calculationResult") {
-    if (e.data.result.success) {
-      const r = e.data.result;
-      const connection = answers.connection;
-      const material = answers.material;
-      let displayMaterial = `${material}(${connection})`;
+    window.addEventListener("message", (e) => {
+      if (e.data.action === "calculationResult") {
+        if (e.data.result.success) {
+          const r = e.data.result;
+          const connection = answers.connection;
+          const material = answers.material;
+          let displayMaterial = `${material}(${connection})`;
 
-      // 単価調整
-      let unitPriceMultiplier = 1;
-      if (connection === "ネジ") {
-        if (material === "鉄" || material === "ステンレス") {
-          unitPriceMultiplier = 0.85;
-        }
-      }
+          // 単価調整
+          let unitPriceMultiplier = 1;
+          if (connection === "ネジ") {
+            if (material === "鉄" || material === "ステンレス") {
+              unitPriceMultiplier = 0.85;
+            }
+          }
 
-      // 単価 × 係数
-      const adjustedUnitPrice = r.unitPricePerMeter * unitPriceMultiplier;
+          // 単価 × 係数
+          const adjustedUnitPrice = r.unitPricePerMeter * unitPriceMultiplier;
 
-      // 単価 × 係数 × 長さ = 材料費ベース（参考値）
-      const pipeCost = adjustedUnitPrice * Number(answers.length);
+          // 単価 × 係数 × 長さ = 材料費ベース（参考値）
+          const pipeCost = adjustedUnitPrice * Number(answers.length);
 
-      // 税率
-      const taxRate = 0.1;  // 10%の場合
+          // 税率
+          const taxRate = 0.1;  // 10%の場合
 
-      // 総額（ここは仮に pipeCost * 2 など、外部から渡される場合に置き換えてOK）
-      let totalAmount = Number(answers.totalAmount); // ← ここに「総額」を外部から受け取るイメージ
-      if (!totalAmount || totalAmount === 0) {
-        totalAmount = pipeCost * 2; // 仮に材料費の2倍を総額に設定
-      }
+          // 総額（ここは仮に pipeCost * 2 など、外部から渡される場合に置き換えてOK）
+          let totalAmount = Number(answers.totalAmount); // ← ここに「総額」を外部から受け取るイメージ
+          if (!totalAmount || totalAmount === 0) {
+            totalAmount = pipeCost * 2; // 仮に材料費の2倍を総額に設定
+          }
 
-      // 税抜きにする
-      const subtotal = totalAmount / (1 + taxRate);
+          // 税抜きにする
+          const subtotal = totalAmount / (1 + taxRate);
 
-      // 割合（例：47% 材料費、38% 人件費、15% 諸経費）
-      const materialRate = 0.47;
-      const laborRate = 0.38;
-      const expenseRate = 0.15;
+          // 割合（例：47% 材料費、38% 人件費、15% 諸経費）
+          const materialRate = 0.47;
+          const laborRate = 0.38;
+          const expenseRate = 0.15;
 
-      const materialCost = subtotal * materialRate;
-      const laborCost = subtotal * laborRate;
-      const expenseCost = subtotal * expenseRate;
+          const materialCost = subtotal * materialRate;
+          const laborCost = subtotal * laborRate;
+          const expenseCost = subtotal * expenseRate;
 
-      const tax = subtotal * taxRate;
+          const tax = subtotal * taxRate;
 
-      // 人工単価（配管工と溶接工の加重平均単価）
-      const pipeFitterRatio = 0.6;
-      const welderRatio = 0.4;
-      const pipeFitterUnitPrice = 27000;
-      const welderUnitPrice = 35100;
-      const weightedLaborUnitPrice = pipeFitterUnitPrice * pipeFitterRatio + welderUnitPrice * welderRatio;
+          // 人工単価（配管工と溶接工の加重平均単価）
+          const pipeFitterRatio = 0.6;
+          const welderRatio = 0.4;
+          const pipeFitterUnitPrice = 27000;
+          const welderUnitPrice = 35100;
+          const weightedLaborUnitPrice = pipeFitterUnitPrice * pipeFitterRatio + welderUnitPrice * welderRatio;
 
-      // 工数計算（逆算）
-      const laborCount = laborCost / weightedLaborUnitPrice;
+          // 工数計算（逆算）
+          const laborCount = laborCost / weightedLaborUnitPrice;
 
-      // 歩掛計算（長さ ÷ 工数 = m/人工）
-      const workRate = Number(answers.length) / laborCount;
+          // 歩掛計算（長さ ÷ 工数 = m/人工）
+          const workRate = Number(answers.length) / laborCount;
 
-      // 人工内訳（溶接のみ）
-      let laborBreakdownHTML = "";
-      if (connection === "溶接") {
-        let pipeFitterRatioDetail, welderRatioDetail;
-        if (Number(r.size) <= 25) {
-          pipeFitterRatioDetail = 0.6;
-          welderRatioDetail = 0.4;
-        } else if (Number(r.size) <= 150) {
-          pipeFitterRatioDetail = 0.55;
-          welderRatioDetail = 0.45;
-        } else {
-          pipeFitterRatioDetail = 0.45;
-          welderRatioDetail = 0.55;
-        }
+          // 人工内訳（溶接のみ）
+          let laborBreakdownHTML = "";
+          if (connection === "溶接") {
+            let pipeFitterRatioDetail, welderRatioDetail;
+            if (Number(r.size) <= 25) {
+              pipeFitterRatioDetail = 0.6;
+              welderRatioDetail = 0.4;
+            } else if (Number(r.size) <= 150) {
+              pipeFitterRatioDetail = 0.55;
+              welderRatioDetail = 0.45;
+            } else {
+              pipeFitterRatioDetail = 0.45;
+              welderRatioDetail = 0.55;
+            }
 
-        const pipeFitterCount = laborCount * pipeFitterRatioDetail;
-        const welderCount = laborCount * welderRatioDetail;
+            const pipeFitterCount = laborCount * pipeFitterRatioDetail;
+            const welderCount = laborCount * welderRatioDetail;
 
-        laborBreakdownHTML = `
+            laborBreakdownHTML = `
       <div class="result-item" style="font-size: 0.85rem;">
         <span class="result-label">（内訳）: </span>
         <span class="result-value">
@@ -438,9 +438,9 @@ window.addEventListener("message", (e) => {
         </span>
       </div>
       `;
-      }
+          }
 
-      buttonsDiv.innerHTML = `
+          buttonsDiv.innerHTML = `
     <div style="text-align:center; margin-bottom:0.8em; margin-top:5em;">
       <a href="https://atsu3sh1n1.github.io/yumikou/" target="_blank" style="text-decoration: none; color: inherit;">Created by YUMIKOU Inc.</a>
     </div>
@@ -490,26 +490,21 @@ window.addEventListener("message", (e) => {
         <div class="result-item"><span class="result-label">打合せ時の食事: </span><span class="result-value">${answers.food}屋さん</span></div>
 
       </div>
-    </div><br>
-
-    <div class="comment-section" style="margin-top:20px; font-size: 0.8rem;">
-      <label>*内作・現場・高所・室内・野外、継手数量、材料費などにより、金額は変動します。詳しくはお問い合わせください</label><br>
     </div>
-    <br>
+    
+ <div style="text-align: center; margin-top: 1em;">
+    <button onclick="goBack()" style="
+      padding: 6px 12px;
+      font-size: 16px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      text-align: center;
+    ">続けて、継手溶接費用の見積もり</button>
+  </div>
 
-   <button onclick="goBack()" style="
-  position: fixed;
-  bottom: 0px;
-  right: 20px;
-  padding: 6px 6px;
-  font-size: 16px;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-   text-align: center;
-">続けて、継手溶接費用の見積もり</button>
 
     <br>
     `;

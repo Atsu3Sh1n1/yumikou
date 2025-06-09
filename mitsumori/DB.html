@@ -270,7 +270,7 @@
                 q.options.forEach(option => {
                     const btn = document.createElement("button");
                     btn.textContent = option;
-                    btn.style.margin = "4px";
+                    btn.style.margin = "0.5em";
                     btn.onclick = () => {
                         answers[q.key] = option;
                         nextQuestion();
@@ -347,7 +347,7 @@
                 (tee * COEF_TEE * diameterFactor) +
                 (flange * COEF_FLANGE * diameterFactor);
 
-            const unitPrice = (answers.backSeal === "オール") ? 1300 : 1000;
+            const unitPrice = (answers.backSeal === "オール") ? 1750 : 1500;
             let subtotal = Math.round(totalDB * unitPrice);
 
             // SWの場合は0.85倍
@@ -378,6 +378,11 @@ buttonsDiv.innerHTML = `
         <strong class="result-value" style="color:red;">${subtotal.toLocaleString()} 円</strong>      ${answers.weldType === "SW" ? `<div style="color:red;">※SW補正済</div>` : ""}
     </div>
   </div> </div><br>
+
+   <div class="comment-section" style="margin-top:20px; font-size: 0.8rem;">
+      <label>*内作・現場・高所・室内・野外、継手数量、材料費などにより、金額は変動します。詳しくはお問い合わせください</label><br>
+    </div>
+    <br>
 
    <button onclick="window.location.href='https://atsu3sh1n1.github.io/yumikou/'" style="
       padding:8px 16px;
