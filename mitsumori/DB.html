@@ -355,15 +355,21 @@
                 subtotal = Math.round(subtotal * 0.85);
             }
 
-buttonsDiv.innerHTML = `  
+
+
+            // 税率
+            const TAX_RATE = 0.10;
+
+            // 小計はsubtotal（既に計算済み）
+            const tax = Math.round(subtotal * TAX_RATE);
+            const total = subtotal + tax;
+
+            buttonsDiv.innerHTML = `  
   <div style="text-align:center; margin-bottom:0.8em; margin-top: -100px;">
     <a href="https://atsu3sh1n1.github.io/yumikou/" target="_blank" style="text-decoration: none; color: inherit;">Created by YUMIKOU Inc.</a>
   </div>
 
   <div class="result-card">
-    <!-- iframeは不要なら消します -->
-    <!-- <iframe id="backgroundIframe" src="cost.html" frameborder="0"></iframe> -->
-
     <div class="result-content">
       <div class="result-item"><span class="result-label">サイズ: </span><span class="result-value">${answers.pipeSize}A</span></div>
       <div class="result-item"><span class="result-label">エルボ: </span><span class="result-value">${elbow} 個</span></div>
@@ -371,29 +377,42 @@ buttonsDiv.innerHTML = `
       <div class="result-item"><span class="result-label">フランジ: </span><span class="result-value">${flange} 枚</span></div>
       <div class="result-item"><span class="result-label">バックシール: </span><span class="result-value">${answers.backSeal}</span></div>
       <div class="result-item"><span class="result-label">継手タイプ: </span><span class="result-value">${answers.weldType}</span></div>
-      <div class="result-item"><span class="result-label">DB単価: </span><span class="result-value">${unitPrice} 円</span></div>
+      <div class="result-item"><span class="result-label">単価/DB: </span><span class="result-value">${unitPrice} 円</span></div>
       <div class="result-item"><span class="result-label">合計DB: </span><span class="result-value">${totalDB.toFixed(1)}</span></div>
- <div class="result-item">
-        <strong class="result-label">溶接費概算: </strong>
-        <strong class="result-value" style="color:red;">${subtotal.toLocaleString()} 円</strong>      ${answers.weldType === "SW" ? `<div style="color:red;">※SW補正済</div>` : ""}
+
+      <div class="result-item">
+        <strong class="result-label">小計: </strong>
+        <strong class="result-value">${subtotal.toLocaleString()} 円</strong>  
+        ${answers.weldType === "SW" ? `<div style="color:red;">※SW補正済</div>` : ""}
+      </div>
+
+      <div class="result-item">
+        <strong class="result-label">消費税（10%）: </strong>
+        <strong class="result-value">${tax.toLocaleString()} 円</strong>
+      </div>
+
+      <div class="result-item">
+        <strong class="result-label">税込合計(概算): </strong>
+        <strong class="result-value" style="color:red;">${total.toLocaleString()} 円</strong>
+      </div>
     </div>
-  </div> </div><br>
+  </div>
+  <br>
 
-   <div class="comment-section" style="margin-top:20px; font-size: 0.8rem;">
-      <label>*内作・現場・高所・室内・野外、継手数量、材料費などにより、金額は変動します。詳しくはお問い合わせください</label><br>
-    </div>
-    <br>
+  <div class="comment-section" style="margin-top:20px; font-size: 0.8rem;">
+    <label>*内作・現場・高所・室内・野外、継手数量、材料費などにより、金額は変動します。詳しくはお問い合わせください</label><br>
+  </div>
+  <br>
 
-   <button onclick="window.location.href='https://atsu3sh1n1.github.io/yumikou/'" style="
-      padding:8px 16px;
-      font-size:16px;
-      background-color:#007bff;
-      color:white;
-      border:none;
-      border-radius:4px;
-      cursor:pointer;
-    ">戻る</button>
-
+  <button onclick="window.location.href='https://atsu3sh1n1.github.io/yumikou/'" style="
+    padding:8px 16px;
+    font-size:16px;
+    background-color:#007bff;
+    color:white;
+    border:none;
+    border-radius:4px;
+    cursor:pointer;
+  ">戻る</button>
 
   <br>
 `;
