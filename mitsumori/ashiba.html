@@ -372,10 +372,12 @@
                 // 計算ロジック
                 const baseCost = r.cost; // 原価
                 const materialCost = Math.round(baseCost * 0.3); // 材料費（30%）
-                const overheadCost = Math.round(baseCost * 0.2); // 諸経費（20%）
-                const subtotal = baseCost + materialCost + overheadCost; // 小計
+                const subtotalBeforeOverhead = baseCost + materialCost;
+                const overheadCost = Math.round(subtotalBeforeOverhead * 0.2); // 諸経費（20%）
+                const subtotal = subtotalBeforeOverhead + overheadCost;
                 const tax = Math.round(subtotal * 0.1); // 消費税（10%）
-                const grandTotal = subtotal + tax; // 合計
+                const grandTotal = subtotal + tax;
+
 
                 // 結果表示
                 buttonsDiv.innerHTML = `
