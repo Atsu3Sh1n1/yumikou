@@ -335,7 +335,7 @@
         questionEl.textContent = "";
         buttonsDiv.innerHTML = "";
 
-        const unitPrice = 650;
+        const unitPrice = 700;
         const materialMap = { "鉄": "steel", "ステンレス": "stainless" };
 
         const postData = {
@@ -398,15 +398,15 @@
           const laborCoefficient = ratioCoefficients[answers.onsiteRatio] || 1.00;
 
           // 割合（例：47% 材料費、38% 人件費、15% 諸経費）
-          let materialRate = 0.45;
-          let laborRate = 0.40;
-          let expenseRate = 0.15;
+          let materialRate = 0.46;
+          let laborRate = 0.42;
+          let expenseRate = 0.12;
 
           // ステンレスの場合だけ割合を変更
           if (material === "ステンレス") {
             materialRate = 0.65;
-            laborRate = 0.23;
-            expenseRate = 0.12;
+            laborRate = 0.25;
+            expenseRate = 0.10;
           }
 
           const materialCost = subtotalBeforeRatio * materialRate;
