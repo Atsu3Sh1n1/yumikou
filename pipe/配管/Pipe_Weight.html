@@ -14,7 +14,7 @@
     }
 
     .container {
-      max-width: 600px;
+      max-width: 300px;
       margin: auto;
       background: #fff;
       padding: 20px;
@@ -42,7 +42,7 @@
 
     select,
     input[type="number"] {
-      width: 100%;
+      width: 50%;
       padding: 8px;
       border: 1px solid #ccc;
       border-radius: 4px;
@@ -155,13 +155,13 @@
     <div class="form-section">
       <div class="price-inputs">
         <div class="form-group">
-          <label for="steelPrice">鉄単価 (円/kg):</label>
-          <input type="number" inputmode="numeric" id="steelPrice" name="steelPrice" value="500" min="0" />
+          <label for="steelPrice">鉄単価:</label>
+          <input type="number" inputmode="numeric" id="steelPrice" name="steelPrice" value="500" min="0" /> (円/kg)
         </div>
 
         <div class="form-group">
-          <label for="stainlessPrice">ステンレス単価 (円/kg):</label>
-          <input type="number" inputmode="numeric" id="stainlessPrice" name="stainlessPrice" value="1500" min="0" />
+          <label for="stainlessPrice">ステンレス単価:</label>
+          <input type="number" inputmode="numeric" id="stainlessPrice" name="stainlessPrice" value="1500" min="0" /> (円/kg)
         </div>
       </div>
     </div>
@@ -239,7 +239,7 @@
       'sgp': { steel: 'sgp', stainless: null },
       'sch5s': { steel: null, stainless: 'sch5s' },
       'sch10s': { steel: null, stainless: 'sch10s' },
-      'sch20': { steel: 'sch20', stainless: 'sch20s' },
+      'sch20': { steel: null, stainless: 'sch20s' },
       'sch40': { steel: 'sch40', stainless: 'sch40s' },
       'sch60': { steel: 'sch60', stainless: 'sch60s' },
       'sch80': { steel: 'sch80', stainless: 'sch80s' },
