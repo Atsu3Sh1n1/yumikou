@@ -9,21 +9,21 @@
     body {
       font-family: Arial, sans-serif;
       margin: 0;
-      padding: 20px;
-      background: #f4f4f4;
+      padding: 5px;
     }
 
     .container {
-      max-width: 300px;
+      max-width: 400px;
       margin: auto;
-      background: #fff;
-      padding: 20px;
+      padding: 5px;
       border-radius: 8px;
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     }
 
     h1 {
       text-align: center;
+      font-size: 1.5em;
+      margin-bottom: 20px;
     }
 
     .form-section {
@@ -38,14 +38,16 @@
       display: block;
       margin-bottom: 5px;
       font-weight: bold;
+
     }
 
     select,
     input[type="number"] {
-      width: 50%;
+      width: 40%;
       padding: 8px;
       border: 1px solid #ccc;
       border-radius: 4px;
+      font-size: 1.1em;
     }
 
     .price-inputs {
@@ -109,48 +111,79 @@
       color: #007bff;
       text-decoration: none;
     }
+
+    .size-length-inputs {
+      display: flex;
+      gap: 15px;
+    }
+
+    .size-length-inputs .form-group {
+      flex: 1;
+      min-width: 120px;
+    }
+
+    .size-length-inputs select,
+    .size-length-inputs input {
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    #size {
+      height: 40px;
+      /* デフォルトより少し大きめ */
+      padding: 6px 8px;
+      /* 内側の余白も調整可能 */
+      font-size: 1.1em;
+      /* 文字の大きさも調整すると見栄えよく */
+      box-sizing: border-box;
+      /* 高さにpaddingも含める */
+      
+    }
   </style>
 </head>
 
 <body>
   <div class="container">
-    <h1 style="line-height: 0.9;">
+    <h1 style="margin-top: 0px;">
       施工費概算算出機<br>
-      <span style="font-size: 0.6em;">(フジタくん2号)*調整中</span>
+      <span style="font-size: 0.6em; ">(フジタくん2号)*調整中</span>
     </h1>
     <div class="footer">
       <a href="https://atsu3sh1n1.github.io/yumikou/" target="_blank">Created by YUMIKOU Inc.</a>
     </div>
 
     <div class="form-section">
-      <div class="form-group">
-        <label for="size">サイズ（呼び径 A）:</label>
-        <select id="size" name="size">
-          <option value="25">25A</option>
-          <option value="32">32A</option>
-          <option value="40">40A</option>
-          <option value="50">50A</option>
-          <option value="65">65A</option>
-          <option value="80">80A</option>
-          <option value="100">100A</option>
-          <option value="125">125A</option>
-          <option value="150">150A</option>
-          <option value="175">175A</option>
-          <option value="200">200A</option>
-          <option value="250">250A</option>
-          <option value="300">300A</option>
-          <option value="350">350A</option>
-          <option value="400">400A</option>
-          <option value="450">450A</option>
-          <option value="500">500A</option>
-        </select>
-      </div>
+      <div class="size-length-inputs">
+        <div class="form-group">
+          <label for="size">サイズ(A)</label>
+          <select id="size" name="size">
+            <option value="25">25A</option>
+            <option value="32">32A</option>
+            <option value="40">40A</option>
+            <option value="50">50A</option>
+            <option value="65">65A</option>
+            <option value="80">80A</option>
+            <option value="100">100A</option>
+            <option value="125">125A</option>
+            <option value="150">150A</option>
+            <option value="175">175A</option>
+            <option value="200">200A</option>
+            <option value="250">250A</option>
+            <option value="300">300A</option>
+            <option value="350">350A</option>
+            <option value="400">400A</option>
+            <option value="450">450A</option>
+            <option value="500">500A</option>
+          </select>
+        </div>
 
-      <div class="form-group">
-        <label for="pipeLength">配管メーター数:</label>
-        <input type="number" inputmode="numeric" id="pipeLength" name="pipeLength" placeholder="0" min="0" />
+        <div class="form-group">
+          <label for="pipeLength">メーター数</label>
+          <input type="number" inputmode="numeric" id="pipeLength" name="pipeLength" placeholder="0" min="0" />
+        </div>
       </div>
     </div>
+
 
     <div class="form-section">
       <div class="price-inputs">
@@ -161,7 +194,8 @@
 
         <div class="form-group">
           <label for="stainlessPrice">ステンレス単価:</label>
-          <input type="number" inputmode="numeric" id="stainlessPrice" name="stainlessPrice" value="1500" min="0" /> (円/kg)
+          <input type="number" inputmode="numeric" id="stainlessPrice" name="stainlessPrice" value="1500" min="0" />
+          (円/kg)
         </div>
       </div>
     </div>
