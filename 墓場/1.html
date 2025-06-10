@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>単価計算表（調整可能）</title>
+  <style>
+    table { border-collapse: collapse; width: 80%; margin: 20px auto; }
+    th, td { border: 1px solid #ccc; padding: 8px; text-align: center; }
+    input[type="number"] { width: 80px; }
+    #average { font-weight: bold; }
+  </style>
+</head>
+<body>
+  <h2 style="text-align:center;">単価計算表（調整可能）</h2>
+  <table id="priceTable">
+    <thead>
+      <tr>
+        <th>品名</th>
+        <th>数量</th>
+        <th>金額（元）</th>
+        <th>金額（÷4）</th>
+        <th>重さ(kg)</th>
+        <th>1kgあたり金額</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- データ行はJavaScriptで生成 -->
+    </tbody>
+    <tfoot>
+      <tr>
+        <td colspan="5">平均（1kgあたり金額）</td>
+        <td id="average">-</td>
+      </tr>
+    </tfoot>
+  </table>
+
+  <script>
+    const data = [
+      ["8A x Sch40", 7258],
+      ["10A x Sch40", 8358],
+      ["15A x Sch40", 10888],
+      ["20A x Sch40", 13178],
+      ["25A x Sch40", 20878],
+      ["32A x Sch40", 26378],
+      ["32A x Sch20", 21978],
+      ["32A x Sch10", 21978],
+      ["40A x Sch40", 32978],
+      ["40A x Sch20", 24178],
+      ["40A x Sch10", 24178],
+      ["50A x Sch40", 39578],
+      ["50A x Sch20", 35178],
+      ["50A x Sch10", 29678],
+      ["65A x Sch20", 43978],
+      ["65A x Sch10", 38478],
+      ["80A x Sch20", 58278],
+      ["80A x Sch10", 43978],
+      ["100A x Sch40（推定）", 78000],
+      ["100A x Sch20", 75878],
+      ["100A x Sch10", 56078],
+      ["125A x Sch10S", 120780],
+      ["125A x Sch20S", 175780],
+      ["150A x Sch10S", 142780],
+      ["150A x Sch20S", 208780]
+    ];
+
+    const tbody = document.querySelector("#priceTable tbody");
+
+    data.forEach(([name, price], index) => {
+      const row = document.createElement("tr");
+
+      // 品名
+      const cellName = document.createElement("td");
+      cellName.textContent = name;
+      row.appendChild(cellName);
+
+      // 数量（固定で1本）
+      const cellQty = document.createElement("td");
+      cellQty.textContent = "1本";
+      row.appendChild(cellQty);
+
+      // 金額（元）
+      const cellOriginalPrice = document.createElement("td");
+      const priceInput = document.createElement("input");
+      priceInput.type = "number";
+      priceInput.min = "0";
+      priceInput.step = "1";
+      priceInput.value = price;
+      priceInput.dataset.index = index;
+      cellOriginalPrice.appendChild(priceInput);
+      row.appendChild(cellOriginalPrice);
+
+      // 金額（÷4）
+      const cellDividedPrice = document.createElement("td");
+      cellDividedPrice.textContent = `￥${(price/4).toLocaleString(undefined, {maximumFractionDigits:2})}`;
+      cellDividedPrice.dataset.index = index;
+      row.appendChild(cellDividedPrice);
+
+      // 重さ入力
+      const cellWeight = document.createElement("td");
+      const weightInput = document.createElement("input");
+      weightInput.type = "number";
+      weightInput.min = "0.01";
+      weightInput.step = "0.01";
+      weightInput.dataset.index = index;
+      cellWeight.appendChild(weightInput);
+      row.appendChild(cellWeight);
+
+      // 1kgあたり金額
+      const cellPerKg = document.createElement("td");
+      cellPerKg.textContent = "-";
+      cellPerKg.dataset.index = index;
+      row.appendChild(cellPerKg);
+
+      tbody.appendChild(row);
+
+      // イベントリスナー
+      priceInput.addEventListener("input", () => {
+        updateDividedPrice(index);
+        updatePerKgPrice(index);
+        updateAverage();
+      });
+
+      weightInput.addEventListener("input", () => {
+        updatePerKgPrice(index);
+        updateAverage();
+      });
+    });
+
+    function updateDividedPrice(index) {
+      const priceInput = document.querySelector(`input[type="number"][data-index='${index}']`);
+      const price = parseFloat(priceInput.value);
+      const dividedPriceCell = document.querySelector(`td[data-index='${index}']`);
+      if (!isNaN(price)) {
+        dividedPriceCell.textContent = `￥${(price/4).toLocaleString(undefined, {maximumFractionDigits:2})}`;
+      } else {
+        dividedPriceCell.textContent = "-";
+      }
+    }
+
+    function updatePerKgPrice(index) {
+      const priceInput = document.querySelector(`input[type="number"][data-index='${index}']`);
+      const price = parseFloat(priceInput.value);
+      const dividedPrice = price / 4;
+
+      const weightInput = document.querySelectorAll("td:nth-child(5) input")[index];
+      const weight = parseFloat(weightInput.value);
+
+      const perKgCell = document.querySelector(`td:nth-child(6)[data-index='${index}']`);
+
+      if (!isNaN(dividedPrice) && !isNaN(weight) && weight > 0) {
+        const perKg = dividedPrice / weight;
+        perKgCell.textContent = `￥${perKg.toFixed(2)}`;
+      } else {
+        perKgCell.textContent = "-";
+      }
+    }
+
+    function updateAverage() {
+      const cells = tbody.querySelectorAll("td:nth-child(6)");
+      let sum = 0;
+      let count = 0;
+      cells.forEach(cell => {
+        if (cell.textContent.startsWith("￥")) {
+          const value = parseFloat(cell.textContent.replace("￥", "").replace(",", ""));
+          if (!isNaN(value)) {
+            sum += value;
+            count++;
+          }
+        }
+      });
+      const averageCell = document.getElementById("average");
+      if (count > 0) {
+        averageCell.textContent = `￥${(sum / count).toFixed(2)}`;
+      } else {
+        averageCell.textContent = "-";
+      }
+    }
+  </script>
+</body>
+</html>

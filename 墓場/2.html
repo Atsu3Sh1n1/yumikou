@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>配管工数計算機</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+    }
+    input[type="number"] {
+      width: 100px;
+    }
+    .checkbox-group {
+      margin-top: 10px;
+    }
+    .result {
+      margin-top: 20px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h1>配管工数計算機</h1>
+  
+  <label>
+    材質:
+    <select id="material">
+      <option value="0.0">鉄（炭素鋼）</option>
+      <option value="0.05">ステンレス（SUS304）</option>
+      <!-- 値は工数調整係数(例: 鉄は0.0, ステンレスは0.05) -->
+    </select>
+  </label>
+
+  <label>
+    口径:
+    <select id="diameter">
+      <option value="0.0">小口径（〜50A）</option>
+      <option value="0.05">中口径（65A〜125A）</option>
+      <option value="0.1">大口径（150A以上）</option>
+    </select>
+  </label>
+
+  <label>
+    スケジュール（肉厚）:
+    <select id="schedule">
+      <option value="0.0">SCH10/20</option>
+      <option value="0.05">SCH40以上</option>
+    </select>
+  </label>
+
+  <label>
+    メーター数:
+    <input type="number" id="meter" value="100">
+  </label>
+
+  <div class="checkbox-group">
+    <label><input type="checkbox" id="highwork" value="0.03"> 高所作業（例: +0.03人工/m）</label>
+    <label><input type="checkbox" id="supportweld" value="0.05"> 支持金具現場溶接（+0.05人工/m）</label>
+    <label><input type="checkbox" id="doubleweld" value="0.07"> 両面施行（+0.07人工/m）</label>
+    <label><input type="checkbox" id="pickling" value="0.02"> 酸洗いあり（+0.02人工/m）</label>
+    <label><input type="checkbox" id="narrow" value="0.02"> 狭所作業（障害物多い）（+0.02人工/m）</label>
+    <label><input type="checkbox" id="spool" value="-0.05"> スプール施工（プレハブ化）（-0.05人工/m）</label>
+  </div>
+
+  <button onclick="calculate()">計算する</button>
+
+  <div class="result" id="result"></div>
+
+  <script>
+    function calculate() {
+      // ベース工数（例: SUS304 Sch40 100A 中口径 0.42人工/m）
+      let baseLabor = 0.25;
+
+      // 材料、口径、スケジュール係数
+      const materialFactor = parseFloat(document.getElementById("material").value);
+      const diameterFactor = parseFloat(document.getElementById("diameter").value);
+      const scheduleFactor = parseFloat(document.getElementById("schedule").value);
+
+      // メーター数
+      const meter = parseFloat(document.getElementById("meter").value);
+
+      // 施工条件係数の合計
+      let conditionFactor = 0.0;
+      const conditionIds = ["highwork", "supportweld", "doubleweld", "pickling", "narrow", "spool"];
+      for (let id of conditionIds) {
+        const checkbox = document.getElementById(id);
+        if (checkbox.checked) {
+          conditionFactor += parseFloat(checkbox.value);
+        }
+      }
+
+      // 工数計算
+      let laborPerMeter = baseLabor 
+                          + materialFactor 
+                          + diameterFactor 
+                          + scheduleFactor 
+                          + conditionFactor;
+
+      let totalLabor = laborPerMeter * meter;
+
+      // 結果表示
+      document.getElementById("result").innerText = 
+        `想定工数: ${totalLabor.toFixed(2)}人工 (${laborPerMeter.toFixed(3)}人工/m)`;
+    }
+  </script>
+</body>
+</html>
