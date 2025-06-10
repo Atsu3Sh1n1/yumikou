@@ -335,7 +335,7 @@
         questionEl.textContent = "";
         buttonsDiv.innerHTML = "";
 
-        const unitPrice = 600;
+        const unitPrice = 700;
         const materialMap = { "鉄": "steel", "ステンレス": "stainless" };
 
         const postData = {
@@ -518,9 +518,10 @@
         <span class="result-value" style="color:red;">¥${Math.round(totalAmount).toLocaleString()}円</span>
       </div>
 
-      <div class="result-item">
-        <span class="result-label">（継手溶接費用別） </span>
-      </div>
+     <div class="result-item">
+  <span class="result-value" style="font-size: 16px; text-align: right; ">（継手溶接費用別）</span>
+</div>
+
       <div class="result-item"><span class="result-label">打合せ時の食事: </span><span class="result-value">${answers.food}屋さん</span></div>
 
     </div>
