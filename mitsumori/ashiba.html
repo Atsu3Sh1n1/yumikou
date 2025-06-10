@@ -373,7 +373,7 @@
                 const baseCost = r.cost; // 原価
                 const materialCost = Math.round(baseCost * 0.3); // 材料費（30%）
                 const subtotalBeforeOverhead = baseCost + materialCost;
-                const overheadCost = Math.round(subtotalBeforeOverhead * 0.2); // 諸経費（20%）
+                const overheadCost = Math.round(subtotalBeforeOverhead * 0.15); // 諸経費（20%）
                 const subtotal = subtotalBeforeOverhead + overheadCost;
                 const tax = Math.round(subtotal * 0.1); // 消費税（10%）
                 const grandTotal = subtotal + tax;
@@ -395,7 +395,7 @@
       <div class="result-item"><strong>単価:</strong> ¥${r.laborCost.toLocaleString()}/h</div>
       <div class="result-item"><strong>原価:</strong> ¥${baseCost.toLocaleString()}</div>
       <div class="result-item"><strong>材料費 (30%):</strong> ¥${materialCost.toLocaleString()}</div>
-      <div class="result-item"><strong>諸経費/純利 (20%):</strong> ¥${overheadCost.toLocaleString()}</div>
+      <div class="result-item"><strong>諸経費 (15%):</strong> ¥${overheadCost.toLocaleString()}</div>
       <div class="result-item"><strong>小計:</strong> ¥${subtotal.toLocaleString()}</div>
       <div class="result-item"><strong>消費税 (10%):</strong> ¥${tax.toLocaleString()}</div>
       <div class="result-item"><strong>工事一式（概算）:</strong><span style="color: red;">¥${grandTotal.toLocaleString()}</span></div>
