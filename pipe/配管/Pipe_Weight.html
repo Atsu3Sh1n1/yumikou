@@ -247,7 +247,9 @@
       <div id="pipeCost">金額: -</div>
       <div id="perMeterUnitPrice">換算メーター単価: -</div>
       <div id="manhour">施工人日: -</div>
+      <div id="meterPerManhour">m/人日: -</div> <!-- ← 追加 -->
     </div>
+
 
 
 
@@ -374,6 +376,7 @@
         dom.pipeCostText.textContent = `金額: -`;
         dom.perMeterUnitPriceText.textContent = `-`;
         dom.manhourText.textContent = `施工人日: -`;
+        dom.meterPerManhourText.textContent = `m/人日: -`;
         return;
       }
 
@@ -385,6 +388,7 @@
         dom.pipeCostText.textContent = `金額: -`;
         dom.perMeterUnitPriceText.textContent = `-`;
         dom.manhourText.textContent = `施工人日: -`;
+        dom.meterPerManhourText.textContent = `m/人日: -`;
         return;
       }
 
@@ -402,9 +406,9 @@
       // 施工人日計算（メーター数基準）
       let manhourPerM = 0;
       if (currentMaterial === 'steel') {
-        manhourPerM = 0.4; // 100Aを基準とした1mあたりの施工人日
+        manhourPerM = 0.1; // 100Aを基準とした1mあたりの施工人日
       } else if (currentMaterial === 'stainless') {
-        manhourPerM = 0.48; // 100Aを基準とした1mあたりの施工人日
+        manhourPerM = 0.12; // 100Aを基準とした1mあたりの施工人日
       }
 
       // 呼び径係数を適用
@@ -421,14 +425,20 @@
         "65": 1.10,
         "80": 1.05,
         "100": 1.00
-        // 必要なら125, 150, ...も追加
       };
       const sizeFactor = sizeFactors[size] || 1.00;
 
       // 施工人日 = 1mあたりの施工人日 × 呼び径係数 × 長さ
       const manhour = manhourPerM * sizeFactor * length;
 
+      // m/人日（生産性）
+      let meterPerManhour = '-';
+      if (manhour > 0) {
+        meterPerManhour = (length / manhour).toFixed(2);
+      }
+
       dom.manhourText.textContent = `施工人日: ${manhour.toFixed(2)} 人日 (係数: ${sizeFactor})`;
+      dom.meterPerManhourText.textContent = `m/人日: ${meterPerManhour}`;
     }
 
     // イベント登録
