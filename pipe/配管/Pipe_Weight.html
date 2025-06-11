@@ -267,6 +267,7 @@
         document.getElementById('totalDisplay').innerText = `合計: ${total}`;
       }
     });
+
     const weightPerMeter = {
       "6": { sgp: 0.419, sch40: 0.369, sch60: 0.450, sch80: 0.479, sch5s: 0.237, sch10s: 0.278, sch20s: 0.336, sch40s: 0.373, sch80s: 0.484 },
       "8": { sgp: 0.652, sch40: 0.629, sch60: 0.675, sch80: 0.799, sch5s: 0.377, sch10s: 0.499, sch20s: 0.588, sch40s: 0.636, sch80s: 0.807 },
@@ -364,9 +365,9 @@
     function calculate() {
       const size = dom.sizeSelect.value;
       const length = parseFloat(dom.lengthInput.value) || 0;
-      const unitPrice = currentMaterial === 'steel' ?
-        (parseFloat(dom.steelPriceInput.value) || 0) :
-        (parseFloat(dom.stainlessPriceInput.value) || 0);
+      const unitPrice = currentMaterial === 'steel'
+        ? (parseFloat(dom.steelPriceInput.value) || 0)
+        : (parseFloat(dom.stainlessPriceInput.value) || 0);
 
       if (!weightPerMeter[size]) {
         dom.pipeWeightText.textContent = `データがありません`;
@@ -398,15 +399,36 @@
       dom.pipeCostText.textContent = `金額: ¥${Math.round(cost).toLocaleString()}`;
       dom.perMeterUnitPriceText.textContent = `換算メーター単価: ¥${Math.round(unitPricePerMeter).toLocaleString()} /m`;
 
-      // 施工人日計算
-      let manhour = 0;
+      // 施工人日計算（メーター数基準）
+      let manhourPerM = 0;
       if (currentMaterial === 'steel') {
-        manhour = (weightPerM / 4.01) * 0.1;
+        manhourPerM = 0.4; // 100Aを基準とした1mあたりの施工人日
       } else if (currentMaterial === 'stainless') {
-        manhour = (weightPerM / 4.05) * 0.12;
+        manhourPerM = 0.48; // 100Aを基準とした1mあたりの施工人日
       }
-      manhour = manhour * length;
-      dom.manhourText.textContent = `施工人日: ${manhour.toFixed(2)} 人日`;
+
+      // 呼び径係数を適用
+      const sizeFactors = {
+        "6": 1.50,
+        "8": 1.475, // 必要に応じて調整
+        "10": 1.45,
+        "15": 1.40,
+        "20": 1.35,
+        "25": 1.30,
+        "32": 1.25,
+        "40": 1.20,
+        "50": 1.15,
+        "65": 1.10,
+        "80": 1.05,
+        "100": 1.00
+        // 必要なら125, 150, ...も追加
+      };
+      const sizeFactor = sizeFactors[size] || 1.00;
+
+      // 施工人日 = 1mあたりの施工人日 × 呼び径係数 × 長さ
+      const manhour = manhourPerM * sizeFactor * length;
+
+      dom.manhourText.textContent = `施工人日: ${manhour.toFixed(2)} 人日 (係数: ${sizeFactor})`;
     }
 
     // イベント登録
