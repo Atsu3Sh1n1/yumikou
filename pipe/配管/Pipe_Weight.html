@@ -202,7 +202,8 @@
 
         <div class="form-group">
           <label for="pipeLength">メーター数</label>
-          <input type="number" inputmode="numeric" id="pipeLength" name="pipeLength" step="0.01" placeholder="0" min="0" />
+          <input type="number" inputmode="numeric" id="pipeLength" name="pipeLength" step="0.01" placeholder="0"
+            min="0" />
         </div>
       </div>
     </div>
@@ -275,7 +276,7 @@
 
   </div>
 
- 
+
 
   <script>
 
@@ -447,8 +448,12 @@
       dom.pipeCostText.textContent = `参考価格帯: ¥${Math.round(cost).toLocaleString()}`;
       dom.perMeterUnitPriceText.textContent = `単価/m: ¥${Math.round(unitPricePerMeter).toLocaleString()} /m`;
 
-      // --- 工数計算 ---
-      let manhourPerM = currentMaterial === 'steel' ? 0.4 : 0.48;
+      // --- 工数計算（重量基準） ---
+      // 0.4 ÷ 16.04 ≈ 0.024936 人日/kg（鉄）
+      // 0.48 ÷ 16.20 ≈ 0.029629 人日/kg（ステンレス）
+      const manhourPerKg = currentMaterial === 'steel'
+        ? (0.4 / 16.04)
+        : (0.48 / 16.20);
 
       const sizeFactors = {
         "6": 0.5, "8": 0.53, "10": 0.55, "15": 0.6, "20": 0.65, "25": 0.7,
@@ -458,7 +463,7 @@
       };
       const sizeFactor = sizeFactors[size] || 1.00;
 
-      const manhour = manhourPerM * sizeFactor * length;
+      const manhour = manhourPerKg * weight * sizeFactor;
       dom.manhourText.textContent = `工数: ${manhour.toFixed(2)} 人日 (係数: ${sizeFactor})`;
 
       const meterPerManhour = manhour > 0 ? (length / manhour) : 0.0;
