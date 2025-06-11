@@ -275,10 +275,7 @@
 
   </div>
 
-  <iframe src="fittingsFrame.html" id="fittingsFrame"></iframe>
-
-  <div id="totalDisplay">合計: 0</div>
-
+ 
 
   <script>
 
@@ -421,10 +418,10 @@
 
       // --- 継手の個数入力から換算長さ計算 ---
       const fittingLengths = {
-        elbow: 0.05,
-        tee: 0.07,
-        flange: 0.1,
-        valve: 0.15
+        elbow: 0.5,
+        tee: 0.7,
+        flange: 1,
+        valve: 1.5
       };
 
       const elbowCount = parseInt(document.getElementById('elbowCount')?.value) || 0;
