@@ -1,30 +1,59 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <title>継手入力フォーム（即時反映）</title>
   <meta charset="UTF-8">
   <style>
-    body { font-family: Arial, sans-serif; margin: 20px; }
-    table { border-collapse: collapse; width: 100%; }
-    th, td { border: 1px solid #ccc; padding: 5px; text-align: left; }
-    input[type="number"], select { width: 100px; }
-    button { margin-top: 10px; }
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+
+    th,
+    td {
+      border: 1px solid #ccc;
+      padding: 0;
+      /* セルの余白は消す */
+    }
+
+    input[type="number"],
+    select {
+      width: 100%;
+      box-sizing: border-box;
+      border: none;
+      /* 二重線防止 */
+      height: 100%;
+      padding: 5px;
+      /* 必要なら適宜調整 */
+      font-size: 14px;
+    }
+
+    button {
+      margin-top: 10px;
+    }
+  </style>
   </style>
   <script>
-    function addRow() {
+    function addRow(type = "") {
       const tbody = document.getElementById("fittingsBody");
       const row = document.createElement("tr");
 
       row.innerHTML = `
         <td>
           <select onchange="calculateTotal()">
-            <option value="elbow90">90°エルボ</option>
-            <option value="elbow45">45°エルボ</option>
-            <option value="tee">ティー</option>
-            <option value="reducer">レジューサー（同径）</option>
-            <option value="reducer_diff">レジューサー（異径）</option>
-            <option value="flange_socket">フランジ（差し込み）</option>
-            <option value="flange_lap">フランジ（ラップ）</option>
+            <option value="elbow90" ${type === "elbow90" ? "selected" : ""}>90°エルボ</option>
+            <option value="elbow45" ${type === "elbow45" ? "selected" : ""}>45°エルボ</option>
+            <option value="tee" ${type === "tee" ? "selected" : ""}>ティー</option>
+            <option value="reducer" ${type === "reducer" ? "selected" : ""}>レジューサー（同径）</option>
+            <option value="reducer_diff" ${type === "reducer_diff" ? "selected" : ""}>レジューサー（異径）</option>
+            <option value="flange_socket" ${type === "flange_socket" ? "selected" : ""}>フランジ（差し込み）</option>
+            <option value="flange_lap" ${type === "flange_lap" ? "selected" : ""}>フランジ（ラップ）</option>
           </select>
         </td>
         <td><input type="number" min="0" step="1" placeholder="数量" oninput="calculateTotal()"></td>
@@ -38,7 +67,7 @@
     function deleteRow(button) {
       const row = button.parentNode.parentNode;
       row.parentNode.removeChild(row);
-      calculateTotal(); // 削除後も再計算
+      calculateTotal();
     }
 
     function calculateTotal() {
@@ -58,13 +87,20 @@
       // 親ウィンドウにデータ送信
       window.parent.postMessage({
         action: 'fittingsTotal',
-        total: total
+        total: Math.round(total * 100) / 100
       }, '*');
+    }
+
+    window.onload = function () {
+      addRow("elbow90");
+      addRow("tee");
+      addRow("flange_socket");
     }
   </script>
 </head>
+
 <body>
-  <h2>継手入力フォーム（即時反映）</h2>
+  <h2>継手入力</h2>
   <table>
     <thead>
       <tr>
@@ -76,9 +112,10 @@
       </tr>
     </thead>
     <tbody id="fittingsBody">
-      <!-- ここに行が追加される -->
+      <!-- 初期行はJavaScriptで追加 -->
     </tbody>
   </table>
   <button type="button" onclick="addRow()">行を追加</button>
 </body>
+
 </html>
