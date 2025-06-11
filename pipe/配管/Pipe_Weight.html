@@ -417,12 +417,36 @@
 
       clearErrorMessages();
 
-      // --- 継手の個数入力から換算長さ計算 ---
+      // --- 継手の個数入力から換算長さ計算（サイズ別） ---
       const fittingLengths = {
-        elbow: 0.5,
-        tee: 0.7,
-        flange: 1,
-        valve: 1.5
+        elbow: {
+          "6": 1.25, "8": 1, "10": 0.9, "15": 0.8, "20": 0.6,
+          "25": 0.5, "32": 0.5, "40": 0.5, "50": 0.5, "65": 0.5,
+          "80": 0.6, "100": 0.8, "125": 1, "150": 1.2, "175": 1.5,
+          "200": 1.6, "250": 2, "300": 2.3, "350": 2.6,
+          "400": 2.8, "450": 3.2, "500": 3.5
+        },
+        tee: {
+          "6": 0.5, "8": 0.55, "10": 0.6, "15": 0.65, "20": 0.7,
+          "25": 0.75, "32": 0.8, "40": 0.85, "50": 0.9, "65": 0.95,
+          "80": 1.0, "100": 1.05, "125": 1.1, "150": 1.15,
+          "175": 1.2, "200": 1.25, "250": 1.3, "300": 1.35,
+          "350": 1.4, "400": 1.45, "450": 1.5, "500": 1.55
+        },
+        flange: {
+          "6": 0.8, "8": 0.85, "10": 0.9, "15": 0.95, "20": 1.0,
+          "25": 1.05, "32": 1.1, "40": 1.15, "50": 1.2, "65": 1.25,
+          "80": 1.3, "100": 1.35, "125": 1.4, "150": 1.45,
+          "175": 1.5, "200": 1.55, "250": 1.6, "300": 1.65,
+          "350": 1.7, "400": 1.75, "450": 1.8, "500": 1.85
+        },
+        valve: {
+          "6": 1.0, "8": 1.05, "10": 1.1, "15": 1.15, "20": 1.2,
+          "25": 1.25, "32": 1.3, "40": 1.35, "50": 1.4, "65": 1.45,
+          "80": 1.5, "100": 1.55, "125": 1.6, "150": 1.65,
+          "175": 1.7, "200": 1.75, "250": 1.8, "300": 1.85,
+          "350": 1.9, "400": 1.95, "450": 2.0, "500": 2.05
+        }
       };
 
       const elbowCount = parseInt(document.getElementById('elbowCount')?.value) || 0;
@@ -430,11 +454,16 @@
       const flangeCount = parseInt(document.getElementById('flangeCount')?.value) || 0;
       const valveCount = parseInt(document.getElementById('valveCount')?.value) || 0;
 
+      const elbowLength = fittingLengths.elbow[size] || 0;
+      const teeLength = fittingLengths.tee[size] || 0;
+      const flangeLength = fittingLengths.flange[size] || 0;
+      const valveLength = fittingLengths.valve[size] || 0;
+
       const fittingTotalLength =
-        (elbowCount * fittingLengths.elbow) +
-        (teeCount * fittingLengths.tee) +
-        (flangeCount * fittingLengths.flange) +
-        (valveCount * fittingLengths.valve);
+        (elbowCount * elbowLength) +
+        (teeCount * teeLength) +
+        (flangeCount * flangeLength) +
+        (valveCount * valveLength);
 
       // --- メイン長さに継手長さを加算 ---
       length += fittingTotalLength;
