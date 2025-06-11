@@ -202,7 +202,7 @@
 
         <div class="form-group">
           <label for="pipeLength">メーター数</label>
-          <input type="number" inputmode="numeric" id="pipeLength" name="pipeLength" placeholder="0" min="0" />
+          <input type="number" inputmode="numeric" id="pipeLength" name="pipeLength" step="0.01" placeholder="0" min="0" />
         </div>
       </div>
     </div>
@@ -248,8 +248,28 @@
       <div id="perMeterUnitPrice">単価/m: -</div>
       <div id="manhour">工数: -</div>
       <div id="meterPerManhour">m/人日: -</div>
-
     </div>
+
+    <div class="form-section">
+      <h3>部品数量入力</h3>
+      <div class="form-group">
+        <label for="elbowCount">エルボ個数</label>
+        <input type="number" id="elbowCount" name="elbowCount" value="0" min="0">
+      </div>
+      <div class="form-group">
+        <label for="teeCount">チーズ個数</label>
+        <input type="number" id="teeCount" name="teeCount" value="0" min="0">
+      </div>
+      <div class="form-group">
+        <label for="flangeCount">フランジ個数</label>
+        <input type="number" id="flangeCount" name="flangeCount" value="0" min="0">
+      </div>
+      <div class="form-group">
+        <label for="valveCount">バルブ個数</label>
+        <input type="number" id="valveCount" name="valveCount" value="0" min="0">
+      </div>
+    </div>
+
 
 
 
@@ -328,8 +348,12 @@
       scheduleButtons: document.querySelectorAll(".schedule-buttons button"),
       materialButtons: document.querySelectorAll(".material-toggle button"),
       manhourText: document.getElementById("manhour"),
-      meterPerManhourText: document.getElementById('meterPerManhour'),
-      workplaceRadios: document.getElementsByName('workplace')
+      meterPerManhourText: document.getElementById("meterPerManhour"),
+      workplaceRadios: document.getElementsByName('workplace'),
+      elbowCount: document.getElementById("elbowCount"),
+      teeCount: document.getElementById("teeCount"),
+      flangeCount: document.getElementById("flangeCount"),
+      valveCount: document.getElementById("valveCount")
     };
 
     function getSelectedWorkplace() {
@@ -339,7 +363,6 @@
       return 'naizaku'; // デフォルト
     }
 
-    // スケジュールボタンの有効/無効を更新
     function updateScheduleButtons() {
       dom.scheduleButtons.forEach(btn => {
         const schedule = btn.id.replace(/^btn/i, '').toLowerCase();
@@ -349,7 +372,6 @@
       });
     }
 
-    // スケジュール選択更新
     function setSchedule(schedule) {
       schedule = schedule.toLowerCase();
       if (scheduleMaterialMap[schedule]?.[currentMaterial]) {
@@ -359,10 +381,11 @@
       }
     }
 
-    // 材質選択更新
     function setMaterial(material) {
       currentMaterial = material;
-      dom.materialButtons.forEach(btn => btn.classList.toggle("active", btn.id === `btn${material === 'steel' ? 'Steel' : 'Stainless'}`));
+      dom.materialButtons.forEach(btn => {
+        btn.classList.toggle("active", btn.id === `btn${material === 'steel' ? 'Steel' : 'Stainless'}`);
+      });
 
       if (!scheduleMaterialMap[currentSchedule]?.[currentMaterial]) {
         currentSchedule = currentMaterial === 'steel' ? 'sch40' : 'sch40s';
@@ -372,32 +395,17 @@
       calculate();
     }
 
-    // 配管重量・コスト計算
     function calculate() {
       const size = dom.sizeSelect.value;
-      const length = parseFloat(dom.lengthInput.value) || 0;
-      const workplace = getSelectedWorkplace(); // 内作 or 現場
+      let length = parseFloat(dom.lengthInput.value) || 0;
+      const workplace = getSelectedWorkplace();
 
       const unitPrice = currentMaterial === 'steel'
         ? (parseFloat(dom.steelPriceInput.value) || 0)
         : (parseFloat(dom.stainlessPriceInput.value) || 0);
 
       if (!weightPerMeter[size]) {
-        dom.pipeWeightText.textContent = "該当するデータがありません";
-        dom.pipeWeightText.style.color = 'red';
-
-        dom.pipeCostText.textContent = "参考価格帯: -";
-        dom.pipeCostText.style.color = '#999';
-
-        dom.perMeterUnitPriceText.textContent = "単価/m: -";
-        dom.perMeterUnitPriceText.style.color = '#999';
-
-        dom.manhourText.textContent = "工数: -";
-        dom.manhourText.style.color = '#999';
-
-        dom.meterPerManhourText.textContent = "m/人日: -";
-        dom.meterPerManhourText.style.color = '#999';
-
+        setErrorMessages();
         return;
       }
 
@@ -405,53 +413,46 @@
       const weightPerM = weightPerMeter[size]?.[materialKey] || 0;
 
       if (weightPerM === 0) {
-        dom.pipeWeightText.textContent = "該当するデータがありません";
-        dom.pipeWeightText.style.color = 'red';
-
-        dom.pipeCostText.textContent = "参考価格帯: -";
-        dom.pipeCostText.style.color = '#999';
-
-        dom.perMeterUnitPriceText.textContent = "単価/m: -";
-        dom.perMeterUnitPriceText.style.color = '#999';
-
-        dom.manhourText.textContent = "工数: -";
-        dom.manhourText.style.color = '#999';
-
-        dom.meterPerManhourText.textContent = "m/人日: -";
-        dom.meterPerManhourText.style.color = '#999';
-
+        setErrorMessages();
         return;
       }
 
-      // データがある場合は色をリセット
-      dom.pipeWeightText.style.color = '';
-      dom.pipeCostText.style.color = '';
-      dom.perMeterUnitPriceText.style.color = '';
-      dom.manhourText.style.color = '';
-      dom.meterPerManhourText.style.color = '';
+      clearErrorMessages();
 
-      // 重量計算
+      // --- 継手の個数入力から換算長さ計算 ---
+      const fittingLengths = {
+        elbow: 0.05,
+        tee: 0.07,
+        flange: 0.1,
+        valve: 0.15
+      };
+
+      const elbowCount = parseInt(document.getElementById('elbowCount')?.value) || 0;
+      const teeCount = parseInt(document.getElementById('teeCount')?.value) || 0;
+      const flangeCount = parseInt(document.getElementById('flangeCount')?.value) || 0;
+      const valveCount = parseInt(document.getElementById('valveCount')?.value) || 0;
+
+      const fittingTotalLength =
+        (elbowCount * fittingLengths.elbow) +
+        (teeCount * fittingLengths.tee) +
+        (flangeCount * fittingLengths.flange) +
+        (valveCount * fittingLengths.valve);
+
+      // --- メイン長さに継手長さを加算 ---
+      length += fittingTotalLength;
+
+      // --- 重量計算 ---
       const weight = length * weightPerM;
-
-      // コスト計算
-      let cost = weight * unitPrice;
+      const cost = weight * unitPrice;
       const unitPricePerMeter = length > 0 ? cost / length : 0;
-
-      // 以下続きは元のまま...
 
       dom.pipeWeightText.textContent = `配管重量: ${weight.toFixed(2)} kg`;
       dom.pipeCostText.textContent = `参考価格帯: ¥${Math.round(cost).toLocaleString()}`;
       dom.perMeterUnitPriceText.textContent = `単価/m: ¥${Math.round(unitPricePerMeter).toLocaleString()} /m`;
 
-      // 工数計算（メーター数基準）
-      let manhourPerM = 0;
-      if (currentMaterial === 'steel') {
-        manhourPerM = 0.4; // 100Aを基準とした1mあたりの工数
-      } else if (currentMaterial === 'stainless') {
-        manhourPerM = 0.48; // 100Aを基準とした1mあたりの工数
-      }
+      // --- 工数計算 ---
+      let manhourPerM = currentMaterial === 'steel' ? 0.4 : 0.48;
 
-      // 呼び径係数を適用
       const sizeFactors = {
         "6": 1.50, "8": 1.475, "10": 1.45, "15": 1.40, "20": 1.35, "25": 1.30,
         "32": 1.25, "40": 1.20, "50": 1.15, "65": 1.10, "80": 1.05, "100": 1.00,
@@ -460,14 +461,32 @@
       };
       const sizeFactor = sizeFactors[size] || 1.00;
 
-      // 工数 = 1mあたりの工数 × 呼び径係数 × 長さ
       const manhour = manhourPerM * sizeFactor * length;
-
       dom.manhourText.textContent = `工数: ${manhour.toFixed(2)} 人日 (係数: ${sizeFactor})`;
 
-      // m/人日 = length / manhour
-      let meterPerManhour = manhour > 0 ? (length / manhour) : 0.0;
+      const meterPerManhour = manhour > 0 ? (length / manhour) : 0.0;
       dom.meterPerManhourText.textContent = `m/人日: ${meterPerManhour.toFixed(2)} m/人日`;
+    }
+
+    function setErrorMessages() {
+      dom.pipeWeightText.textContent = "該当するデータがありません";
+      dom.pipeWeightText.style.color = 'red';
+      dom.pipeCostText.textContent = "参考価格帯: -";
+      dom.pipeCostText.style.color = '#999';
+      dom.perMeterUnitPriceText.textContent = "単価/m: -";
+      dom.perMeterUnitPriceText.style.color = '#999';
+      dom.manhourText.textContent = "工数: -";
+      dom.manhourText.style.color = '#999';
+      dom.meterPerManhourText.textContent = "m/人日: -";
+      dom.meterPerManhourText.style.color = '#999';
+    }
+
+    function clearErrorMessages() {
+      dom.pipeWeightText.style.color = '';
+      dom.pipeCostText.style.color = '';
+      dom.perMeterUnitPriceText.style.color = '';
+      dom.manhourText.style.color = '';
+      dom.meterPerManhourText.style.color = '';
     }
 
     // イベント登録
@@ -475,6 +494,12 @@
     dom.lengthInput.addEventListener("input", calculate);
     dom.steelPriceInput.addEventListener("input", calculate);
     dom.stainlessPriceInput.addEventListener("input", calculate);
+
+    dom.elbowCount.addEventListener("input", calculate);
+    dom.teeCount.addEventListener("input", calculate);
+    dom.flangeCount.addEventListener("input", calculate);
+    dom.valveCount.addEventListener("input", calculate);
+
 
     dom.scheduleButtons.forEach(btn => {
       btn.addEventListener("click", () => setSchedule(btn.id.replace(/^btn/i, '')));
@@ -489,13 +514,13 @@
     setMaterial(currentMaterial);
     calculate();
 
-    // 外部用の見積もり取得関数
+    // 外部向け見積データ取得
     window.getEstimateData = function () {
       const size = dom.sizeSelect.value;
       const length = parseFloat(dom.lengthInput.value) || 0;
-      const unitPrice = currentMaterial === 'steel' ?
-        (parseFloat(dom.steelPriceInput.value) || 0) :
-        (parseFloat(dom.stainlessPriceInput.value) || 0);
+      const unitPrice = currentMaterial === 'steel'
+        ? (parseFloat(dom.steelPriceInput.value) || 0)
+        : (parseFloat(dom.stainlessPriceInput.value) || 0);
       const materialKey = scheduleMaterialMap[currentSchedule]?.[currentMaterial];
       const weightPerM = weightPerMeter[size]?.[materialKey] || 0;
 
@@ -510,7 +535,13 @@
       }
 
       const weight = length * weightPerM;
-      let cost = weight * unitPrice;
+      const cost = weight * unitPrice;
+      let manhour = 0;
+      if (currentMaterial === 'steel') {
+        manhour = 0.4 * (sizeFactors[size] || 1.00) * length;
+      } else if (currentMaterial === 'stainless') {
+        manhour = 0.48 * (sizeFactors[size] || 1.00) * length;
+      }
 
       return {
         appId: 'pipe-weight',
@@ -519,7 +550,6 @@
         pipeLength: length,
         pipeWeight: weight.toFixed(2)
       };
-
     };
   </script>
 </body>
