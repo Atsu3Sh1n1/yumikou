@@ -388,16 +388,16 @@
         dom.pipeWeightText.textContent = "該当するデータがありません";
         dom.pipeWeightText.style.color = 'red';
 
-        dom.pipeCostText.textContent = "金額: -";
+        dom.pipeCostText.textContent = "参考価格帯: -";
         dom.pipeCostText.style.color = '#999';
 
         dom.perMeterUnitPriceText.textContent = "換算メーター単価: -";
         dom.perMeterUnitPriceText.style.color = '#999';
 
-        dom.manhourText.textContent = "施工人日: -";
+        dom.manhourText.textContent = "工数: -";
         dom.manhourText.style.color = '#999';
 
-        dom.meterPerManhourText.textContent = "m/人日: -";
+        dom.meterPerManhourText.textContent = "歩掛: -";
         dom.meterPerManhourText.style.color = '#999';
 
         return;
@@ -410,16 +410,16 @@
         dom.pipeWeightText.textContent = "該当するデータがありません";
         dom.pipeWeightText.style.color = 'red';
 
-        dom.pipeCostText.textContent = "金額: -";
+        dom.pipeCostText.textContent = "参考価格帯: -";
         dom.pipeCostText.style.color = '#999';
 
         dom.perMeterUnitPriceText.textContent = "換算メーター単価: -";
         dom.perMeterUnitPriceText.style.color = '#999';
 
-        dom.manhourText.textContent = "施工人日: -";
+        dom.manhourText.textContent = "工数: -";
         dom.manhourText.style.color = '#999';
 
-        dom.meterPerManhourText.textContent = "m/人日: -";
+        dom.meterPerManhourText.textContent = "歩掛: -";
         dom.meterPerManhourText.style.color = '#999';
 
         return;
@@ -439,8 +439,8 @@
       let cost = weight * unitPrice;
       const unitPricePerMeter = length > 0 ? cost / length : 0;
       dom.pipeWeightText.textContent = `配管重量: ${weight.toFixed(2)} kg`;
-      dom.pipeCostText.textContent = `金額: ¥${Math.round(cost).toLocaleString()}`;
-      dom.perMeterUnitPriceText.textContent = `換算メーター単価: ¥${Math.round(unitPricePerMeter).toLocaleString()} /m`;
+      dom.pipeCostText.textContent = `参考価格帯: ¥${Math.round(cost).toLocaleString()}`;
+      dom.perMeterUnitPriceText.textContent = `単価/m: ¥${Math.round(unitPricePerMeter).toLocaleString()} /m`;
 
       // 内作用施工人日係数
       const manhourPerM_Naizaku = currentMaterial === 'steel' ? 0.4 : 0.48;
@@ -476,11 +476,11 @@
 
       // 施工人日計算
       const manhour = manhourPerM * sizeFactor * length;
-      dom.manhourText.textContent = `施工人日: ${manhour.toFixed(2)} 人日 (係数: ${sizeFactor})`;
+      dom.manhourText.textContent = `工数: ${manhour.toFixed(2)} 人日 (係数: ${sizeFactor})`;
 
       // m/人日計算
       const meterPerManhour = manhour > 0 ? (length / manhour) : 0;
-      dom.meterPerManhourText.textContent = `m/人日: ${meterPerManhour.toFixed(2)} m/人日`;
+      dom.meterPerManhourText.textContent = `歩掛: ${meterPerManhour.toFixed(2)} m/人日`;
     }
 
     // イベント登録
