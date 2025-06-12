@@ -1,22 +1,274 @@
-| A    | kg     |
-| ---- | ------ |
-| 15   | 0.098  |
-| 20   | 0.134  |
-| 25   | 0.196  |
-| 32   | 0.341  |
-| 40   | 0.491  |
-| 50   | 0.892  |
-| 65   | 1.79   |
-| 80   | 2.74   |
-| 90   | 3.91   |
-| 100  | 5.36   |
-| 125  | 9.13   |
-| 150  | 15.0   |
-| 175※ | 23.3★  |
-| 200  | 30.5   |
-| 250  | 56.2   |
-| 300  | 92.7★  |
-| 350  | 132.0★ |
-| 400  | 194.0★ |
-| 450  | 274.0★ |
-| 500  | 372.0★ |
+    const dom = {
+      sizeSelect: document.getElementById("size"),
+      lengthInput: document.getElementById("pipeLength"),
+      steelPriceInput: document.getElementById("steelPrice"),
+      stainlessPriceInput: document.getElementById("stainlessPrice"),
+      pipeWeightText: document.getElementById("pipeWeight"),
+      pipeCostText: document.getElementById("pipeCost"),
+      perMeterUnitPriceText: document.getElementById("perMeterUnitPrice"),
+      scheduleButtons: document.querySelectorAll(".schedule-buttons button"),
+      materialButtons: document.querySelectorAll(".material-toggle button"),
+      manhourText: document.getElementById("manhour"),
+      meterPerManhourText: document.getElementById("meterPerManhour"),
+      workplaceRadios: document.getElementsByName('workplace'),
+      elbowCount: document.getElementById("elbowCount"),
+      teeCount: document.getElementById("teeCount"),
+      flangeCount: document.getElementById("flangeCount"),
+      valveCount: document.getElementById("valveCount")
+    };
+
+    function getSelectedWorkplace() {
+      for (const radio of dom.workplaceRadios) {
+        if (radio.checked) return radio.value;
+      }
+      return 'naizaku'; // デフォルト
+    }
+
+    function updateScheduleButtons() {
+      dom.scheduleButtons.forEach(btn => {
+        const schedule = btn.id.replace(/^btn/i, '').toLowerCase();
+        const isAvailable = scheduleMaterialMap[schedule]?.[currentMaterial] !== null;
+        btn.disabled = !isAvailable;
+        btn.classList.toggle('active', isAvailable && schedule === currentSchedule);
+      });
+    }
+
+    function setSchedule(schedule) {
+      schedule = schedule.toLowerCase();
+      if (scheduleMaterialMap[schedule]?.[currentMaterial]) {
+        currentSchedule = schedule;
+        updateScheduleButtons();
+        calculate();
+      }
+    }
+
+    function setMaterial(material) {
+      currentMaterial = material;
+      dom.materialButtons.forEach(btn => {
+        btn.classList.toggle("active", btn.id === `btn${material === 'steel' ? 'Steel' : 'Stainless'}`);
+      });
+
+      if (!scheduleMaterialMap[currentSchedule]?.[currentMaterial]) {
+        currentSchedule = currentMaterial === 'steel' ? 'sch40' : 'sch40s';
+      }
+
+      updateScheduleButtons();
+      calculate();
+    }
+
+    function calculate() {
+      const size = dom.sizeSelect.value;
+      let length = parseFloat(dom.lengthInput.value) || 0;
+      const workplace = getSelectedWorkplace();
+
+      const unitPrice = currentMaterial === 'steel'
+        ? (parseFloat(dom.steelPriceInput.value) || 0)
+        : (parseFloat(dom.stainlessPriceInput.value) || 0);
+
+      if (!weightPerMeter[size]) {
+        setErrorMessages();
+        return;
+      }
+
+      const materialKey = scheduleMaterialMap[currentSchedule]?.[currentMaterial];
+      const weightPerM = weightPerMeter[size]?.[materialKey] || 0;
+
+      if (weightPerM === 0) {
+        setErrorMessages();
+        return;
+      }
+
+      clearErrorMessages();
+
+      // --- 継手重量（仮データ、後で編集） ---
+      const fittingWeights = {
+        elbow: {
+          
+         "15": { sgp: 0.078, sch40: 0.078, sch60: 1.46, sch80: 1.64, sch160: 1.97, sch5s: 0.049, sch10s: 0.061, sch20s: 0.071, sch40s: 0.078, sch80s: 0.098, sch160s: 0.118 },
+         "20": { sgp: 0.101, sch40: 0.104, sch60: 1.46, sch80: 1.64, sch160: 1.97, sch5s: 0.062, sch10s: 0.078, sch20s: 0.091, sch40s: 0.104, sch80s: 0.134, sch160s: 0.118 },
+         "25": { sgp: 0.145, sch40: 0.153, sch60: 1.46, sch80: 1.64, sch160: 1.97, sch5s: 0.079, sch10s: 0.129, sch20s: 0.137, sch40s: 0.153, sch80s: 0.196, sch160s: 0.118 },
+         "32": { sgp: 0.253, sch40: 0.259, sch60: 1.46, sch80: 1.64, sch160: 1.97, sch5s: 0.125, sch10s: 0.206, sch20s: 0.219, sch40s: 0.259, sch80s: 0.341, sch160s: 0.118 },
+         "40": { sgp: 0.349, sch40: 0.368, sch60: 1.46, sch80: 1.64, sch160: 1.97, sch5s: 0.171, sch10s: 0.284, sch20s: 0.303, sch40s: 0.368, sch80s: 0.491, sch160s: 0.118 },
+       
+         "450": { sgp: 94.2, sch40: 168.0, sch60: 1.46, sch80: 1.64, sch160: 1.97, sch5s: 0.049, sch10s: 0.061, sch20s: 0.071, sch40s: 168.0, sch80s: 0.098, sch160s: 0.118 },
+         "500": { sgp: 116.0, sch40: 219.0, sch60: 1.46, sch80: 1.64, sch160: 1.97, sch5s: 0.049, sch10s: 0.061, sch20s: 0.071, sch40s: 219.0, sch80s: 0.098, sch160s: 0.118 }
+        },
+        tee: {
+          "6": { sch40: 0.5, sch80: 0.6 },
+          "500": { sch40: 1.55, sch80: 1.8 }
+        },
+        flange: {
+          "6": { sch40: 0.8, sch80: 1.0 },
+          "500": { sch40: 1.85, sch80: 2.2 }
+        },
+        valve: {
+          "6": { sch40: 1.0, sch80: 1.1 },
+          "500": { sch40: 2.05, sch80: 2.3 }
+        }
+      };
+
+      // --- 材質ごとの継手単価倍率 ---
+      const fittingPriceFactorsByMaterial = {
+        steel: {
+          elbow: 3,
+          tee: 1.2,
+          flange: 1.3,
+          valve: 1.5
+        },
+        stainless: {
+          elbow: 3.15,
+          tee: 1.4,
+          flange: 1.5,
+          valve: 1.8
+        }
+      };
+
+      const fittingFactors = fittingPriceFactorsByMaterial[currentMaterial] || fittingPriceFactorsByMaterial.steel;
+
+      // --- 継手数量取得（未入力は0） ---
+      const elbowCount = parseInt(dom.elbowCount?.value) || 0;
+      const teeCount = parseInt(dom.teeCount?.value) || 0;
+      const flangeCount = parseInt(dom.flangeCount?.value) || 0;
+      const valveCount = parseInt(dom.valveCount?.value) || 0;
+
+      // --- 選択サイズの文字列変換 ---
+      const sizeStr = String(size);
+
+      // --- 各継手の重量取得 ---
+      const scheduleKey = scheduleMaterialMap[currentSchedule]?.[currentMaterial] || currentSchedule;
+
+      const elbowWeight = fittingWeights.elbow[sizeStr]?.[scheduleKey] || 0;
+      const teeWeight = fittingWeights.tee[sizeStr]?.[scheduleKey] || 0;
+      const flangeWeight = fittingWeights.flange[sizeStr]?.[scheduleKey] || 0;
+      const valveWeight = fittingWeights.valve[sizeStr]?.[scheduleKey] || 0;
+
+
+      // --- 各継手のコスト計算（材質別倍率を適用） ---
+      const elbowCost = elbowCount * elbowWeight * unitPrice * fittingFactors.elbow;
+      const teeCost = teeCount * teeWeight * unitPrice * fittingFactors.tee;
+      const flangeCost = flangeCount * flangeWeight * unitPrice * fittingFactors.flange;
+      const valveCost = valveCount * valveWeight * unitPrice * fittingFactors.valve;
+
+      // --- 総重量・継手費用・配管費用・合計費用計算 ---
+      const fittingTotalWeight =
+        (elbowCount * elbowWeight) +
+        (teeCount * teeWeight) +
+        (flangeCount * flangeWeight) +
+        (valveCount * valveWeight);
+
+      const totalWeight = (length * weightPerM) + fittingTotalWeight;
+      const pipeCost = length * weightPerM * unitPrice;
+      const fittingCost = elbowCost + teeCost + flangeCost + valveCost;
+      const totalCost = pipeCost + fittingCost;
+
+      const unitPricePerMeter = weightPerM * unitPrice;
+
+      // --- 表示 ---
+      dom.pipeWeightText.textContent = `配管重量: ${totalWeight.toFixed(3)} kg`;
+      dom.pipeCostText.textContent = `参考価格帯: ¥${Math.round(totalCost).toLocaleString()}`;
+      dom.perMeterUnitPriceText.textContent = `単価/m: ¥${Math.round(unitPricePerMeter).toLocaleString()} /m`;
+
+      // --- 工数計算 ---
+      const manhourPerKg = currentMaterial === 'steel'
+        ? (0.4 / 16.04)
+        : (0.48 / 16.20);
+
+      const sizeFactors = {
+        "6": 14.58, "8": 10.94, "10": 8.75, "15": 5.83, "20": 4.38, "25": 3.5,
+        "32": 3.27, "40": 3.00, "50": 2.67, "65": 2.17, "80": 1.67, "100": 1.00,
+        "125": 1.00, "150": 1.00, "175": 1.10, "200": 1.00, "250": 1.00,
+        "300": 1.05, "350": 1.10, "400": 1.15, "450": 1.20, "500": 1.25
+      };
+      const sizeFactor = sizeFactors[size] || 1.00;
+
+      const manhour = manhourPerKg * totalWeight * sizeFactor;
+      dom.manhourText.textContent = `工数: ${manhour.toFixed(2)} 人日 (係数: ${sizeFactor})`;
+
+      const meterPerManhour = manhour > 0 ? (length / manhour) : 0.0;
+      dom.meterPerManhourText.textContent = `歩掛: ${meterPerManhour.toFixed(2)} m/人日`;
+    }
+
+    function setErrorMessages() {
+      dom.pipeWeightText.textContent = "該当するデータがありません";
+      dom.pipeWeightText.style.color = 'red';
+      dom.pipeCostText.textContent = "参考価格帯: -";
+      dom.pipeCostText.style.color = '#999';
+      dom.perMeterUnitPriceText.textContent = "単価/m: -";
+      dom.perMeterUnitPriceText.style.color = '#999';
+      dom.manhourText.textContent = "工数: -";
+      dom.manhourText.style.color = '#999';
+      dom.meterPerManhourText.textContent = "歩掛: -";
+      dom.meterPerManhourText.style.color = '#999';
+    }
+
+    function clearErrorMessages() {
+      dom.pipeWeightText.style.color = '';
+      dom.pipeCostText.style.color = '';
+      dom.perMeterUnitPriceText.style.color = '';
+      dom.manhourText.style.color = '';
+      dom.meterPerManhourText.style.color = '';
+    }
+
+    // イベント登録
+    dom.sizeSelect.addEventListener("change", calculate);
+    dom.lengthInput.addEventListener("input", calculate);
+    dom.steelPriceInput.addEventListener("input", calculate);
+    dom.stainlessPriceInput.addEventListener("input", calculate);
+
+    dom.elbowCount.addEventListener("input", calculate);
+    dom.teeCount.addEventListener("input", calculate);
+    dom.flangeCount.addEventListener("input", calculate);
+    dom.valveCount.addEventListener("input", calculate);
+
+
+    dom.scheduleButtons.forEach(btn => {
+      btn.addEventListener("click", () => setSchedule(btn.id.replace(/^btn/i, '')));
+    });
+
+    dom.materialButtons.forEach(btn => {
+      btn.addEventListener("click", () => setMaterial(btn.id === 'btnSteel' ? 'steel' : 'stainless'));
+    });
+
+    // 初期計算
+    setSchedule(currentSchedule);
+    setMaterial(currentMaterial);
+    calculate();
+
+    // 外部向け見積データ取得
+    window.getEstimateData = function () {
+      const size = dom.sizeSelect.value;
+      const length = parseFloat(dom.lengthInput.value) || 0;
+      const unitPrice = currentMaterial === 'steel'
+        ? (parseFloat(dom.steelPriceInput.value) || 0)
+        : (parseFloat(dom.stainlessPriceInput.value) || 0);
+      const materialKey = scheduleMaterialMap[currentSchedule]?.[currentMaterial];
+      const weightPerM = weightPerMeter[size]?.[materialKey] || 0;
+
+      if (weightPerM === 0) {
+        return {
+          appId: 'pipe-weight',
+          subtotal: 0,
+          manhour: 0,
+          pipeLength: length,
+          pipeWeight: "0"
+        };
+      }
+
+      const weight = length * weightPerM;
+      const cost = weight * unitPrice;
+      let manhour = 0;
+      if (currentMaterial === 'steel') {
+        manhour = 0.4 * (sizeFactors[size] || 1.00) * length;
+      } else if (currentMaterial === 'stainless') {
+        manhour = 0.48 * (sizeFactors[size] || 1.00) * length;
+      }
+
+      return {
+        appId: 'pipe-weight',
+        subtotal: Math.round(cost),
+        manhour: manhour.toFixed(2),
+        pipeLength: length,
+        pipeWeight: weight.toFixed(2)
+      };
+    };
+  </script>
