@@ -213,16 +213,18 @@
       <div class="price-inputs">
         <div class="form-group">
           <label for="steelPrice">鉄単価:</label>
-          <input type="number" inputmode="numeric" id="steelPrice" name="steelPrice" value="520" min="0" /> (円/kg)
+          <input type="number" inputmode="numeric" id="steelPrice" name="steelPrice" value="500" min="0" /> (円/kg)
         </div>
 
         <div class="form-group">
           <label for="stainlessPrice">ステンレス単価:</label>
-          <input type="number" inputmode="numeric" id="stainlessPrice" name="stainlessPrice" value="1400" min="0" />
+          <input type="number" inputmode="numeric" id="stainlessPrice" name="stainlessPrice" value="1500" min="0" />
           (円/kg)
         </div>
       </div>
     </div>
+
+
 
     <div class="button-groups">
       <div class="schedule-buttons" role="group" aria-label="スケジュール選択">
@@ -251,28 +253,32 @@
       <div id="meterPerManhour">歩掛: -</div>
     </div>
 
+
+
+
     <div class="form-section">
-      <h3>部品数量入力</h3>
+
+
       <div class="form-group">
         <label for="elbowCount">エルボ個数</label>
         <input type="number" id="elbowCount" name="elbowCount" value="0" min="0">
       </div>
+
       <div class="form-group">
         <label for="teeCount">チーズ個数</label>
         <input type="number" id="teeCount" name="teeCount" value="0" min="0">
       </div>
+
       <div class="form-group">
         <label for="flangeCount">フランジ個数</label>
         <input type="number" id="flangeCount" name="flangeCount" value="0" min="0">
       </div>
+
       <div class="form-group">
         <label for="valveCount">バルブ個数</label>
         <input type="number" id="valveCount" name="valveCount" value="0" min="0">
       </div>
     </div>
-
-
-
 
   </div>
 
@@ -417,69 +423,89 @@
 
       clearErrorMessages();
 
-      // --- 継手の個数入力から換算長さ計算（サイズ別） ---
-      const fittingLengths = {
+      // --- 継手重量（仮データ、後で編集） ---
+      const fittingWeights = {
         elbow: {
-          "6": 1.25, "8": 1, "10": 0.9, "15": 0.8, "20": 0.6,
-          "25": 0.5, "32": 0.5, "40": 0.5, "50": 0.5, "65": 0.5,
-          "80": 0.6, "100": 0.8, "125": 1, "150": 1.2, "175": 1.5,
-          "200": 1.6, "250": 2, "300": 2.3, "350": 2.6,
-          "400": 2.8, "450": 3.2, "500": 3.5
+          "6": { sgp: 0.419, sch40: 0.369, sch60: 0.450, sch80: 0.479, sch5s: 0.237, sch10s: 0.278, sch20s: 0.336, sch40s: 0.373, sch80s: 0.484 },
+          
+          "500": { sch40: 3.5, sch80: 4.0 }
         },
         tee: {
-          "6": 0.5, "8": 0.55, "10": 0.6, "15": 0.65, "20": 0.7,
-          "25": 0.75, "32": 0.8, "40": 0.85, "50": 0.9, "65": 0.95,
-          "80": 1.0, "100": 1.05, "125": 1.1, "150": 1.15,
-          "175": 1.2, "200": 1.25, "250": 1.3, "300": 1.35,
-          "350": 1.4, "400": 1.45, "450": 1.5, "500": 1.55
+          "6": { sch40: 0.5, sch80: 0.6 },
+          "500": { sch40: 1.55, sch80: 1.8 }
         },
         flange: {
-          "6": 0.8, "8": 0.85, "10": 0.9, "15": 0.95, "20": 1.0,
-          "25": 1.05, "32": 1.1, "40": 1.15, "50": 1.2, "65": 1.25,
-          "80": 1.3, "100": 1.35, "125": 1.4, "150": 1.45,
-          "175": 1.5, "200": 1.55, "250": 1.6, "300": 1.65,
-          "350": 1.7, "400": 1.75, "450": 1.8, "500": 1.85
+          "6": { sch40: 0.8, sch80: 1.0 },
+          "500": { sch40: 1.85, sch80: 2.2 }
         },
         valve: {
-          "6": 1.0, "8": 1.05, "10": 1.1, "15": 1.15, "20": 1.2,
-          "25": 1.25, "32": 1.3, "40": 1.35, "50": 1.4, "65": 1.45,
-          "80": 1.5, "100": 1.55, "125": 1.6, "150": 1.65,
-          "175": 1.7, "200": 1.75, "250": 1.8, "300": 1.85,
-          "350": 1.9, "400": 1.95, "450": 2.0, "500": 2.05
+          "6": { sch40: 1.0, sch80: 1.1 },
+          "500": { sch40: 2.05, sch80: 2.3 }
         }
       };
 
-      const elbowCount = parseInt(document.getElementById('elbowCount')?.value) || 0;
-      const teeCount = parseInt(document.getElementById('teeCount')?.value) || 0;
-      const flangeCount = parseInt(document.getElementById('flangeCount')?.value) || 0;
-      const valveCount = parseInt(document.getElementById('valveCount')?.value) || 0;
+      // --- 材質ごとの継手単価倍率 ---
+      const fittingPriceFactorsByMaterial = {
+        steel: {
+          elbow: 3,
+          tee: 1.2,
+          flange: 1.3,
+          valve: 1.5
+        },
+        stainless: {
+          elbow: 1.3,
+          tee: 1.4,
+          flange: 1.5,
+          valve: 1.8
+        }
+      };
 
-      const elbowLength = fittingLengths.elbow[size] || 0;
-      const teeLength = fittingLengths.tee[size] || 0;
-      const flangeLength = fittingLengths.flange[size] || 0;
-      const valveLength = fittingLengths.valve[size] || 0;
+      const fittingFactors = fittingPriceFactorsByMaterial[currentMaterial] || fittingPriceFactorsByMaterial.steel;
 
-      const fittingTotalLength =
-        (elbowCount * elbowLength) +
-        (teeCount * teeLength) +
-        (flangeCount * flangeLength) +
-        (valveCount * valveLength);
+      // --- 継手数量取得（未入力は0） ---
+      const elbowCount = parseInt(dom.elbowCount?.value) || 0;
+      const teeCount = parseInt(dom.teeCount?.value) || 0;
+      const flangeCount = parseInt(dom.flangeCount?.value) || 0;
+      const valveCount = parseInt(dom.valveCount?.value) || 0;
 
-      // --- メイン長さに継手長さを加算 ---
-      length += fittingTotalLength;
+      // --- 選択サイズの文字列変換 ---
+      const sizeStr = String(size);
 
-      // --- 重量計算 ---
-      const weight = length * weightPerM;
-      const cost = weight * unitPrice;
-      const unitPricePerMeter = length > 0 ? cost / length : 0;
+      // --- 各継手の重量取得 ---
+      const scheduleKey = scheduleMaterialMap[currentSchedule]?.[currentMaterial] || currentSchedule;
 
-      dom.pipeWeightText.textContent = `配管重量: ${weight.toFixed(2)} kg`;
-      dom.pipeCostText.textContent = `参考価格帯: ¥${Math.round(cost).toLocaleString()}`;
+      const elbowWeight = fittingWeights.elbow[sizeStr]?.[scheduleKey] || 0;
+      const teeWeight = fittingWeights.tee[sizeStr]?.[scheduleKey] || 0;
+      const flangeWeight = fittingWeights.flange[sizeStr]?.[scheduleKey] || 0;
+      const valveWeight = fittingWeights.valve[sizeStr]?.[scheduleKey] || 0;
+
+
+      // --- 各継手のコスト計算（材質別倍率を適用） ---
+      const elbowCost = elbowCount * elbowWeight * unitPrice * fittingFactors.elbow;
+      const teeCost = teeCount * teeWeight * unitPrice * fittingFactors.tee;
+      const flangeCost = flangeCount * flangeWeight * unitPrice * fittingFactors.flange;
+      const valveCost = valveCount * valveWeight * unitPrice * fittingFactors.valve;
+
+      // --- 総重量・継手費用・配管費用・合計費用計算 ---
+      const fittingTotalWeight =
+        (elbowCount * elbowWeight) +
+        (teeCount * teeWeight) +
+        (flangeCount * flangeWeight) +
+        (valveCount * valveWeight);
+
+      const totalWeight = (length * weightPerM) + fittingTotalWeight;
+      const pipeCost = length * weightPerM * unitPrice;
+      const fittingCost = elbowCost + teeCost + flangeCost + valveCost;
+      const totalCost = pipeCost + fittingCost;
+
+      const unitPricePerMeter = weightPerM * unitPrice;
+
+      // --- 表示 ---
+      dom.pipeWeightText.textContent = `配管重量: ${totalWeight.toFixed(3)} kg`;
+      dom.pipeCostText.textContent = `参考価格帯: ¥${Math.round(totalCost).toLocaleString()}`;
       dom.perMeterUnitPriceText.textContent = `単価/m: ¥${Math.round(unitPricePerMeter).toLocaleString()} /m`;
 
-      // --- 工数計算（重量基準） ---
-      // 0.4 ÷ 16.04 ≈ 0.024936 人日/kg（鉄）
-      // 0.48 ÷ 16.20 ≈ 0.029629 人日/kg（ステンレス）
+      // --- 工数計算 ---
       const manhourPerKg = currentMaterial === 'steel'
         ? (0.4 / 16.04)
         : (0.48 / 16.20);
@@ -492,7 +518,7 @@
       };
       const sizeFactor = sizeFactors[size] || 1.00;
 
-      const manhour = manhourPerKg * weight * sizeFactor;
+      const manhour = manhourPerKg * totalWeight * sizeFactor;
       dom.manhourText.textContent = `工数: ${manhour.toFixed(2)} 人日 (係数: ${sizeFactor})`;
 
       const meterPerManhour = manhour > 0 ? (length / manhour) : 0.0;
