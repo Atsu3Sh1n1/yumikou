@@ -1,0 +1,22 @@
+.cell {
+    width: 100px;
+    padding: 4px;
+    font-size: 14px;
+    
+}
+.estimate-sheet {
+  padding: 16px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  border: 1px solid #aaa;
+  padding: 4px;
+  text-align: center;
+}
+
