@@ -5,4 +5,6 @@ export interface EstimateItem {
     schedule: string
     length: number
     unitPrice: number
+    quantity: number
+    sizeTo?: string // ← 異径用
 }

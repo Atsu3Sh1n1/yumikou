@@ -1,9 +1,10 @@
 .cell {
-    width: 100px;
-    padding: 4px;
-    font-size: 14px;
-    
+  width: 100px;
+  padding: 4px;
+  font-size: 14px;
+
 }
+
 .estimate-sheet {
   padding: 16px;
 }
@@ -20,3 +21,20 @@ td {
   text-align: center;
 }
 
+body::before {
+  content: "";
+  position: fixed;
+  top: -4%;
+  left: -60%;
+  width: 180vw;
+  height: 180vh;
+  background-image: url('yumikou.png');
+  background-repeat: repeat;
+  background-size: 200px 100px;
+  opacity: 0.03;
+  transform: rotate(-10deg);
+  transform-origin: center;
+  z-index: -1;
+  pointer-events: none;
+  background-attachment: fixed;
+}

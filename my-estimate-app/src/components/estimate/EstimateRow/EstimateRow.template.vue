@@ -11,6 +11,7 @@
       <select v-model="item.shape" @change="onShapeChange" class="cell" :disabled="!item.material">
         <option disabled value="">選択</option>
 
+
         <optgroup label="パイプ・鋼材">
           <option v-for="s in shapeOptionsData.pipe" :key="s.value" :value="s.value">
             {{ s.label }}
@@ -36,18 +37,28 @@
       </select>
     </td>
 
-    <td>
-      <select v-model="item.schedule" class="cell" :disabled="!item.size || item.shape !== 'pipe'">
-        <option disabled value="">選択</option>
-        <option v-for="sc in availableSchedules" :key="sc" :value="sc">{{ sc }}</option>
-      </select>
-    </td>
+   <td>
+  <select
+  v-model="item.schedule"
+  class="cell"
+  :disabled="!item.size || !availableSchedules.length"
+>
 
-    <td>
-      <input v-model.number="item.length" type="number" min="0" class="cell" />
-    </td>
+  >
+    <option disabled value="">選択</option>
+    <option v-for="sc in availableSchedules" :key="sc" :value="sc">
+      {{ sc }}
+    </option>
+  </select>
+</td>
 
-    <td>{{ computedQuantity }}</td>
+
+   <td>
+  <input v-model.number="item.length" type="number" min="0" step="0.1" class="cell" placeholder="m" />
+</td>
+
+
+   
     <td>{{ computedWeight.toFixed(2) }}</td>
 
     <td>
@@ -65,9 +76,12 @@
       </button>
     </td>
 
-    <td v-if="noData" colspan="9" style="color: red; text-align: center;">
-      データが存在しません
-    </td>
+    <!-- ここにパイプのみ本数表示セルを追加 -->
+  <td v-if="item.shape === 'pipe'">
+    定尺本数: {{ computedQuantity }}
+  </td>
+
+  
   </tr>
 </template>
 
@@ -80,7 +94,6 @@ const {
   shapeOptionsData, // ← shapeOptionsData を使う
   availableSizes,
   availableSchedules,
-  noData,
   computedQuantity,
   computedWeight,
   totalPrice,

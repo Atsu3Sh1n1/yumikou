@@ -1,11 +1,11 @@
-// EstimateRow.logic.ts
 import { ref, computed, watch } from 'vue'
 import type { EstimateItem } from '@/types/EstimateItem'
-import { pipeSizes } from '@/data/pipe/sizes'
-import { steelSizes } from '@/data/steel/sizes'
+import { pipeWeights } from '@/data/pipe/weights.ts'
+import { fittingWeights } from '@/data/fittings/weights.ts'
+import { steelWeights } from '@/data/steel/sizes.ts'
 import { shapeOptions } from '@/data/shapes'
 
-// 材質判定
+// スケジュールの末尾で材質判定
 function getMaterialFromSchedule(schedule: string | undefined): '鉄' | 'ステンレス304' | 'ステンレス316' | undefined {
   if (!schedule) return undefined
   if (schedule.endsWith('s')) return 'ステンレス304'
@@ -13,10 +13,25 @@ function getMaterialFromSchedule(schedule: string | undefined): '鉄' | 'ステ�
   return '鉄'
 }
 
+// 材質ごとの単価デフォルト
 const unitPriceDefaults: Record<string, number> = {
   '鉄': 1000,
   'ステンレス304': 1500,
   'ステンレス316': 2000,
+}
+
+// shape ごとの重量データマップ
+const weightsMap: Record<string, Record<string, Record<string, number>>> = {
+  pipe: pipeWeights,
+  ELB: fittingWeights,
+  RELB: fittingWeights,
+  TEE: fittingWeights,
+  RTEE: fittingWeights,
+  CAP: fittingWeights,
+  FLG10K: fittingWeights,
+  FLG20K: fittingWeights,
+  angle: steelWeights, // L形鋼
+  hbeam: steelWeights, // H型鋼
 }
 
 export function useEstimateRowLogic() {
@@ -26,13 +41,12 @@ export function useEstimateRowLogic() {
     size: '',
     schedule: '',
     length: 0,
+    quantity: 0,
     unitPrice: 0,
   })
 
   const materialOptions = ['鉄', 'ステンレス304', 'ステンレス316']
-
   const shapeOptionsData = shapeOptions
-
   const unitPriceManuallyEdited = ref(false)
 
   watch(() => item.value.unitPrice, () => {
@@ -45,69 +59,139 @@ export function useEstimateRowLogic() {
     }
   })
 
+  const weightsSource = computed(() => {
+    return weightsMap[item.value.shape] || {}
+  })
+
+  const isPipe = computed(() => item.value.shape === 'pipe')
+
   const availableSizes = computed(() => {
-    if (!item.value.material || !item.value.shape) return []
-
-    if (item.value.shape === 'pipe') {
-      return Object.entries(pipeSizes)
-        .filter(([size, schedules]) =>
-          Object.keys(schedules).some(sch => getMaterialFromSchedule(sch) === item.value.material)
-        )
-        .map(([size]) => size)
-    }
-
-    const sizes = steelSizes[item.value.shape]
-    return Array.isArray(sizes) ? sizes : []
+    const { material } = item.value
+    if (!material) return []
+    return Object.entries(weightsSource.value)
+      .filter(([sizeKey, schedules]) =>
+        Object.keys(schedules).some(scheduleKey => {
+          let baseSchedule = scheduleKey
+          if (!isPipe.value) {
+            baseSchedule = scheduleKey.replace(/(ELB|RELB|TEE|RTEE|CAP|FLG10K|FLG20K)$/, '')
+          }
+          return getMaterialFromSchedule(baseSchedule) === material
+        })
+      )
+      .map(([size]) => size)
   })
 
   const availableSchedules = computed(() => {
-    if (item.value.shape !== 'pipe' || !item.value.size) return []
+    const { shape, size, material } = item.value
+    if (!shape || !size || !material) return []
 
-    const schedulesObj = pipeSizes[item.value.size]
-    if (!schedulesObj) return []
+    const sizeData = weightsSource.value[size]
+    if (!sizeData) return []
 
-    return Object.keys(schedulesObj).filter(sch => getMaterialFromSchedule(sch) === item.value.material)
+    return Object.keys(sizeData)
+      .filter(scheduleKey => {
+        if (!isPipe.value) {
+          const suffixMap: Record<string, string> = {
+            ELB: 'ELB', RELB: 'RELB', TEE: 'TEE', RTEE: 'RTEE',
+            CAP: 'CAP', FLG10K: 'FLG10K', FLG20K: 'FLG20K',
+          }
+          const shapeSuffix = suffixMap[shape] || ''
+          if (!scheduleKey.endsWith(shapeSuffix)) return false
+          const baseSchedule = scheduleKey.replace(shapeSuffix, '')
+          return getMaterialFromSchedule(baseSchedule) === material
+        } else {
+          return getMaterialFromSchedule(scheduleKey) === material
+        }
+      })
+      .map(scheduleKey => {
+        if (!isPipe.value) {
+          const suffixMap: Record<string, string> = {
+            ELB: 'ELB', RELB: 'RELB', TEE: 'TEE', RTEE: 'RTEE',
+            CAP: 'CAP', FLG10K: 'FLG10K', FLG20K: 'FLG20K',
+          }
+          const shapeSuffix = suffixMap[shape] || ''
+          return scheduleKey.replace(shapeSuffix, '')
+        }
+        return scheduleKey
+      })
   })
 
-  const noData = computed(() => {
-    if (item.value.shape === 'pipe') {
-      if (!availableSizes.value.length) return true
-      if (item.value.size && !availableSchedules.value.length) return true
-    }
-    return false
-  })
-
+  // すべての shape を長さベースの quantity に変換
   const computedQuantity = computed(() => {
-    const standardLength = 4
-    return item.value.length ? Math.ceil(item.value.length / standardLength) : 0
+    const { shape, length, material } = item.value
+    if (!length) return 0
+
+    const unitLengthMap: Record<string, number> = {
+      pipe: material === '鉄' ? 5.5 : 4,
+      ELB: 1,
+      RELB: 1,
+      TEE: 1,
+      RTEE: 1,
+      CAP: 1,
+      FLG10K: 1,
+      FLG20K: 1,
+      angle: 1,
+      hbeam: 1,
+    }
+
+    const unitLength = unitLengthMap[shape] ?? 1
+    return Math.ceil(length / unitLength)
   })
 
   const computedWeight = computed(() => {
-    if (item.value.shape !== 'pipe') return 0
-    const schedulesObj = pipeSizes[item.value.size]
-    if (!schedulesObj) return 0
-    const weightPerMeter = schedulesObj[item.value.schedule]
-    return weightPerMeter ? weightPerMeter * item.value.length : 0
+    const { shape, size, schedule, length } = item.value
+    if (!shape || !size || !schedule || !length) return 0
+
+    const sizeData = weightsSource.value[size]
+    if (!sizeData) return 0
+
+    const suffixMap: Record<string, string> = {
+      ELB: 'ELB', RELB: 'RELB', TEE: 'TEE', RTEE: 'RTEE',
+      CAP: 'CAP', FLG10K: 'FLG10K', FLG20K: 'FLG20K',
+    }
+
+    const key = isPipe.value ? schedule : schedule + (suffixMap[shape] || '')
+    const weightPerMeter = sizeData[key]
+    if (weightPerMeter == null) return 0
+
+    return weightPerMeter * length
   })
 
   const totalPrice = computed(() => {
-    return item.value.length * item.value.unitPrice
+    const { unitPrice, length } = item.value
+    if (!unitPrice || !length) return 0
+    return length * unitPrice
   })
 
   function onMaterialChange() {
-    item.value.shape = ''
-    item.value.size = ''
-    item.value.schedule = ''
     unitPriceManuallyEdited.value = false
+    const { size, schedule } = item.value
+    if (!availableSizes.value.includes(size)) {
+      item.value.size = ''
+      item.value.schedule = ''
+      return
+    }
+    if (!availableSchedules.value.includes(schedule)) {
+      item.value.schedule = ''
+    }
   }
 
   function onShapeChange() {
-    item.value.size = ''
-    item.value.schedule = ''
+    const { size, schedule } = item.value
+    if (!availableSizes.value.includes(size)) {
+      item.value.size = ''
+      item.value.schedule = ''
+      return
+    }
+    if (!availableSchedules.value.includes(schedule)) {
+      item.value.schedule = ''
+    }
   }
 
   function onSizeChange() {
-    item.value.schedule = ''
+    if (!availableSchedules.value.includes(item.value.schedule)) {
+      item.value.schedule = ''
+    }
   }
 
   return {
@@ -116,12 +200,11 @@ export function useEstimateRowLogic() {
     shapeOptionsData,
     availableSizes,
     availableSchedules,
-    noData,
     computedQuantity,
     computedWeight,
     totalPrice,
     onMaterialChange,
     onShapeChange,
     onSizeChange,
-  }
+      }
 }

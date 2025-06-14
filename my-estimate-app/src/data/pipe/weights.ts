@@ -1,4 +1,4 @@
-export const pipeSizes: Record<string, Record<string, number>> = {
+export const pipeWeights: Record<string, Record<string, number>> = {
   
       "15A": { "sgp": 1.31, "sch40": 1.31, "sch60": 1.46, "sch80": 1.64, "sch160": 1.97, "sch5s": 0.824, "sch10s": 1.03, "sch20s": 1.2, "sch40s": 1.31, "sch80s": 1.66, "sch160s": 1.99 },
       "20A": { "sgp": 1.68, "sch40": 1.74, "sch60": 2.00, "sch80": 2.24, "sch160": 2.94, "sch5s": 1.05, "sch10s": 1.31, "sch20s": 1.54, "sch40s": 1.74, "sch80s": 2.26, "sch160s": 2.97 },

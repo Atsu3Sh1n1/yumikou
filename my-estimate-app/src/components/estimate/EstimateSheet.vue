@@ -7,8 +7,7 @@
           <th>形状</th>
           <th>サイズ</th>
           <th>スケジュール</th>
-          <th>長さ(m)</th>
-          <th>定尺本数</th>
+          <th>長さ・個数・枚数</th>
           <th>重量(kg)</th>
           <th>単価</th>
           <th>金額</th>
@@ -37,13 +36,18 @@ import EstimateRow from './EstimateRow/EstimateRow.vue'
 import type { EstimateItem } from '@/types/EstimateItem'
 
 const estimateItems = ref<EstimateItem[]>([
-  { material: '', shape: '', size: '', schedule: '', length: 0, unitPrice: 0 },
-  { material: '', shape: '', size: '', schedule: '', length: 0, unitPrice: 0 },
-  { material: '', shape: '', size: '', schedule: '', length: 0, unitPrice: 0 },
+  { material: '', shape: '', size: '', schedule: '', length: 0, unitPrice: 0, quantity: 0 },
+  { material: '', shape: '', size: '', schedule: '', length: 0, unitPrice: 0, quantity: 0 },
+  { material: '', shape: '', size: '', schedule: '', length: 0, unitPrice: 0, quantity: 0 },
+  { material: '', shape: '', size: '', schedule: '', length: 0, unitPrice: 0, quantity: 0 },
+  { material: '', shape: '', size: '', schedule: '', length: 0, unitPrice: 0, quantity: 0 },
+  { material: '', shape: '', size: '', schedule: '', length: 0, unitPrice: 0, quantity: 0 },
+  
+
 ])
 
 function addRow() {
-  estimateItems.value.push({ material: '', shape: '', size: '', schedule: '', length: 0, unitPrice: 0 })
+  estimateItems.value.push({ material: '', shape: '', size: '', schedule: '', length: 0, unitPrice: 0, quantity: 0 })
 }
 
 function deleteRow(index: number) {
