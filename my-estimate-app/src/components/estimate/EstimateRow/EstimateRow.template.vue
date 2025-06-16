@@ -66,6 +66,7 @@
     </td>
 
     <td>{{ totalPrice.toFixed(0) }}</td>
+    
 
     <td>
       <button 

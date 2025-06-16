@@ -1,0 +1,99 @@
+
+.estimate-sheet {
+  background-image: url('yumikou.png');
+  background-size: cover;         /* 画像をコンテナにフィットさせる */
+  background-repeat: no-repeat;   /* 繰り返さない */
+  background-position: center;    /* 中央に配置 */
+  min-height: 100vh;              /* 背景を画面全体にする場合 */
+  padding: 2rem;
+  box-sizing: border-box;
+   padding: 16px;
+  font-size: 1.2rem;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+th,
+td {
+  border: 1px solid #aaa;
+  padding: 4px;
+  text-align: center;
+  vertical-align: middle;
+}
+
+/* 入力・選択フォームをセルと一体化 */
+input,
+select {
+  border: none;
+  background: transparent;
+  width: 100%;
+  padding: 4px;
+  box-sizing: border-box;
+  font-size: 1.2rem;
+}
+
+input:focus,
+select:focus {
+  outline: none;
+  background-color: #eef9ff; /* 選択時の薄いハイライト */
+}
+
+/* 行追加ボタンを中央配置 */
+.button-wrapper {
+  text-align: center;
+  margin-top: 16px;
+}
+
+.button-wrapper button {
+  padding: 6px 16px;
+  font-size: 1rem;
+  background-color: #3498db;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.button-wrapper button:hover {
+  background-color: #2980b9;
+}
+
+/* 入力欄サイズ調整用 */
+.cell {
+  font-size: 1.2rem;
+}
+
+/* 単価入力欄の幅を狭く */
+td input.cell {
+  width: 100%;
+  text-align: center;
+}
+
+/* 金額セルを広く、右寄せ */
+td.total-price-cell {
+  width: 160px;
+  text-align: right;
+  font-weight: bold;
+}
+
+/* 定尺本数セルのスタイル */
+td.quantity-cell {
+  border: none;
+  font-size: 20px;
+  color: #666;
+  text-align: left;
+  padding-left: 4px;
+}
+
+.footer {
+      text-align: center;
+      margin-top: 10px;
+      margin-bottom: 20px;
+      font-size: 0.9em;
+    }
+
+    

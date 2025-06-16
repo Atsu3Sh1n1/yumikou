@@ -1,0 +1,28 @@
+// src/data/pipe/sus304.ts
+export const sus304Weights = {
+
+  "6A": {sch40s: 0.373,},
+  "8A": {sch40s: 0.636,},
+  "10A": {sch40s: 0.859,},
+  "15A": {sch5s: 0.824, sch10s: 1.03, sch20s: 1.2, sch40s: 1.31, sch80s: 1.66, sch160s: 1.99 },
+  "20A": {sch5s: 1.05, sch10s: 1.31, sch20s: 1.54, sch40s: 1.74, sch80s: 2.26, sch160s: 2.97 },
+  "25A": {sch5s: 1.33, sch10s: 2.18, sch20s: 2.32, sch40s: 2.59, sch80s: 3.31, sch160s: 4.4 },
+  "32A": {sch5s: 1.69, sch10s: 2.78, sch20s: 2.97, sch40s: 3.51, sch80s: 4.61, sch160s: 5.79 },
+  "40A": {sch5s: 1.93, sch10s: 3.19, sch20s: 3.41, sch40s: 4.14, sch80s: 5.53, sch160s: 7.34 },
+  "50A": {sch5s: 2.42, sch10s: 4.02, sch20s: 4.97, sch40s: 5.5, sch80s: 7.54, sch160s: 11.2 },
+  "65A": {sch5s: 3.88, sch10s: 5.48, sch20s: 6.35, sch40s: 9.21, sch80s: 12.1, sch160s: 15.8 },
+  "80A": {sch5s: 4.55, sch10s: 6.43, sch20s: 8.48, sch40s: 11.5, sch80s: 15.4, sch160s: 21.6 },
+  "90A": {sch5s: 5.2, sch10s: 7.37, sch20s: 9.72, sch40s: 13.6, sch80s: 18.9, sch160s: 28.1 },
+  "100A": {sch5s: 5.87, sch10s: 8.32, sch20s: 11, sch40s: 16.2, sch80s: 22.6, sch120s: 28.5, sch160s: 33.9 },
+  "125A": {sch5s: 9.56, sch10s: 11.6, sch20s: 16.8, sch40s: 21.9, sch80s: 30.8, sch120s: 40.2, sch160s: 49.1 },
+  "150A": {sch5s: 11.3, sch10s: 13.7, sch20s: 20, sch40s: 28, sch80s: 42.3, sch120s: 53.8, sch160s: 66.6 },
+  "200A": {sch5s: 14.9, sch10s: 21.2, sch20s: 34, sch40s: 42.5, sch80s: 64.4, sch120s: 89.8, sch160s: 111 },
+  "250A": {sch5s: 22.4, sch10s: 26.2, sch20s: 42.2, sch40s: 59.8, sch80s: 94.9, sch120s: 131, sch160s: 170 },
+  "300A": {sch5s: 31.3, sch10s: 35.2, sch20s: 50.5, sch40s: 79.1, sch80s: 131, sch120s: 185, sch160s: 237 },
+
+  "350A": {sch40s: 95.3, sch80s: 159, sch120s: 227, sch160s: 284 },
+  "400A": {sch40s: 125, sch80s: 205, sch120s: 289, sch160s: 369 },
+  "450A": {sch40s: 158, sch80s: 257, sch120s: 367, sch160s: 468 },
+  "500A": {sch40s: 185, sch80s: 314, sch120s: 446, sch160s: 570 }
+
+};
