@@ -11,7 +11,8 @@
     },
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true
+    "forceConsistentCasingInFileNames": true,
+    "types": ["node"]  // ← これを追加！
   },
   "include": ["src/**/*.ts", "src/**/*.vue"]
 }

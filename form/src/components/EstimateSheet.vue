@@ -15,6 +15,9 @@
           <th>長さ・個数・枚数</th>
           <th>見積重量(kg)</th>
           <th>工数(人工)</th>
+          <th>DBメートル</th>
+          <th style="width: 40px;"></th> <!-- 削除ボタン用 -->
+          <th style="width: 100px;"></th> <!-- 定尺本数表示用 -->
           
         </tr>
       </thead>
@@ -43,9 +46,10 @@ import type { EstimateItem } from '@/types/EstimateItem'
 
 // 初期データ生成関数
 const createEmptyItem = (): EstimateItem => ({
-  id: crypto.randomUUID(),  // ユニークIDを生成
+ id: crypto.randomUUID(),
   material: '',
   shape: '',
+  shapeType: '',   
   size: '',
   schedule: '',
   length: 0,

@@ -1,8 +1,9 @@
 import { computed, type Ref } from 'vue';
 import type { EstimateItem } from '@/types/EstimateItem';
+import { useEstimator } from '@/composables/useEstimator';
 
-// 継手ごとの重量係数（仮）
-const fittingWeightCoefficients: Record<string, number> = {
+// 継手ごとの係数（重さおよび長さ計算用）
+const fittingCoefficients: Record<string, number> = {
   elbow_same: 0.15,
   elbow_diff: 0.16,
   tee_same: 0.225,
@@ -13,32 +14,75 @@ const fittingWeightCoefficients: Record<string, number> = {
   flange_plate: 1.8,
 };
 
-/**
- * 継手の重量を計算する
- * @param localItem EstimateItemのRef
- * @param baseWeight パイプの基本重量（Ref<number>）
- * @returns computedWeight 継手を考慮した重量（computed<number>）
- */
-export function useFittingCalculator(localItem: Ref<EstimateItem>, baseWeight: Ref<number>) {
-  const computedWeight = computed(() => {
-    const shape = localItem.value.shape;
-    if (!shape || shape === 'pipe') {
-      // パイプの場合は基本重量をそのまま返す
-      return baseWeight.value;
+// 呼び径（mm）→インチ換算
+const inchMap: Record<number, number> = {
+  15: 0.5, 20: 0.75, 25: 1, 32: 1.25, 40: 1.5,
+  50: 2, 65: 2.5, 80: 3, 90: 3.5, 100: 4,
+  125: 5, 150: 6, 200: 8, 250: 10, 300: 12,
+  350: 14, 400: 16, 450: 18, 500: 20,
+};
+
+export function useFittingCalculator(localItem: Ref<EstimateItem>) {
+  // リアクティブなプロパティ
+  const size = computed(() => localItem.value.size);
+  const length = computed(() => localItem.value.length ?? 0);
+  const shape = computed(() => localItem.value.shape ?? '');
+  const material = computed(() => localItem.value.material);
+  const schedule = computed(() => localItem.value.schedule);
+
+  // 継手係数（継手でない場合は1）
+  const coefficient = computed(() => fittingCoefficients[shape.value] ?? 1);
+
+  // 継手として認識される形状
+  const fittingShapes = new Set(Object.keys(fittingCoefficients));
+
+  // 呼び径（例: '25A'）→ 数値 → インチ換算（例: 1.0）
+  const pipeInch = computed(() => {
+    const sizeStr = size.value?.replace('A', '') ?? '';
+    const numericSize = parseInt(sizeStr, 10);
+    return inchMap[numericSize] ?? 0;
+  });
+
+  // 材質 + サイズ + スケジュールに基づく1mあたりの重量（kg/m）
+  const { weight: perMeterWeight } = useEstimator(material, size, schedule);
+
+  // 総合的な配管長さ（インチ・m）計算
+  // 継手: サイズ÷インチ×継手係数×入力長さ
+  // パイプ: サイズ÷インチ×入力長さ
+  const pipeSizeInch = computed(() => {
+    if (!length.value || !size.value) return 0;
+
+    // 継手の場合
+    if (fittingShapes.has(shape.value)) {
+      return (pipeInch.value * coefficient.value * length.value);
     }
+    // パイプの場合
+    else if (shape.value === 'pipe') {
+      return pipeInch.value * length.value;
+    }
+    return 0;
+  });
 
-    // 継手・バルブの係数を取得（無ければ1）
-    const factor = fittingWeightCoefficients[shape] ?? 1;
+  // 重さ（kg）計算
+  // 継手: サイズ÷インチ×継手係数×入力長さ×1mあたりの重量
+  // パイプ: サイズ÷インチ×入力長さ×1mあたりの重量
+  const computedWeight = computed(() => {
+    if (!length.value || !size.value) return 0;
 
-    // サイズ（例：25A）から数値だけ抜き出してサイズ補正係数を作る
-    const numericSize = parseInt(localItem.value.size?.replace('A', '') || '0', 10);
-    const sizeFactor = numericSize > 0 ? numericSize / 25 : 1;
-
-    // 継手重量 = パイプ基本重量 × 継手係数 × サイズ係数
-    return baseWeight.value * factor * sizeFactor;
+    const unitWeight = perMeterWeight.value ?? 0;
+    // 継手の場合
+    if (fittingShapes.has(shape.value)) {
+      return (pipeInch.value * coefficient.value * length.value * unitWeight);
+    }
+    // パイプの場合
+    else if (shape.value === 'pipe') {
+      return pipeInch.value * length.value * unitWeight;
+    }
+    return 0;
   });
 
   return {
-    computedWeight,
+    computedWeight,   // 継手・パイプの換算重量（kg）
+    pipeSizeInch,     // 総合的な配管長さ（インチ・m相当）
   };
 }

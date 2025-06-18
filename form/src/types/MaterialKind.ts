@@ -2,7 +2,7 @@
 export type MaterialKind =
   | 'sgp'
   | 'ss400'
-  | 'stpg'       // ← これ必要！
+  | 'stpg'     
   | 'sus304'
   | 'sus304L'
   | 'sus316'

@@ -1,6 +1,6 @@
 import type { PipeWeightData } from '@/types/WeightData';
 
-const stpg: PipeWeightData = {
+export const stpgWeights: PipeWeightData = {
   "15A": { sch40: 1.31, sch60: 1.46, sch80: 1.64, sch160: 1.97,  },
   "20A": { sch40: 1.74, sch60: 2.00, sch80: 2.24, sch160: 2.94,  },
   "25A": { sch40: 2.56, sch60: 2.89, sch80: 3.27, sch160: 4.36,  },
@@ -23,4 +23,4 @@ const stpg: PipeWeightData = {
 };
 
 
-export default stpg;
+

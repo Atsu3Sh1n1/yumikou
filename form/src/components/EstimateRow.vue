@@ -51,6 +51,10 @@
 
     <td>{{ computedManHours.toFixed(2) }}</td>
 
+    <td>{{ pipeSizeInch.toFixed(2) }}</td>
+
+
+
     <td>
       <button
         @click="$emit('deleteClick')"
@@ -61,9 +65,13 @@
       </button>
     </td>
 
-    <td v-if="localItem.shape === 'pipe'">
+      <td
+      v-if="localItem.shape === 'pipe'"
+      style="border: none; font-size: 0.75em; padding: 2px 4px;"
+>
       定尺本数: {{ computedQuantity }}
-    </td>
+      </td>
+      
   </tr>
 </template>
 
@@ -91,6 +99,7 @@ const {
   availableSchedules,
   computedWeight,
   computedQuantity,
+  pipeSizeInch,  
   onMaterialChange,
   onShapeChange,
   onSizeChange,
