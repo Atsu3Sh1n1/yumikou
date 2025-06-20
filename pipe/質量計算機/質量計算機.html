@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>重量計算機</title>
+  <script src="https://cdn.jsdelivr.net/npm/react@18.2.0/umd/react.production.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/react-dom@18.2.0/umd/react-dom.production.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@babel/standalone@7.20.15/babel.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4 bg-transparent">
+  <div id="root"></div>
+  <script type="text/babel">
+    const materials = [
+      { name: '炭素鋼（STPG）', density: 7850 },
+      { name: 'ステンレス304', density: 7930 },
+      { name: 'ステンレス316', density: 8000 },
+      { name: '銅', density: 8900 },
+      { name: 'アルミニウム', density: 2700 },
+      { name: '鋳鉄', density: 7200 },
+      { name: '塩ビ（PVC）', density: 1400 },
+      { name: 'ポリエチレン（PE）', density: 950 },
+      { name: 'チタン', density: 4500 },
+    ];
+
+    function App() {
+      const [od, setOd] = React.useState(114.3);
+      const [thickness, setThickness] = React.useState(6.02);
+      const [density, setDensity] = React.useState(7850);
+      const [weight, setWeight] = React.useState('-');
+
+      const calculateWeight = () => {
+        const outerDiameter = parseFloat(od);
+        const t = parseFloat(thickness);
+        const d = parseFloat(density);
+
+        if (isNaN(outerDiameter) || isNaN(t) || isNaN(d) || t * 2 >= outerDiameter) {
+          setWeight('入力値が正しくありません');
+          return;
+        }
+
+        const id = outerDiameter - 2 * t;
+        const volume = (Math.PI / 4) * (outerDiameter ** 2 - id ** 2) * 1e-6; // m³/m
+        const w = volume * d; // kg/m
+        setWeight(w.toFixed(3));
+      };
+
+      const handleMaterialChange = (e) => {
+        const newDensity = parseFloat(e.target.value);
+        setDensity(newDensity);
+      };
+
+      React.useEffect(() => {
+        calculateWeight();
+      }, [od, thickness, density]);
+
+      return (
+        <div className="max-w-md w-full mx-auto rounded-2xl shadow-xl p-8">
+          <h1 className="text-2xl font-bold text-gray-800 mb-2 text-center">
+            管重量計算機
+          </h1>
+          <div className="text-center mb-6">
+            <a
+              href="https://atsu3sh1n1.github.io/yumikou/"
+              className="text-sm text-gray-600 hover:text-blue-600 transition duration-200 no-underline"
+            >
+              Created by YUMIKOU Inc.
+            </a>
+          </div>
+
+          <div className="space-y-6">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                材質を選択
+              </label>
+              <select
+                value={density}
+                onChange={handleMaterialChange}
+                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200 bg-transparent"
+              >
+                {materials.map((material) => (
+                  <option key={material.density} value={material.density}>
+                    {material.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                外径（mm）
+              </label>
+              <input
+                type="number"
+                step="0.01"
+                value={od}
+                onChange={(e) => setOd(e.target.value)}
+                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200 bg-transparent"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                肉厚（mm）
+              </label>
+              <input
+                type="number"
+                step="0.01"
+                value={thickness}
+                onChange={(e) => setThickness(e.target.value)}
+                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200 bg-transparent"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                比重（kg/m³）
+              </label>
+              <input
+                type="number"
+                step="1"
+                value={density}
+                onChange={(e) => setDensity(e.target.value)}
+                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200 bg-transparent"
+              />
+            </div>
+
+            <div className="p-4 rounded-lg text-center shadow-inner bg-transparent border border-gray-200">
+              <p className="text-lg font-semibold text-gray-800">
+                理論重量: <span className="text-blue-600">{weight}</span>{' '}
+                {weight !== '入力値が正しくありません' && 'kg/m'}
+              </p>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<App />);
+  </script>
+</body>
+</html>
