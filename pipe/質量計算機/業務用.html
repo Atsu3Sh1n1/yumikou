@@ -1,69 +1,31 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>鋼管重量計算（材質一括・コピー対応）</title>
+  <meta charset="UTF-8">
+  <title>鋼管重量計算（外径×肉厚 一括対応）</title>
   <style>
-    body {
-      font-family: sans-serif;
-      margin: 30px;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 10px;
-    }
-    th, td {
-      border: 1px solid #ccc;
-      padding: 6px;
-      text-align: center;
-    }
-    input {
-      width: 100%;
-      box-sizing: border-box;
-    }
-    select {
-      font-size: 1rem;
-    }
-    button {
-      margin-top: 10px;
-      margin-right: 10px;
-    }
-    .copy-message {
-      color: green;
-      font-size: 0.9em;
-      margin-left: 10px;
-    }
-
-    .footer {
-      text-align: center;
-      margin-top: 10px;
-      margin-bottom: 20px;
-      font-size: 0.9em;
-    }
-
-     h2 {
-      text-align: center;
-      font-size: 1.8em;
-      
-    }
-
+    body { font-family: sans-serif; margin: 20px; }
+    textarea { width: 45%; height: 200px; margin-right: 5%; vertical-align: top; }
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    th, td { border: 1px solid #ccc; padding: 6px; text-align: center; }
+    input, select { width: 100%; }
+    button { margin-top: 10px; margin-bottom: 20px; }
   </style>
 </head>
 <body>
-  <h2>業務用鋼管重量計算</h2>
-   <div class="footer">
-      <a href="https://atsu3sh1n1.github.io/yumikou/" target="_blank">Created by YUMIKOU Inc.</a>
-    </div>
 
-  <label for="globalMaterial">材質（全体）</label>
-  <select id="globalMaterial" onchange="updateAllRows()">
+  <h2>鋼管重量計算（1mあたり）</h2>
+
+  <label>材質（全体）</label>
+  <select id="materialSelect">
     <option value="7850">炭素鋼（STPG）</option>
     <option value="7930">ステンレス304</option>
     <option value="7920">ステンレス304L</option>
     <option value="8000">ステンレス316</option>
     <option value="7990">ステンレス316L</option>
+    <option value="7750">ステンレス430L</option>
+    <option value="7700">ステンレス410</option>
+    <option value="7620">ステンレス329J4L</option>
     <option value="8900">銅</option>
     <option value="2700">アルミ</option>
     <option value="7200">鋳鉄</option>
@@ -72,112 +34,72 @@
     <option value="4500">チタン</option>
   </select>
 
-  <table id="pipeTable">
+  <div style="display: flex; gap: 10px; margin-top: 10px;">
+    <div>
+      <label>外径リスト（mm）</label><br>
+      <textarea id="odList" placeholder="1行ずつ入力"></textarea>
+    </div>
+    <div>
+      <label>肉厚リスト（mm）</label><br>
+      <textarea id="thicknessList" placeholder="1行ずつ入力"></textarea>
+    </div>
+  </div>
+
+  <button onclick="processInputs()">⚙️ 計算実行</button>
+  <button onclick="copyWeights()">📋 結果をコピー</button>
+  <span id="copyMsg" style="margin-left: 10px; color: green;"></span>
+
+  <table>
     <thead>
       <tr>
+        <th>#</th>
         <th>外径 (mm)</th>
         <th>肉厚 (mm)</th>
         <th>比重</th>
         <th>理論重量 (kg/m)</th>
       </tr>
     </thead>
-    <tbody id="tableBody">
-      <!-- 初期行 -->
-    </tbody>
+    <tbody id="resultBody"></tbody>
   </table>
 
-  <div>
-    <button onclick="addRow()">＋ 行を追加</button>
-    <button onclick="copyResults()">📋 結果をコピー</button>
-    <span id="copyMessage" class="copy-message"></span>
-  </div>
-
   <script>
-    function addRow() {
-      const tbody = document.getElementById('tableBody');
-      const row = document.createElement('tr');
+    function processInputs() {
+      const ods = document.getElementById('odList').value.trim().split('\n').map(x => parseFloat(x.trim()));
+      const ths = document.getElementById('thicknessList').value.trim().split('\n').map(x => parseFloat(x.trim()));
+      const density = parseFloat(document.getElementById('materialSelect').value);
+      const tbody = document.getElementById('resultBody');
+      tbody.innerHTML = '';
 
-      row.innerHTML = `
-        <td><input type="number" step="0.1" class="od"></td>
-        <td><input type="number" step="0.1" class="thickness"></td>
-        <td><input type="number" step="1" class="density" readonly></td>
-        <td class="weight">-</td>
-      `;
-
-      const inputs = row.querySelectorAll('input');
-      inputs.forEach(input => {
-        input.addEventListener('input', () => calculateRow(row));
-      });
-
-      tbody.appendChild(row);
-      updateRowDensity(row);
-      calculateRow(row);
-    }
-
-    function getGlobalDensity() {
-      const select = document.getElementById('globalMaterial');
-      return parseFloat(select.value);
-    }
-
-    function updateRowDensity(row) {
-      const densityInput = row.querySelector('.density');
-      densityInput.value = getGlobalDensity();
-    }
-
-    function updateAllRows() {
-      const rows = document.querySelectorAll('#tableBody tr');
-      rows.forEach(row => {
-        updateRowDensity(row);
-        calculateRow(row);
-      });
-    }
-
-    function calculateRow(row) {
-      const od = parseFloat(row.querySelector('.od').value);
-      const t = parseFloat(row.querySelector('.thickness').value);
-      const density = parseFloat(row.querySelector('.density').value);
-      const resultCell = row.querySelector('.weight');
-
-      if (isNaN(od) || isNaN(t) || isNaN(density) || t * 2 >= od) {
-        resultCell.textContent = '-';
-        return;
+      const len = Math.min(ods.length, ths.length);
+      for (let i = 0; i < len; i++) {
+        const od = ods[i], t = ths[i];
+        const tr = document.createElement('tr');
+        if (isNaN(od) || isNaN(t) || od <= 0 || t <= 0 || t * 2 >= od) {
+          tr.innerHTML = `<td>${i+1}</td><td>${od || '-'}</td><td>${t || '-'}</td><td>${density}</td><td>エラー</td>`;
+        } else {
+          const id = od - 2 * t;
+          const volume = (Math.PI / 4) * (od ** 2 - id ** 2) * 1e-6;
+          const weight = volume * density;
+          tr.innerHTML = `<td>${i+1}</td><td>${od}</td><td>${t}</td><td>${density}</td><td>${weight.toFixed(3)}</td>`;
+        }
+        tbody.appendChild(tr);
       }
-
-      const id = od - 2 * t;
-      const volume = (Math.PI / 4) * (od ** 2 - id ** 2) * 1e-6;
-      const weight = volume * density;
-
-      resultCell.textContent = weight.toFixed(3);
     }
 
-    function copyResults() {
-      const resultCells = document.querySelectorAll('.weight');
-      const weights = Array.from(resultCells)
-        .map(cell => cell.textContent.trim())
-        .filter(w => w !== '-' && w !== '');
-
+    function copyWeights() {
+      const weights = Array.from(document.querySelectorAll('#resultBody tr td:nth-child(5)'))
+        .map(td => td.textContent)
+        .filter(val => val !== 'エラー' && val !== '-');
       if (weights.length === 0) {
-        showCopyMessage("コピー対象がありません", false);
+        document.getElementById('copyMsg').textContent = 'コピー対象なし';
         return;
       }
-
-      const text = weights.join('\n');
-      navigator.clipboard.writeText(text).then(() => {
-        showCopyMessage("コピーしました！", true);
-      }).catch(() => {
-        showCopyMessage("コピー失敗", false);
+      navigator.clipboard.writeText(weights.join('\n')).then(() => {
+        document.getElementById('copyMsg').textContent = 'コピーしました';
+        setTimeout(() => document.getElementById('copyMsg').textContent = '', 2000);
       });
     }
-
-    function showCopyMessage(message, success) {
-      const msgEl = document.getElementById('copyMessage');
-      msgEl.textContent = message;
-      msgEl.style.color = success ? 'green' : 'red';
-      setTimeout(() => msgEl.textContent = '', 3000);
-    }
-
-    // 初期行
-    addRow();
   </script>
+
 </body>
 </html>
