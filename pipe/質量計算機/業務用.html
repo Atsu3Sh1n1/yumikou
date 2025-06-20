@@ -1,20 +1,61 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <title>鋼管重量計算（外径×肉厚 一括対応）</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>鋼管重量計算（材質一括・コピー・一括入力対応）</title>
   <style>
-    body { font-family: sans-serif; margin: 20px; }
-    textarea { width: 45%; height: 200px; margin-right: 5%; vertical-align: top; }
-    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-    th, td { border: 1px solid #ccc; padding: 6px; text-align: center; }
-    input, select { width: 100%; }
-    button { margin-top: 10px; margin-bottom: 20px; }
+    body {
+      font-family: sans-serif;
+      margin: 30px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 6px;
+      text-align: center;
+    }
+    input, textarea {
+      width: 100%;
+      box-sizing: border-box;
+    }
+    select {
+      font-size: 1rem;
+    }
+    button {
+      margin-top: 10px;
+      margin-right: 10px;
+    }
+    .copy-message {
+      color: green;
+      font-size: 0.9em;
+      margin-left: 10px;
+    }
+    .footer {
+      text-align: center;
+      margin-top: 10px;
+      margin-bottom: 20px;
+      font-size: 0.9em;
+    }
+    h2 {
+      text-align: center;
+      font-size: 1.8em;
+    }
+    textarea {
+      margin-top: 10px;
+      height: 100px;
+    }
   </style>
 </head>
 <body>
-
-  <h2>鋼管重量計算（1mあたり）</h2>
+  <h2>業務用鋼管重量計算</h2>
+  <div class="footer">
+    <a href="https://atsu3sh1n1.github.io/yumikou/" target="_blank">Created by YUMIKOU Inc.</a>
+  </div>
 
   <label>材質（全体）</label>
   <select id="materialSelect">
@@ -37,11 +78,11 @@
   <div style="display: flex; gap: 10px; margin-top: 10px;">
     <div>
       <label>外径リスト（mm）</label><br>
-      <textarea id="odList" placeholder="1行ずつ入力"></textarea>
+      <textarea id="odList" placeholder="1行ずつ入力・一括対応"></textarea>
     </div>
     <div>
       <label>肉厚リスト（mm）</label><br>
-      <textarea id="thicknessList" placeholder="1行ずつ入力"></textarea>
+      <textarea id="thicknessList" ></textarea>
     </div>
   </div>
 
