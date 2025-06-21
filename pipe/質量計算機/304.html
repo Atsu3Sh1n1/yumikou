@@ -1,66 +1,41 @@
 <!DOCTYPE html>
 <html lang="ja">
-
 <head>
-    <meta charset="UTF-8">
-    <title>素材体積変換計算</title>
-    <style>
-        body {
-            font-family: sans-serif;
-            padding: 20px;
-        }
-
-        textarea {
-            width: 140px;
-            height: 400px;
-            font-size: 14px;
-            margin-right: 10px;
-        }
-
-        select,
-        button {
-            font-size: 16px;
-            margin: 5px;
-        }
-
-        .row {
-            display: flex;
-            align-items: start;
-            margin-bottom: 10px;
-        }
-
-        label {
-            font-weight: bold;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>素材体積変換計算</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 20px;
+    }
+    textarea {
+      width: 140px;
+      height: 400px;
+      font-size: 14px;
+      margin-right: 10px;
+    }
+    select, input, button {
+      font-size: 16px;
+      margin: 5px;
+    }
+    .row {
+      display: flex;
+      align-items: start;
+      margin-bottom: 10px;
+    }
+    label {
+      font-weight: bold;
+    }
+  </style>
 </head>
-
 <body>
-    <h2>素材変換（体積から出力重量を算出）</h2>
+  <h2>素材変換（同体積で出力素材の重量を算出）</h2>
 
-    <div>
-        <label>入力素材：</label>
-        <select id="fromDensity">
-            <option value="7850">炭素鋼（STPG）</option>
-            <option value="7930">ステンレス304</option>
-            <option value="7920">ステンレス304L</option>
-            <option value="8000">ステンレス316</option>
-            <option value="7990">ステンレス316L</option>
-            <option value="7750">ステンレス430</option>
-            <option value="7700">ステンレス410</option>
-            <option value="7620">ステンレス329J4L</option>
-            <option value="8900">銅</option>
-            <option value="2700">アルミ</option>
-            <option value="7200">鋳鉄</option>
-            <option value="1400">塩ビ</option>
-            <option value="950">PE</option>
-            <option value="4500">チタン</option>
-        </select>
+  
 
-        <label>出力素材：</label>
-        <select id="toDensity">
-
-            <option value="7850">炭素鋼（STPG）</option>
+    <label>出力素材：</label>
+    <select id="toDensity">
+      <option value="7850">炭素鋼（STPG）</option>
             <option value="7930">ステンレス304</option>
             <option value="7920">ステンレス304L</option>
             <option value="8000">ステンレス316</option>
@@ -78,85 +53,62 @@
             <option value="21000">プラチナ</option>
             <option value="10500">銀（シルバー）</option>
             <option value="8900">銅</option>
-        </select>
+    </select>
+
+    <label>長さ (m)：</label>
+    <input type="number" id="inputLength" value="1.0" step="0.01" min="0.01">
+  </div>
+
+  <div class="row">
+    <div>
+      <label>出力：外径(mm)</label><br>
+      <textarea id="outputOD" placeholder="例: 89.1"></textarea>
     </div>
-
-    <div class="row">
-
-        <div>
-            <label>入力：外径(mm)</label><br>
-            <textarea id="inputOD" placeholder="例: 114.3"></textarea>
-        </div>
-        <div>
-            <label>入力：厚み(mm)</label><br>
-            <textarea id="inputT" placeholder="例: 3.5"></textarea>
-        </div>
-        <div>
-            <label>入力：重さ(kg)</label><br>
-            <textarea id="inputWeight" placeholder="例: 2.5"></textarea>
-        </div>
-        <br>
-        <div>
-            <label>出力：外径(mm)</label><br>
-            <textarea id="outputOD" placeholder="例: 89.1"></textarea>
-        </div>
-        <div>
-            <label>出力：厚み(mm)</label><br>
-            <textarea id="outputT" placeholder="例: 2.8"></textarea>
-        </div>
-        <div>
-            <label>出力：重さ(kg)</label><br>
-            <textarea id="resultWeight" readonly placeholder="換算後の重さ"></textarea>
-        </div>
+    <div>
+      <label>出力：厚み(mm)</label><br>
+      <textarea id="outputT" placeholder="例: 2.8"></textarea>
     </div>
+    <div>
+      <label>出力：重さ(kg)</label><br>
+      <textarea id="resultWeight" readonly placeholder="換算後の重さ"></textarea>
+    </div>
+  </div>
 
-    <button onclick="convert()">変換</button>
+  <button onclick="convert()">変換</button>
 
-    <script>
-        function convert() {
-            const fromDensity = parseFloat(document.getElementById('fromDensity').value);
-            const toDensity = parseFloat(document.getElementById('toDensity').value);
+  <script>
+    function convert() {
+      const fromDensity = parseFloat(document.getElementById('fromDensity').value);
+      const toDensity = parseFloat(document.getElementById('toDensity').value);
+      const length = parseFloat(document.getElementById('inputLength').value) || 1.0;
 
-            const lines = (id) => document.getElementById(id).value.trim().split('\n');
-            const weights = lines('inputWeight');
-            const fromODs = lines('inputOD');
-            const fromTs = lines('inputT');
-            const toODs = lines('outputOD');
-            const toTs = lines('outputT');
+      const toODs = document.getElementById('outputOD').value.trim().split('\n');
+      const toTs = document.getElementById('outputT').value.trim().split('\n');
 
-            const maxLen = Math.max(weights.length, fromODs.length, fromTs.length, toODs.length, toTs.length);
-            const result = [];
+      const result = [];
 
-            for (let i = 0; i < maxLen; i++) {
-                const W = parseFloat(weights[i]);
-                const D1 = parseFloat(fromODs[i]);
-                const t1 = parseFloat(fromTs[i]);
-                const D2 = parseFloat(toODs[i]);
-                const t2 = parseFloat(toTs[i]);
+      for (let i = 0; i < Math.max(toODs.length, toTs.length); i++) {
+        const D2 = parseFloat(toODs[i]);
+        const t2 = parseFloat(toTs[i]);
 
-                if ([W, D1, t1, D2, t2].some(isNaN)) {
-                    result.push('');
-                    continue;
-                }
-
-                const d1 = D1 - 2 * t1;
-                const vol1_mm3 = (Math.PI * (D1 ** 2 - d1 ** 2) / 4); // mm²断面積
-
-                const vol_m3 = (W / fromDensity); // 元体積（m³）
-
-                const d2 = D2 - 2 * t2;
-                const cross2_mm2 = (Math.PI * (D2 ** 2 - d2 ** 2) / 4); // 出力側断面積（mm²）
-
-                const L_m = vol_m3 / (vol1_mm3 / 1e6); // 長さ[m] = 元体積 / 元断面積
-                const vol2_m3 = cross2_mm2 / 1e6 * L_m;
-
-                const newW = vol2_m3 * toDensity;
-                result.push(newW.toFixed(3));
-            }
-
-            document.getElementById('resultWeight').value = result.join('\n');
+        if ([D2, t2].some(isNaN)) {
+          result.push('');
+          continue;
         }
-    </script>
-</body>
 
+        // 元の断面積は同体積前提 → 入力側の断面積は出力側と同じ体積を仮定（長さ共通）
+        // → 元体積 = 入力比重 / 出力比重 × 出力体積
+
+        const d2 = D2 - 2 * t2;
+        const cross2_mm2 = (Math.PI * (D2 ** 2 - d2 ** 2) / 4);
+        const vol2_m3 = cross2_mm2 / 1e6 * length;
+        const newW = vol2_m3 * toDensity;
+
+        result.push(newW.toFixed(3));
+      }
+
+      document.getElementById('resultWeight').value = result.join('\n');
+    }
+  </script>
+</body>
 </html>
