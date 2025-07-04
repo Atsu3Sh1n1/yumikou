@@ -1,0 +1,134 @@
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>カメラ性能偽装検出</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+        #drop-area {
+            border: 2px dashed #ccc;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 20px;
+            background-color: #fff;
+        }
+        #drop-area.dragover {
+            background-color: #e1e1e1;
+        }
+        #result {
+            white-space: pre-wrap;
+            background-color: #fff;
+            padding: 10px;
+            border: 1px solid #ccc;
+            display: none;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>カメラ性能偽装検出</h1>
+    <div id="drop-area">
+        ここに動画または画像ファイルをドラッグ＆ドロップ<br>
+        または
+        <input type="file" id="file-input" accept="image/*,video/*">
+    </div>
+    <button id="analyze-btn" disabled>分析開始</button>
+    <div id="result"></div>
+
+    <script>
+        const dropArea = document.getElementById('drop-area');
+        const fileInput = document.getElementById('file-input');
+        const analyzeBtn = document.getElementById('analyze-btn');
+        const resultDiv = document.getElementById('result');
+
+        // ドラッグ＆ドロップのイベント
+        dropArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropArea.classList.add('dragover');
+        });
+        dropArea.addEventListener('dragleave', () => {
+            dropArea.classList.remove('dragover');
+        });
+        dropArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropArea.classList.remove('dragover');
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                fileInput.files = files;
+                analyzeBtn.disabled = false;
+            }
+        });
+
+        // ファイル選択時のイベント
+        fileInput.addEventListener('change', () => {
+            if (fileInput.files.length > 0) {
+                analyzeBtn.disabled = false;
+            }
+        });
+
+        // 分析ボタンのクリックイベント
+        analyzeBtn.addEventListener('click', async () => {
+            const file = fileInput.files[0];
+            if (!file) return;
+
+            analyzeBtn.disabled = true;
+            analyzeBtn.textContent = '分析中...';
+            resultDiv.style.display = 'none';
+
+            const formData = new FormData();
+            formData.append('file', file);
+
+            try {
+                const response = await fetch('http://localhost:5000/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+                const result = await response.json();
+
+                if (response.ok) {
+                    let output = '';
+                    result.forEach(item => {
+                        if (item.section) {
+                            output += `=== ${item.section} ===\n`;
+                        } else if (item.error) {
+                            output += `エラー: ${item.error}\n`;
+                        } else {
+                            for (const [key, value] of Object.entries(item)) {
+                                output += `${key}: ${JSON.stringify(value, null, 2)}\n`;
+                            }
+                        }
+                    });
+                    resultDiv.textContent = output;
+                    resultDiv.style.display = 'block';
+                } else {
+                    resultDiv.textContent = `エラー: ${result.error}`;
+                    resultDiv.style.display = 'block';
+                }
+            } catch (error) {
+                resultDiv.textContent = `エラー: ${error.message}`;
+                resultDiv.style.display = 'block';
+            }
+
+            analyzeBtn.disabled = false;
+            analyzeBtn.textContent = '分析開始';
+        });
+    </script>
+</body>
+</html>
