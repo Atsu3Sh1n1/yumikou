@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>設計上の安全マージンに関する注意事項</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="index, follow" />
+    <meta name="description" content="弓工" />
+  <style>
+    body {
+      font-family: "メイリオ", sans-serif;
+      line-height: 1.8;
+      padding: 20px;
+      background-color: #f9f9f9;
+      font-size: 18px; /* 基本の文字サイズを拡大 */
+    }
+    .notice-box {
+      background-color: #fff3cd;
+      border: 1px solid #ffeeba;
+      padding: 24px;
+      border-radius: 10px;
+    }
+    h2 {
+      color: #856404;
+      font-size: 22px;
+      margin-bottom: 16px;
+    }
+    ul {
+      padding-left: 24px;
+    }
+    li {
+      margin-bottom: 12px;
+    }
+    .footer {
+      text-align: center;
+      font-size: 14px;
+      margin-top: 20px;
+      padding: 1rem;
+    }
+
+    /* スマホ用の追加調整 */
+    @media screen and (max-width: 480px) {
+      body {
+        font-size: 20px;
+        padding: 16px;
+      }
+      h2 {
+        font-size: 24px;
+      }
+      .notice-box {
+        padding: 20px;
+      }
+      .footer {
+        font-size: 13px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="notice-box">
+    <h2>【設計上の注意事項と安全マージンに関する補足】</h2>
+    <p>
+      本設計（マコト君１号）では、足場構造の安全性および制度的安定性を確保するために、以下の方針に基づき係数および高さ条件を設定しています。
+    </p>
+    <ul>
+      <li>
+        一般的な足場構造では、実務上の使用限界高さは <strong>40m 程度</strong>とされており、それ以上の設計には特段の安全対策が求められます。
+      </li>
+      <li>
+        限界高さをそのまま設計基準とした場合、風荷重・変形・積載などの許容値に対し <strong>余裕が小さくなり、安全率が下がる</strong>可能性があります。
+      </li>
+      <li>
+        よって、本設計では <strong>仮想的により高い高さ60mに基づく補正係数3.24</strong>を適用し、制度的に余裕を持った設計としています。（実際には200m/8まで考慮）
+      </li>
+      <li>
+        この係数は、高さによる風荷重や構造精度の低下リスクを考慮し、過小評価を防ぐための <strong>安全マージンの一環として意図的に採用</strong>しています。
+      </li>
+    </ul>
+    <p>
+      以上の方針により、実際の施工高さが40m以下であっても、より高負荷条件を想定することで、安全性と制度性を高めた設計としています。
+    </p>
+  </div>
+
+  <footer class="footer">
+    <a href="https://atsu3sh1n1.github.io/yumikou/" style="color:#000; text-decoration:none;">
+      有限会社弓工 All rights reserved.
+    </a>
+  </footer>
+</body>
+</html>

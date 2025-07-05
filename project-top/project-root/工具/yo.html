@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>経費チェックリスト</title>
+  <style>
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      max-width: 100%;
+      font-family: sans-serif;
+
+    }
+
+
+
+
+    h2 {
+      color: #2c3e50;
+      margin: 6px;
+      text-align: center;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      padding: 6px;
+      box-sizing: border-box;
+      max-width: 100%;
+    }
+
+    .table-wrapper {
+      overflow-x: auto;
+      margin: 0;
+      /* 以下を追加 */
+      flex-grow: 0;
+      /* スペースを占有しないように */
+      width: 100%;
+      /* コンテナ幅いっぱいに */
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      min-width: 300px;
+    }
+
+    th,
+    td {
+      border: 1px solid #999;
+      padding: 6px;
+      text-align: left;
+      font-size: 0.95em;
+    }
+
+
+    input[type="number"] {
+      width: 50px;
+      padding: 2px;
+      font-size: 1em;
+      
+    }
+
+    .narrow-cell {
+      width: 1em;
+      min-width: 1em;
+      max-width: 1em;
+      white-space: normal;
+      word-break: break-all;
+      text-align: center;
+      vertical-align: middle;
+      font-weight: bold;
+    }
+
+    .total-display {
+      text-align: right;
+      font-size: 1.2em;
+      font-weight: bold;
+      padding: 10px;
+    }
+
+    #price-tig-welder {
+      text-align: right;
+      font-weight: bold;
+      color: #2c3e50;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h2>工具/消耗品/経費</h2>
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>分類</th>
+            <th>項目</th>
+
+            <th>数量</th>
+            <th>金額</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- 工具・機材類 -->
+          <tr>
+            <td rowspan="24" class="narrow-cell">工<br>具<br>機<br>材</td>
+            <td>TIG溶接機 一式<br>トーチ、トーチケーブル、アースクランプ、アースケーブル、各一次線、レギュレーター(アルゴンガス除く) /月</td>
+            <td><input type="number" pattern="[0-9]*" min="0"></td>
+            <td id="price-tig-welder">13,000</td>
+          </tr>
+
+          <tr>
+            <td>Tig用ケーブル20m /月</td>
+            <td><input type="number" pattern="[0-9]*" min="0"></td>
+            <td id="price-tig-welder">1,400</td>
+          </tr>
+
+          <tr>
+            <td>溶接用キャブタイヤケーブル WCT38sq×20m /月</td>
+            <td><input type="number" pattern="[0-9]*" min="0"></td>
+            <td id="price-tig-welder">1,100</td>
+          </tr>
+
+          <tr>
+            <td>アースクランプ /月</td>
+            <td><input type="number" pattern="[0-9]*" min="0"></td>
+            <td id="price-tig-welder">300</td>
+          </tr>
+
+
+          <tr>
+            <td>Tig用トーチ /月</td>
+            <td><input type="number" pattern="[0-9]*" min="0"></td>
+            <td id="price-tig-welder">800</td>
+          </tr>
+
+
+          <tr>
+            <td>アーク溶接機一式 /月</td>
+            <td><input type="number" pattern="[0-9]*" min="0"></td>
+            <td id="price-tig-welder">7,000</td>
+          </tr>
+
+          <tr>
+            <td>アーク用ホルダー /月</td>
+            <td><input type="number" pattern="[0-9]*" min="0"></td>
+            <td id="price-tig-welder">320</td>
+          </tr>
+
+          <tr>
+            <td>ディスクグラインダー(100mm/125mm) /月</td>
+            <td><input type="number" pattern="[0-9]*" min="0"></td>
+            <td id="price-tig-welder">500</td>
+          </tr>
+
+          <tr>
+            <td>ディスクグラインダー(180mm) /月</td>
+            <td><input type="number" pattern="[0-9]*" min="0"></td>
+            <td id="price-tig-welder">800</td>
+          </tr>
+
+
+
+          <tr>
+            <td>ベベル加工用機器（開先加工機・やすり）/月</td>
+            <td><input type="number" pattern="[0-9]*" min="0"></td>
+            <td id="price-tig-welder">9,800</td>
+          </tr>
+
+          <tr>
+            <td>インパクトドライバー /月</td>
+            <td><input type="number" pattern="[0-9]*" min="0"></td>
+            <td id="price-tig-welder">850</td>
+          </tr>
+
+          <tr>
+            <td>ハンマードリル /月</td>
+            <td><input type="number" pattern="[0-9]*" min="0"></td>
+            <td id="price-tig-welder">1,000</td>
+          </tr>
+
+          <tr>
+            <td>ポータブルバンドソー /月</td>
+            <td><input type="number" pattern="[0-9]*" min="0"></td>
+            <td id="price-tig-welder">1,400</td>
+          </tr>
+
+
+          <tr>
+            <td>バンドソー 小型 /月</td>
+            <td><input type="number" pattern="[0-9]*" min="0"></td>
+            <td id="price-tig-welder">2,700</td>
+          </tr>
+
+          <tr>
+            <td>バンドソー 大型 /月</td>
+            <td><input type="number" pattern="[0-9]*" min="0"></td>
+            <td id="price-tig-welder">3,700</td>
+          </tr>
+
+          <tr>
+            <td>スパナ類1本 /月</td>
+            <td><input type="number" pattern="[0-9]*" min="0"></td>
+            <td id="price-tig-welder">150</td>
+          </tr>
+
+          <tr>
+            <td>チェーンブロック0.5t /月</td>
+            <td><input type="number" pattern="[0-9]*" min="0"></td>
+            <td id="price-tig-welder">900</td>
+          </tr>
+
+          <tr>
+            <td>チェーンブロック1t /月</td>
+            <td><input type="number" pattern="[0-9]*" min="0"></td>
+            <td id="price-tig-welder">1,000</td>
+          </tr>
+
+          <tr>
+            <td>チェーンブロック3t /月</td>
+            <td><input type="number" pattern="[0-9]*" min="0"></td>
+            <td id="price-tig-welder">1,300</td>
+          </tr>
+
+          <tr>
+            <td>チェーンブロック5t /日</td>
+            <td><input type="number" pattern="[0-9]*" min="0"></td>
+            <td id="price-tig-welder">1,600</td>
+          </tr>
+
+          <tr>
+            <td>レバーブロック0.5t /月</td>
+            <td><input type="number" pattern="[0-9]*" min="0"></td>
+            <td id="price-tig-welder">850</td>
+          </tr>
+
+          <tr>
+            <td>レバーブロック1t /月</td>
+            <td><input type="number" pattern="[0-9]*" min="0"></td>
+            <td id="price-tig-welder">1,100</td>
+          </tr>
+          <tr>
+            <td>消火器６型 /月</td>
+            <td><input type="number" pattern="[0-9]*" min="0"></td>
+            <td id="price-tig-welder">200</td>
+          </tr>
+
+          <tr>
+            <td>ガス切断一式 /月</td>
+            <td><input type="number" pattern="[0-9]*" min="0"></td>
+            <td id="price-tig-welder">2,000</td>
+          </tr>
+
+
+
+          <!-- 消耗品 -->
+
+
+
+          <tr>
+            <td rowspan="17" class="narrow-cell">消<br>耗<br>品</td>
+            <td>初回消耗品(Tig 鉄用)<br>
+              ．溶接棒(TG-S50/1kg) ¥1,100<br>
+              ．タングステン(3本) ¥2,000<br>
+              ．コレット＆ボディ各1個 ¥1,300<br>
+              ．バックキャップ¥900<br>
+              ．セラミックノズル¥700<br>
+              ．ワイヤーブラシJ型1本 ¥500<br>
+              ．溶接用皮手袋1双組 ¥1,300<br>
+              ．自動遮光面・手持ち面・安全面 ¥3,500<br>
+            <td><input type="number" pattern="[0-9]*" min="0"></td>
+            <td id="price-tig-welder">11,300</td>
+          </tr>
+
+          <tr>
+            <td>初回消耗品(ステンレス用)<br>
+              ．溶接棒(308/1kg) ¥3,000<br>
+              ．タングステン(3本) ¥2,000<br>
+              ．ガスレンズコレットボディ 1,200円/個<br>
+              ．ガスレンズ 1000円/個<br>
+              ．インシュレーター 800円/個<br>
+              ．ステンレス用ブラシJ型1本 800円<br>
+              ．溶接用皮手袋 ¥1,300<br>
+              ．自動遮光面・手持ち面・安全面 ¥3,500<br>
+            <td><input type="number" pattern="[0-9]*" min="0"></td>
+            <td id="price-tig-welder">13,600</td>
+          </tr>
+
+          <tr>
+            <td>アルゴンガス47L(7立米)1本</td>
+            <td><input type="number" pattern="[0-9]*" min="0"></td>
+            <td id="price-tig-welder">6,800</td>
+          </tr>
+
+          <tr>
+            <td>アルゴンガス20L(3立米)1本</td>
+            <td><input type="number" pattern="[0-9]*" min="0"></td>
+            <td id="price-tig-welder">4,500</td>
+          </tr>
+
+          <tr>
+            <td>アルゴンガス10L(1.5立米)1本</td>
+            <td><input type="number" pattern="[0-9]*" min="0"></td>
+            <td id="price-tig-welder">2,750</td>
+          </tr>
+          <tr>
+            <td>アセチレン・酸素セット</td>
+            <td><input type="number" pattern="[0-9]*" min="0"></td>
+            <td id="price-tig-welder">7,000</td>
+          </tr>
+
+          <tr>
+            <td>溶接棒(TG-S50/5kg) Tig鉄用</td>
+            <td><input type="number" pattern="[0-9]*" min="0"></td>
+            <td id="price-tig-welder">4,800</td>
+          </tr>
+          <tr>
+            <td>溶接棒(Z-44ぜロード/20kg) アーク鉄用</td>
+            <td><input type="number" pattern="[0-9]*" min="0"></td>
+            <td id="price-tig-welder">14,000</td>
+          </tr>
+
+          <tr>
+            <td>溶接棒(TGI308/5kg) Tigステンレス用</td>
+            <td><input type="number" pattern="[0-9]*" min="0"></td>
+            <td id="price-tig-welder">15,000</td>
+          </tr>
+
+          <tr>
+            <td>ワイヤーブラシ鉄用</td>
+            <td><input type="number" pattern="[0-9]*" min="0"></td>
+            <td id="price-tig-welder">500</td>
+          </tr>
+
+          <tr>
+            <td>ステンレス用ブラシ・ペーパー・耐水ペーパー *1本/5枚</td>
+            <td><input type="number" pattern="[0-9]*" min="0"></td>
+            <td id="price-tig-welder">700</td>
+          </tr>
+
+
+          <tr>
+            <td>消火器６型</td>
+            <td><input type="number" pattern="[0-9]*" min="0"></td>
+            <td id="price-tig-welder">7,200</td>
+          </tr>
+
+          <tr>
+            <td>溶接用キャブタイヤケーブル WCT38sq×10m /本</td>
+            <td><input type="number" pattern="[0-9]*" min="0"></td>
+            <td id="price-tig-welder">39,000</td>
+          </tr>
+
+          <tr>
+            <td>アーク用ホルダー2.5mケーブル付き</td>
+            <td><input type="number" pattern="[0-9]*" min="0"></td>
+            <td id="price-tig-welder">19,000</td>
+          </tr>
+
+          <tr>
+            <td>水バケツ</td>
+            <td><input type="number" pattern="[0-9]*" min="0"></td>
+            <td id="price-tig-welder">1,200</td>
+          </tr>
+
+
+
+          <tr>
+            <td>ディスク砥石・フラップ・切断砥石 *10枚</td>
+            <td><input type="number" pattern="[0-9]*" min="0"></td>
+            <td id="price-tig-welder">2,000</td>
+          </tr>
+
+          <tr>
+            <td>パージシート・アルミテープ（裏波処理用）</td>
+            <td><input type="number" pattern="[0-9]*" min="0"></td>
+            <td id="price-tig-welder">1,800</td>
+          </tr>
+
+          <!-- 仮設・搬入 -->
+          <tr>
+            <td rowspan="3" class="narrow-cell">搬<br>入<br>・<br>仮<br>設</td>
+            <td>脚立・足場・可搬ステージ・踏み板</td>
+            <td><input type="number" pattern="[0-9]*" min="0"></td>
+            <td id="price-tig-welder">25,000</td>
+          </tr>
+          <tr>
+            <td>工具・材料の運搬車（軽トラなど）</td>
+            <td><input type="number" pattern="[0-9]*" min="0"></td>
+            <td id="price-tig-welder">30,000</td>
+          </tr>
+          <tr>
+            <td>ブルーシート・養生・墨出し機材</td>
+            <td><input type="number" pattern="[0-9]*" min="0"></td>
+            <td id="price-tig-welder">8,000</td>
+          </tr>
+
+          <!-- 管理系 -->
+          <tr>
+            <td rowspan="3" class="narrow-cell">管<br>理<br>費<br>・<br>そ<br>の<br>他</td>
+            <td>通勤・交通費（ガソリン代、高速など）</td>
+            <td><input type="number" pattern="[0-9]*" min="0"></td>
+            <td id="price-tig-welder">5,000</td>
+          </tr>
+          <tr>
+            <td>現場管理費・報告書・安全書類作成</td>
+            <td><input type="number" pattern="[0-9]*" min="0"></td>
+            <td id="price-tig-welder">10,000</td>
+          </tr>
+          <tr>
+            <td>労災保険・対人賠償・作業員保険料</td>
+            <td><input type="number" pattern="[0-9]*" min="0"></td>
+            <td id="price-tig-welder">12,000</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="total-display" id="total">合計: 0 円</div>
+    <p style="text-align: right;">（課税対象外）</p>
+  </div>
+
+  <script>
+
+
+    // 合計金額を計算
+    function calculateTotal() {
+      let total = 0;
+      const rows = document.querySelectorAll("tbody tr");
+      rows.forEach(row => {
+        const tds = row.querySelectorAll("td");
+        if (tds.length < 3) return;
+
+        const input = tds[tds.length - 2].querySelector("input");
+        const priceText = tds[tds.length - 1].textContent.trim().replace(/,/g, '');
+
+        const price = parseInt(priceText, 10);
+        const quantity = parseInt(input?.value || 0, 10);
+
+        if (!isNaN(price) && !isNaN(quantity)) {
+          total += price * quantity;
+        }
+      });
+
+      document.getElementById("total").textContent = `合計: ${total.toLocaleString()} 円`;
+    }
+
+
+    // 見積もりデータを取得
+    function getEstimateData() {
+      const totalText = document.getElementById('total').textContent;
+      const match = totalText.match(/合計:\s*([\d,]+)\s*円/);
+      const subtotal = match ? parseInt(match[1].replace(/,/g, ''), 10) : 0;
+      return { subtotal };
+    }
+
+    document.querySelectorAll('input[type="number"]').forEach(input => {
+      input.addEventListener("input", calculateTotal);
+    });
+
+
+    function getEstimateData() {
+      const totalText = document.getElementById('total').textContent;
+      const match = totalText.match(/合計:\s*([\d,]+)\s*円/);
+      const subtotal = match ? parseInt(match[1].replace(/,/g, ''), 10) : 0;
+      return { subtotal };
+    }
+
+
+
+  </script>
+
+</body>
+
+</html>

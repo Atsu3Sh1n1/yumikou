@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <title>作業日報フォーム</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Yu Gothic", "Meiryo", sans-serif;
+            margin: 40px;
+            font-size: 12pt;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            top: -4%;
+            left: -60%;
+            width: 180vw;
+            height: 180vh;
+            background-image: url('yumikou.png');
+            background-repeat: repeat;
+            background-size: 600px 200px;
+            opacity: 0.03;
+            transform: rotate(-10deg);
+            transform-origin: center;
+            z-index: -1;
+            pointer-events: none;
+            background-attachment: fixed;
+        }
+
+        h1,
+        h2 {
+            text-align: center;
+            font-size: 40px;
+            margin-bottom: 0px;
+            margin-top: 0px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        th,
+        td {
+            border: 1px solid #333;
+            font-size: 22px;
+            padding: 4px;
+            text-align: left;
+            /* 左寄せ */
+            vertical-align: middle;
+        }
+
+        th {
+            width: 25%;
+            background-color: #f0f0f0;
+        }
+
+        input[type="text"],
+        input[type="date"],
+        input[type="number"],
+        textarea {
+            width: 100%;
+            font-size: 22px;
+            text-align: left;
+            /* 左寄せ */
+            border: none;
+            background-color: transparent;
+            box-sizing: border-box;
+            padding: 4px;
+        }
+
+        input:focus,
+        textarea:focus {
+            outline: none;
+        }
+
+        textarea {
+            background-color: #dffdff;
+            resize: vertical;
+        }
+
+        .section-title {
+            font-weight: bold;
+            padding: 4px;
+            margin-top: 20px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 6px 12px;
+            background: #22d7e3;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 12pt;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .btn:hover {
+            background: #1bc0cf;
+        }
+
+        .footer {
+            text-align: center;
+            font-size: 16px;
+            margin-top: -30px;
+            padding: 10px;
+        }
+
+        .yumikou {
+            text-align: center;
+            font-size: 12px;
+            margin-top: -30px;
+            padding: 25px;
+        }
+
+        /* 特殊: 本日の作業人数のヘッダー行 */
+        #workerTable th {
+            text-align: center;
+        }
+
+        /* 本日の作業人数の人数欄 */
+        #workerTable td input[type="number"] {
+            width: 90%;
+            text-align: center;
+            padding: 5px;
+        }
+
+        /* 本日の作業内容等のテキストエリア */
+        textarea {
+            font-size: 20px;
+            line-height: 1.5;
+        }
+
+        /* workerTable操作欄 */
+        #workerTable tbody td:last-child {
+            border: none;
+            text-align: center;
+            padding: 0;
+        }
+
+        #workerTable td:last-child .btn {
+            padding: 4px 8px;
+            line-height: 1;
+        }
+
+        #app7 {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+        }
+
+        #randomCode {
+            font-size: 16px;
+        }
+
+        .section-title {
+            font-weight: bold;
+            padding: 4px;
+            margin-top: 20px;
+            font-size: 22px;
+            /* ← お好みのサイズに調整してください */
+        }
+
+        #totalWorkers {
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 0px;
+            margin-top: 0px;
+            font-size: 20px;
+            /* ← お好みのサイズに調整してください */
+        }
+    </style>
+</head>
+
+<body>
+    <span id="randomCode"></span></label><br>
+
+
+
+    <h1>報告書</h1>
+
+
+    <form id="reportForm">
+
+        <div class="yumikou">
+            <a href="https://atsu3sh1n1.github.io/yumikou/" target="_blank">Created by YUMIKOU Inc.</a>
+        </div>
+
+        <table>
+            <tr>
+                <th>報告日</th>
+                <td><input type="date" name="date"></td>
+            </tr>
+            <tr>
+                <th>工事名</th>
+                <td><input type="text" name="project"></td>
+            </tr>
+            <tr>
+                <th>作業場所</th>
+                <td><input type="text" name="location"></td>
+            </tr>
+            <tr>
+                <th>作業責任者</th>
+                <td><input type="text" name="supervisor"></td>
+            </tr>
+        </table>
+
+        <div class="section-title">1. 本日の作業人数</div>
+        <table
+            style="width: 100%; border-collapse: collapse; margin-bottom: 20px; table-layout: fixed; text-align: center;">
+            <colgroup>
+                <col style="width: 10%;">
+                <col style="width: 10%;">
+                <col style="width: 10%;">
+                <col style="width: 10%;">
+                <col style="width: 10%;">
+                <col style="width: 10%;">
+                <col style="width: 10%;">
+                <col style="width: 10%;">
+                <col style="width: 10%;">
+                <col style="width: 10%;">
+            </colgroup>
+            <thead>
+                <tr>
+                    <th style="vertical-align: middle; height: 40px; text-align: center;">
+                        <input type="text" name="role_name1" value="事務"
+                            style="width: 100%; text-align: center; border:none; background:transparent; font-weight:bold;">
+                    </th>
+                    <th style="vertical-align: middle; text-align: center;">
+                        <input type="text" name="role_name2" value="監督"
+                            style="width: 100%; text-align: center; border:none; background:transparent; font-weight:bold;">
+                    </th>
+                    <th style="vertical-align: middle; text-align: center;">
+                        <input type="text" name="role_name3" value="足場"
+                            style="width: 100%; text-align: center; border:none; background:transparent; font-weight:bold;">
+                    </th>
+                    <th style="vertical-align: middle; text-align: center;">
+                        <input type="text" name="role_name4" value="配管"
+                            style="width: 100%; text-align: center; border:none; background:transparent; font-weight:bold;">
+                    </th>
+                    <th style="vertical-align: middle; text-align: center;">
+                        <input type="text" name="role_name5" value="溶接"
+                            style="width: 100%; text-align: center; border:none; background:transparent; font-weight:bold;">
+                    </th>
+                    <th style="vertical-align: middle; text-align: center;">
+                        <input type="text" name="role_name6" value="塗装"
+                            style="width: 100%; text-align: center; border:none; background:transparent; font-weight:bold;">
+                    </th>
+                    <th style="vertical-align: middle; text-align: center;">
+                        <input type="text" name="role_name7" value="保温"
+                            style="width: 100%; text-align: center; border:none; background:transparent; font-weight:bold;">
+                    </th>
+                    <th style="vertical-align: middle; text-align: center;">
+                        <input type="text" name="role_name8" value="電気"
+                            style="width: 100%; text-align: center; border:none; background:transparent; font-weight:bold;">
+                    </th>
+                    <th style="vertical-align: middle; text-align: center;">
+                        <input type="text" name="role_name9" value="据付"
+                            style="width: 100%; text-align: center; border:none; background:transparent; font-weight:bold;">
+                    </th>
+                    <th style="vertical-align: middle; text-align: center;">
+                        <input type="text" name="role_name10" value="仕上げ"
+                            style="width: 100%; text-align: center; border:none; background:transparent; font-weight:bold;">
+                    </th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr>
+                    <td><input type="number" name="role1" min="0"
+                            style="width: 90%; text-align: center; vertical-align: middle; padding: 5px;"></td>
+                    <td><input type="number" name="role2" min="0"
+                            style="width: 90%; text-align: center; vertical-align: middle; padding: 5px;"></td>
+                    <td><input type="number" name="role3" min="0"
+                            style="width: 90%; text-align: center; vertical-align: middle; padding: 5px;"></td>
+                    <td><input type="number" name="role4" min="0"
+                            style="width: 90%; text-align: center; vertical-align: middle; padding: 5px;"></td>
+                    <td><input type="number" name="role5" min="0"
+                            style="width: 90%; text-align: center; vertical-align: middle; padding: 5px;"></td>
+                    <td><input type="number" name="role6" min="0"
+                            style="width: 90%; text-align: center; vertical-align: middle; padding: 5px;"></td>
+                    <td><input type="number" name="role7" min="0"
+                            style="width: 90%; text-align: center; vertical-align: middle; padding: 5px;"></td>
+                    <td><input type="number" name="role8" min="0"
+                            style="width: 90%; text-align: center; vertical-align: middle; padding: 5px;"></td>
+                    <td><input type="number" name="role9" min="0"
+                            style="width: 90%; text-align: center; vertical-align: middle; padding: 5px;"></td>
+                    <td><input type="number" name="role10" min="0"
+                            style="width: 90%; text-align: center; vertical-align: middle; padding: 5px;"></td>
+                </tr>
+            </tbody>
+        </table>
+        <div id="totalWorkers" style="text-align: center; font-weight: bold; margin-bottom: 20px;">
+            総工数：0人日
+        </div>
+
+
+
+        <div class="section-title">2. 本日の作業内容</div>
+        <textarea rows="4" name="work_content" placeholder="例：配管継続、北側〇〇2Fから3Fへ移動"></textarea>
+
+        <div class="section-title">3. 進捗状況や変更</div>
+        <textarea rows="4" name="progress"
+            placeholder="例：配管、サポート取付（メーター数、溶接リング数、サポート材の総重量については別紙スプレッドシートにて提出済み）一部、図面のルート変更あり。別紙提出済み(管理番号:00000)"></textarea>
+
+        <div class="section-title">4. 安全・品質管理・注意事項</div>
+        <textarea rows="4" name="safety" placeholder="例：資材仮置き場を他社合同での最適化提案。搬入口、重さ、大きさ、量などから計算し、効率の良い配置の指示"></textarea>
+
+        <div class="section-title">5. 明日の重機/通行止め予定</div>
+        <table>
+            <tr>
+                <th>重機使用希望時間</th>
+                <td><input type="text" name="photo1" placeholder="例：10:00〜10:45（クレーン）西側通路通行止め同じ"></td>
+            </tr>
+            <tr>
+                <th>足場組立予定箇所</th>
+                <td><input type="text" name="photo2" placeholder="例：11:00〜14:30 〇〇北側通行止め予定"></td>
+            </tr>
+            <tr>
+                <th>その他</th>
+                <td><input type="text" name="machine_hours"></td>
+            </tr>
+
+        </table>
+
+
+
+        <div class="section-title">6. 明日の作業内容</div>
+        <table id="workerTable">
+            <thead>
+                <tr>
+                    <th style="width: 25%; text-align: center;">班名</th>
+                    <th style="width: 25%; text-align: center;">場所</th>
+                    <th style="width: 45%; text-align: center;">作業内容</th>
+                    <th style="width: 3%; "></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><input type="text" name="name[]" class="worker-input"></td>
+                    <td><input type="text" name="company[]" class="worker-input"></td>
+                    <td><input type="text" name="task[]" class="worker-task" placeholder="例：各所、配管継続"></td>
+                    <td><button type="button" class="btn" onclick="removeRow(this)">✕</button></td>
+                </tr>
+                <tr>
+                    <td><input type="text" name="name[]" class="worker-input"></td>
+                    <td><input type="text" name="company[]" class="worker-input"></td>
+                    <td><input type="text" name="task[]" class="worker-task"></td>
+                    <td><button type="button" class="btn" onclick="removeRow(this)">✕</button></td>
+                </tr>
+                <tr>
+                    <td><input type="text" name="name[]" class="worker-input"></td>
+                    <td><input type="text" name="company[]" class="worker-input"></td>
+                    <td><input type="text" name="task[]" class="worker-task"></td>
+                    <td><button type="button" class="btn" onclick="removeRow(this)">✕</button></td>
+                </tr>
+            </tbody>
+        </table>
+
+    </form>
+    <button type="button" class="btn" onclick="addWorker()">＋ 作業者を追加</button>
+    <br> <br> <br>
+
+
+
+
+    <div style="text-align: center;">
+        <button type="button" class="btn" onclick="window.print()">PDF出力</button>
+    </div>
+    <br>
+
+
+
+
+    <script>
+        const form = document.getElementById("reportForm");
+
+        // 作業者行追加
+        function addWorker() {
+            const table = document.getElementById("workerTable").getElementsByTagName("tbody")[0];
+            const newRow = table.insertRow();
+            newRow.innerHTML = `
+            <td><input type="text" name="name[]" class="worker-input"></td>
+            <td><input type="text" name="company[]" class="worker-input"></td>
+            <td><input type="text" name="task[]" class="worker-task"></td>
+            <td><button type="button" class="btn" onclick="removeRow(this)">✕</button></td>
+        `;
+        }
+
+        // 作業者行削除
+        function removeRow(button) {
+            const row = button.parentElement.parentElement;
+            row.remove();
+        }
+
+        // 総工数更新
+        function updateTotalWorkers() {
+            let total = 0;
+            for (let i = 1; i <= 10; i++) {
+                const input = document.querySelector(`[name="role${i}"]`);
+                if (input && input.value) {
+                    total += parseInt(input.value) || 0;
+                }
+            }
+            const display = `総工数：${total}人日`;
+            document.getElementById("totalWorkers").textContent = display;
+
+            // 保存
+            localStorage.setItem("totalWorkers", total);
+        }
+
+        // 管理番号生成（秒まで）
+        function generateSerialNumber() {
+            const now = new Date();
+            const yyyy = now.getFullYear();
+            const mm = String(now.getMonth() + 1).padStart(2, '0');
+            const dd = String(now.getDate()).padStart(2, '0');
+            const HH = String(now.getHours()).padStart(2, '0');
+            const MM = String(now.getMinutes()).padStart(2, '0');
+            const SS = String(now.getSeconds()).padStart(2, '0');
+            return `No.${yyyy}${mm}${dd}-${HH}${MM}${SS}`;
+        }
+
+        // フォームデータ保存
+        function saveFormData() {
+            const formData = new FormData(form);
+            const entries = {};
+            for (const [key, value] of formData.entries()) {
+                if (!entries[key]) {
+                    entries[key] = value;
+                } else {
+                    if (!Array.isArray(entries[key])) {
+                        entries[key] = [entries[key]];
+                    }
+                    entries[key].push(value);
+                }
+            }
+            localStorage.setItem("dailyReportData", JSON.stringify(entries));
+        }
+
+        // フォームデータ復元
+        function restoreFormData() {
+            const savedData = localStorage.getItem("dailyReportData");
+            if (!savedData) return;
+
+            const data = JSON.parse(savedData);
+            for (const key in data) {
+                if (key === "date") continue;  // 日付は復元しない
+
+                const elements = form.elements[key];
+                if (!elements) continue;
+
+                if (Array.isArray(data[key])) {
+                    const values = data[key];
+                    const fieldGroup = form.querySelectorAll(`[name="${key}"]`);
+                    while (fieldGroup.length < values.length) {
+                        addWorker();
+                    }
+                    form.querySelectorAll(`[name="${key}"]`).forEach((el, idx) => {
+                        el.value = values[idx] || "";
+                    });
+                } else {
+                    const el = form.elements[key];
+                    if (el) el.value = data[key];
+                }
+            }
+
+            // 総工数の復元
+            const savedTotal = localStorage.getItem("totalWorkers");
+            if (savedTotal !== null) {
+                document.getElementById("totalWorkers").textContent = `総工数：${savedTotal}人日`;
+            }
+
+            updateTotalWorkers();
+        }
+
+        // 初期化
+        window.addEventListener("DOMContentLoaded", () => {
+            restoreFormData();
+            updateTotalWorkers();
+
+            // 日付自動セット
+            const dateInput = form.elements["date"];
+            if (dateInput && !dateInput.value) {
+                const today = new Date();
+                const yyyy = today.getFullYear();
+                const mm = String(today.getMonth() + 1).padStart(2, '0');
+                const dd = String(today.getDate()).padStart(2, '0');
+                dateInput.value = `${yyyy}-${mm}-${dd}`;
+            }
+
+            // 管理番号生成
+            const serialNumber = generateSerialNumber();
+            document.getElementById("randomCode").textContent = serialNumber;
+
+            // 総工数イベント登録（10行）
+            for (let i = 1; i <= 10; i++) {
+                const input = document.querySelector(`[name="role${i}"]`);
+                if (input) {
+                    input.addEventListener("input", updateTotalWorkers);
+                }
+            }
+        });
+
+        // 入力イベントで自動保存
+        form.addEventListener("input", () => {
+            saveFormData();
+        });
+    </script>
+
+</body>
+
+</html>
