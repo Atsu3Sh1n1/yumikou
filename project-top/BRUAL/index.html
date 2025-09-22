@@ -4,64 +4,69 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
   <title>写真・動画撮影テンプレート ARC / Dolly ショット基準</title>
-  <style>
-   html, body {
-      height: 100%;
-      min-height: 100vh;
-      background-image: url('wl.png');
-      background-repeat: no-repeat;
-      background-size: cover;
-      background-attachment: fixed;
-      background-position: center;
-      margin: 0;
-      font-family: 'Segoe UI', 'Meiryo', sans-serif;
-    }
-    body {
-      min-height: 100vh;
-      /* background-image, background-attachment などはhtmlにも適用済み */
-    }
+<style>
+  html, body {
+    height: 100%;
+    min-height: 100vh;
+    background-image: url('wl.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center;
+    margin: 0;
+    font-family: 'Segoe UI', 'Meiryo', sans-serif;
+  }
+  body {
+    min-height: 100vh;
+    /* background-image, background-attachment などはhtmlにも適用済み */
+  }
+  main {
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 1em;
+    
+    border-radius: 12px;
+    box-shadow: 0 2px 12px #bbb;
+  }
+  /* Instagram埋め込みの背景を透明に */
+  .instagram-media,
+  .instagram-media * {
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+  h1, h2, h3 {
+    border-left: 4px solid #0078d7;
+    padding-left: 0.5em;
+    font-size: 1.2em;
+    margin-top: 1.2em;
+    margin-bottom: 0.7em;
+  }
+  h1 { font-size: 1.5em; margin-top: 0.5em; }
+  section {
+    border-radius: 8px;
+    box-shadow: 0 2px 8px #eee;
+    margin-bottom: 1.5em;
+    padding: 1em;
+    
+  }
+  ul { margin-left: 1em; font-size: 1em; }
+  .links a { color: #0078d7; text-decoration: underline; word-break: break-all; }
+  .point {
+    border-left: 4px solid #0078d7;
+    padding: 1em;
+    margin-top: 1em;
+  }
+  @media (max-width: 600px) {
     main {
-      /* ...existing code... */
+      max-width: 98vw;
+      padding: 0.5em;
     }
-    /* Instagram埋め込みの背景を透明に */
-    .instagram-media {
-      background: transparent !important;
-    }
-    h1, h2, h3 {
-      border-left: 4px solid #0078d7;
-      padding-left: 0.5em;
-      font-size: 1.2em;
-      margin-top: 1.2em;
-      margin-bottom: 0.7em;
-    }
-    h1 { font-size: 1.5em; margin-top: 0.5em; }
-    section {
-      border-radius: 8px;
-      box-shadow: 0 2px 8px #eee;
-      margin-bottom: 1.5em;
-      padding: 1em;
-      
-    }
-    ul { margin-left: 1em; font-size: 1em; }
-    .links a { color: #0078d7; text-decoration: underline; word-break: break-all; }
-    .point {
-      
-      border-left: 4px solid #0078d7;
-      padding: 1em;
-      margin-top: 1em;
-    }
-    @media (max-width: 600px) {
-      main {
-        max-width: 98vw;
-        padding: 0.5em;
-      }
-      h1 { font-size: 1.2em; }
-      h2, h3 { font-size: 1em; }
-      section { padding: 0.7em; }
-      ul { font-size: 0.95em; }
-    }
-  </style>
-</head>
+    h1 { font-size: 1.2em; }
+    h2, h3 { font-size: 1em; }
+    section { padding: 0.7em; }
+    ul { font-size: 0.95em; }
+  }
+</style></head>
 <body>
   <main>
     <h1>参考用カメラワーク<br>ARC(アーク)ショット /<br>
