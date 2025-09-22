@@ -2,83 +2,126 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
   <title>写真・動画撮影テンプレート ARC / Dolly ショット基準</title>
   <style>
- body {
-    background-image: url('wl.png');
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-attachment: fixed;
-    background-position: center;
-  }    h1, h2, h3 { border-left: 4px solid #0078d7; padding-left: 0.5em; }
-    section {  border-radius: 8px; box-shadow: 0 2px 8px #ddd; margin-bottom: 2em; padding: 1.5em; }
-    ul { margin-left: 1.5em; }
-    .links a { color: #0078d7; text-decoration: underline; }
-    .point { background: #e6f7ff; border-left: 4px solid #0078d7; padding: 1em; margin-top: 1em; }
+    body {
+      background-image: url('wl.png');
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-attachment: fixed;
+      background-position: center;
+      margin: 0;
+      font-family: 'Segoe UI', 'Meiryo', sans-serif;
+      min-height: 100vh;
+    }
+    main {
+      max-width: 480px;
+      margin: 0 auto;
+      padding: 1em;
+      background: rgba(255,255,255,0.92);
+      border-radius: 12px;
+      box-shadow: 0 2px 12px #bbb;
+    }
+    h1, h2, h3 {
+      border-left: 4px solid #0078d7;
+      padding-left: 0.5em;
+      font-size: 1.2em;
+      margin-top: 1.2em;
+      margin-bottom: 0.7em;
+    }
+    h1 { font-size: 1.5em; margin-top: 0.5em; }
+    section {
+      border-radius: 8px;
+      box-shadow: 0 2px 8px #eee;
+      margin-bottom: 1.5em;
+      padding: 1em;
+      background: #fff;
+    }
+    ul { margin-left: 1em; font-size: 1em; }
+    .links a { color: #0078d7; text-decoration: underline; word-break: break-all; }
+    .point {
+      background: #e6f7ff;
+      border-left: 4px solid #0078d7;
+      padding: 1em;
+      margin-top: 1em;
+    }
+    @media (max-width: 600px) {
+      main {
+        max-width: 98vw;
+        padding: 0.5em;
+      }
+      h1 { font-size: 1.2em; }
+      h2, h3 { font-size: 1em; }
+      section { padding: 0.7em; }
+      ul { font-size: 0.95em; }
+    }
   </style>
 </head>
 <body>
-  <h1>参考用カメラワーク<br>ARC(アーク)ショット / Dolly(ドリー)ショット基準</h1>
+  <main>
+    <h1>参考用カメラワーク<br>ARC(アーク)ショット / Dolly(ドリー)ショット基準</h1>
 
-  <section>
-    <h2>動画撮影の目的</h2>
-    <ul>
-      <li>SNSで使えるプロモーション／紹介動画</li>
-      <li>ビジュアルに動きがあり、観ている人の興味を引くもの</li>
-    </ul>
-  </section>
+    <section>
+      <h2>動画撮影の目的</h2>
+      <ul>
+        <li>SNSで使えるプロモーション／紹介動画</li>
+        <li>ビジュアルに動きがあり、観ている人の興味を引くもの</li>
+      </ul>
+    </section>
 
-  <section>
-    <h2>参考動画</h2>
-    <ul class="links">
-      <li>ドリーショット(引き) / アークショット: <a href="https://www.youtube.com/shorts/FNkBQLpz9wQ" target="_blank">動画1</a></li>
-      <li>ドリーショット(アウト・イン): <a href="https://www.youtube.com/shorts/l2JgmiY9sYI" target="_blank">動画2</a></li>
-      <li>例3: <a href="https://www.youtube.com/shorts/s20vNaaAp2k" target="_blank">動画3</a></li>
-      <li>チャンネル参考: <a href="https://www.youtube.com/@big3mediasg/shorts" target="_blank">Big3MediaSG</a>（美しいフレーミングと動きのあるショットが多い）</li>
-    </ul>
-  </section>
+    <section>
+      <h2>参考動画</h2>
+      <ul class="links">
+        <li>ドリーショット(引き) / アークショット: <a href="https://www.youtube.com/shorts/FNkBQLpz9wQ" target="_blank">動画1</a></li>
+        <li>ドリーショット(アウト・イン): <a href="https://www.youtube.com/shorts/l2JgmiY9sYI" target="_blank">動画2</a></li>
+        <li>例3: <a href="https://www.youtube.com/shorts/s20vNaaAp2k" target="_blank">動画3</a></li>
+        <li>チャンネル参考: <a href="https://www.youtube.com/@big3mediasg/shorts" target="_blank">Big3MediaSG</a>（美しいフレーミングと動きのあるショットが多い）</li>
+      </ul>
+    </section>
 
-  <section>
-    <h2>構成案（例：全体で30秒〜60秒　4K 60FPS）</h2>
-    <h3>OP（導入）約5秒</h3>
-    <ul>
-      <li>被写体やロケーションの広めの見せ場</li>
-      <li>静止または軽いパンで「場所」「テーマ」を伝える</li>
-    </ul>
-    <h3>ARCショット 約10～15秒</h3>
-    <ul>
-      <li>被写体を中心に半円／円弧を描くように移動</li>
-      <li>角度を変えながら背景の変化を活かす</li>
-      <li>動きは滑らかに（ジンバルやスタビライザー推奨）</li>
-      <li>光の向きに注意（人物なら顔に影が入らないように）</li>
-      <li>多くのバリエーションを撮影（半円だけでなく1/4円、逆回りなど複数パターン）</li>
-      <li>近距離・中距離・遠距離の3種類を押さえる</li>
-      <li>背景が変化する位置を意識して繰り返し撮る</li>
-    </ul>
-    <h3>ドリーショット 約10～15秒</h3>
-    <ul>
-      <li>被写体に向かって前進（ドリーイン）または後退（ドリーアウト）</li>
-      <li>被写体が最初より大きく・近くなる／小さく遠くなる効果</li>
-      <li>フォーカスが崩れないようにピントを意識</li>
-      <li>ARC同様、数を多く確保（ドリーイン／ドリーアウト両方を複数回）</li>
-      <li>スピード違い（ゆっくり／速め）で撮る</li>
-      <li>低い位置や目線の高さなどカメラ位置を変えて試す</li>
-    </ul>
-    <h3>クロージング／フィニッシュ 約5秒</h3>
-    <ul>
-      <li>被写体が何かを伝える（話す・見せる）／キャッチフレーズを入れる</li>
-      <li>ロゴ・ブランド名・連絡先・SNSアカウントを表示</li>
-      <li>動きのあるショットから静止に切り替えるとまとまりが良い</li>
-    </ul>
-  </section>
+    <section>
+      <h2>構成案（例：全体で30秒〜60秒　4K 60FPS）</h2>
+      <h3>OP（導入）約5秒</h3>
+      <ul>
+        <li>被写体やロケーションの広めの見せ場</li>
+        <li>静止または軽いパンで「場所」「テーマ」を伝える</li>
+      </ul>
+      <h3>ARCショット 約10～15秒</h3>
+      <ul>
+        <li>被写体を中心に半円／円弧を描くように移動</li>
+        <li>角度を変えながら背景の変化を活かす</li>
+        <li>動きは滑らかに（ジンバルやスタビライザー推奨）</li>
+        <li>光の向きに注意（人物なら顔に影が入らないように）</li>
+        <li>多くのバリエーションを撮影（半円だけでなく1/4円、逆回りなど複数パターン）</li>
+        <li>近距離・中距離・遠距離の3種類を押さえる</li>
+        <li>背景が変化する位置を意識して繰り返し撮る</li>
+      </ul>
+      <h3>ドリーショット 約10～15秒</h3>
+      <ul>
+        <li>被写体に向かって前進（ドリーイン）または後退（ドリーアウト）</li>
+        <li>被写体が最初より大きく・近くなる／小さく遠くなる効果</li>
+        <li>フォーカスが崩れないようにピントを意識</li>
+        <li>ARC同様、数を多く確保（ドリーイン／ドリーアウト両方を複数回）</li>
+        <li>スピード違い（ゆっくり／速め）で撮る</li>
+        <li>低い位置や目線の高さなどカメラ位置を変えて試す</li>
+      </ul>
+      <h3>クロージング／フィニッシュ 約5秒</h3>
+      <ul>
+        <li>被写体が何かを伝える（話す・見せる）／キャッチフレーズを入れる</li>
+        <li>ロゴ・ブランド名・連絡先・SNSアカウントを表示</li>
+        <li>動きのあるショットから静止に切り替えるとまとまりが良い</li>
+      </ul>
+    </section>
 
-  <section class="point">
-    <h2>📌 全体のポイント</h2>
-    <ul>
-      <li>「ARC」と「ドリー」の素材を数多く・バリエーション豊かに確保することを最優先</li>
-      <li>編集段階で「動きが映える画」だけを抽出するため、現場では多めに撮っておく</li>
-      <li>似た画でも光・角度・スピードの違いで印象が変わるため、同じ構図でも複数回収録することが必須</li>
-    </ul>
-  </section>
+    <section class="point">
+      <h2>📌 全体のポイント</h2>
+      <ul>
+        <li>「ARC」と「ドリー」の素材を数多く・バリエーション豊かに確保することを最優先</li>
+        <li>編集段階で「動きが映える画」だけを抽出するため、現場では多めに撮っておく</li>
+        <li>似た画でも光・角度・スピードの違いで印象が変わるため、同じ構図でも複数回収録することが必須</li>
+      </ul>
+    </section>
+  </main>
 </body>
 </html>
