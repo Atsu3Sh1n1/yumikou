@@ -13,6 +13,8 @@
       height: 100%;
       margin: 0;
       padding: 0;
+      overflow: hidden; /* スクロールバーを表示させない */
+      width: 100vw;
     }
 
     body {
@@ -22,18 +24,15 @@
       justify-content: center;
       font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Hiragino Kaku Gothic ProN', 'Noto Sans JP', 'Yu Gothic UI', sans-serif;
       color: #fff;
-      overflow: hidden;
-      width: 100vw;
-      min-height: 100dvh;
       text-align: center;
     }
 
     .stage {
       position: relative;
-      width: 100vw;
-      min-height: 100dvh;
+      width: 100%;
+      height: 100%;
       display: grid;
-      place-items: center;
+      place-items: center; /* 中央固定 */
     }
 
     /* 背景動画 */
@@ -43,7 +42,7 @@
       overflow: hidden;
       z-index: 0;
       opacity: 0;
-      transition: opacity 2s ease-in-out;
+      transition: opacity 1.6s ease;
     }
 
     .bg--visible {
@@ -61,11 +60,11 @@
       content: '';
       position: absolute;
       inset: 0;
-      background: linear-gradient(180deg, rgba(0, 0, 0, .25), rgba(0, 0, 0, .6));
+      background: linear-gradient(180deg, rgba(0,0,0,.25), rgba(0,0,0,.6));
       pointer-events: none;
     }
 
-    /* テキスト */
+    /* 中央テキスト */
     .headline {
       position: relative;
       z-index: 2;
@@ -73,7 +72,6 @@
       letter-spacing: .12em;
       opacity: 0;
       transition: opacity 1.4s ease;
-      min-height: 8rem; /* スマホで高さ確保してズレ防止 */
     }
 
     .headline.visible {
@@ -99,7 +97,6 @@
       margin-top: 1.8rem;
       opacity: 0;
       transition: opacity 1.4s ease 0.3s;
-      min-height: 3rem; /* スマホで高さ確保 */
     }
 
     .link-wrap--visible {
@@ -121,7 +118,7 @@
 
     .btn:hover {
       transform: translateY(-4px);
-      box-shadow: 0 10px 30px rgba(0, 0, 0, .6);
+      box-shadow: 0 10px 30px rgba(0,0,0,.6);
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -161,9 +158,9 @@
       const linkBtn = document.getElementById('linkBtn');
 
       function introSequence() {
-        headline.classList.add('visible');
-        setTimeout(() => bg.classList.add('bg--visible'), 1000);
-        setTimeout(() => linkWrap.classList.add('link-wrap--visible'), 2200);
+        headline.classList.add('visible');         // 文字表示
+        setTimeout(() => bg.classList.add('bg--visible'), 1000);   // 背景表示
+        setTimeout(() => linkWrap.classList.add('link-wrap--visible'), 2200); // ボタン表示
       }
 
       if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
