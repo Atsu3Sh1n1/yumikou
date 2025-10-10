@@ -4,15 +4,16 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Nishida — Video Background Fade</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      /* 背景動画の不透明度（0.0〜1.0） */
       --video-opacity: 0.5;
     }
 
     html, body {
       height: 100%;
       margin: 0;
+      padding: 0;
     }
 
     body {
@@ -20,11 +21,12 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Hiragino Kaku Gothic ProN', 'Noto Sans JP', 'Yu Gothic UI', sans-serif;
+      font-family: 'Noto Sans JP', 'Playfair Display', serif;
       color: #fff;
       overflow: hidden;
       width: 100vw;
       min-height: 100dvh;
+      text-align: center;
     }
 
     .stage {
@@ -42,13 +44,11 @@
       overflow: hidden;
       z-index: 0;
       opacity: 0;
-      transform: scale(1.02) translateY(12px);
-      transition: opacity 1.6s ease, transform 1.8s cubic-bezier(.2, .9, .3, 1);
+      transition: opacity 2.4s ease-in-out;
     }
 
     .bg--visible {
       opacity: 1;
-      transform: scale(1) translateY(0);
     }
 
     .bg video {
@@ -66,51 +66,51 @@
       pointer-events: none;
     }
 
+    /* テキスト */
     .headline {
       position: relative;
       z-index: 2;
       font-weight: 700;
       letter-spacing: .12em;
-      text-align: center;
-      /* transform: translateY(20px); 削除でズレ防止 */
       opacity: 0;
-      transition: opacity 1.4s ease;
+      transition: opacity 2s ease-in-out;
+    }
+
+    .headline.visible {
+      opacity: 1;
     }
 
     .headline span {
       display: block;
+      font-family: 'Playfair Display', serif;
       font-size: clamp(36px, 10vw, 120px);
       line-height: 0.9;
     }
 
     .headline .sub {
+      font-family: 'Noto Sans JP', sans-serif;
       font-size: clamp(14px, 3vw, 22px);
       opacity: .85;
       margin-top: .6rem;
+      letter-spacing: 0.08em;
     }
 
-    .headline.visible {
-      opacity: 1;
-      /* transform: translateY(0); 削除でズレ防止 */
-    }
-
+    /* リンクボタン */
     .link-wrap {
       position: relative;
       z-index: 3;
       margin-top: 1.8rem;
       opacity: 0;
-      /* transform: translateY(18px); 削除でズレ防止 */
-      transition: opacity 1.4s ease 0.3s;
+      transition: opacity 2s ease-in-out;
     }
 
     .link-wrap--visible {
       opacity: 1;
-      /* transform: translateY(0); 削除でズレ防止 */
     }
 
     .btn {
       display: inline-block;
-      padding: 12px 20px;
+      padding: 12px 24px;
       border-radius: 10px;
       background: rgba(255, 255, 255, 0.08);
       border: 1px solid rgba(255, 255, 255, 0.15);
@@ -122,8 +122,8 @@
     }
 
     .btn:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 10px 30px rgba(0, 0, 0, .6);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, .5);
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -136,7 +136,6 @@
 </head>
 <body>
   <main class="stage" role="main">
-    <!-- 背景動画 -->
     <div class="bg" id="bg">
       <video id="bgVideo" autoplay muted loop playsinline>
         <source src="20504774.mp4" type="video/mp4">
@@ -144,8 +143,7 @@
       </video>
     </div>
 
-    <!-- 中央コンテンツ -->
-    <div style="text-align:center;z-index:2">
+    <div>
       <h1 class="headline" id="headline">
         <span>NISHIDA</span>
         <span class="sub">— 西田 —</span>
@@ -166,12 +164,8 @@
 
       function introSequence() {
         headline.classList.add('visible');
-        setTimeout(() => {
-          bg.classList.add('bg--visible');
-        }, 1000);
-        setTimeout(() => {
-          linkWrap.classList.add('link-wrap--visible');
-        }, 2200);
+        setTimeout(() => bg.classList.add('bg--visible'), 1200);
+        setTimeout(() => linkWrap.classList.add('link-wrap--visible'), 3000);
       }
 
       if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
@@ -179,16 +173,15 @@
         bg.classList.add('bg--visible');
         linkWrap.classList.add('link-wrap--visible');
       } else {
-        setTimeout(introSequence, 200);
+        window.addEventListener('load', () => setTimeout(introSequence, 300));
       }
 
       linkBtn.addEventListener('click', (e) => {
         e.preventDefault();
-        linkBtn.animate([
-          { transform: 'scale(1)' },
-          { transform: 'scale(0.96)' },
-          { transform: 'scale(1)' }
-        ], { duration: 260, easing: 'ease-out' });
+        linkBtn.animate(
+          [{ transform: 'scale(1)' }, { transform: 'scale(0.96)' }, { transform: 'scale(1)' }],
+          { duration: 260, easing: 'ease-out' }
+        );
         alert('リンクがクリックされました（デモ）');
       });
     })();
