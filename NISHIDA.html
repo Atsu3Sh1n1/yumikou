@@ -4,6 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Nishida — Video Background Fade</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
   <style>
     :root {
       --video-opacity: 0.5;
@@ -13,7 +14,7 @@
       height: 100%;
       margin: 0;
       padding: 0;
-      overflow: hidden; /* スクロールバーを表示させない */
+      overflow: hidden; /* 初期スクロールバーを消す */
       width: 100vw;
     }
 
@@ -22,17 +23,18 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Hiragino Kaku Gothic ProN', 'Noto Sans JP', 'Yu Gothic UI', sans-serif;
+      font-family: 'Noto Sans JP', 'Playfair Display', serif;
       color: #fff;
+      min-height: 100dvh;
       text-align: center;
     }
 
     .stage {
       position: relative;
-      width: 100%;
-      height: 100%;
+      width: 100vw;
+      min-height: 100dvh;
       display: grid;
-      place-items: center; /* 中央固定 */
+      place-items: center;
     }
 
     /* 背景動画 */
@@ -42,7 +44,7 @@
       overflow: hidden;
       z-index: 0;
       opacity: 0;
-      transition: opacity 1.6s ease;
+      transition: opacity 2.4s ease-in-out;
     }
 
     .bg--visible {
@@ -60,18 +62,18 @@
       content: '';
       position: absolute;
       inset: 0;
-      background: linear-gradient(180deg, rgba(0,0,0,.25), rgba(0,0,0,.6));
+      background: linear-gradient(180deg, rgba(0, 0, 0, .25), rgba(0, 0, 0, .6));
       pointer-events: none;
     }
 
-    /* 中央テキスト */
+    /* テキスト */
     .headline {
       position: relative;
       z-index: 2;
       font-weight: 700;
       letter-spacing: .12em;
       opacity: 0;
-      transition: opacity 1.4s ease;
+      transition: opacity 2s ease-in-out;
     }
 
     .headline.visible {
@@ -80,14 +82,17 @@
 
     .headline span {
       display: block;
+      font-family: 'Playfair Display', serif;
       font-size: clamp(36px, 10vw, 120px);
       line-height: 0.9;
     }
 
     .headline .sub {
+      font-family: 'Noto Sans JP', sans-serif;
       font-size: clamp(14px, 3vw, 22px);
       opacity: .85;
       margin-top: .6rem;
+      letter-spacing: 0.08em;
     }
 
     /* リンクボタン */
@@ -96,7 +101,7 @@
       z-index: 3;
       margin-top: 1.8rem;
       opacity: 0;
-      transition: opacity 1.4s ease 0.3s;
+      transition: opacity 2s ease-in-out;
     }
 
     .link-wrap--visible {
@@ -105,7 +110,7 @@
 
     .btn {
       display: inline-block;
-      padding: 12px 20px;
+      padding: 12px 24px;
       border-radius: 10px;
       background: rgba(255, 255, 255, 0.08);
       border: 1px solid rgba(255, 255, 255, 0.15);
@@ -117,8 +122,8 @@
     }
 
     .btn:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 10px 30px rgba(0,0,0,.6);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, .5);
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -158,9 +163,9 @@
       const linkBtn = document.getElementById('linkBtn');
 
       function introSequence() {
-        headline.classList.add('visible');         // 文字表示
-        setTimeout(() => bg.classList.add('bg--visible'), 1000);   // 背景表示
-        setTimeout(() => linkWrap.classList.add('link-wrap--visible'), 2200); // ボタン表示
+        headline.classList.add('visible');
+        setTimeout(() => bg.classList.add('bg--visible'), 1200);
+        setTimeout(() => linkWrap.classList.add('link-wrap--visible'), 3000);
       }
 
       if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
@@ -168,7 +173,7 @@
         bg.classList.add('bg--visible');
         linkWrap.classList.add('link-wrap--visible');
       } else {
-        window.addEventListener('load', () => setTimeout(introSequence, 200));
+        window.addEventListener('load', () => setTimeout(introSequence, 300));
       }
 
       linkBtn.addEventListener('click', (e) => {
