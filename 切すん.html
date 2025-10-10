@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>配管 切り寸 自動計算</title>
+<style>
+  body{font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;margin:12px;background:#fafafa;color:#111}
+  h1{font-size:1.2rem;margin-bottom:12px;text-align:center}
+  .row{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:8px;background:#fff;padding:8px;border-radius:6px;box-shadow:0 1px 2px rgba(0,0,0,0.1)}
+  input, select{flex:1;min-width:60px;padding:6px;border:1px solid #ccc;border-radius:6px;font-size:1rem}
+  .cut{min-width:100px;text-align:right;font-weight:bold}
+  button{padding:10px 14px;border:none;border-radius:6px;background:#246;color:#fff;font-size:1rem;cursor:pointer;width:100%;margin-top:8px}
+  @media(max-width:480px){.row{flex-direction:column;align-items:flex-start}}
+</style>
+</head>
+<body>
+<h1>配管 切り寸 自動計算</h1>
+
+<div id="inputArea"></div>
+<button id="addBtn">＋ 行を追加</button>
+
+<script>
+// 呼び径 -> JISロングエルボ芯までの長さ R (mm)
+const R_TABLE = {
+  "15":38,"20":38,"25":38,"32":48,"40":57,"50":76,
+  "65":95,"80":114,"100":152,"125":190,"150":229,"200":305
+};
+
+// 初期行数
+const INITIAL_ROWS = 5;
+const inputArea = document.getElementById('inputArea');
+
+// 行を作る関数
+function makeRow(){
+  const row = document.createElement('div');
+  row.className = 'row';
+  row.innerHTML = `
+    <input type="number" class="center" placeholder="芯芯(mm)" min="0">
+    <select class="size"><option value="">--選択--</option></select>
+    <input type="number" class="count" placeholder="エルボ数" min="0">
+    <input type="number" class="Rval" placeholder="R(mm)" min="0">
+    <div class="cut">— mm</div>
+  `;
+
+  // 呼び径リスト生成
+  const sel = row.querySelector('.size');
+  Object.keys(R_TABLE).map(k=>parseInt(k)).sort((a,b)=>a-b).forEach(k=>{
+    const opt = document.createElement('option');
+    opt.value = k;
+    opt.textContent = `${k}A`;
+    sel.appendChild(opt);
+  });
+
+  // 呼び径選択でR自動反映
+  sel.addEventListener('change', ()=>{
+    const val = sel.value;
+    row.querySelector('.Rval').value = val ? R_TABLE[val] : '';
+    updateRow(row);
+  });
+
+  // 入力イベントでリアルタイム計算
+  row.querySelectorAll('input').forEach(el=>{
+    el.addEventListener('input', ()=>updateRow(row));
+  });
+
+  return row;
+}
+
+// 行ごとの計算
+function updateRow(row){
+  const center = Number(row.querySelector('.center').value)||0;
+  const count = Number(row.querySelector('.count').value)||0;
+  const R = Number(row.querySelector('.Rval').value)||0;
+  if(center>0 && count>=0 && R>0){
+    const cut = center - (count * R);
+    row.querySelector('.cut').textContent = `${cut.toFixed(0)} mm`;
+  } else {
+    row.querySelector('.cut').textContent = '— mm';
+  }
+}
+
+// 初期行を追加
+for(let i=0;i<INITIAL_ROWS;i++) inputArea.appendChild(makeRow());
+
+// 行追加ボタン
+document.getElementById('addBtn').addEventListener('click', ()=>{
+  inputArea.appendChild(makeRow());
+});
+</script>
+</body>
+</html>
