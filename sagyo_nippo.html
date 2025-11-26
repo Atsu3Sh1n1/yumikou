@@ -63,7 +63,7 @@
   input, textarea { width:100%; border:none; background:transparent; font-size:14px; text-align:center; }
   textarea { resize:none; rows:1; height:20px; }
 
-  /* 工数・残業・弁当の入力を中央表示 */
+  /* 工数・残業・弁当の中央表示 */
   .sum-work,
   .sum-ot,
   .sum-bento {
@@ -88,35 +88,37 @@
   .total-sums input {
     width:60px;
     border-bottom:1px solid #000;
-    text-align:center; /* 中央揃え */
+    text-align:center;
     font-size:16px;
   }
+
   /* ========= 印刷時の高さ崩れ対策 ========= */
-@media print {
+  @media print {
 
-  /* 入力欄の高さ固定（スマホPDF対策） */
-  input, textarea {
-    height: 20px !important;
-    min-height: 20px !important;
-    max-height: 20px !important;
-    line-height: 20px !important;
-    padding: 0 !important;
-    margin: 0 !important;
-    overflow: hidden !important;
-    box-sizing: border-box !important;
-  }
+    /* 入力欄の高さ固定（スマホPDF対策） */
+    input, textarea {
+      height:20px !important;
+      min-height:20px !important;
+      max-height:20px !important;
+      line-height:20px !important;
+      padding:0 !important;
+      margin:0 !important;
+      overflow:hidden !important;
+      box-sizing:border-box !important;
+      background:transparent !important;
+    }
 
-  /* テーブルの行の高さ固定 */
-  table tr, th, td {
-    height: 24px !important;
-    max-height: 24px !important;
-  }
+    /* テーブル行の高さ固定 */
+    table tr, th, td {
+      height:24px !important;
+      max-height:24px !important;
+    }
 
-  /* textarea の改行を潰す（改行すると縦伸びするため） */
-  textarea {
-    white-space: nowrap !important;
+    /* textarea の改行による縦伸び禁止 */
+    textarea {
+      white-space:nowrap !important;
+    }
   }
-}
 
 </style>
 </head>
