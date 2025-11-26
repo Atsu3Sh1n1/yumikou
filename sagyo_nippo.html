@@ -120,48 +120,7 @@
     }
   }
 
-  /* ======== スマホ閲覧時（横幅フィット）======== */
-@media screen and (max-width: 600px) {
-
-  /* A4固定を解除して画面幅にフィット */
-  .page {
-    width: 100% !important;
-    min-height: auto !important;
-    padding: 10px !important;
-    box-sizing: border-box;
-  }
-
-  /* テーブルを画面幅に合わせる */
-  table {
-    width: 100% !important;
-    table-layout: auto !important;
-  }
-
-  th, td {
-    font-size: 12px !important;
-    padding: 2px !important;
-    height: auto !important;
-  }
-
-  input, textarea {
-    font-size: 12px !important;
-    height: auto !important;
-    min-height: 18px !important;
-  }
-
-  /* 名前・日付の横並びが崩れるので調整 */
-  .header-div {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
-  }
-
-  .header-right {
-    width: 100%;
-    justify-content: space-between;
-  }
-}
-
+  
 
 </style>
 </head>
