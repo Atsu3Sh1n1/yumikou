@@ -91,6 +91,33 @@
     text-align:center; /* 中央揃え */
     font-size:16px;
   }
+  /* ========= 印刷時の高さ崩れ対策 ========= */
+@media print {
+
+  /* 入力欄の高さ固定（スマホPDF対策） */
+  input, textarea {
+    height: 20px !important;
+    min-height: 20px !important;
+    max-height: 20px !important;
+    line-height: 20px !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    overflow: hidden !important;
+    box-sizing: border-box !important;
+  }
+
+  /* テーブルの行の高さ固定 */
+  table tr, th, td {
+    height: 24px !important;
+    max-height: 24px !important;
+  }
+
+  /* textarea の改行を潰す（改行すると縦伸びするため） */
+  textarea {
+    white-space: nowrap !important;
+  }
+}
+
 </style>
 </head>
 <body>
