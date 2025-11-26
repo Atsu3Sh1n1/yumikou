@@ -1,3 +1,4 @@
+// ...existing code...
 <!doctype html>
 <html lang="ja">
 <head>
@@ -91,6 +92,41 @@
     text-align:center; /* 中央揃え */
     font-size:16px;
   }
+
+  /* ========== スマホ向け改善 ========== */
+  @media (max-width: 600px) {
+    body { font-size:16px; }
+    .page {
+      width: auto;
+      margin: 8px;
+      padding: 10px;
+      min-height: auto;
+    }
+    .header-div { gap:10px; padding-bottom:6px; align-items:flex-start; flex-wrap:wrap; }
+    .header-left .title, .company { font-size:18px; }
+    .header-right { width:100%; justify-content:space-between; gap:8px; margin-top:6px; flex-wrap:wrap; }
+    .header-right input { height:36px; font-size:16px; text-align:left; padding:6px; border:1px solid #ddd; background:#fff; border-radius:4px; }
+
+    .controls { text-align:center; display:flex; gap:8px; flex-direction:column; margin-top:12px; }
+    .controls button { font-size:16px; padding:10px; width:100%; box-sizing:border-box; }
+
+    /* 横スクロール可能にしてテーブルの崩壊を避ける */
+    table { display:block; overflow-x:auto; -webkit-overflow-scrolling:touch; }
+    thead { display:table; width:100%; table-layout:fixed; }
+    tbody { display:block; }
+    th, td { min-width:70px; white-space:nowrap; text-align:left; padding:8px; height:auto; border-color:#ccc; font-size:13px; }
+    th { background:transparent; font-weight:bold; }
+    input, textarea { font-size:15px; text-align:left; padding:6px; background:transparent; }
+    textarea { height:48px; }
+
+    .sum-work, .sum-ot, .sum-bento { text-align:center; }
+
+    .total-sums { flex-direction:column; gap:8px; align-items:center; margin-top:12px; }
+    .total-sums input { width:120px; }
+  }
+
+  /* 小さめタッチターゲット改善（すべてのスクリーンで） */
+  button, input[type="button"], input[type="submit"] { cursor:pointer; }
 </style>
 </head>
 <body>
@@ -102,7 +138,7 @@
     <div class="company">有限会社 弓工</div>
   </div>
   <div class="header-right">
-    <div class="header-item"><span>氏名：</span><input class="name-input"></div>
+    <div class="header-item"><span>氏名：</span><input class="name-input" placeholder="例：山田 太郎"></div>
     <div class="header-item"><span>日付：</span><input id="month" type="month" class="date-input"></div>
   </div>
 </div>
@@ -144,13 +180,13 @@ for (let i=1; i<=31; i++) {
   tr.innerHTML = `
     <td>${i}</td>
     <td class="weekday"></td>
-    <td><input></td>
-    <td><input></td>
-    <td><textarea rows="1"></textarea></td>
-    <td><input type="number" class="sum-work" step="0.5"></td>
-    <td><input type="number" class="sum-ot" step="0.5"></td>
-    <td><input type="number" class="sum-bento" step="1"></td>
-    <td><textarea rows="1"></textarea></td>`;
+    <td><input inputmode="text" placeholder=""></td>
+    <td><input inputmode="text" placeholder=""></td>
+    <td><textarea rows="1" placeholder=""></textarea></td>
+    <td><input type="number" inputmode="decimal" class="sum-work" step="0.5" min="0"></td>
+    <td><input type="number" inputmode="decimal" class="sum-ot" step="0.5" min="0"></td>
+    <td><input type="number" inputmode="numeric" class="sum-bento" step="1" min="0"></td>
+    <td><textarea rows="1" placeholder=""></textarea></td>`;
   tbody.appendChild(tr);
 }
 
@@ -247,3 +283,4 @@ window.addEventListener('load', loadData);
 
 </body>
 </html>
+// ...existing code...
