@@ -5,7 +5,7 @@
 <title>作業日報</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <style>
-  @page { size: A4; margin: 10mm; }
+  @page { size: US-Letter; margin: 10mm; }
   body { font-family: sans-serif; background:#f0f0f0; margin:0; }
 
   /* ページ全体 */
@@ -55,7 +55,7 @@
   th.site { width:20%; font-size:14px; }
   th.work { width:25%; font-size:14px; }
   th.hours { width:8%; font-size:14px; }
-  th.ot { width:8%; font-size:14px; }
+  th.ot { width:8%; font-size:1px; }
   th.bento { width:8%; font-size:14px; }
   th.note { width:20%; font-size:14px; }
 
@@ -103,84 +103,86 @@
     }
   }
 
-  /* ========= iOS PDF出力時のA4サイズ対策 ========= */
+  /* ========= 印刷時の高さ崩れ対策 ========= */
   @media print {
-    @page { size: A4; margin: 8mm; }
+    /* iOS Safari対策: USレターサイズでアドレス表示領域を考慮 */
+    @page { size: US-Letter; margin: 8mm; }
     
-    html, body {
-      width: 210mm !important;
-      height: 297mm !important;
-      margin: 0 !important;
-      padding: 0 !important;
-      -webkit-print-color-adjust: exact !important;
-      print-color-adjust: exact !important;
-    }
-    
+    /* ページ全体の固定 */
     .page {
-      width: 210mm !important;
-      min-height: 280mm !important;
-      max-height: 280mm !important;
-      margin: 0 !important;
-      padding: 8mm !important;
-      box-sizing: border-box !important;
-      transform: scale(1) !important;
-      transform-origin: top left !important;
+      width: 216mm !important;
+      min-height: 260mm !important;
+      max-height: 260mm !important;
+      transform-origin: top left;
     }
 
+    /* テーブル全体の固定 */
     table {
       width: 100% !important;
       table-layout: fixed !important;
       border-collapse: collapse !important;
-      font-size: 12px !important;
     }
 
-    /* セル幅をmm単位で固定指定 */
-    th.date, td:nth-child(1) { width: 10mm !important; min-width: 10mm !important; max-width: 10mm !important; }
-    th.weekday, td:nth-child(2) { width: 10mm !important; min-width: 10mm !important; max-width: 10mm !important; }
-    th.customer, td:nth-child(3) { width: 45mm !important; min-width: 45mm !important; max-width: 45mm !important; }
-    th.site, td:nth-child(4) { width: 35mm !important; min-width: 35mm !important; max-width: 35mm !important; }
-    th.work, td:nth-child(5) { width: 45mm !important; min-width: 45mm !important; max-width: 45mm !important; }
-    th.hours, td:nth-child(6) { width: 15mm !important; min-width: 15mm !important; max-width: 15mm !important; }
-    th.ot, td:nth-child(7) { width: 15mm !important; min-width: 15mm !important; max-width: 15mm !important; }
-    th.bento, td:nth-child(8) { width: 15mm !important; min-width: 15mm !important; max-width: 15mm !important; }
-    th.note, td:nth-child(9) { width: 35mm !important; min-width: 35mm !important; max-width: 35mm !important; }
+    /* セル幅の強制固定 */
+    th.date, td:nth-child(1) { width: 5% !important; }
+    th.weekday, td:nth-child(2) { width: 5% !important; }
+    th.customer, td:nth-child(3) { width: 25% !important; }
+    th.site, td:nth-child(4) { width: 20% !important; }
+    th.work, td:nth-child(5) { width: 25% !important; }
+    th.hours, td:nth-child(6) { width: 8% !important; }
+    th.ot, td:nth-child(7) { width: 8% !important; }
+    th.bento, td:nth-child(8) { width: 8% !important; }
+    th.note, td:nth-child(9) { width: 20% !important; }
 
-    /* セル高さの固定 */
-    th, td {
-      height: 6mm !important;
-      min-height: 6mm !important;
-      max-height: 6mm !important;
-      padding: 1mm !important;
-      overflow: hidden !important;
-      word-wrap: break-word !important;
-      vertical-align: middle !important;
-      font-size: 11px !important;
-    }
-
-    /* 入力欄の固定 */
+    /* 入力欄の高さ固定（スマホPDF対策） */
     input, textarea {
-      width: 100% !important;
-      height: 4mm !important;
-      min-height: 4mm !important;
-      max-height: 4mm !important;
-      line-height: 4mm !important;
+      height: 20px !important;
+      min-height: 20px !important;
+      max-height: 20px !important;
+      line-height: 20px !important;
       padding: 0 !important;
       margin: 0 !important;
-      border: none !important;
-      background: transparent !important;
-      font-size: 11px !important;
       overflow: hidden !important;
       box-sizing: border-box !important;
-      resize: none !important;
-      white-space: nowrap !important;
+      background: transparent !important;
+      font-size: 14px !important;
+      border: none !important;
     }
 
+    /* テーブル行の高さ固定 */
+    table tr, th, td {
+      height: 24px !important;
+      min-height: 24px !important;
+      max-height: 24px !important;
+      padding: 2px 4px !important;
+      overflow: hidden !important;
+      word-wrap: break-word !important;
+    }
+
+    /* textarea の改行による縦伸び禁止 */
+    textarea {
+      white-space: nowrap !important;
+      resize: none !important;
+    }
+
+    /* 非表示行は印刷時は完全に削除 */
     .hidden-row {
       display: none !important;
     }
 
-    .controls {
-      display: none !important;
+    /* iOS Safari PDF出力対策 */
+    body {
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+    }
+
+    /* フォントサイズの微調整でレイアウト安定化 */
+    th, td {
+      font-size: 13px !important;
+    }
+
+    input, textarea {
+      font-size: 13px !important;
     }
   }
 
