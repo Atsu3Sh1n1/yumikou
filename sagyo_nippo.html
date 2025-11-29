@@ -5,7 +5,7 @@
 <title>作業日報</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <style>
-  @page { size: US-Letter; margin: 10mm; }
+  @page { size: A4; margin: 10mm; }
   body { font-family: sans-serif; background:#f0f0f0; margin:0; }
 
   /* ページ全体 */
@@ -17,7 +17,7 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    min-height: 277mm;
+    min-height: 287mm;
   }
 
   /* ヘッダー */
@@ -106,14 +106,14 @@
 
   /* ========= 印刷時の高さ崩れ対策 ========= */
   @media print {
-    /* iOS Safari対策: USレターサイズでアドレス表示領域を考慮 */
-    @page { size: US-Letter; margin: 8mm; }
+    /* iOS Safari対策: A4サイズ */
+    @page { size: A4; margin: 8mm; }
     
     /* ページ全体の固定 */
     .page {
-      width: 216mm !important;
-      min-height: 260mm !important;
-      max-height: 260mm !important;
+      width: 210mm !important;
+      min-height: 280mm !important;
+      max-height: 280mm !important;
       transform-origin: top left;
     }
 
@@ -151,7 +151,7 @@
       border: none !important;
     }
 
-    /* テーブル行の高さ固定 */
+    /* テーブル行の高さ固定（iOS対策強化） */
     table tr, th, td {
       height: 24px !important;
       min-height: 24px !important;
@@ -159,6 +159,14 @@
       padding: 2px 4px !important;
       overflow: hidden !important;
       word-wrap: break-word !important;
+      box-sizing: border-box !important;
+      vertical-align: middle !important;
+    }
+    
+    /* iOS Safari特有の高さ変動対策 */
+    table {
+      -webkit-transform: translateZ(0) !important;
+      transform: translateZ(0) !important;
     }
 
     /* textarea の改行による縦伸び禁止 */
