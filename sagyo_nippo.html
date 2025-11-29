@@ -5,7 +5,7 @@
 <title>作業日報</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <style>
-  @page { size: A4; margin: 15mm; }
+  @page { size: US-Letter; margin: 10mm; }
   body { font-family: sans-serif; background:#f0f0f0; margin:0; }
 
   /* ページ全体 */
@@ -94,16 +94,26 @@
 
   /* 月末以降の行を非表示 */
   .hidden-row {
-    visibility: hidden;
+    display: none;
+  }
+
+  @media screen {
+    .hidden-row {
+      visibility: hidden;
+    }
   }
 
   /* ========= 印刷時の高さ崩れ対策 ========= */
   @media print {
+    /* iOS Safari対策: USレターサイズでアドレス表示領域を考慮 */
+    @page { size: US-Letter; margin: 8mm; }
+    
     /* ページ全体の固定 */
     .page {
-      width: 210mm !important;
-      min-height: 277mm !important;
-      max-height: 277mm !important;
+      width: 216mm !important;
+      min-height: 260mm !important;
+      max-height: 260mm !important;
+      transform-origin: top left;
     }
 
     /* テーブル全体の固定 */
@@ -155,10 +165,24 @@
       resize: none !important;
     }
 
-    /* 非表示行も印刷時は完全に隠す */
+    /* 非表示行は印刷時は完全に削除 */
     .hidden-row {
-      visibility: hidden !important;
-      height: 24px !important;
+      display: none !important;
+    }
+
+    /* iOS Safari PDF出力対策 */
+    body {
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+    }
+
+    /* フォントサイズの微調整でレイアウト安定化 */
+    th, td {
+      font-size: 13px !important;
+    }
+
+    input, textarea {
+      font-size: 13px !important;
     }
   }
 
