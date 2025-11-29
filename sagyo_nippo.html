@@ -92,31 +92,73 @@
     font-size:16px;
   }
 
+  /* 月末以降の行を非表示 */
+  .hidden-row {
+    visibility: hidden;
+  }
+
   /* ========= 印刷時の高さ崩れ対策 ========= */
   @media print {
+    /* ページ全体の固定 */
+    .page {
+      width: 210mm !important;
+      min-height: 277mm !important;
+      max-height: 277mm !important;
+    }
+
+    /* テーブル全体の固定 */
+    table {
+      width: 100% !important;
+      table-layout: fixed !important;
+      border-collapse: collapse !important;
+    }
+
+    /* セル幅の強制固定 */
+    th.date, td:nth-child(1) { width: 5% !important; }
+    th.weekday, td:nth-child(2) { width: 5% !important; }
+    th.customer, td:nth-child(3) { width: 25% !important; }
+    th.site, td:nth-child(4) { width: 20% !important; }
+    th.work, td:nth-child(5) { width: 25% !important; }
+    th.hours, td:nth-child(6) { width: 8% !important; }
+    th.ot, td:nth-child(7) { width: 8% !important; }
+    th.bento, td:nth-child(8) { width: 8% !important; }
+    th.note, td:nth-child(9) { width: 20% !important; }
 
     /* 入力欄の高さ固定（スマホPDF対策） */
     input, textarea {
-      height:20px !important;
-      min-height:20px !important;
-      max-height:20px !important;
-      line-height:20px !important;
-      padding:0 !important;
-      margin:0 !important;
-      overflow:hidden !important;
-      box-sizing:border-box !important;
-      background:transparent !important;
+      height: 20px !important;
+      min-height: 20px !important;
+      max-height: 20px !important;
+      line-height: 20px !important;
+      padding: 0 !important;
+      margin: 0 !important;
+      overflow: hidden !important;
+      box-sizing: border-box !important;
+      background: transparent !important;
+      font-size: 14px !important;
+      border: none !important;
     }
 
     /* テーブル行の高さ固定 */
     table tr, th, td {
-      height:24px !important;
-      max-height:24px !important;
+      height: 24px !important;
+      min-height: 24px !important;
+      max-height: 24px !important;
+      padding: 2px 4px !important;
+      overflow: hidden !important;
+      word-wrap: break-word !important;
     }
 
     /* textarea の改行による縦伸び禁止 */
     textarea {
-      white-space:nowrap !important;
+      white-space: nowrap !important;
+      resize: none !important;
+    }
+
+    /* 非表示行も印刷時は完全に隠す */
+    .hidden-row {
+      visibility: hidden !important;
+      height: 24px !important;
     }
   }
 
@@ -129,8 +171,8 @@
 
 <div class="header-div">
   <div class="header-left">
-    <h2 class="title">作業日報 /</h2>
-    <div class="company">有限会社 弓工</div>
+    <h2 class="title">有限会社 弓工 /</h2>
+    <div class="company">作業日報</div>
   </div>
   <div class="header-right">
     <div class="header-item"><span>氏名：</span><input class="name-input"></div>
@@ -191,19 +233,28 @@ document.getElementById('month').addEventListener('change', ()=>{
   const v = document.getElementById('month').value;
   if (!v) return;
   const [y,m] = v.split('-').map(Number);
-  const tbodyWeekdays = document.querySelectorAll('tbody .weekday');
-  tbodyWeekdays.forEach((c,idx)=>{
-    const d = new Date(y, m-1, idx+1);
-    c.textContent = isNaN(d) ? '' : wd[d.getDay()];
+  const daysInMonth = new Date(y, m, 0).getDate();
+  const rows = document.querySelectorAll('tbody tr');
+  rows.forEach((row,idx)=>{
+    if (idx+1 > daysInMonth) {
+      row.classList.add('hidden-row');
+      row.children[0].textContent = '';
+      row.children[1].textContent = '';
+    } else {
+      row.classList.remove('hidden-row');
+      row.children[0].textContent = idx+1;
+      const d = new Date(y, m-1, idx+1);
+      row.children[1].textContent = wd[d.getDay()];
+    }
   });
   saveData();
 });
 
 function calcTotals(){
   let w=0,o=0,b=0;
-  document.querySelectorAll('.sum-work').forEach(e=>{ const v=parseFloat(e.value); if(!isNaN(v)) w+=v; });
-  document.querySelectorAll('.sum-ot').forEach(e=>{ const v=parseFloat(e.value); if(!isNaN(v)) o+=v; });
-  document.querySelectorAll('.sum-bento').forEach(e=>{ const v=parseFloat(e.value); if(!isNaN(v)) b+=v; });
+  document.querySelectorAll('tbody tr:not(.hidden-row) .sum-work').forEach(e=>{ const v=parseFloat(e.value); if(!isNaN(v)) w+=v; });
+  document.querySelectorAll('tbody tr:not(.hidden-row) .sum-ot').forEach(e=>{ const v=parseFloat(e.value); if(!isNaN(v)) o+=v; });
+  document.querySelectorAll('tbody tr:not(.hidden-row) .sum-bento').forEach(e=>{ const v=parseFloat(e.value); if(!isNaN(v)) b+=v; });
   document.getElementById('total-work').value = w? w.toFixed(1) : '';
   document.getElementById('total-ot').value = o? o.toFixed(1) : '';
   document.getElementById('total-bento').value = b? b : '';
