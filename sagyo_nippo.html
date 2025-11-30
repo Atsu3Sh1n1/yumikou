@@ -136,15 +136,19 @@
 
   /* ========= 印刷時の高さ崩れ対策 ========= */
   @media print {
-    /* iOS Safari対策: A4サイズ */
-    @page { size: A4; margin: 8mm; }
+    /* 全ブラウザ対応: A4サイズ */
+    @page { 
+      size: A4 portrait; 
+      margin: 8mm 6mm; 
+    }
     
     /* ページ全体の固定 */
     .page {
-      width: 210mm !important;
-      min-height: 280mm !important;
-      max-height: 280mm !important;
+      width: 198mm !important;
+      min-height: 279mm !important;
+      max-height: 279mm !important;
       transform-origin: top left;
+      page-break-inside: avoid !important;
     }
 
     /* テーブル全体の固定 */
@@ -205,10 +209,11 @@
       vertical-align: middle !important;
     }
     
-    /* iOS Safari特有の高さ変動対策 */
+    /* 全ブラウザ対応の高さ変動対策 */
     table {
       -webkit-transform: translateZ(0) !important;
       transform: translateZ(0) !important;
+      page-break-inside: avoid !important;
     }
 
     /* textarea の改行による縦伸び禁止 */
@@ -222,10 +227,17 @@
       display: none !important;
     }
 
-    /* iOS Safari PDF出力対策 */
+    /* 全ブラウザ PDF出力対策 */
     body {
       -webkit-print-color-adjust: exact !important;
       print-color-adjust: exact !important;
+      color-adjust: exact !important;
+    }
+    
+    /* Android Chrome対策 */
+    * {
+      -webkit-box-sizing: border-box !important;
+      box-sizing: border-box !important;
     }
 
     /* フォントサイズの微調整でレイアウト安定化 */
@@ -253,6 +265,19 @@
     input[type="month"]::-webkit-calendar-picker-indicator {
       display: none !important;
     }
+    
+    /* Android/iPhone共通対策 */
+    input[type="checkbox"] {
+      -webkit-appearance: checkbox !important;
+      appearance: checkbox !important;
+      width: 16px !important;
+      height: 16px !important;
+    }
+    
+    /* 透かし画像を印刷時に非表示（Android対策） */
+    body::before {
+      display: none !important;
+    }
   }
 
   
@@ -274,7 +299,7 @@
 </div>
 
 <div class="controls" style="margin-top:20px; text-align:right;">
-  <button onclick="window.print()">PDF用に印刷</button>
+  <button onclick="printPDF()">PDF用に印刷</button>
   <button onclick="clearData()">データクリア</button>
 </div>
 
@@ -419,6 +444,25 @@ function clearData(){
     localStorage.removeItem('nippoName');
     location.reload();
   }
+}
+
+// PDF印刷関数（全ブラウザ対応）
+function printPDF() {
+  // Android Chrome対策: 印刷前に少し待機
+  setTimeout(() => {
+    // iOS Safari対策: メタタグを一時的に調整
+    const viewport = document.querySelector('meta[name="viewport"]');
+    const originalContent = viewport.content;
+    viewport.content = 'width=device-width, initial-scale=1.0, shrink-to-fit=no';
+    
+    // 印刷実行
+    window.print();
+    
+    // メタタグを元に戻す
+    setTimeout(() => {
+      viewport.content = originalContent;
+    }, 1000);
+  }, 100);
 }
 
 window.addEventListener('load', loadData);
