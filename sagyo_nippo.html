@@ -138,8 +138,10 @@
   /* ========= 印刷時の高さ崩れ対策 ========= */
   @media print {
     @page { size: A4; margin: 8mm; }
-    body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-    .page { width: 210mm; min-height: 280mm; max-height: 280mm; }
+    * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    body { margin: 0; padding: 0; }
+    .controls { display: none !important; }
+    .page { width: 210mm; min-height: 280mm; max-height: 280mm; margin: 0; }
     table { width: 100%; table-layout: fixed; border-collapse: collapse; }
     th.business-trip, td:nth-child(1) { width: 3%; }
     th.nightshift, td:nth-child(2) { width: 3%; }
@@ -182,7 +184,8 @@
 </div>
 
 <div class="controls" style="margin-top:20px; text-align:right;">
-  <button onclick="window.print()">PDF用に印刷</button>
+  <button onclick="generatePDF()">PDFダウンロード</button>
+  <button onclick="window.print()">印刷</button>
   <button onclick="clearData()">データクリア</button>
 </div>
 
@@ -301,6 +304,26 @@ function clearData(){
     delete localStorage.nippoName;
     location.reload();
   }
+}
+
+function generatePDF(){
+  // スマホ対応: 印刷ダイアログを強制表示
+  const printCSS = `
+    @media screen {
+      body * { visibility: hidden; }
+      .page, .page * { visibility: visible; }
+      .page { position: absolute; left: 0; top: 0; width: 100%; }
+      .controls { display: none !important; }
+    }
+  `;
+  const style = document.createElement('style');
+  style.textContent = printCSS;
+  document.head.appendChild(style);
+  
+  setTimeout(() => {
+    window.print();
+    document.head.removeChild(style);
+  }, 100);
 }
 
 window.onload = loadData;
