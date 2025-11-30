@@ -43,6 +43,11 @@
             background-size: 200px 67px;
             width: 200vw;
             height: 200vh;
+            will-change: auto;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            -webkit-transform: translateX(-50%) rotate(-10deg) translateZ(0);
+            transform: translateX(-50%) rotate(-10deg) translateZ(0);
           }
         }
 
@@ -247,6 +252,11 @@
     .header-right span {
       font-size: 22px !important;
       font-weight: bold !important;
+    }
+
+    /* PDF印刷時にカレンダーマークを非表示 */
+    input[type="month"]::-webkit-calendar-picker-indicator {
+      display: none !important;
     }
   }
 
