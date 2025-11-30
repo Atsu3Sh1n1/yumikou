@@ -136,148 +136,29 @@
 
   /* ========= 印刷時の高さ崩れ対策 ========= */
   @media print {
-    /* 全ブラウザ対応: A4サイズ */
-    @page { 
-      size: A4 portrait; 
-      margin: 8mm 6mm; 
-    }
-    
-    /* ページ全体の固定 */
-    .page {
-      width: 198mm !important;
-      min-height: 279mm !important;
-      max-height: 279mm !important;
-      transform-origin: top left;
-      page-break-inside: avoid !important;
-    }
-
-    /* テーブル全体の固定 */
-    table {
-      width: 100% !important;
-      table-layout: fixed !important;
-      border-collapse: collapse !important;
-    }
-
-    /* セル幅の強制固定（A4最適化） */
-    th.nightshift, td:nth-child(1) { width: 4% !important; }
-    th.date, td:nth-child(2) { width: 4% !important; }
-    th.weekday, td:nth-child(3) { width: 4% !important; }
-    th.customer, td:nth-child(4) { width: 22% !important; }
-    th.site, td:nth-child(5) { width: 20% !important; }
-    th.work, td:nth-child(6) { width: 22% !important; }
-    th.hours, td:nth-child(7) { width: 6% !important; }
-    th.ot, td:nth-child(8) { width: 6% !important; }
-    th.bento, td:nth-child(9) { width: 6% !important; }
-    th.note, td:nth-child(10) { width: 18% !important; }
-
-    /* 入力欄の高さ固定（スマホPDF対策） */
-    input, textarea {
-      height: 20px !important;
-      min-height: 20px !important;
-      max-height: 20px !important;
-      line-height: 20px !important;
-      padding: 0 !important;
-      margin: 0 !important;
-      overflow: hidden !important;
-      box-sizing: border-box !important;
-      background: transparent !important;
-      font-size: 14px !important;
-      border: none !important;
-    }
-    
-    /* 合計欄の数字を太く表示（スマホ対策） */
-    .total-sums input {
-      font-size: 18px !important;
-      font-weight: bold !important;
-    }
-    
-    /* テーブル内の数値入力も太く */
-    .sum-work, .sum-ot, .sum-bento {
-      font-size: 16px !important;
-      font-weight: bold !important;
-    }
-
-    /* テーブル行の高さ固定（iOS対策強化） */
-    table tr, th, td {
-      height: 24px !important;
-      min-height: 24px !important;
-      max-height: 24px !important;
-      padding: 2px 4px !important;
-      overflow: hidden !important;
-      word-wrap: break-word !important;
-      box-sizing: border-box !important;
-      vertical-align: middle !important;
-    }
-    
-    /* 全ブラウザ対応の高さ変動対策 */
-    table {
-      -webkit-transform: translateZ(0) !important;
-      transform: translateZ(0) !important;
-      page-break-inside: avoid !important;
-    }
-
-    /* textarea の改行による縦伸び禁止 */
-    textarea {
-      white-space: nowrap !important;
-      resize: none !important;
-    }
-
-    /* 非表示行は印刷時は完全に削除 */
-    .hidden-row {
-      display: none !important;
-    }
-
-    /* 全ブラウザ PDF出力対策 */
-    body {
-      -webkit-print-color-adjust: exact !important;
-      print-color-adjust: exact !important;
-      color-adjust: exact !important;
-    }
-    
-    /* Android Chrome対策 */
-    * {
-      -webkit-box-sizing: border-box !important;
-      box-sizing: border-box !important;
-    }
-
-    /* フォントサイズの微調整でレイアウト安定化 */
-    th, td {
-      font-size: 13px !important;
-    }
-
-    input, textarea {
-      font-size: 13px !important;
-    }
-
-    /* スマホPDF出力時の名前・日付を大きく表示 */
-    .header-right input {
-      font-size: 22px !important;
-      font-weight: bold !important;
-      height: 32px !important;
-    }
-    
-    .header-right span {
-      font-size: 22px !important;
-      font-weight: bold !important;
-    }
-
-    /* PDF印刷時にカレンダーマークを非表示 */
-    input[type="month"]::-webkit-calendar-picker-indicator {
-      display: none !important;
-    }
-    
-    /* Android/iPhone共通対策 */
-    input[type="checkbox"] {
-      -webkit-appearance: checkbox !important;
-      appearance: checkbox !important;
-      width: 16px !important;
-      height: 16px !important;
-    }
-    
-    /* 透かし画像を印刷時に非表示（Android対策） */
-    body::before {
-      display: none !important;
-    }
+    @page { size: A4; margin: 8mm; }
+    body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .page { width: 210mm; min-height: 280mm; max-height: 280mm; }
+    table { width: 100%; table-layout: fixed; border-collapse: collapse; }
+    th.nightshift, td:nth-child(1) { width: 4%; }
+    th.date, td:nth-child(2) { width: 4%; }
+    th.weekday, td:nth-child(3) { width: 4%; }
+    th.customer, td:nth-child(4) { width: 22%; }
+    th.site, td:nth-child(5) { width: 20%; }
+    th.work, td:nth-child(6) { width: 22%; }
+    th.hours, td:nth-child(7) { width: 6%; }
+    th.ot, td:nth-child(8) { width: 6%; }
+    th.bento, td:nth-child(9) { width: 6%; }
+    th.note, td:nth-child(10) { width: 18%; }
+    input, textarea { height: 20px; padding: 0; margin: 0; overflow: hidden; box-sizing: border-box; background: transparent; font-size: 13px; border: none; }
+    .total-sums input { font-size: 18px; font-weight: bold; }
+    .sum-work, .sum-ot, .sum-bento { font-size: 16px; font-weight: bold; }
+    th, td { height: 24px; padding: 2px 4px; overflow: hidden; box-sizing: border-box; vertical-align: middle; font-size: 13px; }
+    textarea { white-space: nowrap; resize: none; }
+    .hidden-row { display: none; }
+    .header-right input { font-size: 22px; font-weight: bold; height: 32px; }
+    .header-right span { font-size: 22px; font-weight: bold; }
+    input[type="month"]::-webkit-calendar-picker-indicator { display: none; }
   }
 
   
@@ -299,7 +180,7 @@
 </div>
 
 <div class="controls" style="margin-top:20px; text-align:right;">
-  <button onclick="printPDF()">PDF用に印刷</button>
+  <button onclick="window.print()">PDF用に印刷</button>
   <button onclick="clearData()">データクリア</button>
 </div>
 
@@ -332,93 +213,67 @@
 <script>
 const tbody = document.querySelector('tbody');
 for (let i=1; i<=31; i++) {
-  const tr = document.createElement('tr');
-  tr.innerHTML = `
-    <td><input type="checkbox" class="nightshift-check"></td>
-    <td>${i}</td>
-    <td class="weekday"></td>
-    <td><input></td>
-    <td><input></td>
-    <td><textarea rows="1"></textarea></td>
-    <td><input type="number" class="sum-work" step="0.5"></td>
-    <td><input type="number" class="sum-ot" step="0.5"></td>
-    <td><input type="number" class="sum-bento" step="1"></td>
-    <td><textarea rows="1"></textarea></td>`;
-  tbody.appendChild(tr);
+  tbody.innerHTML += `<tr><td><input type="checkbox"></td><td>${i}</td><td></td><td><input></td><td><input></td><td><textarea rows="1"></textarea></td><td><input type="number" class="sum-work" step="0.5"></td><td><input type="number" class="sum-ot" step="0.5"></td><td><input type="number" class="sum-bento" step="1"></td><td><textarea rows="1"></textarea></td></tr>`;
 }
 
 const wd = ["日","月","火","水","木","金","土"];
 
-document.getElementById('month').addEventListener('change', ()=>{
+document.getElementById('month').onchange = ()=>{
   const v = document.getElementById('month').value;
   if (!v) return;
   const [y,m] = v.split('-').map(Number);
   const daysInMonth = new Date(y, m, 0).getDate();
-  const rows = document.querySelectorAll('tbody tr');
-  rows.forEach((row,idx)=>{
+  document.querySelectorAll('tbody tr').forEach((row,idx)=>{
     if (idx+1 > daysInMonth) {
       row.classList.add('hidden-row');
-      row.children[1].textContent = '';
-      row.children[2].textContent = '';
     } else {
       row.classList.remove('hidden-row');
       row.children[1].textContent = idx+1;
-      const d = new Date(y, m-1, idx+1);
-      row.children[2].textContent = wd[d.getDay()];
+      row.children[2].textContent = wd[new Date(y, m-1, idx+1).getDay()];
     }
   });
   saveData();
-});
+};
 
 function calcTotals(){
   let w=0,o=0,b=0;
-  document.querySelectorAll('tbody tr:not(.hidden-row) .sum-work').forEach(e=>{ const v=parseFloat(e.value); if(!isNaN(v)) w+=v; });
-  document.querySelectorAll('tbody tr:not(.hidden-row) .sum-ot').forEach(e=>{ const v=parseFloat(e.value); if(!isNaN(v)) o+=v; });
-  document.querySelectorAll('tbody tr:not(.hidden-row) .sum-bento').forEach(e=>{ const v=parseFloat(e.value); if(!isNaN(v)) b+=v; });
-  document.getElementById('total-work').value = w? w.toFixed(1) : '';
-  document.getElementById('total-ot').value = o? o.toFixed(1) : '';
-  document.getElementById('total-bento').value = b? b : '';
+  document.querySelectorAll('tbody tr:not(.hidden-row) .sum-work').forEach(e=>{ const v=+e.value; if(v) w+=v; });
+  document.querySelectorAll('tbody tr:not(.hidden-row) .sum-ot').forEach(e=>{ const v=+e.value; if(v) o+=v; });
+  document.querySelectorAll('tbody tr:not(.hidden-row) .sum-bento').forEach(e=>{ const v=+e.value; if(v) b+=v; });
+  document.getElementById('total-work').value = w || '';
+  document.getElementById('total-ot').value = o || '';
+  document.getElementById('total-bento').value = b || '';
 }
 
-document.addEventListener('input', e=>{
-  if (e.target.classList.contains('sum-work') || e.target.classList.contains('sum-ot') || e.target.classList.contains('sum-bento') ||
-      e.target.tagName==='INPUT' || e.target.tagName==='TEXTAREA') {
+document.oninput = e=>{
+  if (e.target.matches('input,textarea')) {
     calcTotals();
     saveData();
   }
-});
+};
 
 function saveData(){
-  const data = [];
-  document.querySelectorAll('tbody tr').forEach(tr=>{
-    data.push({
-      nightshift: tr.children[0].querySelector('input').checked,
-      customer: tr.children[3].querySelector('input').value,
-      site: tr.children[4].querySelector('input').value,
-      work: tr.children[5].querySelector('textarea').value,
-      hours: tr.children[6].querySelector('input').value,
-      ot: tr.children[7].querySelector('input').value,
-      bento: tr.children[8].querySelector('input').value,
-      note: tr.children[9].querySelector('textarea').value
-    });
-  });
-  localStorage.setItem('nippoData', JSON.stringify(data));
-  localStorage.setItem('nippoMonth', document.getElementById('month').value);
-  localStorage.setItem('nippoName', document.querySelector('.name-input').value);
+  const data = [...document.querySelectorAll('tbody tr')].map(tr=>({
+    nightshift: tr.children[0].querySelector('input').checked,
+    customer: tr.children[3].querySelector('input').value,
+    site: tr.children[4].querySelector('input').value,
+    work: tr.children[5].querySelector('textarea').value,
+    hours: tr.children[6].querySelector('input').value,
+    ot: tr.children[7].querySelector('input').value,
+    bento: tr.children[8].querySelector('input').value,
+    note: tr.children[9].querySelector('textarea').value
+  }));
+  localStorage.nippoData = JSON.stringify(data);
+  localStorage.nippoMonth = document.getElementById('month').value;
+  localStorage.nippoName = document.querySelector('.name-input').value;
 }
 
 function loadData(){
-  const dataStr = localStorage.getItem('nippoData');
-  const month = localStorage.getItem('nippoMonth');
-  const name = localStorage.getItem('nippoName');
-
-  if(month) document.getElementById('month').value = month;
-  if(name) document.querySelector('.name-input').value = name;
-
-  if(!dataStr) return;
-
-  const data = JSON.parse(dataStr);
-  data.forEach((row,idx)=>{
+  if(localStorage.nippoMonth) document.getElementById('month').value = localStorage.nippoMonth;
+  if(localStorage.nippoName) document.querySelector('.name-input').value = localStorage.nippoName;
+  if(!localStorage.nippoData) return;
+  
+  JSON.parse(localStorage.nippoData).forEach((row,idx)=>{
     const tr = document.querySelectorAll('tbody tr')[idx];
     if(!tr) return;
     tr.children[0].querySelector('input').checked = row.nightshift;
@@ -430,42 +285,20 @@ function loadData(){
     tr.children[8].querySelector('input').value = row.bento;
     tr.children[9].querySelector('textarea').value = row.note;
   });
-
-  const event = new Event('change');
-  document.getElementById('month').dispatchEvent(event);
-
+  document.getElementById('month').onchange();
   calcTotals();
 }
 
 function clearData(){
   if(confirm('作業データを削除します。よろしいですか？')){
-    localStorage.removeItem('nippoData');
-    localStorage.removeItem('nippoMonth');
-    localStorage.removeItem('nippoName');
+    delete localStorage.nippoData;
+    delete localStorage.nippoMonth;
+    delete localStorage.nippoName;
     location.reload();
   }
 }
 
-// PDF印刷関数（全ブラウザ対応）
-function printPDF() {
-  // Android Chrome対策: 印刷前に少し待機
-  setTimeout(() => {
-    // iOS Safari対策: メタタグを一時的に調整
-    const viewport = document.querySelector('meta[name="viewport"]');
-    const originalContent = viewport.content;
-    viewport.content = 'width=device-width, initial-scale=1.0, shrink-to-fit=no';
-    
-    // 印刷実行
-    window.print();
-    
-    // メタタグを元に戻す
-    setTimeout(() => {
-      viewport.content = originalContent;
-    }, 1000);
-  }, 100);
-}
-
-window.addEventListener('load', loadData);
+window.onload = loadData;
 </script>
 
 </body>
