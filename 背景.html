@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8" />
+<title>背景表示</title>
+<style>
+  body { 
+    margin: 0; 
+    padding: 0; 
+    height: 100vh; 
+    background: #f0f0f0; 
+  }
+
+  body::before {
+    content: "";
+    position: fixed;
+    top: -4%;
+    left: 50%;
+    width: 180vw;
+    height: 180vh;
+    background-image: url('yumikou.png');
+    background-repeat: repeat;
+    background-size: 300px 100px;
+    opacity: 0.03;
+    transform: translateX(-50%) rotate(-10deg);
+    transform-origin: center;
+    z-index: -1;
+    pointer-events: none;
+    background-attachment: fixed;
+  }
+</style>
+</head>
+<body>
+</body>
+</html>
