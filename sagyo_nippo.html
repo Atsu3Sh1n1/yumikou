@@ -76,16 +76,17 @@
   table { width:100%; border-collapse:collapse; table-layout:fixed; }
   th, td { border:1px solid #000; padding:2px 4px; overflow:hidden; word-wrap:break-word; height:24px; text-align:center; }
 
+  th.business-trip { width:6%; font-size:14px; }
   th.nightshift { width:6%; font-size:14px; }
   th.date { width:6%; font-size:14px; }
   th.weekday { width:6%; font-size:14px; }
-  th.customer { width:22%; font-size:14px; }
-  th.site { width:20%; font-size:14px; }
-  th.work { width:20%; font-size:14px; }
+  th.customer { width:20%; font-size:14px; }
+  th.site { width:18%; font-size:14px; }
+  th.work { width:18%; font-size:14px; }
   th.hours { width:8%; font-size:12px; }
   th.ot { width:8%; font-size:12px; }
   th.bento { width:8%; font-size:10px; }
-  th.note { width:18%; font-size:12px; }
+  th.note { width:16%; font-size:12px; }
 
   /* 入力・テキストエリア */
   input, textarea { width:100%; border:none; background:transparent; font-size:14px; text-align:center; }
@@ -108,18 +109,18 @@
   /* 下部合計欄 */
   .total-sums {
     display:flex;
-    justify-content:center; /* 中央揃え */
-    gap:40px;
-    font-size:18px;
+    justify-content:center;
+    gap:25px;
+    font-size:16px;
     font-weight:bold;
     margin-top:10px;
-    text-align:center; /* 子も中央揃え */
+    text-align:center;
   }
   .total-sums input {
-    width:70px;
+    width:50px;
     border-bottom:1px solid #000;
     text-align:center;
-    font-size:18px;
+    font-size:16px;
     font-weight:bold;
   }
 
@@ -140,16 +141,17 @@
     body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
     .page { width: 210mm; min-height: 280mm; max-height: 280mm; }
     table { width: 100%; table-layout: fixed; border-collapse: collapse; }
-    th.nightshift, td:nth-child(1) { width: 4%; }
-    th.date, td:nth-child(2) { width: 4%; }
-    th.weekday, td:nth-child(3) { width: 4%; }
-    th.customer, td:nth-child(4) { width: 22%; }
-    th.site, td:nth-child(5) { width: 20%; }
-    th.work, td:nth-child(6) { width: 22%; }
-    th.hours, td:nth-child(7) { width: 6%; }
-    th.ot, td:nth-child(8) { width: 6%; }
-    th.bento, td:nth-child(9) { width: 6%; }
-    th.note, td:nth-child(10) { width: 18%; }
+    th.business-trip, td:nth-child(1) { width: 4%; }
+    th.nightshift, td:nth-child(2) { width: 4%; }
+    th.date, td:nth-child(3) { width: 4%; }
+    th.weekday, td:nth-child(4) { width: 4%; }
+    th.customer, td:nth-child(5) { width: 20%; }
+    th.site, td:nth-child(6) { width: 18%; }
+    th.work, td:nth-child(7) { width: 20%; }
+    th.hours, td:nth-child(8) { width: 6%; }
+    th.ot, td:nth-child(9) { width: 6%; }
+    th.bento, td:nth-child(10) { width: 6%; }
+    th.note, td:nth-child(11) { width: 16%; }
     input, textarea { height: 20px; padding: 0; margin: 0; overflow: hidden; box-sizing: border-box; background: transparent; font-size: 13px; border: none; }
     .total-sums input { font-size: 18px; font-weight: bold; }
     .sum-work, .sum-ot, .sum-bento { font-size: 16px; font-weight: bold; }
@@ -187,6 +189,7 @@
 <table id="nippo-table">
   <thead>
     <tr>
+      <th class="business-trip">出張</th>
       <th class="nightshift">夜勤</th>
       <th class="date">日付</th>
       <th class="weekday">曜日</th>
@@ -203,6 +206,8 @@
 </table>
 
 <div class="total-sums">
+  <div>出張：<input id="total-business-trip" readonly>日</div>
+  <div>夜勤：<input id="total-nightshift" readonly>日</div>
   <div>工数：<input id="total-work" readonly>人工</div>
   <div>残業：<input id="total-ot" readonly>ｈ</div>
   <div>弁当：<input id="total-bento" readonly>個</div>
@@ -213,7 +218,7 @@
 <script>
 const tbody = document.querySelector('tbody');
 for (let i=1; i<=31; i++) {
-  tbody.innerHTML += `<tr><td><input type="checkbox"></td><td>${i}</td><td></td><td><input></td><td><input></td><td><textarea rows="1"></textarea></td><td><input type="number" class="sum-work" step="0.5"></td><td><input type="number" class="sum-ot" step="0.5"></td><td><input type="number" class="sum-bento" step="1"></td><td><textarea rows="1"></textarea></td></tr>`;
+  tbody.innerHTML += `<tr><td><input type="checkbox"></td><td><input type="checkbox"></td><td>${i}</td><td></td><td><input></td><td><input></td><td><textarea rows="1"></textarea></td><td><input type="number" class="sum-work" step="0.5"></td><td><input type="number" class="sum-ot" step="0.5"></td><td><input type="number" class="sum-bento" step="1"></td><td><textarea rows="1"></textarea></td></tr>`;
 }
 
 const wd = ["日","月","火","水","木","金","土"];
@@ -228,18 +233,24 @@ document.getElementById('month').onchange = ()=>{
       row.classList.add('hidden-row');
     } else {
       row.classList.remove('hidden-row');
-      row.children[1].textContent = idx+1;
-      row.children[2].textContent = wd[new Date(y, m-1, idx+1).getDay()];
+      row.children[2].textContent = idx+1;
+      row.children[3].textContent = wd[new Date(y, m-1, idx+1).getDay()];
     }
   });
   saveData();
 };
 
 function calcTotals(){
-  let w=0,o=0,b=0;
+  let bt=0,n=0,w=0,o=0,b=0;
+  document.querySelectorAll('tbody tr:not(.hidden-row)').forEach(tr=>{
+    if(tr.children[0].querySelector('input').checked) bt++;
+    if(tr.children[1].querySelector('input').checked) n++;
+  });
   document.querySelectorAll('tbody tr:not(.hidden-row) .sum-work').forEach(e=>{ const v=+e.value; if(v) w+=v; });
   document.querySelectorAll('tbody tr:not(.hidden-row) .sum-ot').forEach(e=>{ const v=+e.value; if(v) o+=v; });
   document.querySelectorAll('tbody tr:not(.hidden-row) .sum-bento').forEach(e=>{ const v=+e.value; if(v) b+=v; });
+  document.getElementById('total-business-trip').value = bt || '';
+  document.getElementById('total-nightshift').value = n || '';
   document.getElementById('total-work').value = w || '';
   document.getElementById('total-ot').value = o || '';
   document.getElementById('total-bento').value = b || '';
@@ -254,14 +265,15 @@ document.oninput = e=>{
 
 function saveData(){
   const data = [...document.querySelectorAll('tbody tr')].map(tr=>({
-    nightshift: tr.children[0].querySelector('input').checked,
-    customer: tr.children[3].querySelector('input').value,
-    site: tr.children[4].querySelector('input').value,
-    work: tr.children[5].querySelector('textarea').value,
-    hours: tr.children[6].querySelector('input').value,
-    ot: tr.children[7].querySelector('input').value,
-    bento: tr.children[8].querySelector('input').value,
-    note: tr.children[9].querySelector('textarea').value
+    businessTrip: tr.children[0].querySelector('input').checked,
+    nightshift: tr.children[1].querySelector('input').checked,
+    customer: tr.children[4].querySelector('input').value,
+    site: tr.children[5].querySelector('input').value,
+    work: tr.children[6].querySelector('textarea').value,
+    hours: tr.children[7].querySelector('input').value,
+    ot: tr.children[8].querySelector('input').value,
+    bento: tr.children[9].querySelector('input').value,
+    note: tr.children[10].querySelector('textarea').value
   }));
   localStorage.nippoData = JSON.stringify(data);
   localStorage.nippoMonth = document.getElementById('month').value;
@@ -276,14 +288,15 @@ function loadData(){
   JSON.parse(localStorage.nippoData).forEach((row,idx)=>{
     const tr = document.querySelectorAll('tbody tr')[idx];
     if(!tr) return;
-    tr.children[0].querySelector('input').checked = row.nightshift;
-    tr.children[3].querySelector('input').value = row.customer;
-    tr.children[4].querySelector('input').value = row.site;
-    tr.children[5].querySelector('textarea').value = row.work;
-    tr.children[6].querySelector('input').value = row.hours;
-    tr.children[7].querySelector('input').value = row.ot;
-    tr.children[8].querySelector('input').value = row.bento;
-    tr.children[9].querySelector('textarea').value = row.note;
+    tr.children[0].querySelector('input').checked = row.businessTrip || false;
+    tr.children[1].querySelector('input').checked = row.nightshift;
+    tr.children[4].querySelector('input').value = row.customer;
+    tr.children[5].querySelector('input').value = row.site;
+    tr.children[6].querySelector('textarea').value = row.work;
+    tr.children[7].querySelector('input').value = row.hours;
+    tr.children[8].querySelector('input').value = row.ot;
+    tr.children[9].querySelector('input').value = row.bento;
+    tr.children[10].querySelector('textarea').value = row.note;
   });
   document.getElementById('month').onchange();
   calcTotals();
