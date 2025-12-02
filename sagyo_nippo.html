@@ -106,6 +106,30 @@
     -moz-appearance: textfield;
   }
 
+  /* スマホ専用スタイル */
+  @media (max-width: 768px) {
+    th, td {
+      height: 28px;
+      vertical-align: middle;
+      padding: 3px 2px;
+    }
+    input, textarea {
+      line-height: 22px;
+      vertical-align: middle;
+      padding: 3px 1px;
+    }
+    .sum-work, .sum-ot, .sum-bento {
+      line-height: 22px;
+      vertical-align: middle;
+      padding: 3px 1px;
+    }
+    .header-right input {
+      line-height: 24px;
+      vertical-align: middle;
+      padding: 2px;
+    }
+  }
+
   /* 下部合計欄 */
   .total-sums {
     display:flex;
