@@ -22,28 +22,18 @@
           body::before {
             content: "";
             position: fixed;
-            top: -4%;
-            left: 50%;
-            width: 180vw;
-            height: 180vh;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             background-image: url('yumikou.png');
             background-repeat: repeat;
-            background-size: 600px 200px;
+            background-size: 400px 133px;
             opacity: 0.03;
-            transform: translateX(-50%) rotate(-10deg);
+            transform: rotate(-10deg);
             transform-origin: center;
             z-index: -1;
             pointer-events: none;
-             background-attachment: fixed;
-        }
-
-        /* スマホ対応の透かし調整 */
-        @media (max-width: 768px) {
-          body::before {
-            background-size: 200px 67px;
-            width: 200vw;
-            height: 200vh;
-          }
         }
 
 
@@ -83,10 +73,10 @@
   th.customer { width:20%; font-size:14px; }
   th.site { width:18%; font-size:14px; }
   th.work { width:18%; font-size:14px; }
-  th.hours { width:8%; font-size:12px; }
-  th.ot { width:8%; font-size:12px; }
-  th.bento { width:8%; font-size:10px; }
-  th.note { width:16%; font-size:12px; }
+  th.hours { width:6%; font-size:14px; }
+  th.ot { width:6%; font-size:14px; }
+  th.bento { width:6%; font-size:14px; }
+  th.note { width:16%; font-size:14px; }
 
   /* 入力・テキストエリア */
   input, textarea { width:100%; border:none; background:transparent; font-size:14px; text-align:center; }
@@ -104,6 +94,16 @@
     box-sizing:border-box;
     font-size:16px;
     font-weight:bold;
+  }
+
+  /* 数値入力のスピナー（矢印）を非表示 */
+  input[type="number"]::-webkit-outer-spin-button,
+  input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  input[type="number"] {
+    -moz-appearance: textfield;
   }
 
   /* 下部合計欄 */
@@ -161,6 +161,14 @@
     .header-right input { font-size: 22px; font-weight: bold; height: 32px; }
     .header-right span { font-size: 22px; font-weight: bold; }
     input[type="month"]::-webkit-calendar-picker-indicator { display: none; }
+    input[type="number"]::-webkit-outer-spin-button,
+    input[type="number"]::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    input[type="number"] {
+      -moz-appearance: textfield;
+    }
   }
 
   
@@ -183,6 +191,7 @@
 
 <div class="controls" style="margin-top:20px; text-align:right;">
   <button onclick="window.print()">PDF用に印刷</button>
+  <button onclick="captureScreen()">スクリーンショット</button>
   <button onclick="clearData()">データクリア</button>
 </div>
 
@@ -308,6 +317,41 @@ function clearData(){
     delete localStorage.nippoMonth;
     delete localStorage.nippoName;
     location.reload();
+  }
+}
+
+function captureScreen(){
+  const element = document.querySelector('.page');
+  
+  if (!window.html2canvas) {
+    const script = document.createElement('script');
+    script.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
+    script.onload = () => {
+      html2canvas(element, {
+        scale: 2,
+        useCORS: true,
+        allowTaint: true,
+        backgroundColor: '#f0f0f0'
+      }).then(canvas => {
+        const link = document.createElement('a');
+        link.download = '作業日報_' + (document.getElementById('month').value || 'screenshot') + '.png';
+        link.href = canvas.toDataURL();
+        link.click();
+      });
+    };
+    document.head.appendChild(script);
+  } else {
+    html2canvas(element, {
+      scale: 2,
+      useCORS: true,
+      allowTaint: true,
+      backgroundColor: '#f0f0f0'
+    }).then(canvas => {
+      const link = document.createElement('a');
+      link.download = '作業日報_' + (document.getElementById('month').value || 'screenshot') + '.png';
+      link.href = canvas.toDataURL();
+      link.click();
+    });
   }
 }
 
