@@ -207,24 +207,8 @@
   @media print {
     @page { size: A4; margin: 8mm; }
     body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-    .page { 
-      width: 210mm; 
-      height: 280mm;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
-    }
-    
-    table { 
-      width: 100%; 
-      table-layout: fixed; 
-      border-collapse: collapse;
-      height: auto;
-    }
-    
-    tbody {
-      height: calc(31 * 8.5mm);
-    }
+    .page { width: 210mm; min-height: 280mm; max-height: 280mm; }
+    table { width: 100%; table-layout: fixed; border-collapse: collapse; }
     
     /* スマホでもPCでも同じ比率を保持 */
     th.business-trip, td:nth-child(1) { width: 6% !important; }
@@ -238,46 +222,19 @@
     th.bento, td:nth-child(9) { width: 6% !important; }
     th.note, td:nth-child(10) { width: 16% !important; }
     
-    th { height: 10mm !important; }
-    td { height: 8.5mm !important; }
-    th, td { 
-      padding: 1mm 2mm !important; 
-      overflow: hidden; 
-      box-sizing: border-box; 
-      vertical-align: middle; 
-      font-size: 11px;
-    }
-    
-    input, textarea { 
-      height: 6.5mm !important; 
-      padding: 0 !important; 
-      margin: 0 !important; 
-      overflow: hidden; 
-      box-sizing: border-box; 
-      background: transparent; 
-      font-size: 12px; 
-      border: none; 
-      vertical-align: middle; 
-      line-height: 6.5mm;
-    }
-    
+    th, td { height: 24px !important; padding: 2px 4px !important; overflow: hidden; box-sizing: border-box; vertical-align: middle; font-size: 13px; }
+    input, textarea { height: 20px !important; padding: 0 !important; margin: 0 !important; overflow: hidden; box-sizing: border-box; background: transparent; font-size: 13px; border: none; vertical-align: middle; line-height: 20px; }
     textarea { white-space: nowrap; resize: none; }
     
     input[type="checkbox"] { 
-      width: 3mm !important;
-      height: 3mm !important;
+      width: 16px !important;
+      height: 16px !important;
       margin: 0 auto !important; 
       display: block !important; 
       transform: scale(1.0) !important;
     }
     
-    .sum-work, .sum-ot, .sum-bento { 
-      font-size: 13px !important; 
-      font-weight: bold; 
-      height: 6.5mm !important; 
-      line-height: 6.5mm !important; 
-    }
-    
+    .sum-work, .sum-ot, .sum-bento { font-size: 16px !important; font-weight: bold; height: 20px !important; line-height: 20px !important; }
     .total-sums input { font-size: 18px; font-weight: bold; }
     .hidden-row { display: none; }
     .header-right input { font-size: 22px; font-weight: bold; height: 32px; }
