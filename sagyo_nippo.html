@@ -17,24 +17,28 @@
     flex-direction: column;
     justify-content: space-between;
     min-height: 287mm;
+    position: relative;
+  }
+  
+  /* スクリーンショット用透かし */
+  .page::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('yumikou.png');
+    background-repeat: repeat;
+    background-size: 400px 133px;
+    opacity: 0.03;
+    transform: rotate(-10deg);
+    transform-origin: center;
+    z-index: -1;
+    pointer-events: none;
   }
 
-          body::before {
-            content: "";
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: url('yumikou.png');
-            background-repeat: repeat;
-            background-size: 400px 133px;
-            opacity: 0.03;
-            transform: rotate(-10deg);
-            transform-origin: center;
-            z-index: -1;
-            pointer-events: none;
-        }
+
 
 
   /* ヘッダー */
