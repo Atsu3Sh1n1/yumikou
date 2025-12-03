@@ -35,6 +35,13 @@
             z-index: -1;
             pointer-events: none;
         }
+        
+        /* スマホ用透かし調整 */
+        @media (max-width: 768px) {
+          body::before {
+            background-size: 300px 100px;
+          }
+        }
 
 
   /* ヘッダー */
