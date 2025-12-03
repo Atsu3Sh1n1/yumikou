@@ -81,6 +81,13 @@
   /* 入力・テキストエリア */
   input, textarea { width:100%; border:none; background:transparent; font-size:14px; text-align:center; }
   textarea { resize:none; rows:1; height:20px; }
+  
+  /* チェックボックスの中央配置 */
+  input[type="checkbox"] {
+    width: auto;
+    margin: 0 auto;
+    display: block;
+  }
 
   /* 工数・残業・弁当の中央表示 */
   .sum-work,
@@ -120,6 +127,10 @@
       padding: 0;
       margin: 0;
       font-size: 12px;
+    }
+    input[type="checkbox"] {
+      margin: 0 auto;
+      display: block;
     }
     .sum-work, .sum-ot, .sum-bento {
       height: 24px;
@@ -185,6 +196,7 @@
     th.bento, td:nth-child(10) { width: 6%; }
     th.note, td:nth-child(11) { width: 16%; }
     input, textarea { height: 20px; padding: 0; margin: 0; overflow: hidden; box-sizing: border-box; background: transparent; font-size: 13px; border: none; }
+    input[type="checkbox"] { margin: 0 auto; display: block; }
     .total-sums input { font-size: 18px; font-weight: bold; }
     .sum-work, .sum-ot, .sum-bento { font-size: 16px; font-weight: bold; }
     th, td { height: 24px; padding: 2px 4px; overflow: hidden; box-sizing: border-box; vertical-align: middle; font-size: 13px; }
