@@ -206,14 +206,19 @@
     }
   }
 
-  /* ========= 印刷時の高さ崩れ対策 ========= */
+  /* 印刷時のA4最適化 */
   @media print {
     @page { size: A4; margin: 8mm; }
-    body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-    .page { width: 210mm; min-height: 280mm; max-height: 280mm; }
-    table { width: 100%; table-layout: fixed; border-collapse: collapse; }
+    body { -webkit-print-color-adjust: exact; print-color-adjust: exact; background: #fff; }
+    .page { 
+      width: 210mm !important; 
+      height: 280mm !important;
+      padding: 5mm 10mm !important;
+      margin: 0 !important;
+    }
     
-    /* スマホでもPCでも同じ比率を保持 */
+    table { width: 100% !important; table-layout: fixed; border-collapse: collapse; }
+    
     th.business-trip, td:nth-child(1) { width: 6% !important; }
     th.nightshift, td:nth-child(2) { width: 6% !important; }
     th.date, td:nth-child(3) { width: 6% !important; }
@@ -225,32 +230,39 @@
     th.bento, td:nth-child(9) { width: 6% !important; }
     th.note, td:nth-child(10) { width: 16% !important; }
     
-    th, td { height: 24px !important; padding: 2px 4px !important; overflow: hidden; box-sizing: border-box; vertical-align: middle; font-size: 13px; }
-    input, textarea { height: 20px !important; padding: 0 !important; margin: 0 !important; overflow: hidden; box-sizing: border-box; background: transparent; font-size: 13px; border: none; vertical-align: middle; line-height: 20px; }
-    textarea { white-space: nowrap; resize: none; }
+    th { height: 8mm !important; font-size: 11px !important; }
+    td { height: 7.8mm !important; font-size: 11px !important; }
+    th, td { padding: 1mm !important; vertical-align: middle; box-sizing: border-box; }
+    
+    input, textarea { 
+      height: 6mm !important; 
+      line-height: 6mm !important;
+      font-size: 11px !important; 
+      padding: 0 !important; 
+      margin: 0 !important;
+      vertical-align: middle;
+    }
     
     input[type="checkbox"] { 
-      width: 16px !important;
-      height: 16px !important;
-      margin: 0 auto !important; 
-      display: block !important; 
-      transform: scale(1.0) !important;
+      width: 3mm !important;
+      height: 3mm !important;
+      transform: none !important;
     }
     
-    .sum-work, .sum-ot, .sum-bento { font-size: 16px !important; font-weight: bold; height: 20px !important; line-height: 20px !important; }
-    .total-sums input { font-size: 18px; font-weight: bold; }
-    .hidden-row { display: none; }
-    .header-right input { font-size: 22px; font-weight: bold; height: 32px; }
-    .header-right span { font-size: 22px; font-weight: bold; }
+    .sum-work, .sum-ot, .sum-bento { 
+      font-size: 12px !important; 
+      height: 6mm !important; 
+      line-height: 6mm !important;
+    }
+    
+    .header-right input { font-size: 16px !important; height: 8mm !important; }
+    .header-right span { font-size: 16px !important; }
+    .total-sums { margin-top: 3mm !important; font-size: 14px !important; }
+    .total-sums input { font-size: 14px !important; }
+    .hidden-row { display: none !important; }
     input[type="month"]::-webkit-calendar-picker-indicator { display: none; }
     input[type="number"]::-webkit-outer-spin-button,
-    input[type="number"]::-webkit-inner-spin-button {
-      -webkit-appearance: none;
-      margin: 0;
-    }
-    input[type="number"] {
-      -moz-appearance: textfield;
-    }
+    input[type="number"]::-webkit-inner-spin-button { display: none; }
   }
 
   
