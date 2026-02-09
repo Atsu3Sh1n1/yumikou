@@ -1,120 +1,125 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>グラインダー負傷事故 再発防止資料</title>
-  <style>
-    html {
-      width: 100%;
-      height: 100%;
-      overflow-x: hidden;
-      background-image: url('107.png');
-      background-attachment: fixed;
-      background-position: top center;
-      background-repeat: repeat-y;
-      background-size: contain;
-    }
-    
-    * {
-      box-sizing: border-box;
-      -webkit-tap-highlight-color: transparent;
-    }
-    
-    body {
-      font-family: "Hiragino Kaku Gothic ProN", "Yu Gothic", Meiryo, sans-serif;
-      line-height: 1.8;
-      margin: 0;
-      padding: 20px;
-      color: #333;
-      background-color: transparent;
-      width: 50%;
-      overflow-x: hidden;
-      min-height: 50vh;
-    }
-    
-    h1, h2, h3 {
-      border-left: 6px solid #333;
-      padding-left: 12px;
-      margin-top: 28px;
-      margin-bottom: 16px;
-    }
-    
-    h1 {
-      font-size: 24px;
-      line-height: 1.5;
-      font-weight: bold;
-    }
-    
-    h2 {
-      font-size: 20px;
-      font-weight: bold;
-    }
-    
-    h3 {
-      font-size: 18px;
-      font-weight: bold;
-    }
-    
-    p {
-      margin: 14px 0;
-      font-size: 16px;
-      line-height: 1.8;
-      word-break: break-word;
-    }
-    
-    ul {
-      margin: 14px 0;
-      padding-left: 24px;
-    }
-    
-    li {
-      margin-bottom: 10px;
-      font-size: 16px;
-      line-height: 1.7;
-      word-break: break-word;
-    }
-    
-    .important {
-      font-weight: bold;
-      background: rgba(245, 245, 245, 0.95);
-      padding: 18px;
-      border-left: 6px solid #d32f2f;
-      margin: 22px 0;
-      font-size: 16px;
-      line-height: 1.8;
-      border-radius: 4px;
-      word-break: break-word;
-    }
-    
-    @media (max-width: 768px) {
-      body {
-        padding: 16px;
-      }
-      
-      h1 {
-        font-size: 22px;
-      }
-      
-      h2 {
-        font-size: 18px;
-      }
-      
-      h3 {
-        font-size: 16px;
-      }
-      
-      p, li {
-        font-size: 15px;
-      }
-      
-      .important {
-        padding: 16px;
-        font-size: 15px;
-      }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>グラインダー負傷事故 再発防止資料</title>
+
+<style>
+/* =========================
+   背景（スマホ安定用）
+========================= */
+html, body {
+  width: 100%;
+  min-height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image: url('107.png');
+  background-repeat: repeat-y;
+  background-position: top center;
+  background-size: contain;
+  z-index: -1;
+}
+
+/* =========================
+   全体設定
+========================= */
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  font-family: "Hiragino Kaku Gothic ProN", "Yu Gothic", Meiryo, sans-serif;
+  color: #333;
+  line-height: 1.9;
+  padding: 18px 16px 40px;
+  overflow-x: hidden;
+}
+
+/* =========================
+   見出し
+========================= */
+h1, h2, h3 {
+  border-left: 6px solid #333;
+  padding-left: 12px;
+  margin: 32px 0 18px;
+  font-weight: 700;
+}
+
+h1 {
+  font-size: 1.4rem;
+  line-height: 1.5;
+}
+
+h2 {
+  font-size: 1.2rem;
+}
+
+h3 {
+  font-size: 1.05rem;
+}
+
+/* =========================
+   本文
+========================= */
+p {
+  margin: 14px 0;
+  font-size: 1rem;
+  line-height: 1.9;
+  word-break: break-word;
+}
+
+ul {
+  margin: 14px 0;
+  padding-left: 22px;
+}
+
+li {
+  margin-bottom: 10px;
+  font-size: 1rem;
+  line-height: 1.8;
+}
+
+/* =========================
+   強調ブロック
+========================= */
+.important {
+  margin: 24px 0;
+  padding: 18px 16px;
+  background: rgba(255, 255, 255, 0.96);
+  border-left: 6px solid #d32f2f;
+  font-weight: 700;
+  font-size: 1rem;
+  line-height: 1.9;
+  border-radius: 6px;
+}
+
+/* =========================
+   小さいスマホ対応
+========================= */
+@media (max-width: 360px) {
+  body {
+    padding: 16px 14px 36px;
+  }
+
+  h1 { font-size: 1.3rem; }
+  h2 { font-size: 1.15rem; }
+  h3 { font-size: 1rem; }
+
+  p, li, .important {
+    font-size: 0.95rem;
+  }
+}
+</style>
 </head>
+
 <body>
 
 <h1>グラインダーによる負傷事故から学ぶ<br>― 思考分散が引き起こす事故と再発防止 ―</h1>
@@ -126,9 +131,7 @@
 <ul>
   <li>使用工具：充電式グラインダー</li>
   <li>刃：切断用薄刃</li>
-  <li>
-    状況：切断用薄刃とカバーの間に指が入った状態でスイッチを入れてしまった
-  </li>
+  <li>状況：切断用薄刃とカバーの間に指が入った状態でスイッチを入れてしまった</li>
 </ul>
 <p>
 この操作は、通常であれば行わない動作である。
