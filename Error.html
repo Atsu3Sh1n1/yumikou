@@ -2,94 +2,111 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>グラインダー負傷事故 再発防止資料</title>
   <style>
+    html {
+      width: 100%;
+      overflow-x: hidden;
+    }
+    
     * {
       box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
     }
     
     body {
       font-family: "Hiragino Kaku Gothic ProN", "Yu Gothic", Meiryo, sans-serif;
       line-height: 1.8;
       margin: 0;
-      padding: 16px;
+      padding: 20px;
       color: #333;
       background: url('107.png') fixed;
       background-size: cover;
       background-attachment: fixed;
+      width: 100%;
+      overflow-x: hidden;
+      min-height: 100vh;
     }
     
     h1, h2, h3 {
       border-left: 6px solid #333;
       padding-left: 12px;
-      margin-top: 32px;
+      margin-top: 28px;
       margin-bottom: 16px;
     }
     
     h1 {
-      font-size: 20px;
-      line-height: 1.4;
+      font-size: 24px;
+      line-height: 1.5;
+      font-weight: bold;
     }
     
     h2 {
-      font-size: 18px;
+      font-size: 20px;
+      font-weight: bold;
     }
     
     h3 {
-      font-size: 16px;
+      font-size: 18px;
+      font-weight: bold;
     }
     
     p {
-      margin: 12px 0;
-      font-size: 15px;
-      line-height: 1.7;
+      margin: 14px 0;
+      font-size: 16px;
+      line-height: 1.8;
+      word-break: break-word;
     }
     
     ul {
-      margin: 12px 0;
-      padding-left: 20px;
+      margin: 14px 0;
+      padding-left: 24px;
     }
     
     li {
-      margin-bottom: 8px;
-      font-size: 15px;
+      margin-bottom: 10px;
+      font-size: 16px;
+      line-height: 1.7;
+      word-break: break-word;
     }
     
     .important {
       font-weight: bold;
-      background: #f5f5f5;
-      padding: 16px;
+      background: rgba(245, 245, 245, 0.95);
+      padding: 18px;
       border-left: 6px solid #d32f2f;
-      margin: 20px 0;
-      font-size: 15px;
-      line-height: 1.6;
+      margin: 22px 0;
+      font-size: 16px;
+      line-height: 1.8;
+      border-radius: 4px;
+      word-break: break-word;
     }
     
-    @media (max-width: 480px) {
+    @media (max-width: 768px) {
       body {
-        padding: 12px;
+        padding: 16px;
       }
       
       h1 {
-        font-size: 18px;
+        font-size: 22px;
       }
       
       h2 {
-        font-size: 16px;
+        font-size: 18px;
       }
       
       h3 {
-        font-size: 15px;
+        font-size: 16px;
       }
       
       p, li {
-        font-size: 14px;
+        font-size: 15px;
       }
       
       .important {
-        padding: 12px;
-        font-size: 14px;
+        padding: 16px;
+        font-size: 15px;
       }
     }
   </style>
