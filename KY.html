@@ -10,16 +10,17 @@
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
       margin: 0;
-      padding: 14px;
-      line-height: 1.7;
+      padding: 16px;
+      line-height: 1.8;              /* ← 行間少し広げた */
       background: #f4f6f8;
       color: #222;
+      font-size: clamp(15px, 4vw, 17px); /* ← 基本文字サイズUP */
     }
 
     h1 {
       text-align: center;
-      margin: 10px 0 18px;
-      font-size: clamp(18px, 4.5vw, 24px);
+      margin: 12px 0 20px;
+      font-size: clamp(20px, 5.2vw, 26px); /* ← 少し大きく */
       line-height: 1.4;
     }
 
@@ -30,24 +31,24 @@
 
     .card {
       background: #ffffff;
-      border-radius: 16px;
-      padding: 14px 14px;
-      margin-bottom: 12px;
-      box-shadow: 0 3px 10px rgba(0,0,0,0.06);
+      border-radius: 18px;          /* ← 少し丸く */
+      padding: 16px;
+      margin-bottom: 14px;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.07);
       border: 1px solid #eef0f2;
     }
 
     .jp {
       font-weight: 600;
-      margin-bottom: 6px;
-      font-size: clamp(14px, 3.8vw, 16px);
-      line-height: 1.6;
+      margin-bottom: 8px;
+      font-size: clamp(15px, 4.2vw, 18px); /* ← 日本語大きく */
+      line-height: 1.7;
     }
 
     .vi {
       color: #666;
-      font-size: clamp(13px, 3.6vw, 15px);
-      line-height: 1.6;
+      font-size: clamp(14px, 4vw, 16px);   /* ← ベトナム語もUP */
+      line-height: 1.7;
     }
 
     .num {
@@ -58,19 +59,24 @@
 
     /* タブレット以上 */
     @media (min-width: 768px) {
-      body { padding: 24px; }
-      .card { padding: 18px 20px; }
+      body { padding: 28px; }
+      .card { padding: 20px 22px; }
     }
 
-    /* 印刷最適化（おまけ） */
+    /* 超小型スマホ対策 */
+    @media (max-width: 360px) {
+      body { padding: 12px; }
+      .card { padding: 14px; }
+    }
+
+    /* 印刷最適化 */
     @media print {
       body { background: #fff; }
       .card { box-shadow: none; break-inside: avoid; }
     }
   </style>
 </head>
-<body>
-  <div class="wrap">
+<body>  <div class="wrap">
     <h1>KY記入用 具体例文一覧</h1>
 
     <div class="card">
