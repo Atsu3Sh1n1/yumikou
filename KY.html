@@ -7,12 +7,21 @@
   <style>
     * { box-sizing: border-box; }
 
+    /* full height so background sizing with 100% works correctly */
+    html, body { height: 100%; }
+
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
       margin: 0;
       padding: 16px;
       line-height: 1.8;              /* ← 行間少し広げた */
-      background: #f4f6f8;
+      /* 背景画像を固定し、縦方向(高さ)を画面に合わせつつアスペクト比を維持 */
+      background-color: #f4f6f8; /* フォールバック色 */
+      background-image: url('107.png');
+      background-repeat: no-repeat;
+      background-position: center center;
+      background-attachment: fixed;
+      background-size: auto 100%; /* 高さ100%で幅は自動、アスペクト比維持 */
       color: #222;
       font-size: clamp(15px, 4vw, 17px); /* ← 基本文字サイズUP */
     }
@@ -30,7 +39,6 @@
     }
 
     .card {
-      background: #ffffff;
       border-radius: 18px;          /* ← 少し丸く */
       padding: 16px;
       margin-bottom: 14px;
