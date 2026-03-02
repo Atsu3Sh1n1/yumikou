@@ -67,12 +67,31 @@
       border: 1px solid #eef0f2;
     }
 
+    .legend {
+      background: #fffbe6;
+      border-left: 4px solid #ffb400;
+      padding: 8px 12px;
+      margin-bottom: 16px;
+      font-size: 0.9em;
+      color: #333;
+    }
+
     .jp {
       font-weight: 600;
       margin-bottom: 8px;
       font-size: clamp(15px, 4.2vw, 18px); /* ← 日本語大きく */
       line-height: 1.7;
+      display: flex;
+      flex-direction: column;
     }
+
+    /* order within jp */
+    .jp .risk { order: 1; }
+    .jp .vi { order: 2; margin: 4px 0; }
+    .jp .evaluation { order: 3; }
+    .jp .countermeasure { order: 4; }
+    .jp .vi.cm { order: 5; margin: 4px 0; }
+    .jp .evaluation.after { order: 6; }
 
     .vi {
       color: #666;
@@ -80,10 +99,33 @@
       line-height: 1.7;
     }
 
+    .risk {
+      font-weight: 600;
+      display: block;
+      margin-bottom: 4px;
+    }
+    .countermeasure {
+      display: block;
+      font-style: italic;
+      margin-top: 4px;
+    }
+
     .num {
       font-weight: 700;
       color: #333;
       margin-right: 6px;
+    }
+
+    /* リスク評価ブロック */
+    .evaluation {
+      background: #eef;
+      padding: 6px 10px;
+      margin: 8px 0;
+      font-size: 0.9em;
+      border-radius: 4px;
+    }
+    .evaluation.after {
+      background: #dfd;
     }
 
     /* タブレット以上 */
@@ -103,6 +145,10 @@
       body { background: #fff; }
       .card { box-shadow: none; break-inside: avoid; }
     }
+
+    /* furigana styling */
+    ruby { ruby-position: over; }
+    rt { font-size: 0.6em; line-height: 1; }
   </style>
 </head>
 <body>
@@ -111,106 +157,496 @@
     <h1>KY記入用 具体例文一覧</h1>
     <p class="title-vi">Danh sách các ví dụ KY để điền</p>
 
-    <div class="card">
-      <div class="jp"><span class="num">1.</span>回転機器に巻き込まれて骨折する。対策、運転停止を確認し、報告連絡相談（ほうれんそう）を徹底する。</div>
-      <div class="vi">Bị cuốn vào máy quay và gãy xương. Biện pháp: xác nhận máy đã dừng và thực hiện báo cáo-liên lạc-trao đổi (hōrensō).</div>
+    <!-- 評価項目の説明（レジェンド） -->
+    <div class="legend">
+      <p>Loại tai nạn: số tương ứng với kiểu sự cố</p>
+      <p>Mức độ nghiêm trọng: ◯ không cần nghỉ, △ phải nghỉ, ✕ tử vong</p>
+      <p>Khả năng xảy ra: ◯ ít (dưới 3 lần/ngày và <10 phút), ✕ nhiều</p>
+      <p>Mức độ rủi ro: tổ hợp của mức độ/số lần (◯◯ D, ◯△ C, △△ hoặc △◯ B, ✕△ hoặc ✕◯ A)</p>
+      <p>(Giải thích các nhãn trên nền tiếng Nhật hiển thị bên dưới.)</p>
     </div>
 
     <div class="card">
-      <div class="jp"><span class="num">2.</span>スパナが滑り手指を打撲する。対策、適正工具を使用し、手元に注意する。</div>
-      <div class="vi">Cờ lê trượt làm dập ngón tay. Biện pháp: dùng dụng cụ phù hợp và chú ý tay.</div>
+      <div class="jp">
+        <span class="num">1.</span>
+        <span class="risk">回転機器に巻き込まれて骨折する。</span>
+        <div class="vi">Bị cuốn vào máy quay và gãy xương.</div>
+        <div class="evaluation">
+          <p>災害の型：6（挟まれ、巻き込まれ）</p>
+          <p>重大性：△</p>
+          <p>可能性：◯</p>
+          <p>危険度：C</p>
+        </div>
+        <span class="countermeasure">対策、運転停止を確認し、報告連絡相談（ほうれんそう）を徹底する。</span>
+        <div class="vi cm">Biện pháp: xác nhận máy đã dừng và thực hiện báo cáo-liên lạc-trao đổi (hōrensō).</div>
+        <div class="evaluation after">
+          <p>対策後</p>
+          <p>災害の型：6（挟まれ、巻き込まれ）</p>
+          <p>重大性：△</p>
+          <p>可能性：◯</p>
+          <p>危険度：D</p>
+        </div>
+      </div>
     </div>
 
     <div class="card">
-      <div class="jp"><span class="num">3.</span>高所から足を踏み外し転落する。対策、親綱の点張を確認し、安全帯の先掛け後外しを徹底する。</div>
-      <div class="vi">Bước hụt trên cao và ngã. Biện pháp: kiểm tra dây sinh mệnh và luôn móc dây an toàn trước, tháo sau.</div>
+      <div class="jp">
+        <span class="num">2.</span>
+        <span class="risk">スパナが滑り手指を打撲する。</span>
+        <div class="vi">Cờ lê trượt làm dập ngón tay.</div>
+        <div class="evaluation">
+          <p>災害の型：3（激突）</p>
+          <p>重大性：△</p>
+          <p>可能性：◯</p>
+          <p>危険度：C</p>
+        </div>
+        <span class="countermeasure">対策、適正工具を使用し、手元に注意する。</span>
+        <div class="vi cm">Biện pháp: dùng dụng cụ phù hợp và chú ý tay。</div>
+        <div class="evaluation after">
+          <p>対策後</p>
+          <p>災害の型：3（激突）</p>
+          <p>重大性：△</p>
+          <p>可能性：◯</p>
+          <p>危険度：D</p>
+        </div>
+      </div>
     </div>
 
     <div class="card">
-      <div class="jp"><span class="num">4.</span>移動時、段差に躓き転倒し、手足首を捻挫する。対策、足元に注意する。</div>
-      <div class="vi">Khi di chuyển, vấp bậc và trật cổ tay/cổ chân. Biện pháp: chú ý dưới chân.</div>
+      <div class="jp">
+        <span class="num">3.</span>
+        <span class="risk">高所から足を踏み外し転落する。</span>
+        <div class="vi">Bước hụt trên cao và ngã.</div>
+        <div class="evaluation">
+          <p>災害の型：1（墜落・転落）</p>
+          <p>重大性：△</p>
+          <p>可能性：◯</p>
+          <p>危険度：C</p>
+        </div>
+        <span class="countermeasure">対策、親綱の点張を確認し、安全帯の先掛け後外しを徹底する。</span>
+        <div class="vi cm">Biện pháp: kiểm tra dây sinh mệnh và always móc dây an toàn trước, tháo sau。</div>
+        <div class="evaluation after">
+          <p>対策後</p>
+          <p>災害の型：1（墜落・転落）</p>
+          <p>重大性：△</p>
+          <p>可能性：◯</p>
+          <p>危険度：D</p>
+        </div>
+      </div>
     </div>
 
     <div class="card">
-      <div class="jp"><span class="num">5.</span>道工具等に躓き転倒し、手足首を捻挫する。対策、作業場の整理整頓を徹底する。</div>
-      <div class="vi">Vấp vào dụng cụ/vật liệu và bị ngã trật cổ tay/cổ chân. Biện pháp: thực hiện sắp xếp nơi làm việc gọn gàng.</div>
+      <div class="jp">
+        <span class="num">4.</span>
+        <span class="risk">移動時、段差に躓き転倒し、手足首を捻挫する。</span>
+        <div class="vi">Khi di chuyển, vấp bậc và trật cổ tay/cổ chân.</div>
+        <div class="evaluation">
+          <p>災害の型：2（転倒）</p>
+          <p>重大性：△</p>
+          <p>可能性：◯</p>
+          <p>危険度：C</p>
+        </div>
+        <span class="countermeasure">対策、足元に注意する。</span>
+        <div class="vi cm">Biện pháp: chú ý dưới chân。</div>
+        <div class="evaluation after">
+          <p>対策後</p>
+          <p>災害の型：2（転倒）</p>
+          <p>重大性：△</p>
+          <p>可能性：◯</p>
+          <p>危険度：D</p>
+        </div>
+      </div>
     </div>
 
     <div class="card">
-      <div class="jp"><span class="num">6.</span>重い物を持ち腰を痛める。対策、重量物は二人以上で持ち、互いに声を掛け合いながら作業する。</div>
-      <div class="vi">Nâng vật nặng gây đau lưng. Biện pháp: vật nặng phải khiêng từ 2 người trở lên và gọi nhau khi làm việc.</div>
+      <div class="jp">
+        <span class="num">5.</span>
+        <span class="risk">道工具等に躓き転倒し、手足首を捻挫する。</span>
+        <div class="vi">Vấp vào dụng cụ/vật liệu và bị ngã trật cổ tay/cổ chân.</div>
+        <div class="evaluation">
+          <p>災害の型：2（転倒）</p>
+          <p>重大性：△</p>
+          <p>可能性：◯</p>
+          <p>危険度：C</p>
+        </div>
+        <span class="countermeasure">対策、作業場の整理整頓を徹底する。</span>
+        <div class="vi cm">Biện pháp: thực hiện sắp xếp nơi làm việc gọn gàng。</div>
+        <div class="evaluation after">
+          <p>対策後</p>
+          <p>災害の型：2（転倒）</p>
+          <p>重大性：△</p>
+          <p>可能性：◯</p>
+          <p>危険度：D</p>
+        </div>
+      </div>
     </div>
 
     <div class="card">
-      <div class="jp"><span class="num">7.</span>上部から工具・材料が落下し、下部作業員に当たる。対策、工具の落下防止措置と上下作業の合図確認を行う。</div>
-      <div class="vi">Dụng cụ/vật liệu rơi từ trên xuống trúng người bên dưới. Biện pháp: chống rơi dụng cụ và xác nhận tín hiệu khi làm việc trên dưới.</div>
+      <div class="jp">
+        <span class="num">6.</span>
+        <span class="risk">重い物を持ち腰を痛める。</span>
+        <div class="vi">Nâng vật nặng gây đau lưng.</div>
+        <div class="evaluation">
+          <p>災害の型：14（反動・無理な姿勢）</p>
+          <p>重大性：△</p>
+          <p>可能性：◯</p>
+          <p>危険度：C</p>
+        </div>
+        <span class="countermeasure">対策、重量物は二人以上で持ち、互いに声を掛け合いながら作業する。</span>
+        <div class="vi cm">Biện pháp: vật nặng phải khiêng từ 2 người trở lên và gọi nhau khi làm việc。</div>
+        <div class="evaluation after">
+          <p>対策後</p>
+          <p>災害の型：14（反動・無理な姿勢）</p>
+          <p>重大性：△</p>
+          <p>可能性：◯</p>
+          <p>危険度：D</p>
+        </div>
+      </div>
     </div>
 
     <div class="card">
-      <div class="jp"><span class="num">8.</span>グレーチング上での作業中、小物を落下させ下部作業員に当たる。対策、落下養生を行い、小物入れを使用する。</div>
-      <div class="vi">Khi làm việc trên grating, làm rơi vật nhỏ trúng người bên dưới. Biện pháp: thực hiện chống rơi và sử dụng túi đựng dụng cụ nhỏ.</div>
+      <div class="jp">
+        <span class="num">7.</span>
+        <span class="risk">上部から工具・材料が落下し、下部作業員に当たる。</span>
+        <div class="vi">Dụng cụ/vật liệu rơi từ trên xuống trúng người bên dưới.</div>
+        <div class="evaluation">
+          <p>災害の型：4（飛来・落下）</p>
+          <p>重大性：△</p>
+          <p>可能性：◯</p>
+          <p>危険度：C</p>
+        </div>
+        <span class="countermeasure">対策、工具の落下防止措置と上下作業の合図確認を行う。</span>
+        <div class="vi cm">Biện pháp: chống rơi dụng cụ và xác nhận tín hiệu khi làm việc trên dưới。</div>
+        <div class="evaluation after">
+          <p>対策後</p>
+          <p>災害の型：4（飛来・落下）</p>
+          <p>重大性：△</p>
+          <p>可能性：◯</p>
+          <p>危険度：D</p>
+        </div>
+      </div>
     </div>
 
     <div class="card">
-      <div class="jp"><span class="num">9.</span>充電工具のコードに引っ掛かり転倒する。対策、配線の取り回しを整理し、通路を確保する。</div>
-      <div class="vi">Vấp vào dây điện của dụng cụ và ngã. Biện pháp: sắp xếp dây gọn gàng và đảm bảo lối đi.</div>
+      <div class="jp">
+        <span class="num">8.</span>
+        <span class="risk">グレーチング上での作業中、小物を落下させ下部作業員に当たる。</span>
+        <div class="vi">Khi làm việc trên grating, làm rơi vật nhỏ trúng người bên dưới.</div>
+        <div class="evaluation">
+          <p>災害の型：4（飛来・落下）</p>
+          <p>重大性：△</p>
+          <p>可能性：◯</p>
+          <p>危険度：C</p>
+        </div>
+        <span class="countermeasure">対策、落下養生を行い、小物入れを使用する。</span>
+        <div class="vi cm">Biện pháp: thực hiện chống rơi và sử dụng túi đựng dụng cụ nhỏ。</div>
+        <div class="evaluation after">
+          <p>対策後</p>
+          <p>災害の型：4（飛来・落下）</p>
+          <p>重大性：△</p>
+          <p>可能性：◯</p>
+          <p>危険度：D</p>
+        </div>
+      </div>
     </div>
 
     <div class="card">
-      <div class="jp"><span class="num">10.</span>保護具未着用により飛来物で負傷する。対策、作業前に保護具の着用を相互確認する。</div>
-      <div class="vi">Không mang đồ bảo hộ bị vật bay trúng gây thương tích. Biện pháp: kiểm tra chéo việc mang bảo hộ trước khi làm.</div>
+      <div class="jp">
+        <span class="num">9.</span>
+        <span class="risk">充電工具のコードに引っ掛かり転倒する。</span>
+        <div class="vi">Vấp vào dây điện của dụng cụ và ngã.</div>
+        <div class="evaluation">
+          <p>災害の型：2（転倒）</p>
+          <p>重大性：△</p>
+          <p>可能性：◯</p>
+          <p>危険度：C</p>
+        </div>
+        <span class="countermeasure">対策、配線の取り回しを整理し、通路を確保する。</span>
+        <div class="vi cm">Biện pháp: sắp xếp dây gọn gàng và đảm bảo lối đi。</div>
+        <div class="evaluation after">
+          <p>対策後</p>
+          <p>災害の型：2（転倒）</p>
+          <p>重大性：△</p>
+          <p>可能性：◯</p>
+          <p>危険度：D</p>
+        </div>
+      </div>
     </div>
 
     <div class="card">
-      <div class="jp"><span class="num">11.</span>脚立使用中にバランスを崩し転落する。対策、水平な場所に設置し、天板に乗らない。</div>
-      <div class="vi">Mất thăng bằng khi dùng thang và bị ngã. Biện pháp: đặt trên mặt phẳng và không đứng lên đỉnh thang.</div>
+      <div class="jp">
+        <span class="num">10.</span>
+        <span class="risk">保護具未着用により飛来物で負傷する。</span>
+        <div class="vi">Không mang đồ bảo hộ bị vật bay trúng gây thương tích.</div>
+        <div class="evaluation">
+          <p>災害の型：4（飛来・落下）</p>
+          <p>重大性：△</p>
+          <p>可能性：◯</p>
+          <p>危険度：C</p>
+        </div>
+        <span class="countermeasure">対策、作業前に保護具の着用を相互確認する。</span>
+        <div class="vi cm">Biện pháp: kiểm tra chéo việc mang bảo hộ trước khi làm。</div>
+        <div class="evaluation after">
+          <p>対策後</p>
+          <p>災害の型：4（飛来・落下）</p>
+          <p>重大性：△</p>
+          <p>可能性：◯</p>
+          <p>危険度：D</p>
+        </div>
+      </div>
     </div>
 
     <div class="card">
-      <div class="jp"><span class="num">12.</span>玉掛け不良により荷が落下する。対策、ワイヤー・フックの点検と合図者の指示徹底。</div>
-      <div class="vi">Treo buộc không đúng làm rơi hàng. Biện pháp: kiểm tra cáp/móc và tuân theo tín hiệu người hướng dẫn.</div>
+      <div class="jp">
+        <span class="num">11.</span>
+        <span class="risk">脚立使用中にバランスを崩し転落する。</span>
+        <div class="vi">Mất thăng bằng khi dùng thang và bị ngã。</div>
+        <div class="evaluation">
+          <p>災害の型：1（墜落・転落）</p>
+          <p>重大性：△</p>
+          <p>可能性：◯</p>
+          <p>危険度：C</p>
+        </div>
+        <span class="countermeasure">対策、水平な場所に設置し、天板に乗らない。</span>
+        <div class="vi cm">Biện pháp: đặt trên mặt phẳng và không đứng lên đỉnh thang。</div>
+        <div class="evaluation after">
+          <p>対策後</p>
+          <p>災害の型：1（墜落・転落）</p>
+          <p>重大性：△</p>
+          <p>可能性：◯</p>
+          <p>危険度：D</p>
+        </div>
+      </div>
     </div>
 
     <div class="card">
-      <div class="jp"><span class="num">13.</span>吊り荷の下に入り込み、挟まれ・激突する。対策、吊り荷の下に入らない。</div>
-      <div class="vi">Đi vào dưới vật đang treo và bị kẹp/va đập. Biện pháp: không đứng dưới vật treo.</div>
+      <div class="jp">
+        <span class="num">12.</span>
+        <span class="risk">玉掛け不良により荷が落下する。</span>
+        <div class="vi">Treo buộc không đúng làm rơi hàng。</div>
+        <div class="evaluation">
+          <p>災害の型：4（飛来・落下）</p>
+          <p>重大性：△</p>
+          <p>可能性：◯</p>
+          <p>危険度：C</p>
+        </div>
+        <span class="countermeasure">対策、ワイヤー・フックの点検と合図者の指示徹底。</span>
+        <div class="vi cm">Biện pháp: kiểm tra cáp/móc và tuân theo tín hiệu người hướng dẫn。</div>
+        <div class="evaluation after">
+          <p>対策後</p>
+          <p>災害の型：4（飛来・落下）</p>
+          <p>重大性：△</p>
+          <p>可能性：◯</p>
+          <p>危険度：D</p>
+        </div>
+      </div>
     </div>
 
     <div class="card">
-      <div class="jp"><span class="num">14.</span>グラインダー使用時、火花が飛散し火傷する。対策、保護具着用と可燃物の除去。</div>
-      <div class="vi">Tia lửa từ máy mài gây bỏng. Biện pháp: mang bảo hộ và loại bỏ vật dễ cháy.</div>
+      <div class="jp">
+        <span class="num">13.</span>
+        <span class="risk">吊り荷の下に入り込み、挟まれ・激突する。</span>
+        <div class="vi">Đi vào dưới vật đang treo và bị kẹp/va đập。</div>
+        <div class="evaluation">
+          <p>災害の型：6（挟まれ、巻き込まれ）</p>
+          <p>重大性：△</p>
+          <p>可能性：◯</p>
+          <p>危険度：C</p>
+        </div>
+        <span class="countermeasure">対策、吊り荷の下に入らない。</span>
+        <div class="vi cm">Biện pháp: không đứng dưới vật treo。</div>
+        <div class="evaluation after">
+          <p>対策後</p>
+          <p>災害の型：6（挟まれ、巻き込まれ）</p>
+          <p>重大性：△</p>
+          <p>可能性：◯</p>
+          <p>危険度：D</p>
+        </div>
+      </div>
     </div>
 
     <div class="card">
-      <div class="jp"><span class="num">15.</span>切断刃に触れ手を切創する。対策、電源停止確認と手袋着用。</div>
-      <div class="vi">Chạm vào lưỡi cắt gây đứt tay. Biện pháp: xác nhận tắt nguồn và mang găng tay.</div>
+      <div class="jp">
+        <span class="num">14.</span>
+        <span class="risk">グラインダー使用時、火花が飛散し火傷する。</span>
+        <div class="vi">Tia lửa từ máy mài gây bỏng。</div>
+        <div class="evaluation">
+          <p>災害の型：10（高温・低温物との接触）</p>
+          <p>重大性：△</p>
+          <p>可能性：◯</p>
+          <p>危険度：C</p>
+        </div>
+        <span class="countermeasure">対策、保護具着用と可燃物の除去。</span>
+        <div class="vi cm">Biện pháp: mang bảo hộ và loại bỏ vật dễ cháy。</div>
+        <div class="evaluation after">
+          <p>対策後</p>
+          <p>災害の型：10（高温・低温物との接触）</p>
+          <p>重大性：△</p>
+          <p>可能性：◯</p>
+          <p>危険度：D</p>
+        </div>
+      </div>
     </div>
 
     <div class="card">
-      <div class="jp"><span class="num">16.</span>雨天時、足場上で滑り転倒する。対策、足場の水分を確認し、滑りに注意して作業する。</div>
-      <div class="vi">Khi trời mưa, giàn giáo trơn gây té ngã. Biện pháp: kiểm tra tình trạng ướt của giàn giáo và chú ý trơn trượt khi làm việc.</div>
+      <div class="jp">
+        <span class="num">15.</span>
+        <span class="risk">切断刃に触れ手を切創する。</span>
+        <div class="vi">Chạm vào lưỡi cắt gây đứt tay。</div>
+        <div class="evaluation">
+          <p>災害の型：7（切れ、こすれ）</p>
+          <p>重大性：△</p>
+          <p>可能性：◯</p>
+          <p>危険度：C</p>
+        </div>
+        <span class="countermeasure">対策、電源停止確認と手袋着用。</span>
+        <div class="vi cm">Biện pháp: xác nhận tắt nguồn và mang găng tay。</div>
+        <div class="evaluation after">
+          <p>対策後</p>
+          <p>災害の型：7（切れ、こすれ）</p>
+          <p>重大性：△</p>
+          <p>可能性：◯</p>
+          <p>危険度：D</p>
+        </div>
+      </div>
     </div>
 
     <div class="card">
-      <div class="jp"><span class="num">17.</span>狭所作業で頭部をぶつけ負傷する。対策、周囲確認と保護帽の着用。</div>
-      <div class="vi">Đụng đầu trong không gian hẹp. Biện pháp: quan sát xung quanh và đội mũ bảo hộ.</div>
+      <div class="jp">
+        <span class="num">16.</span>
+        <span class="risk">雨天時、足場上で滑り転倒する。</span>
+        <div class="vi">Khi trời mưa, giàn giáo trơn gây té ngã。</div>
+        <div class="evaluation">
+          <p>災害の型：2（転倒）</p>
+          <p>重大性：△</p>
+          <p>可能性：◯</p>
+          <p>危険度：C</p>
+        </div>
+        <span class="countermeasure">対策、足場の水分を確認し、滑りに注意して作業する。</span>
+        <div class="vi cm">Biện pháp: kiểm tra tình trạng ướt của giàn giáo và chú ý trơn trượt khi làm việc。</div>
+        <div class="evaluation after">
+          <p>対策後</p>
+          <p>災害の型：2（転倒）</p>
+          <p>重大性：△</p>
+          <p>可能性：◯</p>
+          <p>危険度：D</p>
+        </div>
+      </div>
     </div>
 
     <div class="card">
-      <div class="jp"><span class="num">18.</span>フォークリフト接触により負傷する。対策、作業半径内に立ち入らない。</div>
-      <div class="vi">Bị xe nâng va chạm gây thương tích. Biện pháp: không vào phạm vi hoạt động của xe nâng.</div>
+      <div class="jp">
+        <span class="num">17.</span>
+        <span class="risk">狭所作業で頭部をぶつけ負傷する。</span>
+        <div class="vi">Đụng đầu trong không gian hẹp。</div>
+        <div class="evaluation">
+          <p>災害の型：3（激突）</p>
+          <p>重大性：△</p>
+          <p>可能性：◯</p>
+          <p>危険度：C</p>
+        </div>
+        <span class="countermeasure">対策、周囲確認と保護帽の着用。</span>
+        <div class="vi cm">Biện pháp: quan sát xung quanh và đội mũ bảo hộ。</div>
+        <div class="evaluation after">
+          <p>対策後</p>
+          <p>災害の型：3（激突）</p>
+          <p>重大性：△</p>
+          <p>可能性：◯</p>
+          <p>危険度：D</p>
+        </div>
+      </div>
     </div>
 
     <div class="card">
-      <div class="jp"><span class="num">19.</span>無理な姿勢で作業し筋肉を痛める。対策、作業姿勢を正しく保つ。</div>
-      <div class="vi">Làm việc sai tư thế gây đau cơ. Biện pháp: giữ tư thế làm việc đúng.</div>
+      <div class="jp">
+        <span class="num">18.</span>
+        <span class="risk">フォークリフト接触により負傷する。</span>
+        <div class="vi">Bị xe nâng va chạm gây thương tích。</div>
+        <div class="evaluation">
+          <p>災害の型：3（激突）</p>
+          <p>重大性：△</p>
+          <p>可能性：◯</p>
+          <p>危険度：C</p>
+        </div>
+        <span class="countermeasure">対策、作業半径内に立ち入らない。</span>
+        <div class="vi cm">Biện pháp: không vào phạm vi hoạt động của xe nâng。</div>
+        <div class="evaluation after">
+          <p>対策後</p>
+          <p>災害の型：3（激突）</p>
+          <p>重大性：△</p>
+          <p>可能性：◯</p>
+          <p>危険度：D</p>
+        </div>
+      </div>
     </div>
 
     <div class="card">
-      <div class="jp"><span class="num">20.</span>作業中の声掛け不足により接触災害が発生する。対策、指差呼称と声掛けの徹底。</div>
-      <div class="vi">Thiếu gọi nhau khi làm việc gây tai nạn va chạm. Biện pháp: chỉ tay gọi tên và nhắc nhau.</div>
+      <div class="jp">
+        <span class="num">19.</span>
+        <span class="risk">無理な姿勢で作業し筋肉を痛める。</span>
+        <div class="vi">Làm việc sai tư thế gây đau cơ。</div>
+        <div class="evaluation">
+          <p>災害の型：14（反動・無理な姿勢）</p>
+          <p>重大性：△</p>
+          <p>可能性：◯</p>
+          <p>危険度：C</p>
+        </div>
+        <span class="countermeasure">対策、作業姿勢を正しく保つ。</span>
+        <div class="vi cm">Biện pháp: giữ tư thế làm việc đúng。</div>
+        <div class="evaluation after">
+          <p>対策後</p>
+          <p>災害の型：14（反動・無理な姿勢）</p>
+          <p>重大性：△</p>
+          <p>可能性：◯</p>
+          <p>危険度：D</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="jp">
+        <span class="num">20.</span>
+        <span class="risk">作業中の声掛け不足により接触災害が発生する。</span>
+        <div class="vi">Thiếu gọi nhau khi làm việc gây tai nạn va chạm。</div>
+        <div class="evaluation">
+          <p>災害の型：3（激突）</p>
+          <p>重大性：△</p>
+          <p>可能性：◯</p>
+          <p>危険度：C</p>
+        </div>
+        <span class="countermeasure">対策、指差呼称と声掛けの徹底。</span>
+        <div class="vi cm">Biện pháp: chỉ tay gọi tên và nhắc nhau。</div>
+        <div class="evaluation after">
+          <p>対策後</p>
+          <p>災害の型：3（激突）</p>
+          <p>重大性：△</p>
+          <p>可能性：◯</p>
+          <p>危険度：D</p>
+        </div>
+      </div>
     </div>
 
   </div>
+
+  <!-- furigana auto-conversion script -->
+  <script src="https://unpkg.com/kuroshiro@3.1.2/dist/kuroshiro.min.js"></script>
+  <script src="https://unpkg.com/kuroshiro-analyzer-kuromoji@3.1.2/dist/kuroshiro-analyzer-kuromoji.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      try {
+        const kuroshiro = new Kuroshiro();
+        await kuroshiro.init(new Kuroshiro.Analyzer.Kuromoji());
+        const els = document.querySelectorAll('.risk, .countermeasure, .evaluation p');
+        els.forEach(el => {
+          // avoid converting Vietnamese or numerals
+          const text = el.textContent;
+          const converted = kuroshiro.convert(text, { to: 'hiragana', mode: 'furigana' });
+          el.innerHTML = converted;
+        });
+      } catch (e) {
+        console.warn('furigana conversion failed', e);
+      }
+    });
+  </script>
 </body>
 </html>
