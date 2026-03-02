@@ -65,15 +65,17 @@
       margin-bottom: 14px;
       box-shadow: 0 4px 14px rgba(0,0,0,0.07);
       border: 1px solid #eef0f2;
+      background-color: rgba(255,255,255,0.3); /* much more transparent so image shows clearly */
+      backdrop-filter: blur(4px); /* keep slight blur for text readability */
     }
 
     .legend {
-      background: #fffbe6;
       border-left: 4px solid #ffb400;
       padding: 8px 12px;
       margin-bottom: 16px;
       font-size: 0.9em;
       color: #333;
+      background-color: rgba(255,255,230,0.6); /* 半透明背景 */
     }
 
     .jp {
@@ -118,14 +120,14 @@
 
     /* リスク評価ブロック */
     .evaluation {
-      background: #eef;
+      background: rgba(238,238,255,0.5); /* 半透明 */
       padding: 6px 10px;
       margin: 8px 0;
       font-size: 0.9em;
       border-radius: 4px;
     }
     .evaluation.after {
-      background: #dfd;
+      background: rgba(221,255,221,0.5); /* 半透明 */
     }
 
     /* タブレット以上 */
@@ -149,6 +151,14 @@
     /* furigana styling */
     ruby { ruby-position: over; }
     rt { font-size: 0.6em; line-height: 1; }
+
+    /* inline Vietnamese under each Japanese phrase */
+    .vi-inline {
+      display: block;
+      color: #666;
+      font-size: 0.85em;
+      margin-top: 2px;
+    }
   </style>
 </head>
 <body>
@@ -633,6 +643,27 @@
   <script src="https://unpkg.com/kuroshiro-analyzer-kuromoji@3.1.2/dist/kuroshiro-analyzer-kuromoji.min.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', async () => {
+      // add translations for evaluation labels immediately (regardless of furigana success)
+      const evalMap = {
+        '災害の型': 'Loại tai nạn',
+        '重大性': 'Mức độ nghiêm trọng',
+        '可能性': 'Khả năng xảy ra',
+        '危険度': 'Mức độ rủi ro',
+        '対策後': 'Sau biện pháp'
+      };
+      document.querySelectorAll('.evaluation p').forEach(p => {
+        const text = p.textContent;
+        for (const jpTerm in evalMap) {
+          if (text.startsWith(jpTerm)) {
+            const newp = document.createElement('p');
+            newp.className = 'vi-inline';
+            newp.textContent = evalMap[jpTerm];
+            p.parentNode.insertBefore(newp, p.nextSibling);
+            break;
+          }
+        }
+      });
+
       try {
         const kuroshiro = new Kuroshiro();
         await kuroshiro.init(new Kuroshiro.Analyzer.Kuromoji());
@@ -643,6 +674,32 @@
           const converted = kuroshiro.convert(text, { to: 'hiragana', mode: 'furigana' });
           el.innerHTML = converted;
         });
+
+        // insert inline Vietnamese translations inside risk/countermeasure spans
+        document.querySelectorAll('.jp').forEach(jp => {
+          const risk = jp.querySelector('.risk');
+          if (risk) {
+            const next = risk.nextElementSibling;
+            if (next && next.classList.contains('vi') && !next.classList.contains('cm')) {
+              const span = document.createElement('span');
+              span.className = 'vi-inline';
+              span.textContent = next.textContent;
+              risk.appendChild(span);
+            }
+          }
+          const cm = jp.querySelector('.countermeasure');
+          if (cm) {
+            const next = cm.nextElementSibling;
+            if (next && next.classList.contains('vi') && next.classList.contains('cm')) {
+              const span = document.createElement('span');
+              span.className = 'vi-inline';
+              span.textContent = next.textContent;
+              cm.appendChild(span);
+            }
+          }
+        });
+
+
       } catch (e) {
         console.warn('furigana conversion failed', e);
       }
