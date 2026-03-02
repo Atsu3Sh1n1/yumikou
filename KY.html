@@ -76,8 +76,12 @@
       font-size: 0.9em;
       color: #333;
       background-color: rgba(255,255,230,0.6); /* 半透明背景 */
+    }    /* Japanese translation lines in legend */
+    .legend .ja {
+      color: #555;
+      margin-top: 2px;
+      font-size: 0.9em;
     }
-
     .jp {
       font-weight: 600;
       margin-bottom: 8px;
@@ -169,9 +173,13 @@
 
     <!-- 評価項目の説明（レジェンド） -->
     <div class="legend">
+      <p class="ja">災害の型：対応する番号</p>
       <p>Loại tai nạn: số tương ứng với kiểu sự cố</p>
+      <p class="ja">重大性：◯休まなくてもよい、△休まなければならない、✕死亡</p>
       <p>Mức độ nghiêm trọng: ◯ không cần nghỉ, △ phải nghỉ, ✕ tử vong</p>
+      <p class="ja">可能性：◯少ない（1日3回未満かつ<10分）、✕多い</p>
       <p>Khả năng xảy ra: ◯ ít (dưới 3 lần/ngày và <10 phút), ✕ nhiều</p>
+      <p class="ja">危険度：程度と回数の組み合わせ（◯◯D, ◯△C, △△または△◯B, ✕△または✕◯A）</p>
       <p>Mức độ rủi ro: tổ hợp của mức độ/số lần (◯◯ D, ◯△ C, △△ hoặc △◯ B, ✕△ hoặc ✕◯ A)</p>
       <p>(Giải thích các nhãn trên nền tiếng Nhật hiển thị bên dưới.)</p>
     </div>
