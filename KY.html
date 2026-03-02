@@ -15,15 +15,26 @@
       margin: 0;
       padding: 16px;
       line-height: 1.8;              /* ← 行間少し広げた */
-      /* 背景画像を固定し、縦方向(高さ)を画面に合わせつつアスペクト比を維持 */
+      /* モバイルでbackground-attachment:fixedが無効になるため
+         固定背景用の要素を前に重ねる方式に切り替える */
       background-color: #f4f6f8; /* フォールバック色 */
+      color: #222;
+      font-size: clamp(15px, 4vw, 17px); /* ← 基本文字サイズUP */
+    }
+
+    /* 背景用の固定要素。スマホでも確実に固定表示される */
+    .bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: -1;
       background-image: url('107.png');
       background-repeat: no-repeat;
       background-position: center center;
-      background-attachment: fixed;
-      background-size: auto 100%; /* 高さ100%で幅は自動、アスペクト比維持 */
-      color: #222;
-      font-size: clamp(15px, 4vw, 17px); /* ← 基本文字サイズUP */
+      background-size: auto 100%; /* 高さ100%でアスペクト比維持 */
+      pointer-events: none;
     }
 
     h1 {
@@ -94,7 +105,9 @@
     }
   </style>
 </head>
-<body>  <div class="wrap">
+<body>
+  <div class="bg"></div>
+  <div class="wrap">
     <h1>KY記入用 具体例文一覧</h1>
     <p class="title-vi">Danh sách các ví dụ KY để điền</p>
 
