@@ -129,6 +129,13 @@
       margin: 8px 0;
       font-size: 0.9em;
       border-radius: 4px;
+      /* 横並びにして空白を節約 */
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px 12px; /* 行間と項目間の隙間 */
+    }
+    .evaluation p {
+      margin: 0; /* flex子として余白リセット */
     }
     .evaluation.after {
       background: rgba(221,255,221,0.5); /* 半透明 */
@@ -152,6 +159,20 @@
       .card { box-shadow: none; break-inside: avoid; }
     }
 
+    /* 災害の型リストを横並びにする */
+    .legend .disaster-types {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 12px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 16px;
+    }
+    .legend .disaster-types li {
+      margin: 0;
+      font-size: 0.9em;
+    }
+
     /* furigana styling */
     ruby { ruby-position: over; }
     rt { font-size: 0.6em; line-height: 1; }
@@ -173,14 +194,30 @@
 
     <!-- 評価項目の説明（レジェンド） -->
     <div class="legend">
-      <p class="ja">災害の型：対応する番号</p>
-      <p>Loại tai nạn: số tương ứng với kiểu sự cố</p>
-      <p class="ja">重大性：◯休まなくてもよい、△休まなければならない、✕死亡</p>
-      <p>Mức độ nghiêm trọng: ◯ không cần nghỉ, △ phải nghỉ, ✕ tử vong</p>
-      <p class="ja">可能性：◯少ない（1日3回未満かつ<10分）、✕多い</p>
-      <p>Khả năng xảy ra: ◯ ít (dưới 3 lần/ngày và <10 phút), ✕ nhiều</p>
-      <p class="ja">危険度：程度と回数の組み合わせ（◯◯D, ◯△C, △△または△◯B, ✕△または✕◯A）</p>
-      <p>Mức độ rủi ro: tổ hợp của mức độ/số lần (◯◯ D, ◯△ C, △△ hoặc △◯ B, ✕△ hoặc ✕◯ A)</p>
+      <p class="ja">重大性：◯不休災害（切傷・捻挫・皮膚炎・打撲）、△休業災害（裂傷・骨折・火傷・ガス中毒）、✕死亡災害（身体の機能不全）</p>
+      <p>Mức độ nghiêm trọng: ◯ không nghỉ (vết cắt, trật khớp, viêm da, bầm tím), △ phải nghỉ (vết rách, gãy xương, bỏng, ngộ độc khí), ✕ tử vong/khuyết tật (một phần cơ thể mất chức năng)</p>
+      <p class="ja">可能性：◯少ない（1日3回未満かつ10分未満）、△数回ある（1日3回以上かつ10分以上）</p>
+      <p>Khả năng xảy ra: ◯ ít (dưới 3 lần/ngày và dưới 10 phút), △ thường xuyên (3 lần/ngày trở lên và 10 phút trở lên)</p>
+      <p class="ja">危険度：程度と回数の組み合わせ（◯◯=D, ◯△=C, △◯=B, △△=B, ✕△または✕◯=A）</p>
+      <p>Mức độ rủi ro: tổ hợp của mức độ/số lần (◯◯=D, ◯△=C, △◯=B, △△=B, ✕△ hoặc ✕◯=A)</p>
+      <p class="ja">災害の型一覧：</p>
+      <ol>
+        <li>墜落・転落<br><span class="vi">rơi/ngã</span></li>
+        <li>転倒<br><span class="vi">trượt ngã</span></li>
+        <li>激突／激突され<br><span class="vi">va chạm / bị va chạm</span></li>
+        <li>飛来・落下<br><span class="vi">vật bay/rơi</span></li>
+        <li>崩壊・倒壊<br><span class="vi">sụp đổ, đổ</span></li>
+        <li>挟まれ・巻き込まれ<br><span class="vi">kẹt, cuốn</span></li>
+        <li>切れ・こすれ<br><span class="vi">cắt, chà xát</span></li>
+        <li>踏み抜き<br><span class="vi">đâm xuyên</span></li>
+        <li>おぼれ<br><span class="vi">chìm</span></li>
+        <li>高温・低温物との接触<br><span class="vi">tiếp xúc với vật nóng/lạnh</span></li>
+        <li>有害物との接触<br><span class="vi">tiếp xúc với chất độc hại</span></li>
+        <li>感電<br><span class="vi">dịch điện</span></li>
+        <li>爆発・破裂・火災<br><span class="vi">nổ, vỡ, cháy</span></li>
+        <li>反動・無理な姿勢<br><span class="vi">phản lực, tư thế quá sức</span></li>
+        <li>その他<br><span class="vi">khác</span></li>
+      </ol>
       <p>(Giải thích các nhãn trên nền tiếng Nhật hiển thị bên dưới.)</p>
     </div>
 
@@ -191,6 +228,7 @@
         <div class="vi">Bị cuốn vào máy quay và gãy xương.</div>
         <div class="evaluation">
           <p>災害の型：6（挟まれ、巻き込まれ）</p>
+          <p class="vi">Loại tai nạn: 6 (kẹt, cuốn vào)</p>
           <p>重大性：△</p>
           <p>可能性：◯</p>
           <p>危険度：C</p>
@@ -260,8 +298,8 @@
         <div class="vi">Khi di chuyển, vấp bậc và trật cổ tay/cổ chân.</div>
         <div class="evaluation">
           <p>災害の型：2（転倒）</p>
-          <p>重大性：△</p>
-          <p>可能性：◯</p>
+          <p>重大性：◯</p>
+          <p>可能性：△</p>
           <p>危険度：C</p>
         </div>
         <span class="countermeasure">対策、足元に注意する。</span>
@@ -283,8 +321,8 @@
         <div class="vi">Vấp vào dụng cụ/vật liệu và bị ngã trật cổ tay/cổ chân.</div>
         <div class="evaluation">
           <p>災害の型：2（転倒）</p>
-          <p>重大性：△</p>
-          <p>可能性：◯</p>
+          <p>重大性：◯</p>
+          <p>可能性：△</p>
           <p>危険度：C</p>
         </div>
         <span class="countermeasure">対策、作業場の整理整頓を徹底する。</span>
@@ -670,6 +708,68 @@
             break;
           }
         }
+      });
+
+      // evaluate severity based on injury keywords and recalc risk degree
+      const severityKeywords = [
+        {keywords: ['切傷','捻挫','皮膚炎','打撲'], symbol:'◯'},
+        {keywords: ['裂傷','骨折','火傷','ガス中毒'], symbol:'△'},
+        {keywords: ['機能不全'], symbol:'✕'}
+      ];
+      function deriveSeverityFromText(text) {
+        for (const entry of severityKeywords) {
+          for (const kw of entry.keywords) {
+            if (text.includes(kw)) return entry.symbol;
+          }
+        }
+        return '';
+      }
+      document.querySelectorAll('.card').forEach(card => {
+        const riskText = card.querySelector('.risk')?.textContent || '';
+        let sevSymbol = deriveSeverityFromText(riskText);
+        const evalBlocks = card.querySelectorAll('.evaluation');
+        evalBlocks.forEach((evalBlock, idx) => {
+          // read existing probability and severity
+          let prob = '';
+          evalBlock.querySelectorAll('p').forEach(p => {
+            if (p.textContent.startsWith('可能性：')) prob = p.textContent.replace('可能性：', '').trim();
+            if (p.textContent.startsWith('重大性：') && !sevSymbol) {
+              sevSymbol = p.textContent.replace('重大性：', '').trim();
+            }
+          });
+          // if this is the pre-countermeasure block and severity is ◯,
+          // assume probability should be △ (頻度多い)
+          if (idx === 0 && sevSymbol === '◯') {
+            prob = '△';
+            evalBlock.querySelectorAll('p').forEach(p => {
+              if (p.textContent.startsWith('可能性：')) {
+                p.textContent = '可能性：△';
+              }
+            });
+          }
+          // update severity line
+          if (sevSymbol) {
+            evalBlock.querySelectorAll('p').forEach(p => {
+              if (p.textContent.startsWith('重大性：')) {
+                p.textContent = '重大性：' + sevSymbol;
+              }
+            });
+          }
+          // compute risk degree
+          let riskSym = '';
+          if (sevSymbol === '◯' && prob === '◯') riskSym = 'D';
+          else if (sevSymbol === '◯' && prob === '△') riskSym = 'C';
+          else if (sevSymbol === '△' && prob === '◯') riskSym = 'B';
+          else if (sevSymbol === '△' && prob === '△') riskSym = 'B';
+          else if (sevSymbol === '✕') riskSym = 'A';
+          if (riskSym) {
+            evalBlock.querySelectorAll('p').forEach(p => {
+              if (p.textContent.startsWith('危険度：')) {
+                p.textContent = '危険度：' + riskSym;
+              }
+            });
+          }
+        });
       });
 
       try {
