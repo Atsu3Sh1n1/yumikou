@@ -9,22 +9,6 @@
 body {
   font-family: sans-serif;
   margin: 0;
-<<<<<<< HEAD
-  padding: 16px;
-  background: #f5f5f5;
-}
-
-/* グリッド */
-.grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-
-/* 各アイテム */
-.item {
-  width: 30%;
-=======
   padding: 12px;
   background: #f5f5f5;
 }
@@ -68,27 +52,12 @@ button[data-cat="すべて"].active { background:#4caf50; }
 
 /* アイテム */
 .item {
->>>>>>> bea24b1d (変更内容)
   position: relative;
 }
 
 /* 画像 */
 .item img {
   width: 100%;
-<<<<<<< HEAD
-  height: 120px;
-  object-fit: cover;
-  border-radius: 12px;
-  cursor: pointer;
-  border: 3px solid transparent;
-  transition: 0.2s;
-  filter: brightness(60%);
-}
-
-/* 再生中（画像） */
-.item img.active {
-  border: 3px solid #4caf50;
-=======
   height: 100px;
   object-fit: cover;
   border-radius: 10px;
@@ -101,40 +70,10 @@ button[data-cat="すべて"].active { background:#4caf50; }
 /* 再生中 */
 .item img.active {
   border: 2px solid #4caf50;
->>>>>>> bea24b1d (変更内容)
   transform: scale(1.05);
   filter: brightness(100%);
 }
 
-<<<<<<< HEAD
-/* ラベル（中央文字） */
-.label {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  color: #fff;
-  font-size: 16px;
-  font-weight: bold;
-  text-align: center;
-  pointer-events: none;
-  text-shadow: 0 2px 6px rgba(0,0,0,0.8);
-}
-
-/* 再生中ラベル色 */
-.item.playing .label {
-  color: #4caf50;
-}
-
-/* 再生中バッジ */
-.playing-badge {
-  position: absolute;
-  bottom: 6px;
-  right: 6px;
-  background: #4caf50;
-  color: #fff;
-  font-size: 12px;
-=======
 /* ラベル */
 .label {
   position: absolute;
@@ -155,7 +94,6 @@ button[data-cat="すべて"].active { background:#4caf50; }
   background: #4caf50;
   color: #fff;
   font-size: 11px;
->>>>>>> bea24b1d (変更内容)
   padding: 2px 6px;
   border-radius: 6px;
   display: none;
@@ -165,252 +103,20 @@ button[data-cat="すべて"].active { background:#4caf50; }
   display: block;
 }
 
-<<<<<<< HEAD
-/* アニメーション */
-@keyframes pulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.08); }
-=======
 @keyframes pulse {
   0% { transform: scale(1); }
   50% { transform: scale(1.06); }
->>>>>>> bea24b1d (変更内容)
   100% { transform: scale(1); }
 }
 
 .item.playing img {
   animation: pulse 1s infinite;
 }
-<<<<<<< HEAD
-
-/* コントロール */
-.controls {
-  margin-top: 20px;
-  background: #fff;
-  padding: 16px;
-  border-radius: 12px;
-}
-
-/* スイッチUI */
-.switch {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-top: 16px;
-}
-
-.switch input {
-  display: none;
-}
-
-.slider {
-  width: 50px;
-  height: 26px;
-  background: #ccc;
-  border-radius: 30px;
-  position: relative;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-.slider::before {
-  content: "";
-  width: 22px;
-  height: 22px;
-  background: #fff;
-  position: absolute;
-  top: 2px;
-  left: 2px;
-  border-radius: 50%;
-  transition: 0.3s;
-}
-
-.switch input:checked + .slider {
-  background: #4caf50;
-}
-
-.switch input:checked + .slider::before {
-  transform: translateX(24px);
-}
-=======
->>>>>>> bea24b1d (変更内容)
 </style>
 
 </head>
 <body>
 
-<<<<<<< HEAD
-<div class="grid" id="grid"></div>
-
-<div class="controls">
-  <label>音量</label>
-  <input type="range" min="0" max="1" step="0.1" value="1" id="volume">
-
-  <div class="switch">
-    <span>連続再生</span>
-    <label>
-      <input type="checkbox" id="autoToggle">
-      <div class="slider"></div>
-    </label>
-    <span id="statusText">OFF</span>
-  </div>
-</div>
-
-<script>
-
-/* =========================
-   ★ここに追加するだけ★
-========================= */
-const items = [
-  { img: "ソケットレンチ.webp", sound: "ソケットレンチ.wav", name: "ソケットレンチ" },
-  { img: "メガネレンチ.jpg", sound: "wrench.mp3", name: "メガネレンチ" },
-  { img: "drill.webp", sound: "drill.mp3", name: "ドリル" },
-  { img: "saw.webp", sound: "saw.mp3", name: "ノコギリ" },
-  { img: "helmet.webp", sound: "helmet.mp3", name: "ヘルメット" },
-  { img: "gloves.webp", sound: "gloves.mp3", name: "手袋" },
-  { img: "ladder.webp", sound: "ladder.mp3", name: "脚立" },
-  { img: "pipe.webp", sound: "pipe.mp3", name: "配管" },
-  { img: "valve.webp", sound: "valve.mp3", name: "バルブ" },
-  { img: "tank.webp", sound: "tank.mp3", name: "タンク" }
-];
-/* ========================= */
-
-let currentAudio = null;
-let currentImg = null;
-let pressTimer;
-let isLongPress = false;
-let autoPlay = false;
-
-const grid = document.getElementById("grid");
-
-/* 自動生成 */
-items.forEach((item, index) => {
-
-  const div = document.createElement("div");
-  div.className = "item";
-
-  /* 画像 */
-  const img = document.createElement("img");
-  img.src = item.img;
-
-  /* ラベル（中央文字） */
-  const label = document.createElement("div");
-  label.className = "label";
-  label.textContent = item.name;
-
-  /* 再生中バッジ */
-  const badge = document.createElement("div");
-  badge.className = "playing-badge";
-  badge.textContent = "再生中";
-
-  /* 音声（wav / mp3対応） */
-  const audio = document.createElement("audio");
-  audio.id = "audio" + index;
-
-  const source = document.createElement("source");
-  source.src = item.sound;
-
-  if (item.sound.endsWith(".wav")) {
-    source.type = "audio/wav";
-  } else if (item.sound.endsWith(".mp3")) {
-    source.type = "audio/mpeg";
-  }
-
-  audio.appendChild(source);
-
-  /* タッチ操作 */
-  img.ontouchstart = (e) => startPress(e, index, img);
-  img.ontouchend = (e) => endPress(e, index, img);
-
-  /* PCクリック対応（ついでに） */
-  img.onclick = () => playSound(index, img);
-
-  /* DOM追加 */
-  div.appendChild(img);
-  div.appendChild(label);
-  div.appendChild(badge);
-  div.appendChild(audio);
-
-  grid.appendChild(div);
-});
-
-
-/* 操作系 */
-function startPress(e, index, img) {
-  isLongPress = false;
-
-  pressTimer = setTimeout(() => {
-    isLongPress = true;
-    stopAudio();
-  }, 500);
-}
-
-function endPress(e, index, img) {
-  clearTimeout(pressTimer);
-
-  if (!isLongPress) {
-    playSound(index, img);
-  }
-}
-
-function playSound(index, img) {
-  stopAudio();
-
-  const audio = document.getElementById("audio" + index);
-  const volume = document.getElementById("volume").value;
-
-  audio.volume = volume;
-  audio.play();
-
-  currentAudio = audio;
-  currentImg = img;
-
-  document.querySelectorAll("img").forEach(i => i.classList.remove("active"));
-  img.classList.add("active");
-
-  audio.onended = () => {
-    img.classList.remove("active");
-
-    if (autoPlay) {
-      playNext(index);
-    }
-  };
-}
-
-function stopAudio() {
-  if (currentAudio) {
-    currentAudio.pause();
-    currentAudio.currentTime = 0;
-  }
-  if (currentImg) {
-    currentImg.classList.remove("active");
-  }
-}
-
-function playNext(index) {
-  const next = index + 1;
-  if (next < items.length) {
-    const nextImg = document.querySelectorAll("img")[next];
-    playSound(next, nextImg);
-  }
-}
-
-/* スイッチ */
-const toggle = document.getElementById("autoToggle");
-const statusText = document.getElementById("statusText");
-
-toggle.addEventListener("change", () => {
-  autoPlay = toggle.checked;
-  statusText.textContent = autoPlay ? "ON" : "OFF";
-});
-
-/* 音量 */
-document.getElementById("volume").addEventListener("input", (e) => {
-  if (currentAudio) {
-    currentAudio.volume = e.target.value;
-  }
-});
-=======
 <div id="categories"></div>
 <div id="subcategories"></div>
 <div class="grid" id="grid"></div>
@@ -584,7 +290,6 @@ function setActive(parent,btn){
 /* 初期 */
 renderSub();
 render();
->>>>>>> bea24b1d (変更内容)
 
 </script>
 
