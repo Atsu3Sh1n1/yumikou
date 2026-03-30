@@ -9,6 +9,7 @@
 body {
   font-family: sans-serif;
   margin: 0;
+<<<<<<< HEAD
   padding: 16px;
   background: #f5f5f5;
 }
@@ -23,12 +24,58 @@ body {
 /* 各アイテム */
 .item {
   width: 30%;
+=======
+  padding: 12px;
+  background: #f5f5f5;
+}
+
+/* カテゴリ */
+#categories, #subcategories {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+button {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 20px;
+  background: #ddd;
+  cursor: pointer;
+  white-space: nowrap;
+  font-size: 14px;
+}
+
+button.active {
+  color: #fff;
+}
+
+/* カテゴリ色 */
+button[data-cat="工具"].active { background:#ff9800; }
+button[data-cat="電動工具"].active { background:#f44336; }
+button[data-cat="衣類"].active { background:#2196f3; }
+button[data-cat="設備"].active { background:#9c27b0; }
+button[data-cat="鋼材"].active { background:#607d8b; }
+button[data-cat="すべて"].active { background:#4caf50; }
+
+/* グリッド */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  gap: 10px;
+}
+
+/* アイテム */
+.item {
+>>>>>>> bea24b1d (変更内容)
   position: relative;
 }
 
 /* 画像 */
 .item img {
   width: 100%;
+<<<<<<< HEAD
   height: 120px;
   object-fit: cover;
   border-radius: 12px;
@@ -41,10 +88,25 @@ body {
 /* 再生中（画像） */
 .item img.active {
   border: 3px solid #4caf50;
+=======
+  height: 100px;
+  object-fit: cover;
+  border-radius: 10px;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: 0.2s;
+  filter: brightness(65%);
+}
+
+/* 再生中 */
+.item img.active {
+  border: 2px solid #4caf50;
+>>>>>>> bea24b1d (変更内容)
   transform: scale(1.05);
   filter: brightness(100%);
 }
 
+<<<<<<< HEAD
 /* ラベル（中央文字） */
 .label {
   position: absolute;
@@ -72,6 +134,28 @@ body {
   background: #4caf50;
   color: #fff;
   font-size: 12px;
+=======
+/* ラベル */
+.label {
+  position: absolute;
+  bottom: 6px;
+  left: 6px;
+  right: 6px;
+  color: #fff;
+  font-size: 13px;
+  font-weight: bold;
+  text-shadow: 0 2px 6px rgba(0,0,0,0.8);
+}
+
+/* 再生中バッジ */
+.playing-badge {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  background: #4caf50;
+  color: #fff;
+  font-size: 11px;
+>>>>>>> bea24b1d (変更内容)
   padding: 2px 6px;
   border-radius: 6px;
   display: none;
@@ -81,16 +165,23 @@ body {
   display: block;
 }
 
+<<<<<<< HEAD
 /* アニメーション */
 @keyframes pulse {
   0% { transform: scale(1); }
   50% { transform: scale(1.08); }
+=======
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.06); }
+>>>>>>> bea24b1d (変更内容)
   100% { transform: scale(1); }
 }
 
 .item.playing img {
   animation: pulse 1s infinite;
 }
+<<<<<<< HEAD
 
 /* コントロール */
 .controls {
@@ -141,11 +232,14 @@ body {
 .switch input:checked + .slider::before {
   transform: translateX(24px);
 }
+=======
+>>>>>>> bea24b1d (変更内容)
 </style>
 
 </head>
 <body>
 
+<<<<<<< HEAD
 <div class="grid" id="grid"></div>
 
 <div class="controls">
@@ -316,6 +410,181 @@ document.getElementById("volume").addEventListener("input", (e) => {
     currentAudio.volume = e.target.value;
   }
 });
+=======
+<div id="categories"></div>
+<div id="subcategories"></div>
+<div class="grid" id="grid"></div>
+
+<script>
+
+const items = [
+
+  { img:"ソケットレンチ.webp", sound:"ソケットレンチ.wav", name:"ソケット レンチ", category:"工具", sub:"手工具" },
+  { img:"両口メガネレンチ.webp", sound:"wrench.mp3", name:"両口 メガネ レンチ", category:"工具", sub:"手工具" },
+
+  { img:"scale.webp", sound:"scale.mp3", name:"スケール", category:"工具", sub:"測定工具" },
+  { img:"caliper.webp", sound:"caliper.mp3", name:"ノギス", category:"工具", sub:"測定工具" },
+
+  { img:"impact.webp", sound:"impact.mp3", name:"インパクト", category:"電動工具" },
+  { img:"drill.webp", sound:"drill.mp3", name:"ドリル", category:"電動工具" },
+
+  { img:"gloves.webp", sound:"gloves.mp3", name:"手袋", category:"衣類" },
+  { img:"raincoat.webp", sound:"raincoat.mp3", name:"雨かっぱ", category:"衣類" },
+
+  { img:"ladder.webp", sound:"ladder.mp3", name:"脚立", category:"設備" },
+
+  { img:"angle.webp", sound:"angle.mp3", name:"アングル", category:"鋼材" },
+  { img:"hbeam.webp", sound:"hbeam.mp3", name:"H形鋼", category:"鋼材" }
+
+];
+
+let currentAudio = null;
+let currentImg = null;
+
+let currentCategory = "すべて";
+let currentSub = "すべて";
+
+const grid = document.getElementById("grid");
+const categoriesDiv = document.getElementById("categories");
+const subDiv = document.getElementById("subcategories");
+
+/* カテゴリ */
+const categories = [...new Set(items.map(i=>i.category))];
+categories.unshift("すべて");
+
+categories.forEach(cat=>{
+  const btn = document.createElement("button");
+  btn.textContent = cat;
+  btn.dataset.cat = cat;
+
+  btn.onclick=()=>{
+    currentCategory = cat;
+    currentSub = "すべて";
+    setActive(categoriesDiv, btn);
+    renderSub();
+    render();
+  };
+
+  categoriesDiv.appendChild(btn);
+});
+
+categoriesDiv.querySelector("button").classList.add("active");
+
+/* サブカテゴリ */
+function renderSub(){
+
+  if(currentCategory !== "工具"){
+    subDiv.innerHTML = "";
+    return;
+  }
+
+  subDiv.innerHTML="";
+
+  let subs = items
+    .filter(i=>i.category==="工具")
+    .map(i=>i.sub)
+    .filter(Boolean);
+
+  subs = [...new Set(subs)];
+
+  subs.forEach(s=>{
+    const btn=document.createElement("button");
+    btn.textContent=s;
+
+    btn.onclick=()=>{
+      currentSub=s;
+      setActive(subDiv, btn);
+      render();
+    };
+
+    subDiv.appendChild(btn);
+  });
+
+  if(subDiv.firstChild) subDiv.firstChild.classList.add("active");
+}
+
+/* 表示 */
+function render(){
+
+  grid.innerHTML="";
+
+  let filtered = items.filter(i=>{
+    return (currentCategory==="すべて" || i.category===currentCategory)
+      && (currentSub==="すべて" || i.sub===currentSub);
+  });
+
+  filtered.forEach(item=>{
+
+    const div=document.createElement("div");
+    div.className="item";
+
+    const img=document.createElement("img");
+    img.src=item.img;
+
+    const label=document.createElement("div");
+    label.className="label";
+    label.textContent=item.name;
+
+    const badge=document.createElement("div");
+    badge.className="playing-badge";
+    badge.textContent="再生中";
+
+    const audio=document.createElement("audio");
+
+    const source=document.createElement("source");
+    source.src=item.sound;
+    source.type=item.sound.endsWith(".wav")?"audio/wav":"audio/mpeg";
+
+    audio.appendChild(source);
+
+    img.onclick=()=>playSound(audio,img);
+
+    div.append(img,label,badge,audio);
+    grid.appendChild(div);
+  });
+}
+
+/* 再生 */
+function playSound(audio,img){
+  stopAudio();
+
+  audio.play();
+  currentAudio=audio;
+  currentImg=img;
+
+  document.querySelectorAll(".item").forEach(i=>i.classList.remove("playing"));
+  document.querySelectorAll("img").forEach(i=>i.classList.remove("active"));
+
+  img.classList.add("active");
+  img.parentElement.classList.add("playing");
+
+  audio.onended = () => {
+    img.classList.remove("active");
+    img.parentElement.classList.remove("playing");
+  };
+}
+/* 停止 */
+function stopAudio(){
+  if(currentAudio){
+    currentAudio.pause();
+    currentAudio.currentTime=0;
+  }
+  if(currentImg){
+    currentImg.classList.remove("active");
+    currentImg.parentElement.classList.remove("playing");
+  }
+}
+
+/* ボタン切替 */
+function setActive(parent,btn){
+  parent.querySelectorAll("button").forEach(b=>b.classList.remove("active"));
+  btn.classList.add("active");
+}
+
+/* 初期 */
+renderSub();
+render();
+>>>>>>> bea24b1d (変更内容)
 
 </script>
 

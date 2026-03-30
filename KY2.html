@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>スマホ用選択UI</title>
+
+<style>
+body {
+  font-family: sans-serif;
+  margin: 0;
+  padding: 16px;
+  background: #f5f5f5;
+}
+
+h2 {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.card {
+  background: #fff;
+  padding: 16px;
+  border-radius: 12px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+select {
+  width: 100%;
+  padding: 14px;
+  font-size: 16px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  margin-top: 8px;
+}
+
+.result {
+  background: #e8f5e9;
+  padding: 16px;
+  border-radius: 12px;
+  font-size: 16px;
+  word-break: break-word;
+}
+
+.label {
+  font-size: 14px;
+  color: #666;
+}
+
+button {
+  width: 100%;
+  padding: 14px;
+  border: none;
+  border-radius: 10px;
+  background: #2196f3;
+  color: #fff;
+  font-size: 16px;
+  margin-top: 10px;
+}
+</style>
+
+</head>
+<body>
+
+<div class="card">
+  <div class="label">① 作業</div>
+  <select id="step1">
+    <option value="">選択してください</option>
+    <option value="1">作業1</option>
+    <option value="2">作業2</option>
+    <option value="3">作業3</option>
+    <option value="4">作業4</option>
+    <option value="5">作業5</option>
+  </select>
+</div>
+
+<div class="card">
+  <div class="label">② 危険内容</div>
+  <select id="step2" disabled>
+    <option value="">選択してください</option>
+  </select>
+</div>
+
+<div class="card">
+  <div class="label">③ 対策</div>
+  <select id="step3" disabled>
+    <option value="">選択してください</option>
+  </select>
+</div>
+
+<div class="card result">
+  <strong>選択結果</strong><br>
+  <span id="result">未選択</span>
+</div>
+
+<div class="card">
+  <button onclick="copyResult()">結果をコピー</button>
+</div>
+
+<script>
+const data = {
+  "1": {
+    "感電": ["絶縁手袋使用", "電源遮断"],
+    "転倒": ["足元確認", "滑り止め"]
+  },
+  "2": {
+    "落下": ["安全帯着用", "手すり設置"]
+  },
+  "3": {
+    "挟まれ": ["指差呼称", "機械停止"]
+  },
+  "4": {},
+  "5": {}
+};
+
+const step1 = document.getElementById("step1");
+const step2 = document.getElementById("step2");
+const step3 = document.getElementById("step3");
+const result = document.getElementById("result");
+
+function resetSelect(select) {
+  select.innerHTML = '<option value="">選択してください</option>';
+  select.disabled = true;
+}
+
+step1.addEventListener("change", () => {
+  resetSelect(step2);
+  resetSelect(step3);
+
+  const val1 = step1.value;
+
+  if (!val1 || !data[val1] || Object.keys(data[val1]).length === 0) {
+    updateResult();
+    return;
+  }
+
+  step2.disabled = false;
+
+  Object.keys(data[val1]).forEach(key => {
+    const option = document.createElement("option");
+    option.value = key;
+    option.textContent = key;
+    step2.appendChild(option);
+  });
+
+  updateResult();
+});
+
+step2.addEventListener("change", () => {
+  resetSelect(step3);
+
+  const val1 = step1.value;
+  const val2 = step2.value;
+
+  if (!val1 || !val2 || !data[val1][val2]) {
+    updateResult();
+    return;
+  }
+
+  step3.disabled = false;
+
+  data[val1][val2].forEach(item => {
+    const option = document.createElement("option");
+    option.value = item;
+    option.textContent = item;
+    step3.appendChild(option);
+  });
+
+  updateResult();
+});
+
+step3.addEventListener("change", updateResult);
+
+function updateResult() {
+  const val1 = step1.value;
+  const val2 = step2.value;
+  const val3 = step3.value;
+
+  const text = [val1, val2, val3].filter(v => v).join(" → ");
+  result.textContent = text || "未選択";
+}
+
+function copyResult() {
+  const text = result.textContent;
+  navigator.clipboard.writeText(text);
+  alert("コピーしました");
+}
+</script>
+
+</body>
+</html>
