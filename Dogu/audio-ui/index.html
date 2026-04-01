@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>道具音声教材（軽量版）</title>
+    <style>
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: system-ui, sans-serif;
+            background: radial-gradient(circle at top, #16283e, #09101d 45%);
+            color: #f7f7f7;
+            padding: 18px;
+        }
+
+        .hero {
+            max-width: 900px;
+            margin: 0 auto 24px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 14px;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: clamp(1.9rem, 4vw, 3rem);
+            line-height: 1.05;
+        }
+
+        .intro {
+            margin: 0;
+            color: #cbd5e1;
+            max-width: 640px;
+        }
+
+        #categories,
+        #subcategories {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 18px 0;
+            max-width: 900px;
+        }
+
+        button {
+            border: none;
+            border-radius: 999px;
+            padding: 10px 16px;
+            background: rgba(255, 255, 255, 0.08);
+            color: #f7f7f7;
+            cursor: pointer;
+            transition: transform 0.2s ease, background-color 0.2s ease;
+        }
+
+        button.active {
+            background: linear-gradient(135deg, #0f8fff, #3f51b5);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 16px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .item {
+            position: relative;
+            border-radius: 20px;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.06);
+            box-shadow: 0 18px 40px rgba(0, 0, 0, 0.18);
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .item:hover {
+            transform: translateY(-2px);
+        }
+
+        .item img {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            object-fit: cover;
+            display: block;
+            filter: brightness(0.9);
+        }
+
+        .item.playing img {
+            filter: brightness(1);
+        }
+
+        .label {
+            padding: 12px;
+            font-weight: 700;
+            font-size: 0.95rem;
+        }
+
+        .playing-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: #4caf50;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 999px;
+            display: none;
+            font-size: 0.8rem;
+        }
+
+        .item.playing .playing-badge {
+            display: block;
+        }
+
+        #overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.75);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            z-index: 100;
+        }
+
+        #overlay .panel {
+            background: rgba(12, 23, 44, 0.96);
+            border-radius: 18px;
+            padding: 24px;
+            max-width: 720px;
+            width: 100%;
+            color: white;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
+        }
+
+        #overlay h2 {
+            margin: 0 0 14px;
+        }
+
+        #overlay p {
+            margin: 0 0 22px;
+            line-height: 1.7;
+            white-space: pre-line;
+        }
+
+        #overlay button {
+            border: none;
+            border-radius: 999px;
+            padding: 10px 18px;
+            background: #4caf50;
+            color: #fff;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <section class="hero">
+        <div>
+            <h1>道具教材（軽量版）</h1>
+            <p class="intro">このページは Node.js や npm がなくても、画像をクリックして音声を再生できる静的版です。</p>
+        </div>
+        <div>
+            <strong id="count">0</strong> 件の道具
+        </div>
+    </section>
+
+    <div id="categories"></div>
+    <div id="subcategories"></div>
+    <div class="grid" id="grid"></div>
+
+    <div id="overlay">
+        <div class="panel">
+            <h2 id="overlayTitle"></h2>
+            <p id="overlayText"></p>
+            <button id="closeOverlay">閉じる</button>
+        </div>
+    </div>
+
+    <script>
+        const items = [
+            { img: 'public/images/シノ付片口めがねレンチ.avif', sound: 'public/sounds/シノ付片口めがねレンチ.wav', name: 'シノ付 片口 めがね レンチ', desc: '狭い場所でも使いやすい、しの付きの片口めがねレンチです。', category: '工具', sub: '手工具' },
+            { img: 'public/images/ソケットレンチ.webp', sound: 'public/sounds/ソケットレンチ.wav', name: 'ソケット レンチ', desc: 'ソケットを交換しながらボルトやナットを回すための工具です。', category: '工具', sub: '手工具' },
+            { img: 'public/images/両口メガネレンチ.webp', sound: 'public/sounds/両口メガネレンチ.wav', name: '両口 メガネ レンチ', desc: '両端のサイズが違うめがねレンチ。用途に応じて使い分けます。', category: '工具', sub: '手工具' },
+            { img: 'public/images/⽚⼝スパナ.avif', sound: 'public/sounds/⽚⼝スパナ.wav', name: '片口 スパナ', desc: '片側だけ開いた形状のスパナ。狭い場所での作業に向いています。', category: '工具', sub: '手工具' },
+            { img: 'public/images/片口めがねレンチ.avif', sound: 'public/sounds/片口めがねレンチ.wav', name: '片口 めがね レンチ', desc: '片口とめがねの両方の機能を持つコンビネーションレンチです。', category: '工具', sub: '手工具' },
+            { img: 'public/images/しの付きラチェットレンチ.avif', sound: 'public/sounds/しの付きラチェットレンチ.wav', name: 'しの付き ラチェット レンチ', desc: '回転方向を切り替えて連続作業ができるラチェットレンチです。', category: '工具', sub: '手工具' },
+            { img: 'public/images/打撃メガネレンチ.avif', sound: 'public/sounds/打撃メガネレンチ.wav', name: '打撃 メガネ レンチ', desc: 'バールやハンマーで叩いて緩めるための打撃用めがねレンチです。', category: '工具', sub: '手工具' },
+            { img: 'public/images/コンビネーションレンチ.webp', sound: 'public/sounds/コンビネーションレンチ.wav', name: 'コンビネーション レンチ', desc: '片口とめがねの両方を備えた万能レンチです。', category: '工具', sub: '手工具' },
+            { img: 'public/images/モンキーレンチ.avif', sound: 'public/sounds/モンキーレンチ.wav', name: 'モンキー レンチ', desc: '可変口幅で様々なボルトやナットに対応するレンチです。', category: '工具', sub: '手工具' },
+            { img: 'public/images/板ラチェットメガネレンチ.avif', sound: 'public/sounds/板ラチェットメガネレンチ.wav', name: '板ラチェット メガネ レンチ', desc: '薄型ヘッドで狭い場所にも入るラチェットタイプのめがねレンチです。', category: '工具', sub: '手工具' }
+        ];
+
+        let currentCategory = 'すべて';
+        let currentSubcategory = 'すべて';
+        let currentAudio = null;
+        let currentItem = null;
+
+        const categoriesEl = document.getElementById('categories');
+        const subcategoriesEl = document.getElementById('subcategories');
+        const gridEl = document.getElementById('grid');
+        const overlayEl = document.getElementById('overlay');
+        const overlayTitle = document.getElementById('overlayTitle');
+        const overlayText = document.getElementById('overlayText');
+        const closeOverlay = document.getElementById('closeOverlay');
+        const countEl = document.getElementById('count');
+
+        // 🔥 カテゴリ
+        const categories = ['すべて', ...new Set(items.map(i => i.category))];
+
+        // 🔥 サブカテゴリ（←ここが本質修正）
+        function getSubcategories() {
+            const filtered = currentCategory === 'すべて'
+                ? items
+                : items.filter(i => i.category === currentCategory);
+
+            const subs = filtered
+                .map(i => i.sub)
+                .filter(Boolean);
+
+            // 🔥 「すべて」はここで1回だけ付ける
+            return ['すべて', ...[...new Set(subs)]];
+        }
+
+        function renderCategories() {
+            categoriesEl.innerHTML = '';
+
+            categories.forEach(cat => {
+                const btn = document.createElement('button');
+                btn.textContent = cat;
+                btn.className = cat === currentCategory ? 'active' : '';
+
+                btn.onclick = () => {
+                    currentCategory = cat;
+                    currentSubcategory = 'すべて';
+                    renderCategories();
+                    renderSubcategories();
+                    renderItems();
+                };
+
+                categoriesEl.appendChild(btn);
+            });
+        }
+
+        function renderSubcategories() {
+            subcategoriesEl.innerHTML = '';
+
+            const subs = getSubcategories(); // ← ここはもう触らない
+
+            subs.forEach(sub => {
+                const btn = document.createElement('button');
+                btn.textContent = sub;
+                btn.className = sub === currentSubcategory ? 'active' : '';
+
+                btn.onclick = () => {
+                    currentSubcategory = sub;
+                    renderSubcategories();
+                    renderItems();
+                };
+
+                subcategoriesEl.appendChild(btn);
+            });
+        }
+
+        function getFilteredItems() {
+            return items.filter(item => {
+                const catMatch = currentCategory === 'すべて' || item.category === currentCategory;
+                const subMatch = currentSubcategory === 'すべて' || item.sub === currentSubcategory;
+                return catMatch && subMatch;
+            });
+        }
+
+        function renderItems() {
+            const filtered = getFilteredItems();
+
+            countEl.textContent = filtered.length;
+            gridEl.innerHTML = '';
+
+            filtered.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'item';
+
+                if (currentItem && currentItem.name === item.name) {
+                    card.classList.add('playing');
+                }
+
+                const img = document.createElement('img');
+                img.src = item.img;
+                img.alt = item.name;
+
+                const label = document.createElement('div');
+                label.className = 'label';
+                label.textContent = item.name;
+
+                const badge = document.createElement('div');
+                badge.className = 'playing-badge';
+                badge.textContent = '再生中';
+
+                card.appendChild(img);
+                card.appendChild(label);
+                card.appendChild(badge);
+
+                card.onclick = () => playItem(item, card);
+
+                gridEl.appendChild(card);
+            });
+        }
+
+        function stopAudio() {
+            if (currentAudio) {
+                currentAudio.pause();
+                currentAudio.currentTime = 0;
+            }
+
+            currentAudio = null;
+            currentItem = null;
+
+            document.querySelectorAll('.item.playing')
+                .forEach(el => el.classList.remove('playing'));
+
+            overlayEl.style.display = 'none';
+        }
+
+        function playItem(item, card) {
+            stopAudio();
+
+            currentAudio = new Audio(item.sound);
+            currentAudio.play().catch(() => {
+                alert('音声再生できません');
+            });
+
+            currentItem = item;
+            card.classList.add('playing');
+
+            overlayTitle.textContent = item.name;
+            overlayText.textContent = item.desc || item.name;
+            overlayEl.style.display = 'flex';
+
+            currentAudio.onended = stopAudio;
+        }
+
+        closeOverlay.onclick = stopAudio;
+
+        overlayEl.onclick = e => {
+            if (e.target === overlayEl) stopAudio();
+        };
+
+        renderCategories();
+        renderSubcategories();
+        renderItems();
+    </script>F
+</body>
+
+</html>
